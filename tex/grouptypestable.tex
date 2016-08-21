@@ -1,0 +1,890 @@
+
+
+\subsection{Groups}
+
+This is the documentation for the groups.  Groups are a
+convenient way of organizing rules in complicated structures,
+used as components of other groups or of complex types.  Unlike
+complex types, groups may appear inside other complex types or 
+groups with no tag.  Because groups act a bit like types, their
+names are all CamelCase with the first letter capitalized.
+
+
+\subsubsection*{grouptype:  MPCIDGroup}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{MPCIDGroup} & & \textbf{permID or provID or both in that order} \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  choice &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& element & permID  &  \\ 
+  \multicolumn{1}{c}{}& element & provID  &  (Optional)  \\  
+  \hline 
+  \end{tabular} } \\
+  
+
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& element & provID  &  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{grouptype:  OpticalID}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{OpticalID} & & \textbf{ An MPCIDGroup or trkSub or both in that order.
+           Of permID, provID or trkSub at least one must
+           be present in an optical observation but
+           all three might be present.   Also, MPC will
+           assign unique obsID and trkID fields for
+           distribution
+     } \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  choice &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& group & MPCIDGroup  &  \\ 
+  \multicolumn{1}{c}{}& element & trkSub  &  (Optional)  \\  
+  \hline 
+  \end{tabular} } \\
+  
+
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& element & trkSub  &  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+  \hline 
+  \end{tabular} } \\
+  
+
+  \multicolumn{1}{c}{}& element & obsID  &  (distribOnlyRequired)  \\ 
+  \multicolumn{1}{c}{}& element & trkID  &  (distribOnlyRequired)  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{grouptype:  RadarID}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{RadarID} & & \textbf{ An MPCIDGroup only; radar has no equivalent
+           of the optical ``trkSub" field.  MPC will add
+           a unique obsID field for distribution
+     } \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& group & MPCIDGroup  &  \\ 
+  \multicolumn{1}{c}{}& element & trkSub  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & obsID  &  (distribOnlyRequired)  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{grouptype:  RadarValue}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{RadarValue} & & \textbf{A RadarValue is used for doppler or delay values
+          and errors in a radar observation. } \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  choice &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& element & doppler  &  \\ 
+  \multicolumn{1}{c}{}& element & rmsDoppler  &  \\  
+  \hline 
+  \end{tabular} } \\
+  
+
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& element & delay  &  \\ 
+  \multicolumn{1}{c}{}& element & rmsDelay  &  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{grouptype:  Station}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{Station} & & \textbf{
+     stationary or rover with location data.
+     Either location comes last or we need a new
+     element name (maybe rover) for the rover stations.
+  } \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  choice &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& type FixedStation  & stn   &  \\  
+  \hline 
+  \end{tabular} } \\
+  
+
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& element & sys  &  \\ 
+  \multicolumn{1}{c}{}& element & ctr  &  \\ 
+  \multicolumn{1}{c}{}& element & pos1  &  \\ 
+  \multicolumn{1}{c}{}& element & pos2  &  \\ 
+  \multicolumn{1}{c}{}& element & pos3  &  \\ 
+  \multicolumn{1}{c}{}& element & posCov11  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & posCov12  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & posCov13  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & posCov22  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & posCov23  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & posCov33  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& type RoverStation  & stn   &  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{grouptype:  SubmissionFormat}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{SubmissionFormat} & & \textbf{
+     SubmissionFormat validates the required extra fields
+     for the MPC1992 submission format.  As with
+     Station, the subFmt has to come last to avoid
+     XML LR0 parsing cruft.
+  } \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  choice &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& type FormatType  & subFmt   &  \\  
+  \hline 
+  \end{tabular} } \\
+  
+
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& element & precTime  &  \\ 
+  \multicolumn{1}{c}{}& element & precRA  &  \\ 
+  \multicolumn{1}{c}{}& element & precDec  &  \\ 
+  \multicolumn{1}{c}{}& type MPC80ColFormat  & subFmt   &  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{grouptype:  Photometry}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{Photometry} & & \textbf{
+     The Photometry group is optional in all optical
+     observation types (optical, offset, and
+     occultation).  The "mag" and "band" fields
+     must be present; the rest are optional but
+     can only occur if "mag" and "band" are present
+     to define this as a Photometry group
+  } \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& element & mag  &  \\ 
+  \multicolumn{1}{c}{}& element & band  &  \\ 
+  \multicolumn{1}{c}{}& element & photCat  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & rmsMag  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & photAp  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & nucMag  &  (Optional)  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{grouptype:  OpticalResRADec}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{OpticalResRADec} & & \textbf{
+    OpticalResRADec is optional for the OpticalResiduals group
+  } \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& element & resRA  &  \\ 
+  \multicolumn{1}{c}{}& element & resDec  &  \\ 
+  \multicolumn{1}{c}{}& element & selAst  &  \\ 
+  \multicolumn{1}{c}{}& element & sigRA  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & sigDec  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & sigCorr  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & sigTime  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & biasRA  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & biasDec  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & biasTime  &  (Optional)  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{grouptype:  OpticalResMag}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{OpticalResMag} & & \textbf{
+    OpticalResRADec is optional for the OpticalResiduals group
+  } \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& element & photProd  &  \\ 
+  \multicolumn{1}{c}{}& element & resMag  &  \\ 
+  \multicolumn{1}{c}{}& element & selPhot  &  \\ 
+  \multicolumn{1}{c}{}& element & sigMag  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & biasMag  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & photMod  &  (Optional)  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{grouptype:  OpticalResiduals}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{OpticalResiduals} & & \textbf{
+      The OpticalResiduals group is optional for adding residuals
+      to optical observations, or as a separate obsResidual element 
+      tagged by obsID
+   } \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& element & orbProd  &  \\ 
+  \multicolumn{1}{c}{}& element & orbID  &  \\ 
+  \multicolumn{1}{c}{}& group & OpticalResRADec  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& group & OpticalResMag  &  (Optional)  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{grouptype:  RadarResiduals}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{RadarResiduals} & & \textbf{
+      The RadarResiduals group is optional for adding residuals
+      to optical observations, or as a separate obsResidual element 
+      tagged by obsID
+   } \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& element & orbID  &  \\ 
+  \multicolumn{1}{c}{}& element & resRad  &  \\ 
+  \multicolumn{1}{c}{}& element & selRad  &  \\ 
+  \multicolumn{1}{c}{}& element & sigRad  &  (Optional)  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+
+
+
+\subsection{Complex Types}
+
+This is the documentation for the complex types, which may
+be used directly as similarly-named elements or as components
+of other complex types and groups.  Unlike a group, a complex
+type is always the only thing inside a tag.  The names of
+complex types, like groups and simple types, are all CamelCase
+with the first letter capitalized.
+
+
+\subsubsection*{complextype:  Names}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{Names} & & \textbf{ List of one or more names of type String} \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& type String  & name   &  (Unbounded)  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{complextype:  Observatory}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{Observatory} & & \textbf{ Observatory Identification} \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  all &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& type String  & mpcCode   &  \\ 
+  \multicolumn{1}{c}{}& type String  & name   &  (Optional)  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{complextype:  Contact}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{Contact} & & \textbf{Submitter contact information.  A name field (initials plus surname), an address string, and an e-mail address to which a return receipt will be sent with ackMessage} \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  all &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& type String  & name   &  \\ 
+  \multicolumn{1}{c}{}& type String  & address   &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& type String  & ackMessage   &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& type String  & ackEmail   &  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{complextype:  Telescope}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{Telescope} & & \textbf{telescope information} \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  all &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& type String  & name   &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& type String  & design   &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& type PositiveDecimal  & aperture   &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& type String  & detector   &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& type PositiveDecimal  & fRatio   &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& type String  & filter   &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& type String  & arraySize   &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& type PositiveDecimal  & pixelScale   &  (Optional)  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{complextype:  Software}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{Software} & & \textbf{information about software used in processing} \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  all &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& type String  & astrometry   &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& type String  & fitOrder   &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& type String  & photometry   &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& type String  & objectDetection   &  (Optional)  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{complextype:  Optical}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{Optical} & & \textbf{Optical Observation with RA and Dec} \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& group & OpticalID  &  \\ 
+  \multicolumn{1}{c}{}& element & mode  &  \\ 
+  \multicolumn{1}{c}{}& group & Station  &  \\ 
+  \multicolumn{1}{c}{}& element & prog  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & obsTime  &  \\ 
+  \multicolumn{1}{c}{}& element & ra  &  \\ 
+  \multicolumn{1}{c}{}& element & dec  &  \\ 
+  \multicolumn{1}{c}{}& element & frame  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & astCat  &  \\ 
+  \multicolumn{1}{c}{}& element & rmsRA  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & rmsDec  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & rmsCorr  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& group & Photometry  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & logSNR  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & seeing  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & exp  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & rmsFit  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & nStars  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & ref  &  (distribOnlyRequired)  \\ 
+  \multicolumn{1}{c}{}& element & disc  &  (distribOnlyOptional)  \\ 
+  \multicolumn{1}{c}{}& group & SubmissionFormat  &  (distribOnlyRequired)  \\ 
+  \multicolumn{1}{c}{}& element & uncTime  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & notes  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & remarks  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& group & OpticalResiduals  &  (Optional)  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{complextype:  Offset}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{Offset} & & \textbf{Optical Offset Observation with RA and Dec} \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& group & OpticalID  &  \\ 
+  \multicolumn{1}{c}{}& element & mode  &  \\ 
+  \multicolumn{1}{c}{}& group & Station  &  \\ 
+  \multicolumn{1}{c}{}& element & prog  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & obsTime  &  \\ 
+  \multicolumn{1}{c}{}& element & deltaRA  &  \\ 
+  \multicolumn{1}{c}{}& element & deltaDec  &  \\ 
+  \multicolumn{1}{c}{}& element & frame  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & astCat  &  \\ 
+  \multicolumn{1}{c}{}& element & rmsRA  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & rmsDec  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & rmsCorr  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& group & Photometry  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & logSNR  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & seeing  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & exp  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & rmsFit  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & nStars  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & ref  &  (distribOnlyRequired)  \\ 
+  \multicolumn{1}{c}{}& element & disc  &  (distribOnlyOptional)  \\ 
+  \multicolumn{1}{c}{}& group & SubmissionFormat  &  (distribOnlyRequired)  \\ 
+  \multicolumn{1}{c}{}& element & uncTime  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & notes  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & remarks  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& group & OpticalResiduals  &  (Optional)  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{complextype:  Occultation}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{Occultation} & & \textbf{Optical Occultation Observation with deltaRA, deltaDec, raStar and decStar} \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& group & OpticalID  &  \\ 
+  \multicolumn{1}{c}{}& element & mode  &  \\ 
+  \multicolumn{1}{c}{}& group & Station  &  \\ 
+  \multicolumn{1}{c}{}& element & prog  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & obsTime  &  \\ 
+  \multicolumn{1}{c}{}& element & deltaRA  &  \\ 
+  \multicolumn{1}{c}{}& element & deltaDec  &  \\ 
+  \multicolumn{1}{c}{}& element & raStar  &  \\ 
+  \multicolumn{1}{c}{}& element & decStar  &  \\ 
+  \multicolumn{1}{c}{}& element & frame  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & astCat  &  \\ 
+  \multicolumn{1}{c}{}& element & rmsRA  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & rmsDec  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & rmsCorr  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& group & Photometry  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & logSNR  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & seeing  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & exp  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & rmsFit  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & nStars  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & ref  &  (distribOnlyRequired)  \\ 
+  \multicolumn{1}{c}{}& element & disc  &  (distribOnlyOptional)  \\ 
+  \multicolumn{1}{c}{}& group & SubmissionFormat  &  (distribOnlyRequired)  \\ 
+  \multicolumn{1}{c}{}& element & uncTime  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & notes  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & remarks  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& group & OpticalResiduals  &  (Optional)  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{complextype:  Radar}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{Radar} & & \textbf{Radar Observation using either doppler or delay values from RadarValue} \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& group & RadarID  &  \\ 
+  \multicolumn{1}{c}{}& element & obsTime  &  \\ 
+  \multicolumn{1}{c}{}& group & RadarValue  &  \\ 
+  \multicolumn{1}{c}{}& element & com  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & frq  &  \\ 
+  \multicolumn{1}{c}{}& element & trx  &  \\ 
+  \multicolumn{1}{c}{}& element & rcv  &  \\ 
+  \multicolumn{1}{c}{}& element & remarks  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& group & RadarResiduals  &  (distribOnlyOptional)  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{complextype:  ObservationContext}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{ObservationContext} & & \textbf{observation context header type} \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  all &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& element & observatory  &  \\ 
+  \multicolumn{1}{c}{}& element & contact  &  \\ 
+  \multicolumn{1}{c}{}& element & observers  &  \\ 
+  \multicolumn{1}{c}{}& element & measurers  &  \\ 
+  \multicolumn{1}{c}{}& element & telescope  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & software  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & comment  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & coinvestigators  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & collaborators  &  (Optional)  \\ 
+  \multicolumn{1}{c}{}& element & fundingSource  &  (Optional)  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{complextype:  ObservationChunk}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{ObservationChunk} & & \textbf{A list of all optical or all radar observations, with context} \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& element & observationContext  &  \\ 
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  choice &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& element & optical  &  (Unbounded)  \\ 
+  \multicolumn{1}{c}{}& element & offset  &  (Unbounded)  \\ 
+  \multicolumn{1}{c}{}& element & occultation  &  (Unbounded)  \\ 
+  \multicolumn{1}{c}{}& element & radar  &  (Unbounded)  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{complextype:  SubmitBatch}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{SubmitBatch} & & \textbf{a list of observationChunk} \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& element & observationChunk  &  (Unbounded)  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{complextype:  OpticalResidual}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{OpticalResidual} & & \textbf{Optical Residual outside of the optical/occulatation/offset structure} \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& group & OpticalID  &  \\ 
+  \multicolumn{1}{c}{}& element & obsTime  &  \\ 
+  \multicolumn{1}{c}{}& group & OpticalResiduals  &  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{complextype:  RadarResidual}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{RadarResidual} & & \textbf{Radar Residual outside of the radar structure} \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  sequence &   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& group & RadarID  &  \\ 
+  \multicolumn{1}{c}{}& element & obsTime  &  \\ 
+  \multicolumn{1}{c}{}& group & RadarResiduals  &  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+
+\subsubsection*{complextype:  ADES}
+\begin{tabularx}{\linewidth}{lllY}
+\hline
+     & \textbf{ADES} & & \textbf{This is what is allowed in ades documents -- any
+       of these in any order} \\
+     \hline
+     
+  \multicolumn{1}{c} {} & \multicolumn{3}{l} {
+  \begin{tabular}{|llll}
+  choice &  (Unbounded)   & & \\
+  \hline 
+     
+  \multicolumn{1}{c}{}& element & optical  &  \\ 
+  \multicolumn{1}{c}{}& element & offset  &  \\ 
+  \multicolumn{1}{c}{}& element & occultation  &  \\ 
+  \multicolumn{1}{c}{}& element & radar  &  \\ 
+  \multicolumn{1}{c}{}& element & opticalResidual  &  \\ 
+  \multicolumn{1}{c}{}& element & radarResidual  &  \\ 
+  \multicolumn{1}{c}{}& element & submitBatch  &  \\ 
+  \multicolumn{1}{c}{}& element & observationChunk  &  \\  
+  \hline 
+  \end{tabular} } \\
+  
+ 
+\hline
+\\
+\\
+\end{tabularx}
+

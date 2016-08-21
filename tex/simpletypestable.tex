@@ -1,0 +1,149 @@
+
+\begin{longtable}
+       {|>{\setlength\hsize{0.35\hsize}}Y%
+        |>{\setlength\hsize{0.65\hsize}}Y|}
+\multicolumn{2}{c}{\Large (continued)}\\
+\multicolumn{1}{c}{Type} & \multicolumn{1}{c}{Description}\\
+\endhead
+\multicolumn{2}{c}{\Large Simple Types with their Restrictions}\\
+\multicolumn{1}{c}{Type} & \multicolumn{1}{c}{Description}\\
+\endfirsthead
+\multicolumn{2}{l}{to be cont'd on next page}
+\endfoot
+\endlastfoot
+\hline
+
+
+\textbf{String} 
+    \footnotesize \newline base is xsd:string
+      \newline --pattern: {\scriptsize\verb"[^|]*[\w-[|]][^|]*"}  &  String follows the 
+         ADES specification that that the pipe character is disallowed in PSV.
+         To allow data conversion from XML, it must disallowed in XML as well.
+         Also disallow blank elements.  Therefore, all elements must match
+         this pattern  \\ 
+\hline
+
+\textbf{RightAscension} 
+    \footnotesize \newline base is xsd:decimal
+      \newline --minInclusive: {\scriptsize\verb"0.0"} 
+      \newline --maxExclusive: {\scriptsize\verb"360.0"}  &  RA in \si{\degree} limited to [0.0, 360.0)  \\ 
+\hline
+
+\textbf{Declination} 
+    \footnotesize \newline base is xsd:decimal
+      \newline --minInclusive: {\scriptsize\verb"-90.0"} 
+      \newline --maxInclusive: {\scriptsize\verb"90.0"}  &  $\delta$ in \si{\degree} in range [-90.0, 90.0]  \\ 
+\hline
+
+\textbf{PositiveDecimal} 
+    \footnotesize \newline base is xsd:decimal
+      \newline --minExclusive: {\scriptsize\verb"0.0"}  &  PositiveDecimal in range [0.0, +inf)  \\ 
+\hline
+
+\textbf{Logical} 
+    \footnotesize \newline base is xsd:integer
+      \newline --enumeration: {\scriptsize\verb"0"} 
+      \newline --enumeration: {\scriptsize\verb"1"}  & 0 for false, 1 for true to match C and FORTRAN \\ 
+\hline
+
+\textbf{SelRes} 
+    \footnotesize \newline base is xsd:string
+      \newline --enumeration: {\scriptsize\verb"A"} 
+      \newline --enumeration: {\scriptsize\verb"D"} 
+      \newline --enumeration: {\scriptsize\verb"a"} 
+      \newline --enumeration: {\scriptsize\verb"d"}  &  SelRes must be ``A," (automatic accept) ``a," (manual accecpt)``D," (automatic delete) or ``d" (manual delete) \\ 
+\hline
+
+\textbf{Mode} 
+    \footnotesize \newline base is xsd:string
+      \newline --enumeration: {\scriptsize\verb"CCD"} 
+      \newline --enumeration: {\scriptsize\verb"Photo"}  &  Mode must be ``CCD" or ``Photo"  \\ 
+\hline
+
+\textbf{Disc} 
+    \footnotesize \newline base is xsd:string
+      \newline --enumeration: {\scriptsize\verb"*"}  &  Used to mark the discovery record -- must be `*' if present \\ 
+\hline
+
+\textbf{Sys} 
+    \footnotesize \newline base is xsd:string
+      \newline --enumeration: {\scriptsize\verb"WGS84"} 
+      \newline --enumeration: {\scriptsize\verb"ITRF"} 
+      \newline --enumeration: {\scriptsize\verb"IAU"} 
+      \newline --enumeration: {\scriptsize\verb"ICRF_AU"} 
+      \newline --enumeration: {\scriptsize\verb"ICRF_KM"}  &  Coordinate system for station coordinates. This used by the pos[123]  and poscov[123][123] 
+         elements to determine the meaning of cooridnates. WGS84, ITRF and IAU are for roving stations,
+         ICRF\verb|_|AU and ICRF\verb|_|KM are for fixed stations.   \\ 
+\hline
+
+\textbf{FormatType} 
+    \footnotesize \newline base is xsd:string
+      \newline --enumeration: {\scriptsize\verb"IAU2015"}  &   allowed submission formats with no extra fields  \\ 
+\hline
+
+\textbf{MPC80ColFormat} 
+    \footnotesize \newline base is xsd:string
+      \newline --enumeration: {\scriptsize\verb"MPC1992"} 
+      \newline --enumeration: {\scriptsize\verb"MPC1947"}  &  MCP1992 format with extra fields precTime, precRA and precDec \\ 
+\hline
+
+\textbf{PermID} 
+    \footnotesize \newline base is xsd:string
+      \newline --pattern: {\scriptsize\verb"(\d+([A-Z]*(-[A-Z]*)?)?)|([A-Z]+\d*)"}  &  A permID (permanent ID) string may be a positive integer, a positive integer 
+       followed by upple-case letters, upper-case letters followed by
+       a positive integer, or a positive integer followed by upper-case 
+       letters followed by a hyphen followed by more upper-case letters.
+       That is, ``134340," ``1P," ``73P-C," ``83P-AC," and ``J13" are all allowed.   \\ 
+\hline
+
+\textbf{ProvID} 
+    \footnotesize \newline base is xsd:string
+      \newline --pattern: {\scriptsize\verb"([PCS]/)?\d{4} ([-A-Z \d]*)"}  &  A provID (provisional ID) is based on a four-digit year number 
+      possibly prefixed by P/, C/ or S/ followed by a space and then
+      some combination of upper-case lettesr, digits, hyphens and spaces.
+      That is, ``2014 AA," ``2001 P-L," ``S/2001 S 31," ``P/1886 S1"
+      Perhaps a clearer description would result in a better
+      regular exparession  \\ 
+\hline
+
+\textbf{Remark} 
+    \footnotesize \newline base is String
+      \newline --maxLength: {\scriptsize\verb"200"}  &  A remark is a String limited to 200 characters \\ 
+\hline
+
+\textbf{FixedStation} 
+    \footnotesize \newline base is xsd:string
+      \newline --enumeration: {\scriptsize\verb"123"} 
+      \newline --enumeration: {\scriptsize\verb"456"} 
+      \newline --enumeration: {\scriptsize\verb"F51"}  &  The MPC maintains a list of allowed FixedStations.   at http://somewhere/stationary \\ 
+\hline
+
+\textbf{RoverStation} 
+    \footnotesize \newline base is xsd:string
+      \newline --enumeration: {\scriptsize\verb"427"}  &  The MPC maintains a list of allowed RoverStations.   at http://somewhere/rovers \\ 
+\hline
+
+\textbf{RadarStation} 
+    \footnotesize \newline base is String
+      \newline --maxLength: {\scriptsize\verb"5"}  & MPC maintains a list of radar stations at http://somewhere/radarstations \\ 
+\hline
+
+\textbf{AstCat} 
+    \footnotesize \newline base is String
+      \newline --maxLength: {\scriptsize\verb"5"}  & MPC maintains a list of astrometry catalogs at http://somewhere/astrometrycats \\ 
+\hline
+
+\textbf{Band} 
+    \footnotesize \newline base is String
+      \newline --maxLength: {\scriptsize\verb"5"}  & MPC maintains a list of bands for magnitude observations at http://somewhere/bands \\ 
+\hline
+
+\textbf{PhotCat} 
+    \footnotesize \newline base is String
+      \newline --maxLength: {\scriptsize\verb"5"}  & MPC maintains a list of phototmetry catalogs at http://somewhere/photometrycats \\ 
+\hline
+
+
+\end{longtable}
+
+

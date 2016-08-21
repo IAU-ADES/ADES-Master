@@ -1,0 +1,244 @@
+
+\begin{longtable}
+       {|l|l|Y|}
+\multicolumn{3}{l}{\Large (continued)}\\
+\endhead
+\multicolumn{3}{c}{\Large Elements and their Descriptions}\\
+\endfirsthead
+\multicolumn{3}{l}{to be cont'd on next page}
+\endfoot
+\endlastfoot
+\hline
+
+ 
+\multicolumn{3}{|c|}{\large ADES observation sub-elements}\\
+\multicolumn{1}{|c}{Name}& \multicolumn{1}{c}{Type} & \multicolumn{1}{c|}{Description}\\
+\hline
+
+\textbf{permID} & PermID & IAU permanent designation, i.e., IAU number (MPCID group) \\
+\hline 
+\textbf{provID} & ProvID & MPC provisional designation (unpacked form) for unnumbered object (MPCID group) \\
+\hline 
+\textbf{trkSub} & String & Observer-assigned tracklet identifier, unique within submission batch Typically the same as observer-assiged termporary designation currently employed for the MPC1992 format.  Observsers are encouraged to use values with eight or fewer alphanumeric characers (OpticalID group) \\
+\hline 
+\textbf{obsID} & String & Globally Unique Observation ID assigned by MPC (optical and radar ID groups) \\
+\hline 
+\textbf{trkID} & String & Globally Unique alphnumeric observation identifier assigned by MPC (optical and radar ID groups) \\
+\hline 
+\textbf{mode} & Mode & Mode of optical observations.  See Mode type for allowed values \\
+\hline 
+\textbf{prog} & String & Program code as assigned by the MPC.  The {\em prog} field is used to identify different observing  programs/observers at the the same telescope.  For surveys and other large producers, the MPC will increment {\em prog} for a given observatory code to document a significant operational change reported by the observing team. \\
+\hline 
+\textbf{obsTime} & xsd:dateTime & UTC time of the observation in ISO 8601 extended format, i.e., {\em yyyy-mm-ddThh:mm:ss.ssZ}.  The reported time precision should be appropriate for the astrometric accuracy.   The trailing {\em Z} indicates UTC and is optional. \\
+\hline 
+\textbf{ra} & RightAscension & Astronmetric equatorial right ascension in decimal \si{\degree} in the reference frame specified by {\em frame}. \\
+\hline 
+\textbf{dec} & Declination & Astronmetric equatorial declination in decimal \si{\degree} in the reference frame specified by {\em frame}.  Positive $\delta$ values may optionally include a \verb|+| sign \\
+\hline 
+\textbf{deltaRA} & xsd:decimal & Measured $\Delta(\mathrm{RA}\cos\delta)$ in \si{\arcsecond}.  For offset measurements of a satellite with respect to its planet, or for occultation observations with respect to the star. \\
+\hline 
+\textbf{deltaDec} & xsd:decimal & Measured  $\Delta\delta$ in  \si{\arcsecond}.  For offset measurements of a satellite with respect to its planet, or for occultation observations with respect to the star. \\
+\hline 
+\textbf{raStar} & RightAscension & RA of decimal \si{\degree} of the occulted star \\
+\hline 
+\textbf{decStar} & Declination & $\delta$ in decimal \si{\degree} of the occulted star \\
+\hline 
+\textbf{frame} & String & Reference from for reported angular measurements, e.g., `J2000' for J2000.0 equatorial. (This field is not anticipated to be used until a new reference epoch is indentified, e.g., J2050.0 \\
+\hline 
+\textbf{astCat} & AstCat & Star catalog used for the astrometric reduction or for the occulted star in the case of occultation observations.  Full list of acceptable field names to be provided and maintained by the MPC. (The MPC\textemdash specified value of `UNK' will be used for some archival observations to indicate astrometric catalog unknown.) \\
+\hline 
+\textbf{rmsRA} & PositiveDecimal & Random component of the $\mathrm{RA}\cos\delta$ $1\sigma$ uncertainty in \si{\arcsecond} as estimated by the observer as part of the image processing and astrometric reduction.  Presumed systematic errors, e.g., those arising from star catalog biases, should not be folded into the uncertainties reported in this field.  $\mathrm{rmsRA}^2$ and $\mathrm{rmsDec}^2$ are the diagonal elements of the $\mathrm{RA}$-$\delta$ covariance matrix, which convolves errors from target PSF fitting, telescope tracking, reference star fit, etc. \\
+\hline 
+\textbf{rmsDec} & PositiveDecimal & Random component of the $\delta$ $1\sigma$ uncertainty in \si{\arcsecond} as  estimated by the observer as part of the image processing and astrometric reduction.  Presumed systematic errors, e.g., those arising from star catalog biases, should not be folded into the uncertainties reported in this field.  $\mathrm{rmsRA}^2$ and $\mathrm{rmsDec}^2$ are the diagonal  elements of the $\mathrm{RA}$-$\delta$ covariance matrix, which convolves errors from target PSF fitting, telescope tracking, reference star fit, etc. \\
+\hline 
+\textbf{rmsCorr} & xsd:decimal & Correlation between RA and $\delta$ that may result from the astrometric reduction.  It can be especially relevant for trailed images or cases with a poor distribution of reference stars.  This is derived from the $\mathrm{RA}$-$\delta$ covariance matrix, where the off-diagonal term is $\mathrm{rmsCorr} * \mathrm{rmsRA} * \mathrm{rmsDec}$. \\
+\hline 
+\textbf{mag} & xsd:decimal & Apparent Magnitude in specified band (Photometry group) \\
+\hline 
+\textbf{band} & Band & Filter designation for photometry.  Full list of acceptable fields names are to be provided and maintained by the MPC. (Photometry group). \\
+\hline 
+\textbf{photCat} & PhotCat & Star catalog used for photometry measurements.  Full list of acceptable field names to be provided and maintained by the MPC. (Photometry group) \\
+\hline 
+\textbf{rmsMag} & PositiveDecimal & Apparent magnitude $1\sigma$ uncertainty in magnitudes (Photometry group) \\
+\hline 
+\textbf{photAp} & PositiveDecimal & Photometric aperture radius in \si{\arcsecond} (Photometry group) \\
+\hline 
+\textbf{nucMag} & Logical & Nuclear magnitude flag for comets.  0 for total magnitude (i.e., for most archival comet observations and all asteroid observations), 1 for nuclear magnitude. Primarily used for archival data as photAp should be used to communicate this information in the new standard (Photometry group) \\
+\hline 
+\textbf{logSNR} & xsd:decimal & $\log_{10}$ of the signal-to-noise ratio of the source in the image integrated on the entire aperture used for the astrometric centroid. \\
+\hline 
+\textbf{seeing} & PositiveDecimal & Size of seeing disc in \si{\arcsecond}, measured at Full Width Half Maximum (FWHM) of target point spread function (PSF).  \\
+\hline 
+\textbf{exp} & PositiveDecimal & Exposure time in \si{\second}.  Total exposure time in the case of stacked image detections  \\
+\hline 
+\textbf{rmsFit} & PositiveDecimal & RMS of fit of astrometric comparison stars in \si{\arcsecond}.  \\
+\hline 
+\textbf{nStars} & xsd:positiveInteger & Number of stars in astrometric fit. \\
+\hline 
+\textbf{ref} & String & Standard reference field used for citations. \\
+\hline 
+\textbf{disc} & Disc & Discovery flag; `*' marks a new discovery record; otherwise not present \\
+\hline 
+\textbf{subFmt} & String & Format in which the observation was originally submitted to the MPC, e.g., M92 for MPC1992 format or I15 for this standard.  Filled by the MPC according to a list provided and maintained by the MPC. \\
+\hline 
+\textbf{precTime} & PositiveDecimal & Precision in millionths of a day of the reported obeservation time for achived MPC1992 data records \\
+\hline 
+\textbf{precRA} & PositiveDecimal & Precision in \si{\arcsecond} of the reported RA for archived MPC1992 data records. \\
+\hline 
+\textbf{precDec} & PositiveDecimal & Precision in \si{\arcsecond} of the reported $\delta$ for archived MPC1992 data records. \\
+\hline 
+\textbf{uncTime} & PositiveDecimal & Estimated time uncertainty in \si{\second}. Unlike the preceding RMS fields, which indicate random errors, this field indicates a presumed lvel of systematic clock error.  NB: This field is generally only to be used to communicate exceptions and problems with clock calibration and is not intended to be used in routine submissions where clock errors are not a significant source of astrometric error. \\
+\hline 
+\textbf{notes} & String & A set of one-character note flags to communicate observing circumstances.  List of acceptable flags and their interpretation to be provided and maintained by the MPC. \\
+\hline 
+\textbf{remarks} & Remark & Comment field provided by the observer.  This field can be used to report additional information that is not reportable in the notes field, but that may be of relevance for interpretation of the observations. \\
+\hline 
+\textbf{sys} & Sys & Coordinate system for station coordinates and covariance. \begin{itemize} \item{WGS84: }{geodetic reference eilipsoid. GPS coordinates are normally obtained in this frame} \item{ITRF: }{cylindrical} \item{IAU: }{IAU planetary cartographic model for bodies other than Earth} \item{ICRF\verb|_|AU: }{For space-based stations, in \si{\astronomicalunit}} \item{ICRF\verb|_|KM: }{For space-based stations, in \si{\kilo\meter}}\end{itemize} \\
+\hline 
+\textbf{ctr} & xsd:integer & Origin of the reference system.  Use public SPICE codes, e.g., 399 is the geocenter, 10 is the Sun center.  Note;  sys=WGS84 implies ctr=399 \\
+\hline 
+\textbf{pos1} & xsd:decimal & Position of observer, first value. \begin{itemize}\item{WGS84: }E longitude(\si{\degree}), latitude (\si{\degree}), and altitude (\si{\meter}) \item{ITRF: }{E longitude (\si{\degree}), $R_{xy}$ (\si{\kilo\meter}), $R_z$ (\si{\kilo\meter})} \item {IAU: }{longidule (\si{\degree}), latitude (\si{\degree}) and altitude (\si{\meter}) as defined by the corresponding IAU cartography standard} \item{ICRF: }{ equatorial rectangular coordinates (\si{\kilo\meter} or \si{\astronomicalunit}) in reference frame given by \em{frame}} \end{itemize} The number of digits provided should be consistent with the uncertainty of the coordinates \\
+\hline 
+\textbf{pos2} & xsd:decimal & Position second value per sys \\
+\hline 
+\textbf{pos3} & xsd:decimal & Position third value per sys \\
+\hline 
+\textbf{posCov11} & xsd:decimal & 11 covariance per sys \\
+\hline 
+\textbf{posCov12} & xsd:decimal & 12 covariance per sys \\
+\hline 
+\textbf{posCov13} & xsd:decimal & 13 covariance per sys \\
+\hline 
+\textbf{posCov22} & xsd:decimal & 22 covariance per sys \\
+\hline 
+\textbf{posCov23} & xsd:decimal & 23 covariance per sys \\
+\hline 
+\textbf{posCov33} & xsd:decimal & 33 covariance per sys \\
+\hline 
+\textbf{delay} & xsd:decimal & observed radar delay value in \si{\second}. \\
+\hline 
+\textbf{rmsDelay} & xsd:decimal & Measurement $1\sigma$ uncertainty in \si{\micro\second} for radar delay \\
+\hline 
+\textbf{doppler} & xsd:decimal & observed radar doppler value in \si{\hertz} \\
+\hline 
+\textbf{rmsDoppler} & xsd:decimal & Measurement $1\sigma$ in uncertainty \si{\hertz} for radar doppler \\
+\hline 
+\textbf{com} & Logical & Flag to indicate that the observation is reduced to the center of mass.  0 implies a measurement to the peak power position, which is usually interpreted as the leading edge of the target, with the reflection point being modeled one object radius prior to the center of mass. \\
+\hline 
+\textbf{frq} & PositiveDecimal & Carrier reference frequence in \si{\mega\hertz} \\
+\hline 
+\textbf{trx} & RadarStation & Station code of transmiting antenna.  List of station codes and associated locations provided by the MPC \\
+\hline 
+\textbf{rcv} & RadarStation & Station code of receiving antenna.  List of station codes and associated locations provided by the MPCradar receiver.  \\
+\hline  \hline  
+\multicolumn{3}{|c|}{\large observations residual sub-elements}\\
+\multicolumn{1}{|c}{Name}& \multicolumn{1}{c}{Type} & \multicolumn{1}{c|}{Description}\\
+\hline
+
+\textbf{orbProd} & String & Orbit producer.  Can be institution, individual, or even email address, e.g.`MPC' \\
+\hline 
+\textbf{photProd} & String & Producer of photometric residuals.   Can be institution, individual, or even email address, e.g.`MPC' \\
+\hline 
+\textbf{resRA} & xsd:decimal & Residuals in $\mathrm{RA}\cos\delta$ in decimal \si{\degree} \\
+\hline 
+\textbf{resDec} & xsd:decimal & Residuals in $\delta$ in \si{\arcsecond} \\
+\hline 
+\textbf{orbID} & String & Local reference for orbit, e.g., `JPL 7' or `MPO 12345'. \\
+\hline 
+\textbf{selAst} & SelRes & Inclusion/rejection flag for astrometry \\
+\hline 
+\textbf{sigRA} & PositiveDecimal & Adopted $\mathrm{RA}\cos\delta$ $1\sigma$ uncertainty in \si{\arcsecond}.  Default \SI{1}{\arcsecond} \\
+\hline 
+\textbf{sigDec} & PositiveDecimal & Adopted $\delta$ $1\sigma$ uncertainty in \si{\arcsecond}.  Default \SI{1}{\arcsecond} \\
+\hline 
+\textbf{sigCorr} & PositiveDecimal & Adopted correlation between $\mathrm{RA}\cos\delta$ and $\delta$.  Default 0. May be different from the observer-provided correlation \\
+\hline 
+\textbf{sigTime} & PositiveDecimal & Adopted $1\sigma$ time uncertainty in \si{\second}.  Default 0. May be different from the observer-provided uncertainty \\
+\hline 
+\textbf{biasRA} & xsd:decimal & Adopted $\mathrm{RA}\cos\delta$ bias in \si{\arcsecond}.  Default 0 \\
+\hline 
+\textbf{biasDec} & xsd:decimal & Adopted $\delta$ bias in \si{\arcsecond}.  Default 0 \\
+\hline 
+\textbf{biasTime} & xsd:decimal & Adopted time bias in \si{\second}.  Default 0 \\
+\hline 
+\textbf{resMag} & xsd:decimal & Photometric residual in magnitudes \\
+\hline 
+\textbf{selPhot} & SelRes & Inclusion/rejection flag for photometry \\
+\hline 
+\textbf{sigMag} & PositiveDecimal & Adopted $1\sigma$ magnitude uncertainy in magnitudees. Could be different from the observer-provided uncertainty \\
+\hline 
+\textbf{biasMag} & xsd:decimal & Adopted photometric bias in magnitudes \\
+\hline 
+\textbf{photMod} & String & Description of the photometric model.  For example, a value of $G=0.35$ indicates the value of $G$ in the H-G system. Other standard values for this field will be established by the MPC in consultation with the research community.  Default is H-G model with $G=0.15$ \\
+\hline 
+\textbf{resRad} & xsd:decimal & Residual of the radar measurement in \si{\micro\second} for delay, \si{\hertz} for Doppler \\
+\hline 
+\textbf{selRad} & SelRes & Inclusion/rejection flag for radar astrometry \\
+\hline 
+\textbf{sigRad} & PositiveDecimal & Adopted uncertainty for the radar measurement in \si{\micro\second} for delta, \si{\hertz} for Doppler \\
+\hline  \hline  
+\multicolumn{3}{|c|}{\large observation-context sub-elements}\\
+\multicolumn{1}{|c}{Name}& \multicolumn{1}{c}{Type} & \multicolumn{1}{c|}{Description}\\
+\hline
+
+\textbf{observatory} & Observatory & observatory information block \\
+\hline 
+\textbf{contact} & Contact & Contact information block \\
+\hline 
+\textbf{observers} & Names & list of observer names (initials then surname) \\
+\hline 
+\textbf{measurers} & Names & list of measurer names (intialis then surnames) \\
+\hline 
+\textbf{telescope} & Telescope & Description of telescope \\
+\hline 
+\textbf{software} & Software & Description of software \\
+\hline 
+\textbf{comment} & String & comment for observation context \\
+\hline 
+\textbf{coinvestigators} & Names & list of coinvestigator names (initials then surname) \\
+\hline 
+\textbf{collaborators} & Names & list of collaborator names (initials then surname) \\
+\hline 
+\textbf{fundingSource} & String & funding source \\
+\hline  \hline  
+\multicolumn{3}{|c|}{\large observation types}\\
+\multicolumn{1}{|c}{Name}& \multicolumn{1}{c}{Type} & \multicolumn{1}{c|}{Description}\\
+\hline
+
+\textbf{optical} & Optical & optical observation \\
+\hline 
+\textbf{offset} & Offset & optical offset \\
+\hline 
+\textbf{occultation} & Occultation & optical occultation \\
+\hline 
+\textbf{radar} & Radar & delay or doppler radar \\
+\hline  \hline  
+\multicolumn{3}{|c|}{\large observation-context, observationChunk, submitBatch}\\
+\multicolumn{1}{|c}{Name}& \multicolumn{1}{c}{Type} & \multicolumn{1}{c|}{Description}\\
+\hline
+
+\textbf{observationContext} & ObservationContext & observation context information \\
+\hline 
+\textbf{observationChunk} & ObservationChunk & observationChunk contains an observationContext and a  list of observations of one kind \\
+\hline 
+\textbf{submitBatch} & SubmitBatch & batch is a list of ObservationChunk's \\
+\hline  \hline  
+\multicolumn{3}{|c|}{\large Free-Standing Residuals}\\
+\multicolumn{1}{|c}{Name}& \multicolumn{1}{c}{Type} & \multicolumn{1}{c|}{Description}\\
+\hline
+
+\textbf{opticalResidual} & OpticalResidual & optical residual \\
+\hline 
+\textbf{radarResidual} & RadarResidual & radar residual \\
+\hline  \hline  
+\multicolumn{3}{|c|}{\large ADES root}\\
+\multicolumn{1}{|c}{Name}& \multicolumn{1}{c}{Type} & \multicolumn{1}{c|}{Description}\\
+\hline
+
+\textbf{ades} & ADES & document root \\
+\hline  \hline 
+
+
+\end{longtable}
+
+

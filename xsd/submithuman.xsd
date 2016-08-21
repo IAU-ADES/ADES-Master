@@ -1,0 +1,1043 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+<!-- Here are the type definitions translated from the master xml
+      
+    The master xml file has a restricted vocabulary.  You can help 
+    by expanding it :->
+
+    xsd:simpleType is a restriction generally via enum or regex or length 
+
+    xsd:complexType comes for complexlisttype in the master XML, and is
+       either a xsd:sequence or xsd:all list of elements or groups. 
+
+       It currently uses "name" and "type" instead of "ref" to other elements
+-->
+
+
+<xsd:simpleType name="String">
+    
+    <xsd:annotation>
+      <xsd:documentation> 
+         String follows the 
+         ADES specification that that the pipe character is disallowed in PSV.
+         To allow data conversion from XML, it must disallowed in XML as well.
+         Also disallow blank elements.  Therefore, all elements must match
+         this pattern  
+      </xsd:documentation>
+    </xsd:annotation>
+ 
+    <xsd:restriction base="xsd:string">
+        
+      <xsd:pattern value="[^|]*[\w-[|]][^|]*"/> 
+    </xsd:restriction> 
+
+</xsd:simpleType>
+
+<xsd:simpleType name="RightAscension">
+    
+    <xsd:annotation>
+      <xsd:documentation> 
+         RA in \si{\degree} limited to [0.0, 360.0)  
+      </xsd:documentation>
+    </xsd:annotation>
+ 
+    <xsd:restriction base="xsd:decimal">
+        
+      <xsd:minInclusive value="0.0"/>  
+      <xsd:maxExclusive value="360.0"/> 
+    </xsd:restriction> 
+
+</xsd:simpleType>
+
+<xsd:simpleType name="Declination">
+    
+    <xsd:annotation>
+      <xsd:documentation> 
+         $\delta$ in \si{\degree} in range [-90.0, 90.0]  
+      </xsd:documentation>
+    </xsd:annotation>
+ 
+    <xsd:restriction base="xsd:decimal">
+        
+      <xsd:minInclusive value="-90.0"/>  
+      <xsd:maxInclusive value="90.0"/> 
+    </xsd:restriction> 
+
+</xsd:simpleType>
+
+<xsd:simpleType name="PositiveDecimal">
+    
+    <xsd:annotation>
+      <xsd:documentation> 
+         PositiveDecimal in range [0.0, +inf)  
+      </xsd:documentation>
+    </xsd:annotation>
+ 
+    <xsd:restriction base="xsd:decimal">
+        
+      <xsd:minExclusive value="0.0"/> 
+    </xsd:restriction> 
+
+</xsd:simpleType>
+
+<xsd:simpleType name="Logical">
+    
+    <xsd:annotation>
+      <xsd:documentation> 
+        0 for false, 1 for true to match C and FORTRAN 
+      </xsd:documentation>
+    </xsd:annotation>
+ 
+    <xsd:restriction base="xsd:integer">
+        
+      <xsd:enumeration value="0"/>  
+      <xsd:enumeration value="1"/> 
+    </xsd:restriction> 
+
+</xsd:simpleType>
+
+<xsd:simpleType name="SelRes">
+    
+    <xsd:annotation>
+      <xsd:documentation> 
+         SelRes must be ``A," (automatic accept) ``a," (manual accecpt)``D," (automatic delete) or ``d" (manual delete) 
+      </xsd:documentation>
+    </xsd:annotation>
+ 
+    <xsd:restriction base="xsd:string">
+        
+      <xsd:enumeration value="A"/>  
+      <xsd:enumeration value="D"/>  
+      <xsd:enumeration value="a"/>  
+      <xsd:enumeration value="d"/> 
+    </xsd:restriction> 
+
+</xsd:simpleType>
+
+<xsd:simpleType name="Mode">
+    
+    <xsd:annotation>
+      <xsd:documentation> 
+         Mode must be ``CCD" or ``Photo"  
+      </xsd:documentation>
+    </xsd:annotation>
+ 
+    <xsd:restriction base="xsd:string">
+        
+      <xsd:enumeration value="CCD"/>  
+      <xsd:enumeration value="Photo"/> 
+    </xsd:restriction> 
+
+</xsd:simpleType>
+
+<xsd:simpleType name="Disc">
+    
+    <xsd:annotation>
+      <xsd:documentation> 
+         Used to mark the discovery record -- must be `*' if present 
+      </xsd:documentation>
+    </xsd:annotation>
+ 
+    <xsd:restriction base="xsd:string">
+        
+      <xsd:enumeration value="*"/> 
+    </xsd:restriction> 
+
+</xsd:simpleType>
+
+<xsd:simpleType name="Sys">
+    
+    <xsd:annotation>
+      <xsd:documentation> 
+         Coordinate system for station coordinates. This used by the pos[123]  and poscov[123][123] 
+         elements to determine the meaning of cooridnates. WGS84, ITRF and IAU are for roving stations,
+         ICRF\verb|_|AU and ICRF\verb|_|KM are for fixed stations.   
+      </xsd:documentation>
+    </xsd:annotation>
+ 
+    <xsd:restriction base="xsd:string">
+        
+      <xsd:enumeration value="WGS84"/>  
+      <xsd:enumeration value="ITRF"/>  
+      <xsd:enumeration value="IAU"/>  
+      <xsd:enumeration value="ICRF_AU"/>  
+      <xsd:enumeration value="ICRF_KM"/> 
+    </xsd:restriction> 
+
+</xsd:simpleType>
+
+<xsd:simpleType name="FixedStation">
+    
+    <xsd:annotation>
+      <xsd:documentation> 
+         The MPC maintains a list of allowed FixedStations.   
+      </xsd:documentation>
+    </xsd:annotation>
+ 
+    <xsd:restriction base="xsd:string">
+        
+      <xsd:enumeration value="123"/>  
+      <xsd:enumeration value="456"/>  
+      <xsd:enumeration value="F51"/> 
+    </xsd:restriction> 
+
+</xsd:simpleType>
+
+<xsd:simpleType name="RoverStation">
+    
+    <xsd:annotation>
+      <xsd:documentation> 
+         The MPC maintains a list of allowed RoverStations.   
+      </xsd:documentation>
+    </xsd:annotation>
+ 
+    <xsd:restriction base="xsd:string">
+        
+      <xsd:enumeration value="427"/> 
+    </xsd:restriction> 
+
+</xsd:simpleType>
+
+<xsd:simpleType name="FormatType">
+    
+    <xsd:annotation>
+      <xsd:documentation> 
+          allowed submission formats with no extra fields  
+      </xsd:documentation>
+    </xsd:annotation>
+ 
+    <xsd:restriction base="xsd:string">
+        
+      <xsd:enumeration value="IAU2015"/> 
+    </xsd:restriction> 
+
+</xsd:simpleType>
+
+<xsd:simpleType name="MPC80ColFormat">
+    
+    <xsd:annotation>
+      <xsd:documentation> 
+         MCP1992 format with extra fields precTime, precRA and precDec 
+      </xsd:documentation>
+    </xsd:annotation>
+ 
+    <xsd:restriction base="xsd:string">
+        
+      <xsd:enumeration value="MPC1992"/>  
+      <xsd:enumeration value="MPC1947"/> 
+    </xsd:restriction> 
+
+</xsd:simpleType>
+
+<xsd:simpleType name="PermID">
+    
+    <xsd:annotation>
+      <xsd:documentation> 
+         A permID (permanent ID) string may be a positive integer, a positive integer 
+       followed by upple-case letters, upper-case letters followed by
+       a positive integer, or a positive integer followed by upper-case 
+       letters followed by a hyphen followed by more upper-case letters.
+       That is, ``134340," ``1P," ``73P-C," ``83P-AC," and ``J13" are all allowed.   
+      </xsd:documentation>
+    </xsd:annotation>
+ 
+    <xsd:restriction base="xsd:string">
+        
+      <xsd:pattern value="(\d+([A-Z]*(-[A-Z]*)?)?)|([A-Z]+\d*)"/> 
+    </xsd:restriction> 
+
+</xsd:simpleType>
+
+<xsd:simpleType name="ProvID">
+    
+    <xsd:annotation>
+      <xsd:documentation> 
+         A provID (provisional ID) is based on a four-digit year number 
+      possibly prefixed by P/, C/ or S/ followed by a space and then
+      some combination of upper-case lettesr, digits, hyphens and spaces.
+      That is, ``2014 AA," ``2001 P-L," ``S/2001 S 31," ``P/1886 S1"
+      Perhaps a clearer description would result in a better
+      regular exparession  
+      </xsd:documentation>
+    </xsd:annotation>
+ 
+    <xsd:restriction base="xsd:string">
+        
+      <xsd:pattern value="([PCS]/)?\d{4} ([-A-Z \d]*)"/> 
+    </xsd:restriction> 
+
+</xsd:simpleType>
+
+<xsd:simpleType name="Remark">
+    
+    <xsd:annotation>
+      <xsd:documentation> 
+         A remark is a String limited to 200 characters 
+      </xsd:documentation>
+    </xsd:annotation>
+ 
+    <xsd:restriction base="String">
+        
+      <xsd:maxLength value="200"/> 
+    </xsd:restriction> 
+
+</xsd:simpleType>
+
+<xsd:simpleType name="RadarStation">
+    
+    <xsd:annotation>
+      <xsd:documentation> 
+        MPC maintains a list of radar stations 
+      </xsd:documentation>
+    </xsd:annotation>
+ 
+    <xsd:restriction base="String">
+        
+      <xsd:maxLength value="5"/> 
+    </xsd:restriction> 
+
+</xsd:simpleType>
+
+<xsd:simpleType name="AstCat">
+    
+    <xsd:annotation>
+      <xsd:documentation> 
+        MPC maintains a list of astrometry catalogs 
+      </xsd:documentation>
+    </xsd:annotation>
+ 
+    <xsd:restriction base="String">
+        
+      <xsd:maxLength value="5"/> 
+    </xsd:restriction> 
+
+</xsd:simpleType>
+
+<xsd:simpleType name="Band">
+    
+    <xsd:annotation>
+      <xsd:documentation> 
+        MPC maintains a list of bands for magnitude observations 
+      </xsd:documentation>
+    </xsd:annotation>
+ 
+    <xsd:restriction base="String">
+        
+      <xsd:maxLength value="5"/> 
+    </xsd:restriction> 
+
+</xsd:simpleType>
+
+<xsd:simpleType name="PhotCat">
+    
+    <xsd:annotation>
+      <xsd:documentation> 
+        MPC maintains a list of phototmetry catalogs 
+      </xsd:documentation>
+    </xsd:annotation>
+ 
+    <xsd:restriction base="String">
+        
+      <xsd:maxLength value="5"/> 
+    </xsd:restriction> 
+
+</xsd:simpleType>
+
+<xsd:complexType name="Names">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+         List of one or more names of type String 
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:sequence>  
+          <xsd:element name="name" type="String" maxOccurs="unbounded"/> <!-- list of names -->  
+  </xsd:sequence> 
+</xsd:complexType>
+
+<xsd:complexType name="Observatory">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+         Observatory Identification 
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:all>  
+          <xsd:element name="mpcCode" type="String"/> <!-- observatory mpc code name -->   
+          <xsd:element name="name" type="String" minOccurs="0"/> <!-- observatory name -->  
+  </xsd:all> 
+</xsd:complexType>
+
+<xsd:complexType name="Contact">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+        Submitter contact information.  A name field (initials plus surname), an address string, and an e-mail address to which a return receipt will be sent with ackMessage 
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:all>  
+          <xsd:element name="name" type="String"/> <!-- observer name -->   
+          <xsd:element name="address" type="String" minOccurs="0"/> <!-- observer address -->   
+          <xsd:element name="ackMessage" type="String" minOccurs="0"/> <!-- message to be sent to ackEmal -->   
+          <xsd:element name="ackEmail" type="String"/> <!-- e-mail for acknowlegdment messages -->  
+  </xsd:all> 
+</xsd:complexType>
+
+<xsd:complexType name="Telescope">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+        telescope information 
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:all>  
+          <xsd:element name="name" type="String" minOccurs="0"/> <!-- telescope name -->   
+          <xsd:element name="design" type="String" minOccurs="0"/> <!-- telescope design -->   
+          <xsd:element name="aperture" type="PositiveDecimal" minOccurs="0"/> <!-- telescope aperture -->   
+          <xsd:element name="detector" type="String" minOccurs="0"/> <!-- telescope detector -->   
+          <xsd:element name="fRatio" type="PositiveDecimal" minOccurs="0"/> <!-- telescope f number -->   
+          <xsd:element name="filter" type="String" minOccurs="0"/> <!-- telescope filter -->   
+          <xsd:element name="arraySize" type="String" minOccurs="0"/> <!-- telescope array size -->   
+          <xsd:element name="pixelScale" type="PositiveDecimal" minOccurs="0"/> <!-- telescope sensor pixel size -->  
+  </xsd:all> 
+</xsd:complexType>
+
+<xsd:complexType name="Software">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+        information about software used in processing 
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:all>  
+          <xsd:element name="astrometry" type="String" minOccurs="0"/>  
+          <xsd:element name="fitOrder" type="String" minOccurs="0"/>  
+          <xsd:element name="photometry" type="String" minOccurs="0"/>  
+          <xsd:element name="objectDetection" type="String" minOccurs="0"/> 
+  </xsd:all> 
+</xsd:complexType>
+
+<xsd:group name="MPCIDGroup">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+        permID or provID or both in that order 
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:choice>
+  <xsd:sequence>  
+          <xsd:element ref="permID"/>  
+          <xsd:element ref="provID" minOccurs="0"/> 
+  </xsd:sequence>
+  <xsd:sequence>  
+          <xsd:element ref="provID"/> 
+  </xsd:sequence> 
+  </xsd:choice> 
+</xsd:group>
+
+<xsd:group name="OpticalID">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+         An MPCIDGroup or trkSub or both in that order.
+           Of permID, provID or trkSub at least one must
+           be present in an optical observation but
+           all three might be present.   Also, MPC will
+           assign unique obsID and trkID fields for
+           distribution
+      
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:sequence>
+  <xsd:choice>
+  <xsd:sequence>  
+          <xsd:group ref="MPCIDGroup"/>  
+          <xsd:element ref="trkSub" minOccurs="0"/> 
+  </xsd:sequence>
+  <xsd:sequence>  
+          <xsd:element ref="trkSub"/> 
+  </xsd:sequence> 
+  </xsd:choice> 
+  </xsd:sequence> 
+</xsd:group>
+
+<xsd:group name="RadarID">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+         An MPCIDGroup only; radar has no equivalent
+           of the optical ``trkSub" field.  MPC will add
+           a unique obsID field for distribution
+      
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:sequence>  
+          <xsd:group ref="MPCIDGroup"/>  
+          <xsd:element ref="trkSub" minOccurs="0"/> 
+  </xsd:sequence> 
+</xsd:group>
+
+<xsd:group name="RadarValue">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+        A RadarValue is used for doppler or delay values
+          and errors in a radar observation.  
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:choice>
+  <xsd:sequence>  
+          <xsd:element ref="doppler"/>  
+          <xsd:element ref="rmsDoppler"/> 
+  </xsd:sequence>
+  <xsd:sequence>  
+          <xsd:element ref="delay"/>  
+          <xsd:element ref="rmsDelay"/> 
+  </xsd:sequence> 
+  </xsd:choice> 
+</xsd:group>
+
+<xsd:group name="Station">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+        
+     stationary or rover with location data.
+     Either location comes last or we need a new
+     element name (maybe rover) for the rover stations.
+   
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:choice>
+  <xsd:sequence>  
+          <xsd:element name="stn" type="FixedStation"/> 
+  </xsd:sequence>
+  <xsd:sequence>  
+          <xsd:element ref="sys"/>  
+          <xsd:element ref="ctr"/>  
+          <xsd:element ref="pos1"/>  
+          <xsd:element ref="pos2"/>  
+          <xsd:element ref="pos3"/>  
+          <xsd:element ref="posCov11" minOccurs="0"/>  
+          <xsd:element ref="posCov12" minOccurs="0"/>  
+          <xsd:element ref="posCov13" minOccurs="0"/>  
+          <xsd:element ref="posCov22" minOccurs="0"/>  
+          <xsd:element ref="posCov23" minOccurs="0"/>  
+          <xsd:element ref="posCov33" minOccurs="0"/>  
+          <xsd:element name="stn" type="RoverStation"/> 
+  </xsd:sequence> 
+  </xsd:choice> 
+</xsd:group>
+
+<xsd:group name="SubmissionFormat">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+        
+     SubmissionFormat validates the required extra fields
+     for the MPC1992 submission format.  As with
+     Station, the subFmt has to come last to avoid
+     XML LR0 parsing cruft.
+   
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:choice>
+  <xsd:sequence>  
+          <xsd:element name="subFmt" type="FormatType"/> 
+  </xsd:sequence>
+  <xsd:sequence>  
+          <xsd:element ref="precTime"/>  
+          <xsd:element ref="precRA"/>  
+          <xsd:element ref="precDec"/>  
+          <xsd:element name="subFmt" type="MPC80ColFormat"/> 
+  </xsd:sequence> 
+  </xsd:choice> 
+</xsd:group>
+
+<xsd:group name="Photometry">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+        
+     The Photometry group is optional in all optical
+     observation types (optical, offset, and
+     occultation).  The "mag" and "band" fields
+     must be present; the rest are optional but
+     can only occur if "mag" and "band" are present
+     to define this as a Photometry group
+   
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:sequence>  
+          <xsd:element ref="mag"/>  
+          <xsd:element ref="band"/>  
+          <xsd:element ref="photCat" minOccurs="0"/>  
+          <xsd:element ref="rmsMag" minOccurs="0"/>  
+          <xsd:element ref="photAp" minOccurs="0"/>  
+          <xsd:element ref="nucMag" minOccurs="0"/> 
+  </xsd:sequence> 
+</xsd:group>
+
+<xsd:group name="OpticalResRADec">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+        
+    OpticalResRADec is optional for the OpticalResiduals group
+   
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:sequence>  
+          <xsd:element ref="resRA"/>  
+          <xsd:element ref="resDec"/>  
+          <xsd:element ref="selAst"/>  
+          <xsd:element ref="sigRA" minOccurs="0"/>  
+          <xsd:element ref="sigDec" minOccurs="0"/>  
+          <xsd:element ref="sigCorr" minOccurs="0"/>  
+          <xsd:element ref="sigTime" minOccurs="0"/>  
+          <xsd:element ref="biasRA" minOccurs="0"/>  
+          <xsd:element ref="biasDec" minOccurs="0"/>  
+          <xsd:element ref="biasTime" minOccurs="0"/> 
+  </xsd:sequence> 
+</xsd:group>
+
+<xsd:group name="OpticalResMag">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+        
+    OpticalResRADec is optional for the OpticalResiduals group
+   
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:sequence>  
+          <xsd:element ref="photProd"/>  
+          <xsd:element ref="resMag"/>  
+          <xsd:element ref="selPhot"/>  
+          <xsd:element ref="sigMag" minOccurs="0"/>  
+          <xsd:element ref="biasMag" minOccurs="0"/>  
+          <xsd:element ref="photMod" minOccurs="0"/> 
+  </xsd:sequence> 
+</xsd:group>
+
+<xsd:group name="OpticalResiduals">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+        
+      The OpticalResiduals group is optional for adding residuals
+      to optical observations, or as a separate obsResidual element 
+      tagged by obsID
+    
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:sequence>  
+          <xsd:element ref="orbProd"/>  
+          <xsd:element ref="orbID"/>  
+          <xsd:group ref="OpticalResRADec" minOccurs="0"/>  
+          <xsd:group ref="OpticalResMag" minOccurs="0"/> 
+  </xsd:sequence> 
+</xsd:group>
+
+<xsd:group name="RadarResiduals">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+        
+      The RadarResiduals group is optional for adding residuals
+      to optical observations, or as a separate obsResidual element 
+      tagged by obsID
+    
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:sequence>  
+          <xsd:element ref="orbID"/>  
+          <xsd:element ref="resRad"/>  
+          <xsd:element ref="selRad"/>  
+          <xsd:element ref="sigRad" minOccurs="0"/> 
+  </xsd:sequence> 
+</xsd:group>
+
+<xsd:complexType name="Optical">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+        Optical Observation with RA and Dec 
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:sequence>  
+          <xsd:group ref="OpticalID"/>  
+          <xsd:element ref="mode"/>  
+          <xsd:group ref="Station"/>  
+          <xsd:element ref="prog" minOccurs="0"/>  
+          <xsd:element ref="obsTime"/>  
+          <xsd:element ref="ra"/>  
+          <xsd:element ref="dec"/>  
+          <xsd:element ref="frame" minOccurs="0"/>  
+          <xsd:element ref="astCat"/>  
+          <xsd:element ref="rmsRA" minOccurs="0"/>  
+          <xsd:element ref="rmsDec" minOccurs="0"/>  
+          <xsd:element ref="rmsCorr" minOccurs="0"/>  
+          <xsd:group ref="Photometry" minOccurs="0"/>  
+          <xsd:element ref="logSNR" minOccurs="0"/>  
+          <xsd:element ref="seeing" minOccurs="0"/>  
+          <xsd:element ref="exp" minOccurs="0"/>  
+          <xsd:element ref="rmsFit" minOccurs="0"/>  
+          <xsd:element ref="nStars" minOccurs="0"/>  
+          <xsd:element ref="uncTime" minOccurs="0"/>  
+          <xsd:element ref="notes" minOccurs="0"/>  
+          <xsd:element ref="remarks" minOccurs="0"/>  
+          <xsd:group ref="OpticalResiduals" minOccurs="0"/> 
+  </xsd:sequence> 
+</xsd:complexType>
+
+<xsd:complexType name="Offset">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+        Optical Offset Observation with RA and Dec 
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:sequence>  
+          <xsd:group ref="OpticalID"/>  
+          <xsd:element ref="mode"/>  
+          <xsd:group ref="Station"/>  
+          <xsd:element ref="prog" minOccurs="0"/>  
+          <xsd:element ref="obsTime"/>  
+          <xsd:element ref="deltaRA"/>  
+          <xsd:element ref="deltaDec"/>  
+          <xsd:element ref="frame" minOccurs="0"/>  
+          <xsd:element ref="astCat"/>  
+          <xsd:element ref="rmsRA" minOccurs="0"/>  
+          <xsd:element ref="rmsDec" minOccurs="0"/>  
+          <xsd:element ref="rmsCorr" minOccurs="0"/>  
+          <xsd:group ref="Photometry" minOccurs="0"/>  
+          <xsd:element ref="logSNR" minOccurs="0"/>  
+          <xsd:element ref="seeing" minOccurs="0"/>  
+          <xsd:element ref="exp" minOccurs="0"/>  
+          <xsd:element ref="rmsFit" minOccurs="0"/>  
+          <xsd:element ref="nStars" minOccurs="0"/>  
+          <xsd:element ref="uncTime" minOccurs="0"/>  
+          <xsd:element ref="notes" minOccurs="0"/>  
+          <xsd:element ref="remarks" minOccurs="0"/>  
+          <xsd:group ref="OpticalResiduals" minOccurs="0"/> 
+  </xsd:sequence> 
+</xsd:complexType>
+
+<xsd:complexType name="Occultation">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+        Optical Occultation Observation with deltaRA, deltaDec, raStar and decStar 
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:sequence>  
+          <xsd:group ref="OpticalID"/>  
+          <xsd:element ref="mode"/>  
+          <xsd:group ref="Station"/>  
+          <xsd:element ref="prog" minOccurs="0"/>  
+          <xsd:element ref="obsTime"/>  
+          <xsd:element ref="deltaRA"/>  
+          <xsd:element ref="deltaDec"/>  
+          <xsd:element ref="raStar"/>  
+          <xsd:element ref="decStar"/>  
+          <xsd:element ref="frame" minOccurs="0"/>  
+          <xsd:element ref="astCat"/>  
+          <xsd:element ref="rmsRA" minOccurs="0"/>  
+          <xsd:element ref="rmsDec" minOccurs="0"/>  
+          <xsd:element ref="rmsCorr" minOccurs="0"/>  
+          <xsd:group ref="Photometry" minOccurs="0"/>  
+          <xsd:element ref="logSNR" minOccurs="0"/>  
+          <xsd:element ref="seeing" minOccurs="0"/>  
+          <xsd:element ref="exp" minOccurs="0"/>  
+          <xsd:element ref="rmsFit" minOccurs="0"/>  
+          <xsd:element ref="nStars" minOccurs="0"/>  
+          <xsd:element ref="uncTime" minOccurs="0"/>  
+          <xsd:element ref="notes" minOccurs="0"/>  
+          <xsd:element ref="remarks" minOccurs="0"/>  
+          <xsd:group ref="OpticalResiduals" minOccurs="0"/> 
+  </xsd:sequence> 
+</xsd:complexType>
+
+<xsd:complexType name="Radar">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+        Radar Observation using either doppler or delay values from RadarValue 
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:sequence>  
+          <xsd:group ref="RadarID"/>  
+          <xsd:element ref="obsTime"/>  
+          <xsd:group ref="RadarValue"/>  
+          <xsd:element ref="com" minOccurs="0"/>  
+          <xsd:element ref="frq"/>  
+          <xsd:element ref="trx"/>  
+          <xsd:element ref="rcv"/>  
+          <xsd:element ref="remarks" minOccurs="0"/> 
+  </xsd:sequence> 
+</xsd:complexType>
+
+<xsd:complexType name="ObservationContext">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+        observation context header type 
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:all>  
+          <xsd:element ref="observatory"/>  
+          <xsd:element ref="contact"/>  
+          <xsd:element ref="observers"/>  
+          <xsd:element ref="measurers"/>  
+          <xsd:element ref="telescope" minOccurs="0"/>  
+          <xsd:element ref="software" minOccurs="0"/>  
+          <xsd:element ref="comment" minOccurs="0"/>  
+          <xsd:element ref="coinvestigators" minOccurs="0"/>  
+          <xsd:element ref="collaborators" minOccurs="0"/>  
+          <xsd:element ref="fundingSource" minOccurs="0"/> 
+  </xsd:all> 
+</xsd:complexType>
+
+<xsd:complexType name="ObservationChunk">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+        A list of all optical or all radar observations, with context 
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:sequence>  
+          <xsd:element ref="observationContext"/>
+  <xsd:choice>  
+          <xsd:element ref="optical" maxOccurs="unbounded"/>  
+          <xsd:element ref="offset" maxOccurs="unbounded"/>  
+          <xsd:element ref="occultation" maxOccurs="unbounded"/>  
+          <xsd:element ref="radar" maxOccurs="unbounded"/> 
+  </xsd:choice> 
+  </xsd:sequence> 
+</xsd:complexType>
+
+<xsd:complexType name="SubmitBatch">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+        a list of observationChunk 
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:sequence>  
+          <xsd:element ref="observationChunk" maxOccurs="unbounded"/> 
+  </xsd:sequence> 
+</xsd:complexType>
+
+<xsd:complexType name="OpticalResidual">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+        Optical Residual outside of the optical/occulatation/offset structure 
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:sequence>  
+          <xsd:group ref="OpticalID"/>  
+          <xsd:element ref="obsTime"/>  
+          <xsd:group ref="OpticalResiduals"/> 
+  </xsd:sequence> 
+</xsd:complexType>
+
+<xsd:complexType name="RadarResidual">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+        Radar Residual outside of the radar structure 
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:sequence>  
+          <xsd:group ref="RadarID"/>  
+          <xsd:element ref="obsTime"/>  
+          <xsd:group ref="RadarResiduals"/> 
+  </xsd:sequence> 
+</xsd:complexType>
+
+<xsd:complexType name="ADES">
+     
+    <xsd:annotation>
+      <xsd:documentation> 
+        This is what is allowed in ades documents -- any
+       of these in any order 
+      </xsd:documentation>
+    </xsd:annotation>
+
+  <xsd:choice maxOccurs="unbounded">  
+          <xsd:element ref="optical"/>  
+          <xsd:element ref="offset"/>  
+          <xsd:element ref="occultation"/>  
+          <xsd:element ref="radar"/>  
+          <xsd:element ref="opticalResidual"/>  
+          <xsd:element ref="radarResidual"/>  
+          <xsd:element ref="submitBatch"/>  
+          <xsd:element ref="observationChunk"/> 
+  </xsd:choice> 
+</xsd:complexType>
+
+
+
+
+
+<!-- Here are the elements, which all are defined with names
+      
+     All elements are of the form
+     <xsd:element name="<name>" type="<type>"/>
+     and so have a simple transformation from the master xml
+-->
+
+ 
+
+<!-- These elements are for the observation types in the required order -->
+  
+          <xsd:element name="permID" type="PermID"/> <!-- IAU permanent designation, i.e., IAU number (MPCID group) -->   
+          <xsd:element name="provID" type="ProvID"/> <!-- MPC provisional designation (unpacked form) for unnumbered object (MPCID group) -->   
+          <xsd:element name="trkSub" type="String"/> <!-- Observer-assigned tracklet identifier, unique within submission batch Typically the same as observer-assiged termporary designation currently employed for the MPC1992 format.  Observsers are encouraged to use values with eight or fewer alphanumeric characers (OpticalID group) -->   
+          <xsd:element name="obsID" type="String"/> <!-- Globally Unique Observation ID assigned by MPC (optical and radar ID groups) -->   
+          <xsd:element name="trkID" type="String"/> <!-- Globally Unique alphnumeric observation identifier assigned by MPC (optical and radar ID groups) -->   
+          <xsd:element name="mode" type="Mode"/> <!-- Mode of optical observations.  See Mode type for allowed values -->   
+          <xsd:element name="prog" type="String"/> <!-- Program code as assigned by the MPC.  The {\em prog} field is used to identify different observing  programs/observers at the the same telescope.  For surveys and other large producers, the MPC will increment {\em prog} for a given observatory code to document a significant operational change reported by the observing team. -->   
+          <xsd:element name="obsTime" type="xsd:dateTime"/> <!-- UTC time of the observation in ISO 8601 extended format, i.e., {\em yyyy-mm-ddThh:mm:ss.ssZ}.  The reported time precision should be appropriate for the astrometric accuracy.   The trailing {\em Z} indicates UTC and is optional. -->   
+          <xsd:element name="ra" type="RightAscension"/> <!-- Astronmetric equatorial right ascension in decimal \si{\degree} in the reference frame specified by {\em frame}. -->   
+          <xsd:element name="dec" type="Declination"/> <!-- Astronmetric equatorial declination in decimal \si{\degree} in the reference frame specified by {\em frame}.  Positive $\delta$ values may optionally include a \verb|+| sign -->   
+          <xsd:element name="deltaRA" type="xsd:decimal"/> <!-- Measured $\Delta(\mathrm{RA}\cos\delta)$ in \si{\arcsecond}.  For offset measurements of a satellite with respect to its planet, or for occultation observations with respect to the star. -->   
+          <xsd:element name="deltaDec" type="xsd:decimal"/> <!-- Measured  $\Delta\delta$ in  \si{\arcsecond}.  For offset measurements of a satellite with respect to its planet, or for occultation observations with respect to the star. -->   
+          <xsd:element name="raStar" type="RightAscension"/> <!-- RA of decimal \si{\degree} of the occulted star -->   
+          <xsd:element name="decStar" type="Declination"/> <!-- $\delta$ in decimal \si{\degree} of the occulted star -->   
+          <xsd:element name="frame" type="String"/> <!-- Reference from for reported angular measurements, e.g., `J2000' for J2000.0 equatorial. (This field is not anticipated to be used until a new reference epoch is indentified, e.g., J2050.0 -->   
+          <xsd:element name="astCat" type="AstCat"/> <!-- Star catalog used for the astrometric reduction or for the occulted star in the case of occultation observations.  Full list of acceptable field names to be provided and maintained by the MPC. (The MPC\textemdash specified value of `UNK' will be used for some archival observations to indicate astrometric catalog unknown.) -->   
+          <xsd:element name="rmsRA" type="PositiveDecimal"/> <!-- Random component of the $\mathrm{RA}\cos\delta$ $1\sigma$ uncertainty in \si{\arcsecond} as estimated by the observer as part of the image processing and astrometric reduction.  Presumed systematic errors, e.g., those arising from star catalog biases, should not be folded into the uncertainties reported in this field.  $\mathrm{rmsRA}^2$ and $\mathrm{rmsDec}^2$ are the diagonal elements of the $\mathrm{RA}$-$\delta$ covariance matrix, which convolves errors from target PSF fitting, telescope tracking, reference star fit, etc. -->   
+          <xsd:element name="rmsDec" type="PositiveDecimal"/> <!-- Random component of the $\delta$ $1\sigma$ uncertainty in \si{\arcsecond} as  estimated by the observer as part of the image processing and astrometric reduction.  Presumed systematic errors, e.g., those arising from star catalog biases, should not be folded into the uncertainties reported in this field.  $\mathrm{rmsRA}^2$ and $\mathrm{rmsDec}^2$ are the diagonal  elements of the $\mathrm{RA}$-$\delta$ covariance matrix, which convolves errors from target PSF fitting, telescope tracking, reference star fit, etc. -->   
+          <xsd:element name="rmsCorr" type="xsd:decimal"/> <!-- Correlation between RA and $\delta$ that may result from the astrometric reduction.  It can be especially relevant for trailed images or cases with a poor distribution of reference stars.  This is derived from the $\mathrm{RA}$-$\delta$ covariance matrix, where the off-diagonal term is $\mathrm{rmsCorr} * \mathrm{rmsRA} * \mathrm{rmsDec}$. -->   
+          <xsd:element name="mag" type="xsd:decimal"/> <!-- Apparent Magnitude in specified band (Photometry group) -->   
+          <xsd:element name="band" type="Band"/> <!-- Filter designation for photometry.  Full list of acceptable fields names are to be provided and maintained by the MPC. (Photometry group). -->   
+          <xsd:element name="photCat" type="PhotCat"/> <!-- Star catalog used for photometry measurements.  Full list of acceptable field names to be provided and maintained by the MPC. (Photometry group) -->   
+          <xsd:element name="rmsMag" type="PositiveDecimal"/> <!-- Apparent magnitude $1\sigma$ uncertainty in magnitudes (Photometry group) -->   
+          <xsd:element name="photAp" type="PositiveDecimal"/> <!-- Photometric aperture radius in \si{\arcsecond} (Photometry group) -->   
+          <xsd:element name="nucMag" type="Logical"/> <!-- Nuclear magnitude flag for comets.  0 for total magnitude (i.e., for most archival comet observations and all asteroid observations), 1 for nuclear magnitude. Primarily used for archival data as photAp should be used to communicate this information in the new standard (Photometry group) -->   
+          <xsd:element name="logSNR" type="xsd:decimal"/> <!-- $\log_{10}$ of the signal-to-noise ratio of the source in the image integrated on the entire aperture used for the astrometric centroid. -->   
+          <xsd:element name="seeing" type="PositiveDecimal"/> <!-- Size of seeing disc in \si{\arcsecond}, measured at Full Width Half Maximum (FWHM) of target point spread function (PSF).  -->   
+          <xsd:element name="exp" type="PositiveDecimal"/> <!-- Exposure time in \si{\second}.  Total exposure time in the case of stacked image detections  -->   
+          <xsd:element name="rmsFit" type="PositiveDecimal"/> <!-- RMS of fit of astrometric comparison stars in \si{\arcsecond}.  -->   
+          <xsd:element name="nStars" type="xsd:positiveInteger"/> <!-- Number of stars in astrometric fit. -->   
+          <xsd:element name="ref" type="String"/> <!-- Standard reference field used for citations. -->   
+          <xsd:element name="disc" type="Disc"/> <!-- Discovery flag; `*' marks a new discovery record; otherwise not present -->   
+          <xsd:element name="subFmt" type="String"/> <!-- Format in which the observation was originally submitted to the MPC, e.g., M92 for MPC1992 format or I15 for this standard.  Filled by the MPC according to a list provided and maintained by the MPC. -->   
+          <xsd:element name="precTime" type="PositiveDecimal"/> <!-- Precision in millionths of a day of the reported obeservation time for achived MPC1992 data records -->   
+          <xsd:element name="precRA" type="PositiveDecimal"/> <!-- Precision in \si{\arcsecond} of the reported RA for archived MPC1992 data records. -->   
+          <xsd:element name="precDec" type="PositiveDecimal"/> <!-- Precision in \si{\arcsecond} of the reported $\delta$ for archived MPC1992 data records. -->   
+          <xsd:element name="uncTime" type="PositiveDecimal"/> <!-- Estimated time uncertainty in \si{\second}. Unlike the preceding RMS fields, which indicate random errors, this field indicates a presumed lvel of systematic clock error.  NB: This field is generally only to be used to communicate exceptions and problems with clock calibration and is not intended to be used in routine submissions where clock errors are not a significant source of astrometric error. -->   
+          <xsd:element name="notes" type="String"/> <!-- A set of one-character note flags to communicate observing circumstances.  List of acceptable flags and their interpretation to be provided and maintained by the MPC. -->   
+          <xsd:element name="remarks" type="Remark"/> <!-- Comment field provided by the observer.  This field can be used to report additional information that is not reportable in the notes field, but that may be of relevance for interpretation of the observations. -->   
+          <xsd:element name="sys" type="Sys"/> <!-- Coordinate system for station coordinates and covariance. \begin{itemize} \item{WGS84: }{geodetic reference eilipsoid. GPS coordinates are normally obtained in this frame} \item{ITRF: }{cylindrical} \item{IAU: }{IAU planetary cartographic model for bodies other than Earth} \item{ICRF\verb|_|AU: }{For space-based stations, in \si{\astronomicalunit}} \item{ICRF\verb|_|KM: }{For space-based stations, in \si{\kilo\meter}}\end{itemize} -->   
+          <xsd:element name="ctr" type="xsd:integer"/> <!-- Origin of the reference system.  Use public SPICE codes, e.g., 399 is the geocenter, 10 is the Sun center.  Note;  sys=WGS84 implies ctr=399 -->   
+          <xsd:element name="pos1" type="xsd:decimal"/> <!-- Position of observer, first value. \begin{itemize}\item{WGS84: }E longitude(\si{\degree}), latitude (\si{\degree}), and altitude (\si{\meter}) \item{ITRF: }{E longitude (\si{\degree}), $R_{xy}$ (\si{\kilo\meter}), $R_z$ (\si{\kilo\meter})} \item {IAU: }{longidule (\si{\degree}), latitude (\si{\degree}) and altitude (\si{\meter}) as defined by the corresponding IAU cartography standard} \item{ICRF: }{ equatorial rectangular coordinates (\si{\kilo\meter} or \si{\astronomicalunit}) in reference frame given by \em{frame}} \end{itemize} The number of digits provided should be consistent with the uncertainty of the coordinates -->   
+          <xsd:element name="pos2" type="xsd:decimal"/> <!-- Position second value per sys -->   
+          <xsd:element name="pos3" type="xsd:decimal"/> <!-- Position third value per sys -->   
+          <xsd:element name="posCov11" type="xsd:decimal"/> <!-- 11 covariance per sys -->   
+          <xsd:element name="posCov12" type="xsd:decimal"/> <!-- 12 covariance per sys -->   
+          <xsd:element name="posCov13" type="xsd:decimal"/> <!-- 13 covariance per sys -->   
+          <xsd:element name="posCov22" type="xsd:decimal"/> <!-- 22 covariance per sys -->   
+          <xsd:element name="posCov23" type="xsd:decimal"/> <!-- 23 covariance per sys -->   
+          <xsd:element name="posCov33" type="xsd:decimal"/> <!-- 33 covariance per sys -->   
+          <xsd:element name="delay" type="xsd:decimal"/> <!-- observed radar delay value in \si{\second}. -->   
+          <xsd:element name="rmsDelay" type="xsd:decimal"/> <!-- Measurement $1\sigma$ uncertainty in \si{\micro\second} for radar delay -->   
+          <xsd:element name="doppler" type="xsd:decimal"/> <!-- observed radar doppler value in \si{\hertz} -->   
+          <xsd:element name="rmsDoppler" type="xsd:decimal"/> <!-- Measurement $1\sigma$ in uncertainty \si{\hertz} for radar doppler -->   
+          <xsd:element name="com" type="Logical"/> <!-- Flag to indicate that the observation is reduced to the center of mass.  0 implies a measurement to the peak power position, which is usually interpreted as the leading edge of the target, with the reflection point being modeled one object radius prior to the center of mass. -->   
+          <xsd:element name="frq" type="PositiveDecimal"/> <!-- Carrier reference frequence in \si{\mega\hertz} -->   
+          <xsd:element name="trx" type="RadarStation"/> <!-- Station code of transmiting antenna.  List of station codes and associated locations provided by the MPC -->   
+          <xsd:element name="rcv" type="RadarStation"/> <!-- Station code of receiving antenna.  List of station codes and associated locations provided by the MPCradar receiver.  -->  
+
+<!--  -->
+  
+          <xsd:element name="orbProd" type="String"/> <!-- Orbit producer.  Can be institution, individual, or even email address, e.g.`MPC' -->   
+          <xsd:element name="photProd" type="String"/> <!-- Producer of photometric residuals.   Can be institution, individual, or even email address, e.g.`MPC' -->   
+          <xsd:element name="resRA" type="xsd:decimal"/> <!-- Residuals in $\mathrm{RA}\cos\delta$ in decimal \si{\degree} -->   
+          <xsd:element name="resDec" type="xsd:decimal"/> <!-- Residuals in $\delta$ in \si{\arcsecond} -->   
+          <xsd:element name="orbID" type="String"/> <!-- Local reference for orbit, e.g., `JPL 7' or `MPO 12345'. -->   
+          <xsd:element name="selAst" type="SelRes"/> <!-- Inclusion/rejection flag for astrometry -->   
+          <xsd:element name="sigRA" type="PositiveDecimal"/> <!-- Adopted $\mathrm{RA}\cos\delta$ $1\sigma$ uncertainty in \si{\arcsecond}.  Default \SI{1}{\arcsecond} -->   
+          <xsd:element name="sigDec" type="PositiveDecimal"/> <!-- Adopted $\delta$ $1\sigma$ uncertainty in \si{\arcsecond}.  Default \SI{1}{\arcsecond} -->   
+          <xsd:element name="sigCorr" type="PositiveDecimal"/> <!-- Adopted correlation between $\mathrm{RA}\cos\delta$ and $\delta$.  Default 0. May be different from the observer-provided correlation -->   
+          <xsd:element name="sigTime" type="PositiveDecimal"/> <!-- Adopted $1\sigma$ time uncertainty in \si{\second}.  Default 0. May be different from the observer-provided uncertainty -->   
+          <xsd:element name="biasRA" type="xsd:decimal"/> <!-- Adopted $\mathrm{RA}\cos\delta$ bias in \si{\arcsecond}.  Default 0 -->   
+          <xsd:element name="biasDec" type="xsd:decimal"/> <!-- Adopted $\delta$ bias in \si{\arcsecond}.  Default 0 -->   
+          <xsd:element name="biasTime" type="xsd:decimal"/> <!-- Adopted time bias in \si{\second}.  Default 0 -->   
+          <xsd:element name="resMag" type="xsd:decimal"/> <!-- Photometric residual in magnitudes -->   
+          <xsd:element name="selPhot" type="SelRes"/> <!-- Inclusion/rejection flag for photometry -->   
+          <xsd:element name="sigMag" type="PositiveDecimal"/> <!-- Adopted $1\sigma$ magnitude uncertainy in magnitudees. Could be different from the observer-provided uncertainty -->   
+          <xsd:element name="biasMag" type="xsd:decimal"/> <!-- Adopted photometric bias in magnitudes -->   
+          <xsd:element name="photMod" type="String"/> <!-- Description of the photometric model.  For example, a value of $G=0.35$ indicates the value of $G$ in the H-G system. Other standard values for this field will be established by the MPC in consultation with the research community.  Default is H-G model with $G=0.15$ -->   
+          <xsd:element name="resRad" type="xsd:decimal"/> <!-- Residual of the radar measurement in \si{\micro\second} for delay, \si{\hertz} for Doppler -->   
+          <xsd:element name="selRad" type="SelRes"/> <!-- Inclusion/rejection flag for radar astrometry -->   
+          <xsd:element name="sigRad" type="PositiveDecimal"/> <!-- Adopted uncertainty for the radar measurement in \si{\micro\second} for delta, \si{\hertz} for Doppler -->  
+
+<!-- These elements are for the observation context types -->
+  
+          <xsd:element name="observatory" type="Observatory"/> <!-- observatory information block -->   
+          <xsd:element name="contact" type="Contact"/> <!-- Contact information block -->   
+          <xsd:element name="observers" type="Names"/> <!-- list of observer names (initials then surname) -->   
+          <xsd:element name="measurers" type="Names"/> <!-- list of measurer names (intialis then surnames) -->   
+          <xsd:element name="telescope" type="Telescope"/> <!-- Description of telescope -->   
+          <xsd:element name="software" type="Software"/> <!-- Description of software -->   
+          <xsd:element name="comment" type="String"/> <!-- comment for observation context -->   
+          <xsd:element name="coinvestigators" type="Names"/> <!-- list of coinvestigator names (initials then surname) -->   
+          <xsd:element name="collaborators" type="Names"/> <!-- list of collaborator names (initials then surname) -->   
+          <xsd:element name="fundingSource" type="String"/> <!-- funding source -->  
+
+<!-- These are the five observation types -->
+  
+          <xsd:element name="optical" type="Optical"/> <!-- optical observation -->   
+          <xsd:element name="offset" type="Offset"/> <!-- optical offset -->   
+          <xsd:element name="occultation" type="Occultation"/> <!-- optical occultation -->   
+          <xsd:element name="radar" type="Radar"/> <!-- delay or doppler radar -->  
+
+<!-- These are the top-level types> -->
+  
+          <xsd:element name="observationContext" type="ObservationContext"/> <!-- observation context information -->   
+          <xsd:element name="observationChunk" type="ObservationChunk"/> <!-- observationChunk contains an observationContext and a  list of observations of one kind -->   
+          <xsd:element name="submitBatch" type="SubmitBatch"/> <!-- batch is a list of ObservationChunk's -->  
+
+<!-- These are the top-level types for residuals> -->
+  
+          <xsd:element name="opticalResidual" type="OpticalResidual"/> <!-- optical residual -->   
+          <xsd:element name="radarResidual" type="RadarResidual"/> <!-- radar residual -->  
+
+<!-- The intended top-level document root -->
+  
+          <xsd:element name="ades" type="ADES"/> <!-- document root --> 
+
+
+</xsd:schema>
+
+
