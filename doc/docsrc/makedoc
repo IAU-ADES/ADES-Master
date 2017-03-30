@@ -1,0 +1,9 @@
+#!/usr/bin/env csh
+set tex="/usr/local/texlive/2016/bin/x86_64-darwin/"
+set tex="/bin"
+./cleanup
+../../Python/bin/maketexfiles "../.."
+$tex/latex ades.tex
+$tex/latex ades.tex
+$tex/dvips ades.dvi
+$tex/dvipdfm ades.dvi

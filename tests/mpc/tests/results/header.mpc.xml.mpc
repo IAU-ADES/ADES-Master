@@ -1,0 +1,34 @@
+COD 291
+CON R S. McMillan, Univ. of Arizona, 1629 E. Univ. Blvd, Tucson AZ 85721
+OBS T.H. Bressi
+MEA T.H. Bressi
+TEL 1.8-m f/2.7 reflector + CCD
+COM CCD = 2048x2048 Fairchild 3041 thinned, back-illum., BB AR coated
+COM Pixels are 15x15 microns = 0.62 arcsec on Spacewatch 1.8-m telescope
+COM Camera = Finger Lakes Instr. ProLine Model PL3041-LC, S/N PL0144010
+COM Filter = Schott OG-515; bandpass 515-950 nm = V+R+I
+COM Measurements made using Astromatic (Ver. 1.14.12.19)
+COM Directory: 2015.04.01.22
+COM 6 stacked images per pass, 60 second exposure per image
+COM Type: CP, Last Observed: 2015 Mar 28.27, Uncertainty: N/A
+COM Sky:  Clear.
+COM Seeing FWHM = 2.0 arcsec
+     P10kefK KC2015 04 01.46910 12 17 58.93 +48 19 52.2          20.7 R      291
+     P10kefK KC2015 04 01.47360 12 17 58.50 +48 19 55.4          20.8 R      291
+     P10kefK KC2015 04 01.47813 12 17 58.11 +48 19 59.2          21.0 R      291
+COD T12
+CON D. J. Tholen
+OBS Y. Ramanjooloo
+MEA D. J. Tholen
+TEL 2.24-m University of Hawaii reflector
+     K16R34D  C2016 12 22.31391602 41 34.669+42 25 16.29         24.2 G      T12
+     K16R34D  C2016 12 22.32559102 41 35.541+42 24 59.45         23.9 G      T12
+COD 568
+CON D. J. Tholen
+OBS D. Fohring, D. Hung
+MEA D. J. Tholen
+TEL 2.24-m University of Hawaii reflector
+     K16J29B  C2016 05 17.31725815 44 36.217+10 58 28.98         21.1 R      568
+     K16J29B  C2016 05 17.31871815 44 36.483+10 58 29.98         20.9 R      568
+     K16J29B  C2016 05 17.31943515 44 36.615+10 58 30.52         21.1 R      568
+     K16J29B  C2016 05 17.32085215 44 36.880+10 58 31.46         21.4 R      568

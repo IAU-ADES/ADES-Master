@@ -1,0 +1,62 @@
+# version=2017
+# observatory
+! mpcCode G96
+! name Catalina Sky Survey
+# submitter
+! name E. J. Christensen
+# observers
+! name R. L. Seaman
+# measurers
+! name E. J. Christensen
+! name D. C. Fuls
+! name A. R. Gibbs
+! name A. D. Grauer
+! name J. A. Johnson
+! name R. A. Kowalski
+! name S. M. Larson
+! name G. J. Leonard
+! name R. G. Matheny
+! name R. L. Seaman
+! name F. C. Shelly
+# telescope
+! aperture 1.5
+! design reflector
+! detector CCD
+permID     |mode|stn |obsTime                 |ra         |dec        |rmsRA|rmsDec|astCat|mag  |band|photCat|logSNR|remarks
+     (45) 1| CCD|G96 |2013-10-04T08:05:24.576Z| 17.75174  | 20.21894  |0.02 |0.02  | UCAC4|17.9 |   V|  UCAC4|3.36  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0001.sext
+  Jupiter 1| CCD|G96 |2013-10-04T08:35:42.864Z| 17.74735  | 20.21693  |0.03 |0.02  | UCAC4|18.1 |   V|  UCAC4|3.29  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0004.sext
+  Jupiter 2| CCD|G96 |2013-10-04T08:05:24.576Z| 18.27857  | 19.79157  |0.04 |0.04  | UCAC4|19.0 |   V|  UCAC4|3.03  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0001.sext
+  Jupiter 3| CCD|G96 |2013-10-04T08:15:29.549Z| 18.27689  | 19.79160  |0.04 |0.04  | UCAC4|19.1 |   V|  UCAC4|2.99  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0002.sext
+  Jupiter 4| CCD|G96 |2013-10-04T08:25:34.867Z| 18.27523  | 19.79161  |0.04 |0.04  | UCAC4|19.1 |   V|  UCAC4|3.00  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0003.sext
+  Jupiter 5| CCD|G96 |2013-10-04T08:35:42.864Z| 18.27354  | 19.79165  |0.04 |0.04  | UCAC4|19.0 |   V|  UCAC4|3.04  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0004.sext
+  Jupiter 6| CCD|G96 |2013-10-04T08:05:24.576Z| 17.86340  | 19.60112  |0.04 |0.04  | UCAC4|19.2 |   V|  UCAC4|2.99  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0001.sext
+  Jupiter 7| CCD|G96 |2013-10-04T08:15:29.549Z| 17.86160  | 19.60116  |0.06 |0.04  | UCAC4|19.2 |   V|  UCAC4|2.97  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0002.sext
+  Jupiter 8| CCD|G96 |2013-10-04T08:25:34.867Z| 17.85976  | 19.60122  |0.04 |0.04  | UCAC4|19.2 |   V|  UCAC4|2.96  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0003.sext
+  Jupiter 9| CCD|G96 |2013-10-04T08:35:42.864Z| 17.85798  | 19.60128  |0.04 |0.04  | UCAC4|19.2 |   V|  UCAC4|2.97  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0004.sext
+  Saturn 10| CCD|G96 |2013-10-04T08:05:24.576Z| 17.44151  | 20.32628  |0.04 |0.04  | UCAC4|19.3 |   V|  UCAC4|2.93  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0001.sext
+  Saturn 11| CCD|G96 |2013-10-04T08:15:29.549Z| 17.43981  | 20.32562  |0.05 |0.04  | UCAC4|19.3 |   V|  UCAC4|2.98  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0002.sext
+  Saturn 14| CCD|G96 |2013-10-04T08:25:34.867Z| 17.43811  | 20.32495  |0.05 |0.04  | UCAC4|19.2 |   V|  UCAC4|2.98  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0003.sext
+  Saturn 15| CCD|G96 |2013-10-04T08:35:42.864Z| 17.43639  | 20.32427  |0.05 |0.04  | UCAC4|19.3 |   V|  UCAC4|2.96  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0004.sext
+  Saturn 18| CCD|G96 |2013-10-04T08:05:24.576Z| 18.31761  | 20.31483  |0.05 |0.04  | UCAC4|19.4 |   V|  UCAC4|2.96  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0001.sext
+  Saturn 19| CCD|G96 |2013-10-04T08:15:29.549Z| 18.31620  | 20.31439  |0.06 |0.04  | UCAC4|19.2 |   V|  UCAC4|2.98  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0002.sext
+  Saturn 30| CCD|G96 |2013-10-04T08:25:34.867Z| 18.31478  | 20.31401  |0.06 |0.04  | UCAC4|19.3 |   V|  UCAC4|2.98  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0003.sext
+  Saturn 34| CCD|G96 |2013-10-04T08:35:42.864Z| 18.31335  | 20.31356  |0.05 |0.04  | UCAC4|19.3 |   V|  UCAC4|2.95  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0004.sext
+  Saturn 46| CCD|G96 |2013-10-04T08:05:24.576Z| 17.86646  | 20.29178  |0.06 |0.06  | UCAC4|19.8 |   V|  UCAC4|2.81  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0001.sext
+  Saturn 50| CCD|G96 |2013-10-04T08:15:29.549Z| 17.86490  | 20.29160  |0.06 |0.05  | UCAC4|19.7 |   V|  UCAC4|2.84  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0002.sext
+  Saturn 90| CCD|G96 |2013-10-04T08:25:34.867Z| 17.86334  | 20.29140  |0.06 |0.04  | UCAC4|19.7 |   V|  UCAC4|2.84  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0003.sext
+  Saturn 99| CCD|G96 |2013-10-04T08:35:42.864Z| 17.86174  | 20.29121  |0.06 |0.05  | UCAC4|19.7 |   V|  UCAC4|2.83  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0004.sext
+ Saturn 100| CCD|G96 |2013-10-04T08:05:24.576Z| 17.95327  | 20.21751  |0.06 |0.05  | UCAC4|19.6 |   V|  UCAC4|2.90  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0001.sext
+ Saturn 294| CCD|G96 |2013-10-04T08:15:29.549Z| 17.95160  | 20.21724  |0.07 |0.06  | UCAC4|19.6 |   V|  UCAC4|2.90  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0002.sext
+ Saturn 878| CCD|G96 |2013-10-04T08:25:34.867Z| 17.94994  | 20.21699  |0.09 |0.06  | UCAC4|19.6 |   V|  UCAC4|2.91  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0003.sext
+ Saturn 999| CCD|G96 |2013-10-04T08:35:42.864Z| 17.94828  | 20.21675  |0.06 |0.05  | UCAC4|19.6 |   V|  UCAC4|2.87  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0004.sext
+ Saturn 454| CCD|G96 |2013-10-04T08:05:24.576Z| 18.30256  | 20.35091  |0.06 |0.05  | UCAC4|19.6 |   V|  UCAC4|2.90  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0001.sext
+  Neptune 1| CCD|G96 |2013-10-04T08:15:29.549Z| 18.30060  | 20.35134  |0.07 |0.05  | UCAC4|19.7 |   V|  UCAC4|2.86  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0002.sext
+ Uranus 101| CCD|G96 |2013-10-04T08:25:34.867Z| 18.29861  | 20.35178  |0.06 |0.05  | UCAC4|19.7 |   V|  UCAC4|2.86  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0003.sext
+ Uranus 104| CCD|G96 |2013-10-04T08:35:42.864Z| 18.29664  | 20.35222  |0.06 |0.06  | UCAC4|19.7 |   V|  UCAC4|2.87  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0004.sext
+ Uranus 264| CCD|G96 |2013-10-04T08:05:24.576Z| 17.77839  | 19.63967  |0.07 |0.06  | UCAC4|19.9 |   V|  UCAC4|2.81  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0001.sext
+ Uranus 269| CCD|G96 |2013-10-04T08:15:29.549Z| 17.77699  | 19.63919  |0.07 |0.06  | UCAC4|19.8 |   V|  UCAC4|2.85  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0002.sext
+ Uranus 233| CCD|G96 |2013-10-04T08:25:34.867Z| 17.77542  | 19.63865  |0.06 |0.05  | UCAC4|19.9 |   V|  UCAC4|2.78  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0003.sext
+          1| CCD|G96 |2013-10-04T08:35:42.864Z| 17.77376  | 19.63815  |0.08 |0.05  | UCAC4|19.7 |   V|  UCAC4|2.87  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0004.sext
+ Neptune 69| CCD|G96 |2013-10-04T08:05:24.576Z| 17.22208  | 20.38825  |0.07 |0.06  | UCAC4|19.9 |   V|  UCAC4|2.81  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0001.sext
+Neptune 549| CCD|G96 |2013-10-04T08:15:29.549Z| 17.22069  | 20.38722  |0.08 |0.06  | UCAC4|19.9 |   V|  UCAC4|2.82  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0002.sext
+ Saturn 794| CCD|G96 |2013-10-04T08:25:34.867Z| 17.21912  | 20.38617  |0.07 |0.06  | UCAC4|20.0 |   V|  UCAC4|2.78  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0003.sext

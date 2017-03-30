@@ -1,0 +1,933 @@
+#!/usr/bin/env python 
+#
+# __future__ imports for Python 3 compliance in Python 2
+# 
+from __future__ import absolute_import, division, print_function
+from __future__ import unicode_literals
+#
+# end of __future__ imports
+#
+
+#
+# sys.argv[1]: input mpc 80-column file
+# sys.argv[2]: output xml file  (in utf-8)
+# example: ./psvtoxml.py <psv file> <xml file>
+#
+import sys
+import re
+import io
+import math
+
+import adesutility
+import packUtil
+import sexVals
+
+#codeDict = {  # converts code to mode for optical type
+#
+#  'P': 'PHO',
+#  'e': 'ENC',
+#  'C': 'CCD',
+#  'T': 'MER',
+#  'M': 'MIC',
+#  'c': 'ccd',
+#  'E': 'OCC',
+#  'O': 'OFF',
+#  'H': 'PMT', # hipparcos
+#  'N': 'NOR',
+#  'n': 'VID',
+#
+#   'A': 'PHO', # sets subFrm to 'B1950.0' not in dict
+#   'X': 'CCD', # not in dict
+#   'x': 'CCD', # not in dict
+#
+# # 'V': 'CCD', # by type
+# # 'S': 'CCD', # by type
+#}
+#reverseCodeDict = { codeDict[i] : i for i in codeDict }  # no duplicates
+
+#validCodes = "A PeCTMcEOHNnRrSsVvXx"+"0"  # 0 is special for header lines
+#validNotes = ' AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345vzjeL16789'
+#validProgramCodes = ' AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345016789=#$%"&\+-![]`!|(){}.?@,^;:_/~*<>eLvzjZ'"'"
+#programCodeSites = \
+#set([ "010",
+#      "012",
+#      "084",
+#      "089",
+#      "094",
+#      "095",
+#      "121",
+#      "260",
+#      "261",
+#      "262",
+#      "266",
+#      "267",
+#      "268",
+#      "269",
+#      "290",
+#      "309",
+#      "413",
+#      "561",
+#      "568",
+#      "658",
+#      "673",
+#      "675",
+#      "688",
+#      "689",
+#      "695",
+#      "696",
+#      "705",
+#      "807",
+#      "809",
+#      "950",
+#      "A84",
+#      "B35",
+#      "D90",
+#      "E03",
+#      "E10",
+#      "E26",
+#      "F65",
+#      "G40",
+#      "G73",
+#      "G83",
+#      "H06",
+#      "I03",
+#      "I05",
+#      "I11",
+#      "I89",
+#      "J13",
+#      "N50",
+#      "Q62",
+#      "U69",
+#      "V07",
+#      "W84",
+#      "W88",
+#      "Z18",
+#      "Z19",
+#      "Z20",
+#      "249",
+#      "C49",
+#      "C50 ", ])
+
+#
+# ignore blanks lines everywhere
+#
+blankRegex = re.compile( '^ *$' )
+#
+# header lines
+#
+# groups:
+#   1: header keyword
+#   2: header content
+#   code is set to '0' as this does not conflict with data codes
+#
+# COD appears in data but not on MPC page
+# ACK appears in data but not on MPC page
+#
+headerRegex = re.compile( '(ACK|COD|CON|OBS|MEA|TEL|NET|BND|COM|NUM|AC2) (.*)$' )
+
+#
+# matches optical line; also V and S and X
+#
+# groups: first seven are for all types
+#   1: id group
+#   2: discovery
+#   3: notes -- notes can be anything; valid Notes is wrong
+#   4: codes  and RvSsVvXx
+#   5: yyyy  from obsDate
+#   6: blank or a-e for asteroid satellites (embedded in obsDat)
+#   7: rest of obsDate
+
+commonRegexHelp1 = ( '([A-za-z0-9 ]{12})'    # id group 1-12
+                     + '([ *+])'                # discovery group 13 may be ' ', '*' or '+'
+                     #+ '( AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345vzjeL16789])' # notes group 14
+                     + '(.)'                 # notes can be anything
+                     )
+commonRegexHelp2 = ( '(\d{4})'            # yyyy from obsDate 16-19
+                     + '([ a-e])'            # asteroid satellite embedded in date 20
+                     + '([0-9 .]{12})'       # rest of obsDate loosely checked 21-32 
+                     )
+
+
+# ----------- remainder depends on type.  This is for optical and SV
+#   8: Ra
+#   9: Dec
+#  10: doc says blank but stuff is here
+#  11: mag
+#  12: band
+#  13: packedref and astCode as first character
+#  14: 3-character obs stn code
+#
+normalLineRegex = re.compile( ( '^' 
+                                   + commonRegexHelp1  
+                                   + '([A PeCTMcEOHNnSVXx])' # codes group -- include SVXx but not Rrsv 15
+                                   + commonRegexHelp2  
+                                   + '([0-9 .]{12})'       # Ra loosely checked 33-44
+                                   + '([-+ ][0-9 .]{11})'  # Dec loosely checked 45-56
+                                   + '(.{9})'              # mpc doc says blank but not 57-65
+                                   + '(.{5})'              # mag 66-70
+                                   + '(.{1})'              # band 71
+                                   + '(.{6})'              # packedref 72-77.  72 by itself is astCode
+                                   + '(.{3})'              # obs stn 78-80
+                                   + '$' )  )
+#
+# matches Radar first line (R)
+#
+# ----------- 1-7 as per optical
+#   8: delay 33-47
+#   9: shift 48-62
+#  10: tfreq 63-68
+#  11: tobs  69-71
+#  12: packedref 72-77
+#  13: obs stn   78-80
+#
+radarFirstLineRegex = re.compile( ( '^' 
+                                   + commonRegexHelp1
+                                   + '(R)'                 # code is Radar first line
+                                   + commonRegexHelp2
+                                   + '([-+0-9 .]{15})'     # Delay loosely checked 33-47
+                                   + '([-+0-9 .]{15})'     # Shift loosely checked 48-62
+                                   + '([-+0-9 .]{6})'      # tfreq loosely checked 63-68
+                                   + '(.{3})'              # tobs loosely checked 69-71
+                                   + '(.{6})'              # packedref 72-77
+                                   + '(.{3})'              # obs stn 78-80
+                                   + '$' )  )
+#
+# matches Radar second line (r)
+#
+# ----------- 1-7 as per optical
+#   8: column 33 must be S(?)
+#   9: delay uncertainty 34-47
+#  10: shift uncertainty 48-62
+#  11: tfreq uncertainty 63-68
+#  12: tobs  69-71
+#  13: packedref 72-77
+#  14: obs stn  78-80
+radarSecondLineRegex = re.compile( ( '^' 
+                                   + commonRegexHelp1
+                                   + '(r)'                 # code is Radar second line
+                                   + commonRegexHelp2
+                                   + '([SC])'              # column 33 must be S or C
+                                   + '([-+0-9 .]{14})'     # Delay uncertainty loosely checked 33-47
+                                   + '([-+0-9 .]{15})'     # Shift uncertainty loosely checked 48-62
+                                   + '([-+0-9 .]{6})'      # tfreq uncertainty loosely checked 63-68
+                                   + '(.{3})'              # tobs loosely checked 69-71
+                                   + '(.{6})'              # packedref 72-77
+                                   + '(.{3})'              # obs stn 78-80
+                                   + '$' )  )
+#
+# matches Satellite second line (s)
+#
+#
+# ----------- 1-7 as per optical
+#   8: column 33 must be '1' or '2'
+#   9: x 35-45
+#  10: y 47-57
+#  11: z 59-69
+#  12: packedref 72-77
+#  13: obs stn  78-80
+satelliteSecondLineRegex = re.compile( ( '^' 
+                                   + commonRegexHelp1
+                                   + '(s)'                 # code is satellite second line
+                                   + commonRegexHelp2
+                                   + '([12])'              # column 33 must be parallax type 1 or 2
+                                   + '.'                   # column 34 is unpsecified
+                                   + '([-+0-9 .]{11})'     # x columns 35-45
+                                   + '.'                   # column 46 is unpsecified
+                                   + '([-+0-9 .]{11})'     # y columns 47-57
+                                   + '.'                   # column 58 is unpsecified
+                                   + '([-+0-9 .]{11})'     # z columns 59-69
+                                   + ' {2}'                # colunms 70-72 must be blank but 72 is astCode for packedref
+                                   + '( .{5})'             # packedref 72-77 but 72 must be blank
+                                   + '(.{3})'              # obs stn 78-80
+                                   + '.*$' )  )
+#
+# matches Rover second line (v)
+#
+# ----------- 1-7 as per optical
+#   8: E longitude  35-44
+#   9: latitude 46-55
+#  10: altitude 57-61
+#  11: packedref 72-77
+#  12: obs stn  78-80 must be 247
+roverSecondLineRegex = re.compile( ( '^' 
+                                   + commonRegexHelp1
+                                   + '(v)'                 # code is rover second line
+                                   + commonRegexHelp2
+                                   + '1 '                  # column 33 must be 1, column 34 must be blank
+                                   + '([-+0-9 .]{10})'     # E longitude columns 35-44
+                                   + ' '                   # column 45 is space
+                                   + '([-+0-9 .]{10})'     # latitude columns 46-55; N is + S is -
+                                   + ' '                   # column 55 is blank
+                                   + '([-+0-9 .]{5})'      # altitude is 57-61
+                                   + ' {10}'                # colunms 62-71 must be blank
+                                   + '(.{6})'             # packedref 72-77
+                                   + '(247)'              # obs stn 78-80 must be 247
+                                   + '.*$' )  )
+
+
+def error80(msg, l):
+   badLineMsg = 'Invalid MPC80COL line ('
+   #print (badLineMsg, msg)
+   raise RuntimeError(badLineMsg + msg + ') in line \n' + l)
+
+def valueError(s, line, c1, c2, value=None):
+   """ valueError raises an exception if s is not empty.
+       Inputs:
+          s: string to check for emptiness
+          line: input line
+          c1: first column in format
+          c2: second column in format
+          value:  if None must be all spaces.  Otherwise
+                  must in the value tuple
+
+       Return Value: None
+       Exceptions:  RuntimeError if s is not empty
+   """
+   if value:
+      if s not in value:
+        if (c1 != c2):
+           error80('columns ' + repr(c1) + '-' + repr(c2) + 
+                  ' must be "' + repr(value) + '" not "' + s + '"', line)
+        else:
+           error80('column ' + repr(c1) +  
+                   ' must be "' + repr(value) + '" not "' + s + '"', line)
+   else:
+      if not s.isspace():
+        if (c1 != c2):
+           error80('columns ' + repr(c1) + '-' + repr(c2) + 
+                  ' must be blank not "' + s + '"', line)
+        else:
+           error80('column ' + repr(c1) +  
+                   ' must be blank not "' + s + '"', line)
+
+
+
+def prettyPrintDict(title, d):
+   print (title,":")
+   for i in sorted(d):
+     print ("  ", i, d[i])
+
+
+
+def decode80ColumnDataLine(line):
+   """ decode80ColumnDataLine reaks an initial 80-col line in MPC
+       format into its constituent parts and types.  The type may mean
+       the next line is a continuation
+
+       Input:  A line in 80-col format.  This is padded with spaces by 
+               the caller
+
+       Output:  A tuple.  If this is an optical first line:
+           totalid: permid and provid fields -- used for artsat if not matching packed formats
+           permid: unpacked Permanent ID or None
+           provid: unpacked Provisional ID or None
+           trkSub: trkSub field or None
+           disc:   '*" (for discovery) or ''
+           note:   1-character note or program code
+           code:   This is an overloaded character.  
+                   'V/v' means a roving observation with a second record.  
+                   'R/r' means a radar observation with a second record.
+                   'S/s' means a satellite observation
+                   'O' means an offset observation (used only for natural satellites)
+                   'E' means an occultation-derived observation
+                   other values mean other things.  Black and 'P' mean the same thing
+           date:  date of observtion in 'YYYY MM DD.dddddd' format.  The number of 'd's 
+                  is important so this is returned as a string.
+           ra:    observed j2000.0 ra in 'HH MM SS.ddd' format.  The number if 'd's is
+                  so this is returned as a string
+           decl:  observed j2000.0 dec in 'sDD MM SS.dd' format.  The 's' is +, -, or 
+                  ' ' which means +.  The number of 'd's is important
+           mag:   Observed magnitude
+           band:  band for observed magnitude
+           observatory:   three-character observatory code
+       Output:  A tuple.  If this is a radar first line:
+           totalid: permid and provid fields -- used for artsat if not matching packed formats
+           permid: unpacked Permanent ID or None
+           provid: unpacked Provisional ID or None
+           disc:   '*" (for discovery) or ''
+           note:   1-character note or program code
+           code:   This is an overloaded character.  
+                   'V/v' means a roving observation with a second record.  
+                   'R/r' means a radar observation with a second record.
+                   'S/s' means a satellite observation
+                   'O' means an offset observation (used only for natural satellites)
+                   'E' means an occultation-derived observation
+                   other values mean other things.  Black and 'P' mean the same thing
+           date:  date of observtion in 'YYYY MM DD.dddddd' format.  The number of 'd's 
+                  is important so this is returned as a string.
+           delay: delay time
+           shfit: doppler shift
+           tfreq: transmit frequency
+           tobs:  transmit observatory three-character code
+           rfreq: receive frequency
+           robs:  receive observatory three-character code
+
+       Exceptions:  raises "Invalid MPC80COL line (<reason>): <line> " is the line 
+                    is not valid for some reason
+   """
+   if not line:
+      return {}
+   if len(line) > 80:
+      error80 ( repr(len(line)) + ' columns ) ',l)
+   ret  = {}
+
+   m = headerRegex.match(line)
+   if m:
+      #print (m.groups(), m.group(1))
+      ret['headerKeyword'] = m.group(1)
+      ret['headerValue'] = m.group(2)
+      ret['code'] = '0' # not in conflict with anything else
+      return ret
+
+   if len(line) != 80:
+      error80 ( repr(len(line)) + ' columns -- only header may be shorter than 80) ',l)
+
+   #ret['totalid'] = line[0:12]   # 1-12.  This is an artsat name if it doesn't match PermiD/ProvID
+   #ret['disc'] =   line[12]     # 13  discovery flag is '*' for discovery
+   #ret['notes'] =   line[13]     # 14  There is a list of valid notes
+   #ret['code'] =   line[14]     # 15
+   #ret['date'] =   line[15:32]  # 16-32  but watch for column
+   #ret['packedref']  = line[71:77]   # 72-77   # packed reference. Blank for submissions
+   if not m:
+      ret['subFmt'] = 'M92'  # since were are MPC 80-col format
+      m = normalLineRegex.match(line)  # optical, SVXx
+      if m:
+         #  print (m.groups())
+         ret['totalid'] = m.group(1)
+         ret['disc'] = m.group(2)
+         ret['notes'] = m.group(3)
+         ret['code'] = m.group(4)
+         ret['date'] = m.group(5) + m.group(6) + m.group(7)
+
+         ret['raSexagesimal']   =   m.group(8)
+         ret['decSexagesimal'] =   m.group(9)
+         ret['bl1']  =   m.group(10)
+         ret['mag']  =   m.group(11)
+         ret['band'] =   m.group(12)
+         ret['packedref'] = m.group(13)
+         ret['stn']  =   m.group(14)
+      
+         sexVals.checkDate(ret) # check date first
+         sexVals.checkRa(ret)
+         sexVals.checkDec(ret)
+   if not m:
+      m = radarFirstLineRegex.match(line)  # R
+      if m:
+         ret['totalid'] = m.group(1)
+         ret['disc'] = m.group(2)
+         ret['notes'] = m.group(3)
+         ret['code'] = m.group(4)
+         ret['date'] = m.group(5) + m.group(6) + m.group(7)
+
+         ret['delay'] = m.group(8)
+         ret['shift'] = m.group(9)
+         ret['frq'] = m.group(10)
+         ret['trx']  = m.group(11)
+         ret['packedref'] = m.group(12)
+         ret['stn']  = m.group(13)
+
+         #print (m.groups())
+         pass
+
+   if not m:
+      m = radarSecondLineRegex.match(line) # r
+      if m:
+         ret['totalid'] = m.group(1)
+         ret['disc'] = m.group(2)
+         ret['notes'] = m.group(3)
+         ret['code'] = m.group(4)
+         ret['date'] = m.group(5) + m.group(6) + m.group(7)
+
+         ret['sc']  =  m.group(8)
+         ret['delay uncertainty'] = m.group(9)
+         ret['shift uncertainty'] = m.group(10)
+         ret['frq continuation'] = m.group(11)
+         ret['trx']  = m.group(12)
+         ret['packedref'] = m.group(13)
+         ret['stn']  = m.group(14)
+         #print (m.groups())
+         pass
+   if not m:
+      m = satelliteSecondLineRegex.match(line) # s
+      if m:
+         ret['totalid'] = m.group(1)
+         ret['disc'] = m.group(2)
+         ret['notes'] = m.group(3)
+         ret['code'] = m.group(4)
+         ret['date'] = m.group(5) + m.group(6) + m.group(7)
+
+         ret['parallax_type'] = m.group(8)
+         ret['x'] = m.group(9)
+         ret['y'] = m.group(10)
+         ret['z'] = m.group(11)
+         ret['packedref'] = m.group(12)
+         ret['stn'] = m.group(13)
+         #print (m.groups())
+         pass
+   if not m:
+      m = roverSecondLineRegex.match(line) # v
+      if m:
+         ret['totalid'] = m.group(1)
+         ret['disc'] = m.group(2)
+         ret['notes'] = m.group(3)
+         ret['code'] = m.group(4)
+         ret['date'] = m.group(5) + m.group(6) + m.group(7)
+
+         ret['sys'] =  'WGS84'        # always
+         ret['ctr'] =  '399'        # always
+         ret['pos1'] =  m.group(8)  # E longitude
+         ret['pos2'] =  m.group(9)     # latitude
+         ret['pos3'] =  m.group(10)    # altitude
+         ret['packedref'] = m.group(11)
+         ret['stn'] =  m.group(12)
+         #print (m.groups())
+         pass
+
+   if not m:
+      error80 ("no match for line", line)
+
+   # 
+   # more value sanity checks
+   #
+   sexVals.checkDate(ret) # check date always
+   #if ( ret['notes'] == 'X' ): 
+   #    print (lineNumber, ":", line)
+   if ( ret['code'] not in packUtil.validCodes):
+      error80 ("invalid column 14 " + ret['code']+ " in line " +  repr(lineNumber), line)
+   if (ret['stn'] in packUtil.programCodeSites):
+       if ( ret['notes'] not in packUtil.validProgramCodes):
+            error80 ("invalid program code "+ ret['notes']+ " in line "+ repr(lineNumber), line)
+   else:
+        if ( ret['notes'] not in packUtil.validNotes):
+            error80 ("invalid note "+ ret['notes'] +" in line "+ repr(lineNumber), line)
+
+   ret['astCat']   = ret['packedref'][0] # catalog code; 72 - first in packed reference. Blank for submissions
+
+   #
+   # compute unpacked ID fields.  This may be only a trkSub
+   #
+  
+   (permID, provID, trkSub) = packUtil.unpackPackedID(ret['totalid'])
+   ret['permID'] = permID
+   ret['provID'] = provID
+   ret['trkSub'] = trkSub
+   #print(permid, provid, trkSub)
+   
+   try:
+     packtest =  packUtil.packTupleID( (permID, provID, trkSub) )
+     if packtest != ret['totalid']:
+        print ("ID does not round-trip; " + packtest + " vs. " + ret['totalid'])
+   except:
+     print ("fails pack: ", permID, provID, trkSub)
+
+   return ret
+
+#
+# Sometimes we have to combine lines in order to make a complete field
+# This is the case for Rr, Vv and Ss pairs.  This should be a generator
+# but for now it just calls the callBack function
+#
+def parseFile(fname, callBack):
+   with open(fname) as f:
+      global lineNumber
+      lineNumber = 0;
+      oldCode = 'None' # must not be null for in to work -- valids are all 1 char
+      oldDataLine = None
+      for l in f:
+         lineNumber += 1 # count lines
+         if lineNumber%1000000 == 0: print ("at line", lineNumber)
+         if blankRegex.match(l[:-1]): # skip empty or blank lines
+            #print ("line", lineNumber, "is", len(l[:-1]), 'columms of space')
+            continue
+         try:
+            #print (':' + l[:-1]  + ':')
+            badCombo = False
+            dataLine = l[:-1]
+            line = decode80ColumnDataLine(dataLine)
+            newCode = line['code']
+   
+   
+            #
+            # check for two-line mismatch
+            #
+            if (oldCode in 'RSV' and newCode != oldCode.lower()):
+               print ()
+               print (oldCode + '/' + oldCode.lower() +  " mismatch at" ,lineNumber,"new was " + newCode + ":")
+               print ("oldDataLLine", oldDataLine)
+               print ("dataLine    ", dataLine)
+               badCombo = True
+          
+            if (newCode in 'rsv' and newCode.upper() != oldCode):
+               print ()
+               print (newCode + '/' + newCode.upper() +  " mismatch at" ,lineNumber,"old was " + oldCode  + ":")
+               print ("oldDataLLine", oldDataLine)
+               print ("dataLine    ", dataLine)
+               badCombo = True
+          
+   
+            #
+            # now yield valid lines and combinations
+            #
+            nextThing = None
+            if not badCombo:
+               if (oldCode in 'RSV'):
+                  if ( (line['totalid'] != oldLine['totalid']) or \
+                       (line['date'] != oldLine['date']) or \
+                       (line['stn'] != oldLine['stn']) ):
+                     print ("Contintuation line mismatch at",i)
+                     print ("oldLine", oldLine)
+                     print ("line", line)
+                  if (oldCode == 'R'): # radar
+                     if (line['trx'] != oldLine['trx']):
+                        print ("Radar Contintuation line trx mismatch at",i)
+                        print ("oldLine", oldLine)
+                        print ("line", line)
+                     oldLine['sc'] = line['sc']
+                     if line['sc'] == 'S':
+                        oldLine['com'] = '0'
+                     if line['sc'] == 'C':
+                        oldLine['com'] = '1'
+                     oldLine['rmsDelay'] = line['delay uncertainty']
+                     oldLine['rmsDoppler'] = line['shift uncertainty']
+                     oldLine['frq continuation'] = line['frq continuation']
+                     oldLine['rcv'] = line['stn'] # for xml
+                     oldLine['doppler'] = oldLine['shift'] # for xml
+                     oldLine['ref'] = oldLine['packedref'] # for xml?
+                     #print ("Rr at",lineNumber,":")
+   
+                  if (oldCode == 'S'): # satellite
+                     oldLine['parallax_type'] = line['parallax_type']
+                     oldLine['x'] = line['x']
+                     oldLine['y'] = line['y']
+                     oldLine['z'] = line['z']
+                     #print ("Ss at",lineNumber,":")
+   
+                  if (oldCode == 'V'): # rover
+                     oldLine['sys'] = line['sys']  # always WGS84
+                     oldLine['ctr'] = line['ctr']  # always 399
+                     oldLine['pos1'] = line['pos1']  # E long
+                     oldLine['pos2'] = line['pos2']   # lat
+                     oldLine['pos3'] = line['pos3']   # alt
+                     #print ("Vv at",lineNumber,":")
+   
+               if (newCode in 'rsv'):
+                  nextThing = oldLine  # with new fields from line
+                  oldCode = None
+               else:
+                  if (newCode  not in 'RrSsVv'):
+                     nextThing = line # all opticals (some Xx)
+   
+            #
+            # save for continuation lines only
+            #
+            if newCode in "RSV":
+               oldLine = line
+               oldDataLine = dataLine
+               oldCode = newCode
+            else:
+               oldLine = None
+               oldDataLine = None
+               oldCode = 'None' # can't be None and still work
+   
+            if nextThing:  # could yield it up but instead call down -- works in C++
+                if callBack:
+                   callBack(nextThing, lineNumber)
+
+         except RuntimeError as e:
+            print ("Error in line ", lineNumber)
+            print (e)
+
+#
+# callback functions (or None if only syntax check is wanted)
+#
+# printit:  classifies and prints the found items
+# toXML:    classifies and puts items in xml tree
+#
+# This really needs to use the generator model since there are
+# things to finalize and intermediate states.
+#
+headerCodes = "0"  # header lines
+roverCodes = "V"   # rover lines
+radarCodes = "R"   # radar lines
+satelliteCodes = "S" # satellite lines
+opticalCodes = "A PeCTMcHNnXs"   # optical codes are also detector types, and include Xx
+offsetCodes = "E"       # offset -- how to process?
+occultationCodes = "O"  # occultation -- how to process?
+codeTable = {}
+
+def _initCodeTable():
+   global codeTable;
+   for i in opticalCodes:
+     codeTable[i] = 'Optical'
+   for i in offsetCodes:
+     codeTable[i] = 'Offset'
+   for i in occultationCodes:
+     codeTable[i] = 'Occultation'
+   for i in roverCodes:
+     codeTable[i] = 'Rover'
+   for i in radarCodes:
+     codeTable[i] = 'Radar'
+   for i in satelliteCodes:
+     codeTable[i] = 'Satellite'
+   for i in headerCodes:
+     codeTable[i] = 'Header'
+
+_initCodeTable()
+
+
+#
+# print the parsed lines
+#
+def printit(item, lineNumber):
+  code = item['code']
+  try:
+     codeType = codeTable[code]
+  except:
+     codeType = None
+
+  print ('line ', lineNumber,'code is', code, ', type is ', codeType)
+  prettyPrintDict("Found code " + code + ' at line ' + repr(lineNumber), item);
+
+#
+# convert to XML -- note preamble and postamble since we aren't using yield
+#
+def convertitPreamble(fname):  # set up elementTree
+   print ("set up elementTree")
+   global stack
+   global allowedElementDict
+   global firstElement
+   global inObsBlock
+   global firstObsBlock
+   (allowedElementDict, requiredElementDict, psvFormatDict)  = adesutility.getAdesTables()
+   MPC80OpticalElements = ['permID', 'provID', 'trkSub', 'mode', 'stn',
+                           'obsTime', 'ra', 'dec', 'mag', 'band']
+   firstElement = True
+   firstObsBlock = True
+   inObsBlock = False
+   # root node has no text or tail and one attribute
+   stack = adesutility.ElementStack('ades', None, {'version':'2017'} )
+   
+
+
+
+
+def convertitPostamble(fname):
+   print ("write tree on ", fname)
+   xmlencoding = 'UTF-8'
+   # Tested encodings: 'UTF-16' 'UTF-16LE' 'UTF-16BE' 'UCS-4' 'UTF32' 'UTF-32BE' 'UTF-32LE'
+   #                   'LATIN1' 'ISO-LATIN-1' 'ISO-8859-1' 'ASCII' 'cp500' 'cp037' 'UTF-7'
+   #                   'windows-1252' 'UTF-8'
+   treeTop = stack.takeTreeAndClear()
+   treeTop.write(sys.argv[2], pretty_print=True, xml_declaration=True, encoding=xmlencoding)
+
+
+def convertit(item, lineNumber):
+  global firstElement
+  global firstObsBlock
+  global inObsBlock
+  global stack
+  global commentList
+  global obsContextList
+  global obsContextSeen
+  code = item['code']
+  try:
+     codeType = codeTable[code]
+  except:
+     codeType = None
+
+  if codeType != 'Header':
+    if inObsBlock:
+       if obsContextList: # print out other header lines in order
+          for obsContextTuple in obsContextList:  # but respect order
+             (hkey, hval, hlist) = obsContextTuple
+             stack.addPush(hkey, hval)
+             for sub in hlist:
+                stack.add(sub[0], sub[1]) # sub is (key, value)
+             stack.pop()
+       if commentList:  # print out comments last
+          stack.addPush('comment')
+          for commentLine in commentList:
+             stack.add('line', commentLine)
+          stack.pop()
+       stack.addPopPush('obsData') # ends obsContext
+       inObsBlock = False
+
+  #
+  # how to convert 'Offset' and 'Occultation' values? -- as Optical with 
+  # 'OFF' and 'OCC' as the 'mode' field.  This round-trips.
+  #
+  if codeType == 'Satellite':
+     print ("Satellite observations (Ss) not yet handled")
+     pass
+  if codeType == 'Offset': # same as optical but code E -> 'OFF'
+     pass
+  if codeType == 'Occultation': # same as optical but code O -> 'OCC'
+     pass
+  if codeType == 'Rover':  # same as optical but extra fields
+     pass
+  if codeType == 'Optical' or codeType == 'Rover' or codeType == 'Offset' or codeType == 'Occultation':
+     if (firstElement):
+         stack.addPush('optical')
+         firstElement = False
+     else:
+         stack.addPopPush('optical')
+     #
+     # then extend to the ElementStack element in the proper order
+     # as determined by MPC80OpticalElements
+     #
+     # don't add None or '' items.  Note str(item[x]).strip() test after None test
+     #
+     #for item in things:
+     #   stack.add(item, d[item])
+   
+     if code in 'Xx':  # deprecated with disc flag
+        code = 'C' # mode set below
+        item['deprecated'] = 'X' # what about x?
+     elif code == 'A':  # set subFrm
+        item['subFrm'] = 'B1950.0' # PHA mode but set below
+        code = 'P'
+     elif code == 'V':  # Rover
+        code = 'C' # CCD
+     item['mode'] = packUtil.codeDict[code]
+     if not item['astCat'] or not item['astCat'].strip():
+        item['astCat'] = 'UNK'
+     if item['mag']:
+        if not item['band'].strip():
+          item['band'] = 'V'  # V is default if blank
+     if item['band']:  # dump band if no mag
+        if not item['mag'].strip():
+          item['band'] = None
+     if (item['stn'] in packUtil.programCodeSites):
+         item['prog'] = packUtil.packProgID(item['notes'])  # convert to hex or something else
+         item['notes'] = ' ' # need to put notes somewhere else
+
+     item['ref'] = item['packedref'][1:]  # astCat now has first character
+
+     d = allowedElementDict['optical']
+     #print ( [x for x in item if x not in d ] )
+     elements = adesutility.makeElementList( [ (x, str(item[x]).strip()) 
+                for x in d if x in item and item[x] and str(item[x]).strip()] )
+     stack.addElementList(elements)
+
+     #prettyPrintDict("Found code " + code + ' at line ' + repr(lineNumber), item);
+     pass
+  if codeType == 'Radar':
+     if (firstElement):
+         stack.addPush('radar')
+         firstElement = False
+     else:
+         stack.addPopPush('radar')
+
+     d = allowedElementDict['radar']
+     #print ( 'radar', [(x, item[x]) for x in item if x not in d ] )
+     elements = adesutility.makeElementList( [ (x, str(item[x]).strip()) 
+                for x in d if x in item and item[x] and str(item[x]).strip()] )
+     stack.addElementList(elements)
+     pass
+
+
+
+
+
+  if codeType == 'Header':  # headers introduce obsBlocks
+     if not inObsBlock:  # open obsBlock
+         if firstObsBlock:
+              firstObsBlock = False
+              stack.addPush('obsBlock')
+         else:
+              stack.pop()  # end last element in old block (must be data or inObsBlock is True)
+              stack.pop()  # end obsData
+              stack.addPopPush('obsBlock')  # create new obsBlock
+         stack.addPush('obsContext')        # with new obsContext
+         commentList = []
+         obsContextList = []
+         obsContextSeen = []
+     inObsBlock = True
+     firstElement = True # for later optical/offset/occultation/radar additions
+
+     #
+     # now process the elements -- all of them are one line but some turn into
+     # more than one line and COM is special
+     #
+     hkey = item['headerKeyword']
+     hval = item['headerValue']
+     if hkey == 'COM':  # comment
+        commentList.append(hval)
+     else:
+        if hkey not in obsContextSeen: # ignore multiple lines
+           obsContextSeen.append(hkey)
+           if hkey == 'COD':  # mpcCode
+             subval = ('mpcCode', hval)
+             obsContextList.append( ( 'observatory', None, [subval] ) )
+           elif hkey == 'CON':  # submitter and institution
+             hvals = hval.split(',', 1)
+             sub = [ ('name', hvals[0] ) ]
+             try:
+                sub.append( ('institution', hvals[1] ) )
+             except:
+                pass
+             obsContextList.append( ( 'submitter', None, sub ) )
+           elif hkey == 'OBS':  # list of names of observers
+             hvals = hval.split(',')
+             sub = []
+             for i in hvals:
+               sub.append ( ('name', i) )
+             obsContextList.append( ( 'observers', None, sub ) )
+           elif hkey == 'MEA':  # list of names for measurers
+             hvals = hval.split(',')
+             sub = []
+             for i in hvals:
+               sub.append ( ('name', i) )
+             obsContextList.append( ( 'measurers', None, sub ) )
+           elif hkey == 'TEL':  # telescope -- just punt for now
+             sub = [ ('name', hval) ]
+             sub.append( ( 'design', 'Unknown') )
+             sub.append( ( 'aperture', '9999') )
+             sub.append( ( 'detector', 'Unknown') )
+             obsContextList.append( ( 'telescope', None, sub ) )
+           else: # ignore 'NET', 'ACK', 'AC2', 'BND', 'NUM'
+             #obsContextList.append( ( hkey, hval, [] ) )
+             pass
+
+     #print("Found Header " + hkey + ' at line ' + repr(lineNumber) + ": " + hval, firstObsBlock, inObsBlock, firstElement);
+
+#parseFile(sys.argv[1], convertit)
+
+convertitPreamble(sys.argv[2])
+parseFile(sys.argv[1], convertit)
+convertitPostamble(sys.argv[2])
+try:
+
+   #
+   # for xml output
+   #
+   convertitPreamble(sys.argv[2])
+   try:
+      pass
+   except:
+      print("Usage: <convert> <mpcfile> <xmlfile>")
+      exit()
+   try:
+      parseFile(sys.argv[1], convertit)
+      convertitPostamble(sys.argv[2])
+   except RuntimeError as e:
+      print ("Error", e)
+      exit()
+      
+
+except:
+   try:
+      parseFile(sys.argv[1], None)
+   except:
+      print("Usage: <convert> <mpcfile> <xmlfile>")
+
+#
+# for printing the output
+#
+#parseFile(sys.argv[1], printit)
+
+print()
+print()
+print ("Statistics:")
+sexVals.printCounts()
+

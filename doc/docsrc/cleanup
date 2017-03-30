@@ -1,0 +1,2 @@
+#!/usr/bin/env csh
+rm *tex *aux *dvi *ps *pdf *log

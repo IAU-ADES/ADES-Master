@@ -1,0 +1,28 @@
+# version=2017
+# observatory
+! mpcCode G96
+! name Catalina Sky Survey
+# submitter
+! name E. J. Christensen
+# observers
+! name R. L. Seaman
+# measurers
+! name E. J. Christensen
+! name D. C. Fuls
+! name A. R. Gibbs
+! name A. D. Grauer
+! name J. A. Johnson
+! name R. A. Kowalski
+! name S. M. Larson
+! name G. J. Leonard
+! name R. G. Matheny
+! name R. L. Seaman
+! name F. C. Shelly
+# telescope
+! aperture 1.5
+! design reflector
+! detector CCD
+provID       |mode|stn |obsTime                 |ra         |dec        |rmsRA|rmsDec|astCat|mag  |band|photCat|logSNR|remarks
+1997 AA      | CCD|G96 |2013-10-04T08:05:24.576Z| 17.75174  | 20.21894  |0.02 |0.02  | UCAC4|17.9 |   V|  UCAC4|3.36  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0001.sext
+2001 AA1     | CCD|G96 |2013-10-04T08:15:29.549Z| 17.75028  | 20.21827  |0.02 |0.02  | UCAC4|18.0 |   V|  UCAC4|3.32  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0002.sext
+2007 BF123455| CCD|G96 |2013-10-04T08:25:34.867Z| 17.74880  | 20.21762  |0.02 |0.02  | UCAC4|18.0 |   V|  UCAC4|3.31  |/data0/seaman_ar/G96_20131004_1A_N20016_01_0003.sext

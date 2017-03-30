@@ -1,0 +1,124 @@
+#!/bin/csh -f
+
+#
+# testmakecheck is just like runtests but it writes the 
+# generate psv and encoded files to psv/validpsv and encodings/
+#
+# use this only to update the test comparisons
+#
+
+#
+# validator must return 0 status if it succeeds on its argument
+# validator must run as "$validator <platform> [<verbosity>]"
+# validator should write somewhat descriptiive output on failure
+#
+
+set verbosity=0
+if $#argv == 2 then
+  set verbosity=$argv[2]
+endif
+
+set testdir = `pwd`
+set pybindir = $testdir/../Python/bin
+set cbindir = $testdir/../C/bin
+
+# platform definitions of 
+#  xmltopsv
+#  psvtoxml
+#  getencoding 
+#  valades
+#
+# prog_c, prog_python2, prog_python3
+#
+source $argv[1]  
+
+set adesxml = $testdir/../xml
+set adesxslt = $testdir/../xslt
+set validator="$valades $adesxml/adesmaster.xml $adesxslt/xsd/generalhumanxsd.xslt"
+
+echo "-----------------------------------------------"
+echo "Test xml for validity"
+echo "-----------------------------------------------"
+
+if $verbosity == 1 then
+  foreach thing ( `find $testdir/xml -name \*xml -type f` )
+    echo $thing
+    $validator $thing
+    if $status == 0 then
+      grep OK {$thing}.README >& /dev/null
+      if  $status == 0 then
+        printf "PASS (OK) "
+      else
+        printf "FAIL (BAD is OK) "
+      endif
+    else
+      grep BAD {$thing}.README >& /dev/null
+      if  $status == 0 then
+        printf "PASS (BAD) "
+      else
+        printf "FAIL (OK is BAD) "
+      endif
+    endif
+    cat {$thing}.README
+    echo "-----------------------------------------------"
+  end
+else
+  foreach thing ( `find $testdir/xml -name \*xml -type f` )
+    $validator $thing >& /dev/null
+    if $status == 0 then
+      grep OK {$thing}.README >& /dev/null
+      if  $status == 0 then
+        printf "PASS (OK) "
+      else
+        printf "FAIL (BAD is OK) "
+      endif
+    else
+      grep BAD {$thing}.README >& /dev/null
+      if  $status == 0 then
+        printf "PASS (BAD) "
+      else
+        printf "FAIL (OK is BAD) "
+      endif
+    endif
+    cat {$thing}.README
+  end
+endif
+
+echo "-----------------------------------------------"
+echo "Now test xml->psv->xml conversion"
+echo "-----------------------------------------------"
+
+rm -rf testarea  # clean up now for sure
+mkdir testarea
+
+foreach xmlthing ( `find $testdir/xml/validxml -name \*xml -type f` )
+   echo $xmlthing
+   $xmltopsv $xmlthing testarea/{$xmlthing:t}.psv
+
+   echo {$xmlthing:h:t}/{$xmlthing:t} 
+   echo mkdir -p psv/validpsv/{$xmlthing:h:t}
+   mkdir -p psv/validpsv/{$xmlthing:h:t}
+   echo cp testarea/{$xmlthing:t}.psv psv/validpsv/{$xmlthing:h:t}/${xmlthing:t}.psv
+   cp testarea/{$xmlthing:t}.psv psv/validpsv/{$xmlthing:h:t}/${xmlthing:t}.psv
+
+   $psvtoxml testarea/{$xmlthing:t}.psv testarea/{$xmlthing:t}
+   #diff -w testarea/$xmlthing:t $xmlthing
+   diff testarea/$xmlthing:t $xmlthing
+   echo "------------------------------------------------"
+end
+
+echo '=============================================='
+echo ' Exercise encoding'
+echo '=============================================='
+
+$xmltopsv $testdir/xml/validxml/codings/goodutf8.xml testarea/a.out
+foreach encoding ( 'UTF-16' 'UTF-16LE' 'UTF-16BE' 'UCS-4' 'UTF32' 'UTF-32BE' 'UTF-32LE' 'LATIN1' 'ISO-LATIN-1' 'ISO-8859-1' 'ISO-8859-5' 'ASCII' 'CP500' 'CP037' 'UTF-7' 'WINDOWS-1252' 'UTF-8')
+echo "------------------------------------------------"
+echo $encoding
+$psvtoxml testarea/a.out testarea/y.out 'UTF-8' $encoding
+$getencoding testarea/y.out
+cp testarea/y.out encodedxml/$encoding.xml
+end
+#rm -rf testarea  # leave files for inspection for now
+
+

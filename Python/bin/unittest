@@ -1,0 +1,113 @@
+#!/usr/bin/env python
+#
+# __future__ imports for Python 3 compliance in Python 2
+# 
+from __future__ import absolute_import, division, print_function
+from __future__ import unicode_literals
+#
+# end of __future__ imports
+#
+#
+# xtest.py tests some formatting routines
+#
+# Usage:  xtest.py 
+#
+#         writes some explicit justfication tests,
+#         with captured errors, to stdout (using ASCII only)
+#
+#
+
+
+
+import adesutility
+from adesutility import applyPaddingAndJustification
+
+from xmlutility import regularizeWhiteSpace
+
+#
+# read in allowedElementDict, requiredELementDict and psvFormatDict
+#
+(allowedElementDict, requiredELementDict, psvFormatDict) = adesutility.getAdesTables()
+
+
+def testApplyPadding(s, width, just, dpos=0):
+   try:
+     (ns, nwidth, ndpos) = \
+              applyPaddingAndJustification(s, width, just, dpos)
+     print ( "len %2d %2d width %2d %2d dpos %2d %2d s=\"%s\"" % \
+       (len(s), len(ns), width, nwidth, dpos, ndpos, ns) )
+   except RuntimeError as e:
+      print (e, " -- ", s, width, just, dpos)
+
+
+#
+# some test cases for regularizeWhiteSpace (ascii only)
+#
+# use repr(str(x)) to get the same answer in python 2 and 3 
+# since python2 repr would report u'' and python3 repr would
+# report just ''.  The extra str makes them the same
+#
+print (repr(str(regularizeWhiteSpace(None))))
+print (repr(str(regularizeWhiteSpace("The king    is a   fink!"))))
+print (repr(str(regularizeWhiteSpace("   The king    is a   fink!"))))
+print (repr(str(regularizeWhiteSpace("   The king    is a   fink!   "))))
+print (repr(str(regularizeWhiteSpace("   "))))
+print (repr(str(regularizeWhiteSpace(" '  " + ' " '))))
+
+#
+# some test cases for applyPaddingAndJustification
+#
+testApplyPadding("This is a test", 20, 'L', 0)
+testApplyPadding("This is a test", 20, 'R', 0)
+testApplyPadding("This is a test", 20, 'C', 0)
+testApplyPadding("This is a test", 21, 'C', 0)
+testApplyPadding("This is a test", 22, 'C', 0)
+testApplyPadding("This is a test", 5, 'L', 0)
+testApplyPadding("This is a test", 5, 'R', 0)
+testApplyPadding("This is a test", 5, 'C', 0)
+testApplyPadding("43.12", 20, 'D' , 3)
+testApplyPadding("43.12234324", 25, 'D' , 8)
+testApplyPadding("43.12234324", 10, 'D' , 8)
+
+testApplyPadding("123.4567890123", 10, 'D', 1)
+testApplyPadding("123.4567890123", 10, 'D', 6)
+testApplyPadding(".333", 10, 'D', 1)
+testApplyPadding("333", 10, 'D', 1)
+testApplyPadding("333.", 10, 'D', 1)
+testApplyPadding("333.11", 10, 'D', 1)
+testApplyPadding(".333", 10, 'D', 5)
+testApplyPadding("333", 10, 'D', 5)
+testApplyPadding("333.", 10, 'D', 5)
+testApplyPadding("333.11", 10, 'D', 5)
+testApplyPadding(".333", 10, 'D', 8)
+testApplyPadding("333", 10, 'D', 8)
+testApplyPadding("333.", 10, 'D', 8)
+testApplyPadding("333.11", 10, 'D', 8)
+testApplyPadding(".333", 10, 'D', 9)
+testApplyPadding("333", 10, 'D', 9)
+testApplyPadding("333.", 10, 'D', 9)
+testApplyPadding("333.11", 10, 'D', 9)
+testApplyPadding(".333", 10, 'D', 10)
+testApplyPadding("333", 10, 'D', 10)
+testApplyPadding("333.", 10, 'D', 10)
+testApplyPadding("333.11", 10, 'D', 10)
+testApplyPadding("333.", 10, 'D', 11)
+testApplyPadding("333", 10, 'D', 11)
+testApplyPadding("333.", 10, 'D', 11)
+testApplyPadding("333.11", 10, 'D', 11)
+testApplyPadding("333.45444", 10, 'D', 2)
+testApplyPadding("333.45444", 10, 'D', 2)
+testApplyPadding("333.45444", 10, 'D', 4)
+testApplyPadding("333.45444", 10, 'D', 5)
+testApplyPadding("333.45444", 10, 'D', 6)
+testApplyPadding("333.454440000", 10, 'L', 0)
+testApplyPadding("333.454440000", 10, 'R', 0)
+testApplyPadding("333.45444", 10, 'L', 0)
+testApplyPadding("333.45444", 10, 'R', 0)
+testApplyPadding("", 10, 'D', 5) 
+
+testApplyPadding('383.444', 10, 'D', -2) # negative dpos
+testApplyPadding('383.444', 10, 'Dbad2', 1) # bad code
+testApplyPadding('383.45.444', 10, 'D', 2) # two decimal points
+testApplyPadding('333.45444', 10, 'Q')  # bad code
+

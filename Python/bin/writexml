@@ -1,0 +1,123 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+#
+# __future__ imports for Python 3 compliance in Python 2
+# 
+from __future__ import absolute_import, division, print_function
+from __future__ import unicode_literals
+#
+# end of __future__ imports
+#
+
+import sys
+
+#
+# sys.argv[1]: output xml file
+# sys.argv[2]: output xml encoding
+# example: ./writexml <xml file>
+# example: ./writexml <xml file> UTF-8
+#
+
+import adesutility
+
+
+def usage(name):
+    print("Usage: %s <xml file> [<xml_encoding>]" % (name));
+
+
+utf8 = "UTF-8";
+
+def doit(argc, argv):
+	xmlEncoding = utf8;
+
+	if (argc <= 1):
+		usage(argv[0])
+		return(1)
+
+	if (argc > 2):
+		xmlEncoding = argv[2]
+
+	# adesReadTables(ADES_MASTER, ADES_TABLES); // initialize tables
+
+	stack = adesutility.ElementStack();
+	# stack.clear() is already done in constructor
+
+	property = {}
+	property["version"] = "2017"
+	stack.addPush("ades", None, property );
+
+	stack.addPush("obsBlock");
+
+	stack.addPush("obsContext");
+
+	stack.addPush("observatory");
+	stack.add("mpcCode", "F51");
+	stack.add("name", "Pan-STARRS 1");
+
+	stack.addPopPush("submitter");
+	stack.add("name", "P. Villa");
+	stack.add("institution", "Ejército Constitucionalista");
+ 
+	stack.addPopPush("observers");
+	stack.add("name", "P. Villa");
+	stack.add("name", "F. Madero");
+
+	stack.addPopPush("measurers");
+	stack.add("name", "P. Villa");
+	stack.add("name", "F. Madero");
+
+	stack.addPopPush("telescope");
+	stack.add("aperture", "1.5");
+	stack.add("design", "Reflector");
+	stack.add("detector", "CCD");
+
+	stack.addPopPush("fundingSource", "Your favorite funding agency");
+
+	stack.addPopPush("comment");
+	stack.add("line", "A comment line with >stuff< in it");
+	stack.add("line", "Another comment line");
+
+	stack.pop(); 
+	stack.addPopPush("obsData");
+
+	stack.addPush("optical");
+	stack.add("permID", "1234456");
+	stack.add("trkSub", "aa");
+	stack.add("mode", "CCD");
+	stack.add("stn", "F51");
+	stack.add("obsTime", "2016-08-29T12:32:34Z");
+	stack.add("ra", "10.21");
+	stack.add("dec", "21.21");
+	stack.add("astCat", "2MA");
+	stack.add("mag", "15.3");
+	stack.add("band", "w");
+	stack.add("notes", "klmn");
+	stack.add("remarks", "A free-form \"remark\" <with stuff>");
+
+	stack.addPopPush("optical");
+	stack.add("permID", "1334456");
+	stack.add("trkSub", "aa");
+	stack.add("mode", "CCD");
+	stack.add("stn", "F51");
+	stack.add("obsTime", "2016-08-29T12:32:34Z");
+	stack.add("ra", "10.21");
+	stack.add("dec", "21.21");
+	stack.add("astCat", "2MA");
+	stack.add("mag", "15.3");
+	stack.add("band", "w");
+	stack.add("notes", "klmn");
+	stack.add("remarks", "Another One");
+
+	stack.pop();
+	stack.pop();
+
+
+	tree = stack.takeTreeAndClear();
+	tree.write(sys.argv[1], pretty_print=True, xml_declaration=True, encoding=xmlEncoding)
+	#  xmlFree(doc); # python owns memory
+	
+
+	
+doit(len(sys.argv), sys.argv)
+
+

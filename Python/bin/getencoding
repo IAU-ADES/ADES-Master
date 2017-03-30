@@ -1,0 +1,191 @@
+#!/usr/bin/env python
+#
+# getencoding.py
+#  
+# This gets the encoding of an xml file. It is completely independent
+# of the codecs used in lxml.etree.parse, so it is not really used
+# in operation.  However, it is amusing to see if it matches.
+#
+# Usage: getencoding.py sys.argv[1]
+#
+#
+# __future__ imports for Python 3 compliance in Python 2
+# 
+from __future__ import absolute_import, division, print_function
+from __future__ import unicode_literals
+#
+# end of __future__ imports
+#
+
+import codecs # used only to avoid extra bogus buffering in getXMLFileEncoding
+import sys
+import io # io.open works in python 2 and 3 the same way
+import os
+import re
+
+#
+# Diagnostic utiltiles
+#   getXMLFileEncoding -- determine XML file encoding, which lxml.tree.parse
+#                         does in one line.  This is for testing
+#
+# getXMLFileEncoding is present only to describe how lxml.etree.parse determines
+# the encoding of an xml file.
+#
+def getXMLFileEncoding(filename):
+   """ Determines the encoding of an xml file using
+       the approved detection technique.  Note this
+       depends on the XML file being correctly formed.
+
+       This routine is not used since lxml.etree.parse(<file>) does
+       it automatically.
+
+       Input: xml file name
+
+       Output: xml file encoding ('UTF-8' for default)
+
+       Algorithm:  Per https://www.w3.org/TR/REC-xml/#sec-guessing-no-ext-info,
+                   to wit:
+
+       "
+       F.1 Detection Without External Encoding Information
+
+       Because each XML entity not accompanied by external encoding information and not in UTF-8 or UTF-16 encoding must begin with an XML encoding declaration, in which the first characters must be '<?xml', any conforming processor can detect, after two to four octets of input, which of the following cases apply. In reading this list, it may help to know that in UCS-4, '<' is " #x0000003C " and '?' is " #x0000003F ", and the Byte Order Mark required of UTF-16 data streams is " #xFEFF ". The notation ## is used to denote any byte value except that two consecutive ##s cannot be both 00.
+
+       With a Byte Order Mark:
+       00 00 FE FF 	UCS-4, big-endian machine (1234 order)
+       FF FE 00 00 	UCS-4, little-endian machine (4321 order)
+       00 00 FF FE 	UCS-4, unusual octet order (2143)
+       FE FF 00 00 	UCS-4, unusual octet order (3412)
+       FE FF ## ## 	UTF-16, big-endian
+       FF FE ## ## 	UTF-16, little-endian
+       EF BB BF 	UTF-8
+
+       Without a Byte Order Mark:
+       00 00 00 3C 	UCS-4 or other encoding with a 32-bit code unit and ASCII characters encoded as ASCII values, in respectively big-endian (1234), little-endian (4321) and two unusual byte orders (2143 and 3412). The encoding declaration must be read to determine which of UCS-4 or other supported 32-bit encodings applies.
+       3C 00 00 00
+       00 00 3C 00
+       00 3C 00 00
+       00 3C 00 3F 	UTF-16BE or big-endian ISO-10646-UCS-2 or other encoding with a 16-bit code unit in big-endian order and ASCII characters encoded as ASCII values (the encoding declaration must be read to determine which)
+       3C 00 3F 00 	UTF-16LE or little-endian ISO-10646-UCS-2 or other encoding with a 16-bit code unit in little-endian order and ASCII characters encoded as ASCII values (the encoding declaration must be read to determine which)
+       3C 3F 78 6D 	UTF-8, ISO 646, ASCII, some part of ISO 8859, Shift-JIS, EUC, or any other 7-bit, 8-bit, or mixed-width encoding which ensures that the characters of ASCII have their normal positions, width, and values; the actual encoding declaration must be read to detect which of these applies, but since all of these encodings use the same bit patterns for the relevant ASCII characters, the encoding declaration itself may be read reliably
+       4C 6F A7 94 	EBCDIC (in some flavor; the full encoding declaration must be read to tell which code page is in use)
+       Other	UTF-8 without an encoding declaration, or else the data stream is mislabeled (lacking a required encoding declaration), corrupt, fragmentary, or enclosed in a wrapper of some kind
+       
+       Note:
+       
+       In cases above which do not require reading the encoding declaration to determine the encoding, section 4.3.3 still requires that the encoding declaration, if present, be read and that the encoding name be checked to match the actual encoding of the entity. Also, it is possible that new character encodings will be invented that will make it necessary to use the encoding declaration to determine the encoding, in cases where this is not required at present.
+       
+       This level of autodetection is enough to read the XML encoding declaration and parse the character-encoding identifier, which is still necessary to distinguish the individual members of each family of encodings (e.g. to tell UTF-8 from 8859, and the parts of 8859 from each other, or to distinguish the specific EBCDIC code page in use, and so on).
+       
+       Because the contents of the encoding declaration are restricted to characters from the ASCII repertoire (however encoded), a processor can reliably read the entire encoding declaration as soon as it has detected which family of encodings is in use. Since in practice, all widely used character encodings fall into one of the categories above, the XML encoding declaration allows reasonably reliable in-band labeling of character encodings, even when external sources of information at the operating-system or transport-protocol level are unreliable. Character encodings such as UTF-7 that make overloaded usage of ASCII-valued bytes may fail to be reliably detected.
+       
+       Once the processor has detected the character encoding in use, it can act appropriately, whether by invoking a separate input routine for each case, or by calling the proper conversion function on each character of input.
+       
+       Like any self-labeling system, the XML encoding declaration will not work if any software changes the entity's character set or encoding without updating the encoding declaration. Implementors of character-encoding routines should be careful to ensure the accuracy of the internal and external information used to label the entity.
+
+       "
+      So there.
+
+   """
+   nul = chr(0x00)
+   fe =  chr(0xfe)
+   ff =  chr(0xff)
+   ef =  chr(0xef)
+   bb =  chr(0xbb)
+   bf =  chr(0xbf)
+   lt =  b'<'
+   qu =  b'?'
+   x =   b'x'
+   m =   b'm'
+   ebcdiclt = chr(0x4c)
+   ebcdicqu = chr(0x6f)
+   ebcdicx  = chr(0xa7)
+   ebcdicm  = chr(0x94)
+
+   ftype = ''
+   with io.open(filename, 'rb') as f:  # open for binary read
+      b = f.read(4) # first four bytes tell the tale
+
+   if b == b'\x00\x00\xfe\xff':   # BOM
+            ftype = 'UTF-32'
+            extra = '1234_BOM'
+   elif b == b'\x00\x00\xff\xfe': # BOM
+            ftype = 'UTF-32'
+            extra = '2143_BOM'
+   elif b == b'\x00\x00\x00<': # no BOM
+            ftype = 'UTF-32BE'
+            extra = '1234_no_BOM'
+   elif b == b'\x00\x00<\x00': # no BOM
+            ftype = 'UTF-32'
+            extra = '2143_no_BOM'
+   elif b == b'\x00<\x00\x00': # no BOM
+            ftype = 'UTF-32'
+            extra = '3412_no_BOM'
+   elif b == b'\x00<\x00?': # no BOM
+            ftype = 'UTF-16BE'
+            extra = 'big-endian_no_BOM'
+   elif b == b'\xff\xfe\x00\x00': # BOM
+             ftype = 'UTF-32' # 4321 order
+             extra = '4321_BOM'
+   elif b[0:2] == b'\xff\xfe':    # BOM but utf-16 since 3 and 4 not nul
+             ftype = 'UTF-16' # little-endian
+             extra = 'little-endian_BOM'
+   elif b == b'\xfe\xff\x00\x00': # BOM
+             ftype = 'UTF-32' # 3412 order
+             extra = '3412_BOM'
+   elif b[0:2] == b'\xfe\xff':    # BOM but utf-16 since 3 and 4 are not nul
+             ftype = 'UTF-16' # big-endian
+             extra = 'big-endian_BOM'
+   elif b[0:3] == b'\xef\xbb\xbf': # BOM
+        ftype = 'utf-8' # with byte order mark
+        extra = "with_BOM"
+   elif b == b'<?xm': # no bom
+           ftype = 'ascii' # with no byte order mark utf-8 or windows-1252 (cp1242) probably 
+           extra = "no_BOM"
+   elif b == b'<\x00\x00\x00': # no bom
+            ftype = 'UTF-32LE'
+            extra = '4321_no_BOM'
+   elif b == b'<\x00?\x00': # no bom
+            ftype = 'UTF-16LE'
+            extra = 'little-endian_no_BOM'
+   elif b == b'\x4c\x6f\xa7\x94':
+           ftype = 'CP500'  # cp500
+           extra= 'EBCDIC'
+   elif b == b'+ADw':
+           ftype = 'utf-7'  # utf-7 cp500
+           extra= '7bit_unicode'
+   else: # something strange
+      pass
+
+   if ftype == '':
+     raise RuntimeError("can't decode file type " + repr(b))
+
+   #print (ftype, '  (' + extra + ')')
+   #print (repr(b))
+ 
+   #
+   # use codecs.open instead of io.open or open in python 3 
+   # to avoid buffering past the encoding line 
+   # for utf-8/iso-8859-1 encoding to avoid illegal code points.
+   #
+   # codecs.open buffers by lines by default when reading files,
+   # and won't look ahead to the error.
+   #
+   with codecs.open(filename, 'r', encoding=ftype) as f:
+      line = f.readline()   # first line is '<?xml version='1.0' encoding='<coded>'?>
+                            # in the identified ftype character set.
+      l = line.split('encoding=')
+      if len(l) < 2:  # default encoding if no explicit encoding; that's UTF-8
+        coding="UTF-8"
+      else:           # pick off encoding
+        delim = l[1][0] # ' or "
+        coding=l[1][1:].split(delim)[0]  # thing inside delim
+
+   return (coding, ftype, extra)
+
+
+
+(coding, ftype, extra) = getXMLFileEncoding(sys.argv[1])
+print (coding, ftype, extra)
+
+

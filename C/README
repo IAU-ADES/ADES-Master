@@ -1,0 +1,34 @@
+
+The configure script will directly work on Linux.  
+
+Mac OS X requires at least
+
+source forMacOSWihtout_pkg_config
+
+but may have other issues.
+
+
+
+
+
+j
+
+The build puts executables in adestest/C/bin.   These executables
+rely being able to read /path/to/adestest/xml/... and /path/to/adestest/xslt/...
+to pick up files.      
+
+
+
+To Build:
+
+for Macs:  source forMacOSWithout_pkg_config
+
+run ./configure to make Makefile.config.
+
+cd to src/ and run "make" to build.  Binaries will be put in /bin.
+
+
+To Remove:
+
+make clean -- cleans up src/ area
+make realclean -- also removes binaries from bin/

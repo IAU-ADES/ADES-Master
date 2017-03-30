@@ -1,0 +1,9 @@
+#
+# This should be sourced (or the equivalent in sh) so configure can find the 
+# XML libraries.  This is all because Mac OS 10.8 and above decided not to 
+# have pkg-config.   
+#
+setenv LIBXML2_LIBS "-lxml2"
+setenv LIBXSLT_LIBS "-lxslt -lz -ldl -lm -lxml2"
+setenv LIBXML2_CFLAGS "-I/usr/include/libxml2"
+setenv LIBXSLT_CFLAGS "-I/usr/include/libxml2"

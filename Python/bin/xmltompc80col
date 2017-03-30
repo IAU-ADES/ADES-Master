@@ -1,0 +1,351 @@
+#!/usr/bin/env python
+#
+   # __future__ imports for Python 3 compliance in Python 2
+# 
+from __future__ import absolute_import, division, print_function
+from __future__ import unicode_literals
+#
+# end of __future__ imports
+#
+
+import sys
+import io
+
+from collections import OrderedDict
+
+#
+# write encoded output for psv.  Default encoding 
+# for psv is utf-8
+#
+psvencoding = 'utf-8'
+encodedout = io.open(sys.argv[2], 'w', encoding=psvencoding)
+
+#
+# sys.argv[1]: input xml file
+# sys.argv[2]: output mpc file
+# example: ./xmltomcp80col.py <xml file> mpc file>
+#
+import sys
+
+import adesutility
+import packUtil
+import sexVals
+
+
+def setFromElementDictList(element):
+   """ makes a set from the allowedElementDict list for elemnt """
+   return set([t for t in allowedElementDict[element]])
+
+def processDataElement(first, element):
+   global dataDicts
+   global headerInfo
+   global headerDict # need to preserve across calls to this routine
+                     # only used to find i in headerInfo first element
+                     # of tuple quickly ( hash vs. O(n) )
+
+   subDict = [element.tag, {}]
+   for i in element:
+      (childtag, childtext) = adesutility.getElementTagText(i)
+      if childtext:      # add to dict if child has text -- this excludes localUse
+                         # because localUse has no text
+         subDict[1][childtag] = childtext
+ 
+   if first:
+     dataDicts = []  # store subDicts
+   dataDicts.append(subDict) # add to the list
+
+
+def processObsBlock(element):
+   first = True
+   for child in element:
+      tag = child.tag
+
+      if tag not in allowedObsBlockSet:
+        raise RuntimeError("Cannot have tag " + tag + " in obsBlock");
+
+      elif tag == "obsContext":
+        processObsContext(child)
+
+      elif tag == "obsData": # an empty obsData is not allowed in PSV
+         for grandchild in child:
+            tag = grandchild.tag
+            if first:
+               obsDataType = tag
+               if tag not in allowedObsDataSet:
+                  raise RuntimeError("Cannot have tag " + tag + " in obsData");
+            elif tag != obsDataType:
+               raise RuntimeError("Cannot mix tag " + tag + " with tag " + 
+                                  obsDataType + "in obsData")
+            processDataElement(first, grandchild)
+            first = False
+
+#
+#
+#
+def processAdesElement(element):
+   """ processAdesElement (element)
+ 
+       Inputs:
+          element:  element of a tree
+
+   """
+   global dataDicts
+   if element.tag != "ades":
+      raise RuntimeError("Root element must be ades for PSV conversion");
+
+   dataDicts = []   # printDataDicts won't print anything if empty
+   lastDataTagType = None  # logic here is to print the dataDict when
+                           # the next block is found.
+   # 
+   # no header with version
+   #
+   #sline = "# version=2017"
+   #print (sline, file=encodedout)
+
+   for child in element:
+      tag = child.tag
+      if tag not in allowedAdesSet: 
+         raise RuntimeError("tag " + tag + " not allowend in ades")
+
+      if tag == "obsBlock":
+         printDataDicts()
+         lastDataTagType = None
+         processObsBlock(child)  # do not print data dicts inside
+         lastDataTagType = tag
+
+      else: # must be allowed non-obsBlock data element
+        if tag != lastDataTagType:
+          printDataDicts()
+          lastDataTagType = tag
+          first = True;
+        processDataElement(first, child)
+        first = False
+
+   printDataDicts()   # push out the last one
+
+def hasKeyOrVal(d, key, val):
+   """ regularize missing keys for xml
+       Inputs:
+          d: a dictionary
+          key: a key
+          val: if key is not present
+       Output:
+          either d[key] or val if key not in d
+       Errors:  RuntimeError if types are wrong
+   """
+   if key in d:
+     return d[key]
+   else: 
+     return val
+
+def printOpticalLine(item):
+   """ printOpticalLine decodes and prints an optical element
+       Input:
+          item:  a dictionary of optical sub-elements
+       Output: None
+       Side Effects:  prints mpc 80-column line on encoded-out
+   """
+   permID = hasKeyOrVal(item, 'permID', None)
+   provID = hasKeyOrVal(item, 'provID', None)
+   trkSub = hasKeyOrVal(item, 'trkSub', None)
+   packedID = packUtil.packTupleID( (permID, provID, trkSub) )
+   disc = hasKeyOrVal(item, 'disc', ' ')
+   notes = hasKeyOrVal(item, 'notes', ' ')
+   precTime = float(hasKeyOrVal(item, 'precTime', '1') )
+   precRa = float(hasKeyOrVal(item, 'precRA', '0.6') )
+   precDec = float(hasKeyOrVal(item, 'precDec', '0.6') )
+   sexDate = sexVals.isoToSexDate(item['obsTime'], precTime)
+   sexRa = sexVals.decRaToSexRa(item['ra'], precRa)
+   sexDecl = sexVals.degDeclToSexDecl(item['dec'], precDec)
+   #mag = "{0:5s}".format(hasKeyOrVal(item, 'mag', ''))
+   mag = adesutility.applyPaddingAndJustification(hasKeyOrVal(item, 'mag', ''), 5, 'D', 3)[0]
+   band = hasKeyOrVal(item, 'band', ' ')
+   astCat = item['astCat']
+   if astCat == 'UNK':
+      astCat = ' '
+   packedref = "{0:<5s}".format(hasKeyOrVal(item, 'ref', ' '))
+
+   deprecated = hasKeyOrVal(item, 'deprecated', None)
+   if deprecated:
+      code = deprecated  # right now just X
+   
+   prog = hasKeyOrVal(item, 'prog', None)
+   if prog:  # This changes the meaning of the notes field
+      notes = packUtil.unpackProgID(prog)
+
+   if deprecated:
+      code = deprecated  # right now just X
+   elif 'pos1' in item: # this is a rover so write second line
+      code = 'V'
+   elif 'subFrm' in item:
+      code = 'A'
+   else:
+      code = packUtil.reverseCodeDict[item['mode']]
+
+   sline =  packedID + disc + notes + code + \
+            sexDate + sexRa + sexDecl + \
+            '         ' + mag + band + \
+            astCat + packedref + item['stn']
+   print (sline, file= encodedout)
+   if 'pos1' in item: # this is a rover so write second line
+      pos1 = adesutility.applyPaddingAndJustification(item['pos1'], 11, 'D', 4)[0]
+      pos2 = adesutility.applyPaddingAndJustification(item['pos2'], 11, 'D', 4)[0]
+      pos3 = "{0:>5s}".format(item['pos3']) + ' '
+      sline =  packedID + disc + notes + 'v' + \
+               sexDate + '1 ' + pos1 +  pos2 +  pos3 + \
+               '         ' + astCat + packedref + item['stn']
+      print (sline, file= encodedout)
+      pass
+    
+def printRadarLine(item):
+   """ printRadarLine decodes and prints a radar element
+       Input:
+          item:  a dictionary of radar sub-elements
+       Output: None
+       Side Effects:  prints mpc 80-column line on encoded-out
+   """
+   permID = hasKeyOrVal(item, 'permID', None)
+   provID = hasKeyOrVal(item, 'provID', None)
+   trkSub = hasKeyOrVal(item, 'trkSub', None)
+   packedID = packUtil.packTupleID( (permID, provID, trkSub) )
+   disc = hasKeyOrVal(item, 'disc', ' ')
+   notes = hasKeyOrVal(item, 'notes', ' ')
+   precTime = 1
+   sexDate = sexVals.isoToSexDate(item['obsTime'], precTime)
+   astCat = ' '
+   packedref = "{0:<5s}".format(hasKeyOrVal(item, 'ref', '      '))
+
+   doppler =     "{0:>15s}".format(hasKeyOrVal(item, 'doppler', ''))
+   rmsDoppler =  "{0:>14s}".format(hasKeyOrVal(item, 'rmsDoppler', ''))
+   delay =     "{0:>15s}".format(hasKeyOrVal(item, 'delay', ''))
+   rmsDelay =  "{0:>15s}".format(hasKeyOrVal(item, 'rmsDelay', ''))
+   frq =     "{0:<6s}".format(hasKeyOrVal(item, 'frq', ''))
+
+   scval = hasKeyOrVal(item, 'com', '0') # no good default
+   if scval == '0':
+     sc = 'S'
+   if scval == '1':
+     sc = 'C'
+   # first radar line
+   #sline =  packedID + disc + notes + code + \
+   #         sexDate + sexRa + sexDecl + \
+   #         + item['stn']
+   sline = packedID + disc + notes + 'R' + sexDate + \
+           delay + doppler + frq +\
+           item['rcv'] + ' ' + item['ref'] + item['trx']
+   print (sline, file= encodedout)
+   # second radar line
+   sline = packedID + disc + notes + 'r' + sexDate +\
+           sc + rmsDelay + rmsDoppler + frq +\
+           item['rcv'] + ' ' + item['ref'] + item['trx']
+   print (sline, file= encodedout)
+   
+def printDataDicts():
+   global dataDicts
+   global headerInfo
+
+   if (dataDicts):  # don't print anything if no entries ([])
+      #
+      # now print data records -- subDict is [ <element name>, <dictionary>]
+      #
+      for subDict in dataDicts :
+        eType = subDict[0]
+        if eType == 'optical':  # process optical -- may be rover or converted offset or occultation
+           printOpticalLine(subDict[1])
+        elif eType == 'radar':  # process radar
+           printRadarLine(subDict[1])
+        else:
+           print ("Error: can't process " + subDict[0] + ' elements in mpc80')
+
+
+
+
+def processObsContext(element):
+  """ prints obsContext in MPC 80-col format
+      This depends on the tag type and 
+      is fragile
+  """
+  for i in element:
+    (tag, text) = adesutility.getElementTagText(i)
+    # check for tags we allow
+    if tag == 'comment':
+       for j in i: # each line is a separate COM entry
+         (childtag, childtext) = adesutility.getElementTagText(j)
+         if childtag == 'line':
+            sline = "COM " + childtext
+            print (sline, file=encodedout)
+
+    elif tag == 'observatory':  # right now the mpcCode sub-element is the one that matters
+       for j in i: # look for mpcCode -- ignore <name> for now
+         (childtag, childtext) = adesutility.getElementTagText(j)
+         if childtag == 'mpcCode':
+            sline = "COD " + childtext
+            print (sline, file=encodedout)
+
+    elif tag == 'telescope':  # right now the name sub-element is the one that matters
+       for j in i: # The name element has the original text
+         (childtag, childtext) = adesutility.getElementTagText(j)
+         if childtag == 'name':
+            sline = "TEL " + childtext
+            print (sline, file=encodedout)
+
+    elif tag == 'submitter':
+       names = []
+       for j in i: # a list of names
+         (childtag, childtext) = adesutility.getElementTagText(j)
+         if childtag == 'name':  # only one allowed if valid
+            names.append(childtext)
+         if childtag == 'institution': # optional but must be after <name>
+            names.append(childtext)
+
+       sline = "CON " + ', '.join(names)
+       print (sline, file=encodedout)
+
+    elif tag == 'observers':
+       names = []
+       for j in i: # a list of names
+         (childtag, childtext) = adesutility.getElementTagText(j)
+         if childtag == 'name':
+            names.append(childtext)
+
+       sline = "OBS " + ', '.join(names)
+       print (sline, file=encodedout)
+
+    elif tag == 'measurers':
+       names = []
+       for j in i: # a list of names
+         (childtag, childtext) = adesutility.getElementTagText(j)
+         if childtag == 'name':
+            names.append(childtext)
+
+       sline = "MEA " + ', '.join(names)
+       print (sline, file=encodedout)
+
+    else:  # not an orignal entry so just do stuff or ignore it
+       pass
+       sline = "# " + tag + ' ' + text # in python2, unicode + bytes -> unicode
+       sline = sline.rstrip() # remove trailing whitespace
+       print (sline, file=encodedout)
+       for j in i:
+         (childtag, childtext) = adesutility.getElementTagText(j)
+         # check for tag being allowed
+         sline = "! " + childtag + ' ' + childtext  # in python2, unicode + bytes -> unicode
+         sline = sline.rstrip() # remove trailing whitespace
+         print (sline, file=encodedout)
+  
+    
+        
+#
+# read in allowedElementDict, requiredElementDict  and psvFormatDict
+#
+(allowedElementDict, requiredElementDict, psvFormatDict) = \
+                                         adesutility.getAdesTables()
+
+inputTree = adesutility.readXML(sys.argv[1])
+
+allowedObsDataSet = setFromElementDictList('obsData')
+allowedObsBlockSet = setFromElementDictList('obsBlock')
+allowedAdesSet = setFromElementDictList('ades')
+
+processAdesElement(inputTree.getroot())
+

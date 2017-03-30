@@ -1,0 +1,1040 @@
+#!/usr/bin/env python
+#
+# __future__ imports for Python 3 compliance in Python 2
+# 
+from __future__ import absolute_import, division, print_function
+from __future__ import unicode_literals
+#
+# end of __future__ imports
+#
+
+
+import sys
+import re
+
+#
+# codes and translations
+# 
+codeDict = {  # converts code to mode for optical type
+ # 'A': 'PHA', # sets subFrm to 'B1950.0' maps to 'PHO'
+
+  ' ': 'PHo', # blank means photographic -- see Xx
+  'P': 'PHO',
+  'e': 'ENC',
+  'C': 'CCD',
+  'T': 'MER',
+  'M': 'MIC',
+  'c': 'ccd',
+  'E': 'OCC',
+  'O': 'OFF',
+  'H': 'PMT', # hipparcos
+  'N': 'NOR',
+  'n': 'VID',
+
+ #  'X': 'Pho',  # maps to CCD
+ #  'x': 'pho',  # maps to CCD
+
+ # 'V': 'CCD', # by type
+ # 'S': 'CCD', # by type
+}
+reverseCodeDict = { codeDict[i] : i for i in codeDict }  # no duplicates
+
+validCodes = "A PeCTMcEOHNnRrSsVvXx"+"0"  # 0 is special for header lines
+validNotes = ' AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345vzjeL16789'
+validProgramCodes = ' AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345016789=#$%"&\+-![]`!|(){}.?@,^;:_/~*<>eLvzjZ'"'"
+programCodeSites = \
+set([ "010",
+      "012",
+      "084",
+      "089",
+      "094",
+      "095",
+      "121",
+      "260",
+      "261",
+      "262",
+      "266",
+      "267",
+      "268",
+      "269",
+      "290",
+      "309",
+      "413",
+      "561",
+      "568",
+      "658",
+      "673",
+      "675",
+      "688",
+      "689",
+      "695",
+      "696",
+      "705",
+      "807",
+      "809",
+      "950",
+      "A84",
+      "B35",
+      "D90",
+      "E03",
+      "E10",
+      "E26",
+      "F65",
+      "G40",
+      "G73",
+      "G83",
+      "H06",
+      "I03",
+      "I05",
+      "I11",
+      "I89",
+      "J13",
+      "N50",
+      "Q62",
+      "U69",
+      "V07",
+      "W84",
+      "W88",
+      "Z18",
+      "Z19",
+      "Z20",
+      "249",
+      "C49",
+      "C50 ", ])
+
+def packProgID(c): # for program code id -- must be alpha
+   return  hex(ord(c))[-2:]  # code in hex
+
+def unpackProgID(s): # for program code id -- must be alpha
+   return  chr(int(s, 16))  # decode into alpha
+
+#
+# packed implicit decimal converter
+#
+def packImplicitDecimal(value, width, decimal):
+   """ packs a float into a string of width 
+       with an implicit decimal point in column decimal
+   """
+   v = float(value)
+   digits = width - decimal 
+   fmt = '{0:'+ repr(width) + '.' + repr(digits) + 'f}'
+   print (fmt, v)
+   ret = fmt.format(v)
+   return ret
+
+def unpackImplicitDecimal(s, decimal):
+   """ unpacks a string with an implicit decimal point
+       in column decimal """
+   return s
+
+# PermID and ProvID pack/unpack
+#
+# PermID for a minor planet is a postive integer
+# PermID for a comet is a positive integer followed by P or D
+#   Comets may have fragments
+# PermID for a natural satellite is "Jupiter VIII" or J8 ?
+#
+# ProvID for a minor planet is 
+# ProvID for a comet is 
+#   Comets may have fragments
+# ProvID for a natual satellite is 
+#
+# a Packed PermID for a minor planet may use A-Z or a-z to encode
+# the first digit of the integer for numbers > 10000
+#
+# a Packed ProvID for a minor planet
+#     J95X00A -> 1995 XA
+#     J95X01A -> 1995 XA1
+#     J95Xa1A -> 1995 XA361
+#  unless it is a survey
+#     2050 P-L -> PLS2040
+#     3138 T-1 -> T1S2040
+#        There may be minor planets which become comets.
+# a Packed ProvID for a comet
+#   Comets may have fragments
+# a Packed ProvID for a natural satellite
+
+#minorplanetPackedPermIDRegex = re.compile('^([0-9A-Za-z])(\d{4})$')
+#cometPackedPermIDRegex = re.compile('^(\d{4})([PD])$')
+#satellitePackedPermIDRegex = re.compile('^([JSUN])(\d{3})S$')
+
+#minorplanetPackedProvIDRegex = re.compile('^ ([I-K])(\d{2})([A-HJ-Y])([a-zA-Z0-9])(\d)([A-HJ-Z])$')
+#minorplanetSurveyPackedProvIDRegex = re.compile('^ (PL|T1|T2|T3)S(\d{4})$')
+#cometPackedProvIDRegex = re.compile('^([ACDPX])([0-9A-Za-z])(\d{2})([A-HJ-Y])([a-zA-Z0-9])(\d)([0A-Z])$')
+#cometfragmentPackedProvIDRegex = re.compile('^([CDPX])([0-9A-Za-z])(\d{2})([A-HJ-Y])([a-zA-Z0-9])(\d)([a-z])$')
+#satellitePackedProvIDRegex = re.compile('^S([0-9A-Za-z])(\d{2})([A-HJ-Y])([a-zA-Z0-9])(\d)0$')
+
+minorplanetProvIDRegex = re.compile('^(\d{2})(\d{2}) ([A-HJ-Y])([A-HJ-Z])(\d+)?$')
+minorplanetSurveyProvIDRegex = re.compile('^(\d{4}) (P-L|T-1|T-2|T-3)$')
+cometProvIDRegex = re.compile('^([ACDPX])/(\d{4}) ([A-Z])([A-Z])?(\d*)$')
+cometfragmentProvIDRegex = re.compile('^([CDPX])/(\d{4}) ([A-Z])(\d*)-([A-Z])$')
+satelliteProvIDRegex = re.compile('^S/(\d{4}) ([JSUN]) (\d+)$')
+
+minorplanetPermIDRegex = re.compile('^(\d+)$')
+cometPermIDRegex = re.compile('^(\d+)([PD])$')
+cometfragmentPermIDRegex = re.compile('^(\d+)([PD])-([A-Z]{1,2})$')
+satellitePermIDRegex = re.compile('^(Jupiter|Saturn|Uranus|Neptune) (\d+)$')
+asteroidsatellitePermIDRegex = re.compile('^\((\d+|\d{4} [A-Z]{2}\d+)\) (\d+)$')
+
+#
+# trkSub matches any 7 characters starting with a letter except anything
+# matching a minorplanetPackedProvIDRegex or a minorplanetSurveyRegex
+#
+# note minor planet centuries are restricted to [I-K] (1800 - 2099; maybe allow 2199?)
+# Also we must exclude PLS and T[1-3]S for the surveys
+#
+# Use the extra outside parentheses to add comments to the continuation
+#
+# This is a mess because it's hard to exclude things in regex
+#
+trksubRegexHelp = ( '([A-Za-z][A-Za-z0-9]{0,5}' +         # anything six characters
+                    '|[A-HL-OQ-SU-Z][A-Za-z0-9]{0,6}' +   # anything seven not starting with I-K,P or T
+                    '|[I-K][A-Za-z0-9]{5}[a-z1-9]' +      # anything starting with I-K not ending in A-Z or 0
+                    '|[I-K][A-Za-z][A-Za-z0-9]{4}[0A-Z]' + # anything starting with I-K ending in [A-Z] with not digit as second character
+                    '|[I-K][0-9][A-Za-z][A-Za-z0-9]{3}[0A-Z]' + # anything starting with [I-K]<digit> ending in [A-Z] with not digit as third character
+                    '|[I-K][0-9][0-9][Ia-z0-9][A-Za-z0-9]{2}[0A-Z]' + # anything starting with [I-K]<digit> ending in [A-Z] with not [A-Z] as fourth character
+                    '|[I-K][0-9][0-9][A-HJ-Z][A-Za-z0-9][A-Za-z][0A-Z]' + # anything with [I-K]\d\d[A-HJ-Z][A-Za-z0-9]<not digit> [A-Z]
+                    '|P[A-KM-Za-z0-9][A-Za-z0-9]{5}' +   # anything seven starting with P<not L>
+                    '|T[A-Za-z04-9][A-Za-z0-9]{5}' +   # anything seven starting with T<not 1-3>
+                     '|(?:PL|T1|T2|T3)[A-RT-Za-z0-9][A-Za-z0-9]{4}' + # anything starting PL|T1|T2|T3 not followed by S 
+                     '|(?:PL|T1|T2|T3)S[A-Za-z][A-Za-z0-9]{3}' + # anything starting PL|T1|T2|T3 followed by S with not digit in 4
+                     '|(?:PL|T1|T2|T3)S[A-Za-z0-9][A-Za-z][A-Za-z0-9]{2}' + # anything starting PL|T1|T2|T3 followed by S with not digit in 5
+                     '|(?:PL|T1|T2|T3)S[A-Za-z0-9]{2}[A-Za-z][A-Za-z0-9]' + # anything starting PL|T1|T2|T3 followed by S with not digit in 6
+                     '|(?:PL|T1|T2|T3)S[A-Za-z0-9]{3}[A-Za-z]' + # anything starting PL|T1|T2|T3 followed by S with not digit in 7
+                    ')' )
+#trksubRegex = re.compile('^([A-Za-z][A-Za-z0-9]{0,7})$')
+trksubRegex = re.compile('^' + trksubRegexHelp + '$')
+
+
+#
+# Minor Planet groups: 
+#   PermID:  None if not present
+#      1: <letnum>
+#      2: 4 digits
+#   Normal ProvID: None if not present
+#      3: <letnum> 
+#      4: <yy> 
+#      5: <halfmonth> 
+#      6: <letnum> 
+#      7: digit 
+#      8: order -- is None if matches 0 for comet id
+#   Survey ProvID: None if not present
+#      9: PL | T1 | t3 | T3  
+#      10: 4 digits
+#   trkSub:  None if not present
+#      11: six characters starting with a letter
+#
+minorplanetPackedIDRegex = re.compile('^(?: {5}|([0-9A-Za-z])(\d{4}))'+ 
+                                      '(?:' + '([I-K])(\d{2})([A-HJ-Y])([a-zA-Z0-9])(\d)(?:([A-HJ-Z])|0)' + '|'
+                                            + '(PL|T1|T2|T3)S(\d{4})' + '|'
+                                            + trksubRegexHelp + ' *|'
+                                            + ' *'
+                                       + ')$')
+
+#
+# Comet groups:
+#
+#  PermID:  
+#    1: 4 digits  -- None if no PermID
+#    2: PCDX  -- used by provID too.  Only PD for PermID.  Is A allowed????
+#  ProvID:  None if not present
+#    3: <letnum>
+#    4: <yy>
+#    5: <halfmonth>
+#    6: <letnum>
+#    7: <digit>
+#    8: A-Z; comet coded as asteroid
+#    9: a-z; comet fragment 
+# fragment marker for permID only (blanks in cols 6-10)
+#   10: a-z; comet fragment first letter or blank
+#   11: a-z; comet fragment 
+#
+cometPackedIDRegex = re.compile('^(?: {4}|(\d{4}))([APCDX])'  
+                                  + '(?:' + '([0-9A-Za-z])(\d{2})([A-HJ-Y])([a-zA-Z0-9])(\d)(?:0|([A-Z])|([a-z]))' + '|'
+                                          + '     ([a-z ])([a-z])'  + '|'
+                                          + ' *$'
+                                  + ')$')
+
+#
+# Satellite groups:
+#
+#  PermID:  None if not present
+#    1: [JSUN]
+#    2: 3 digits
+#  ProvID:  None if not present
+#    3: <letnum>
+#    4: <yy>
+#    5: JSUN
+#    6: <letnum>
+#    7: <digit>
+#
+satellitePackedIDRegex = re.compile('^(?: {4}|([JSUN])(\d{3}))S'  
+                                       + '(?:' + '([0-9A-Za-z])(\d{2})([JSUN])([a-zA-Z0-9])(\d)0$' + '|'
+                                               + ' *$'
+                                       + ')$')
+
+#
+# A dictionary for unpacking planet names
+#
+planetNameDict = {
+     'J': 'Jupiter',
+     'S': 'Saturn',
+     'U': 'Uranus',
+     'N': 'Neptune',
+}
+
+#
+# A dictionary for unpacking letters as numbers
+#
+packLetters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+unpackLetters = {}
+
+def _initpackLetters():
+   global packLetters, unpackLetters
+   for i in range(len(packLetters)):
+     unpackLetters[packLetters[i]] = i
+
+_initpackLetters()
+
+
+
+        
+
+def unpackPackedID(packedID):
+   """ unpackePackedID unpacks an MPC 80-column ID
+       Input:
+          packedID: The 12-character packed ID
+       Output:
+          (permID, provID, trkSub)
+   """
+   permID = None
+   provID = None
+   trkSub = None
+   #
+   # groups:  0: <letnum> or None  1: 4 digits or None -- 2: <letnum> 3: yy 4: <halfmonth> : 5: <letnum> 6: digig 7: order
+   #
+   m = minorplanetPackedIDRegex.match(packedID)
+   if m: 
+      if m.group(1):  # check for permID presence
+         n = int(m.group(2)) + 10000*unpackLetters[m.group(1)]
+         if (n == 0):
+            raise RuntimeError("Can't unpack because minor planet number for " 
+                                + packedID + " is zero")
+         permID = str(n)
+      
+      if m.group(3): # check for normal provID presence
+         y = unpackLetters[m.group(3)] * 100 + int(m.group(4))
+         y = "{0:0d}".format(y)
+         n = unpackLetters[m.group(6)] * 10 + int(m.group(7))
+         if n==0:
+            ns = ''
+         else:
+            ns = str(n)
+         if m.group(8):  # normal asteroid provid
+             provID =  y + ' ' + m.group(5) + m.group(8) + ns
+         else:           # comet ID -- use A/
+             provID =  'A/' + y + ' ' + m.group(5) + ns
+
+      if m.group(9): # check for survey provID presence
+         provID =  m.group(10) + ' ' + m.group(9)[0] + '-' + m.group(9)[1]
+
+      if not permID and m.group(11): # check for trkSub -- can't be provID may not have permID
+         trkSub = m.group(11).strip()
+
+   #
+   # Comet groups:
+   #
+   #  PermID:  
+   #    1: 4 digits  -- None if no PermID
+   #    2: PCDX  -- used by provID too.  Only PD for PermID.  Is A allowed????
+   #  ProvID:  None if not present
+   #    3: <letnum>
+   #    4: <yy>
+   #    5: <halfmonth>
+   #    6: <letnum>
+   #    7: <digit>
+   #    8: A-Z; comet coded as asteroid
+   #    9: a-z; comet fragment 
+   # fragment marker for permID only (blanks in cols 6-10)
+   #   10: a-z; comet fragment first letter or blank
+   #   11: a-z; comet fragment 
+   #
+   m = cometPackedIDRegex.match(packedID)
+   if m:
+     cometType = m.group(2)
+     if m.group(1):
+        n = int(m.group(1))
+        if (n == 0):
+           raise RuntimeError("Can't unpack because comet number for " 
+                               + packedID + " is zero")
+        if (cometType != 'P' and cometType != 'D'):
+           raise RuntimeError("Can't unpack because comet type for " 
+                               + packedID + " must be P or D")
+        permID = str(n) + cometType
+        #
+        # now check for fragments
+        #
+        if m.group(9):
+          permID = permID + '-' + m.group(9).upper()
+        if m.group(11):
+          frag = (m.group(10) + m.group(11)).strip().upper()
+          permID = permID + '-' + frag
+
+     if m.group(3):
+        y = unpackLetters[m.group(3)] * 100 + int(m.group(4))
+        y = "{0:0d}".format(y)
+        n = unpackLetters[m.group(6)] * 10 + int(m.group(7))
+        if n==0:
+           ns = ''
+        else:
+           ns = str(n)
+        extra = ''
+        if m.group(8): # m.group(8) changes nothing 
+           extra = m.group(8) # adds order
+
+        frag = ''
+        if m.group(9): # fragment letter
+           frag = '-' + m.group(9).upper()
+
+        provID =  m.group(2) + '/' + y + ' ' + m.group(5) + extra + ns + frag
+
+   #
+   # Satellite groups:
+   #
+   #  PermID:  None if not present
+   #    1: [JSUN]
+   #    2: 3 digits
+   #  ProvID:  None if not present
+   #    3: <letnum>
+   #    4: <yy>
+   #    5: JSUN
+   #    6: <letnum>
+   #    7: <digit>
+   #
+   m = satellitePackedIDRegex.match(packedID)
+   if m:
+     if m.group(1):
+        n = int(m.group(2))
+        if (n == 0):
+           raise RuntimeError("Can't unpack because satellite number for " 
+                               + packedID + " is zero")
+        permID =  planetNameDict[m.group(1)] + " " +  str(n)
+     if m.group(3):
+        y = unpackLetters[m.group(3)] * 100 + int(m.group(4))
+        y = "{0:0d}".format(y)
+        n = unpackLetters[m.group(6)] * 10 + int(m.group(7))
+        if n==0:
+           ns = ''
+        else:
+           ns = str(n)
+        provID =  'S/' + y + ' ' + m.group(5) + ' ' + ns
+
+   if not permID and not provID and not trkSub: # oops -- nothing here
+      raise RuntimeError("Can't unpack " + repr(packedID) + " because this does not match a valid packed ID")
+
+   return (permID, provID, trkSub)
+
+
+def packTupleID(triplet):
+   """ packTupleID packs an (permID, provID, trkSub) into
+       MCP 80-column format or raises an exception about why not
+       Input:
+          (permID, provID, trkSub)  or  [permID, provID, trkSub]
+       Output:
+          packedID: The 12-character packed ID
+   """
+   try:
+      permID = triplet[0]
+      provID = triplet[1]
+      trkSub = triplet[2]
+   except:
+      raise RuntimeError("Can't pack " + repr(triplet) + " because it isn't (permID, provID, trkSub)")
+   if len(triplet) != 3:
+      raise RuntimeError("Can't pack " + repr(triplet) + "because it is not of length 3")
+
+   #
+   # figure out permID type and value using regex
+   #
+   packedPermID = None # may be None if permID is None
+   if permID is not None: # otherwise try to decode it
+      #
+      # may be a minor planet
+      #
+      m = minorplanetPermIDRegex.match(permID)
+      if m:
+         mp = int(m.group(1))
+         if (mp > 0) and (mp < 620000): # 1 through 619999 allowed
+             firstDigit = mp//10000   
+             lastDigits = mp - firstDigit * 10000
+             packedPermID =  packLetters[firstDigit] + "{0:0d}".format(lastDigits + 10000)[1:]
+             permIDType = 'A'
+         else:
+             raise RuntimeError("Can't pack permID " + permID + " because it is not in range 1-619000")
+
+      #
+      # may be a comet
+      #
+      m = cometPermIDRegex.match(permID)
+      if m:
+         n = int(m.group(1))
+         if n > 9999:
+            raise RuntimeError("Can't pack because comet number for " 
+                                + permID + " is too large")
+         if n == 0:
+            raise RuntimeError("Can't pack because comet number for " 
+                                + permID + " is zero")
+         packedPermID =  "{0:0d}".format(n + 10000)[1:] + m.group(2)
+         permIDType = 'C'
+
+      #
+      # may be a comet fragmnet
+      #
+      m = cometfragmentPermIDRegex.match(permID)
+      if m:
+         n = int(m.group(1))
+         if n > 9999:
+            raise RuntimeError("Can't pack because comet number for " 
+                                + permID + " is too large")
+         if n == 0:
+            raise RuntimeError("Can't pack because comet number for " 
+                                + permID + " is zero")
+         packedPermID =  "{0:0d}".format(n + 10000)[1:] + m.group(2)
+         permIDType = 'F'
+         permIDFragment = m.group(3)
+   
+   
+      #
+      # may be a satellite
+      #
+      m = satellitePermIDRegex.match(permID)
+      if m:
+         n = int(m.group(2))
+         if n > 999:
+            raise RuntimeError("Can't pack because satellite number for " 
+                                + permID + " is too large")
+         if n == 0:
+            raise RuntimeError("Can't pack because satellite number for " 
+                                + permID + " is zero")
+         permIDType = 'S'
+         packedPermID = m.group(1)[0]  + "{0:0d}".format(1000 + int(m.group(2)))[1:] + 'S'
+
+      #
+      # may not be a satellite of an asteroid
+      #
+      m = asteroidsatellitePermIDRegex.match(permID)
+      if m:
+         raise RuntimeError("Can't pack satellites of asteroids: " +  permID)
+
+      if not packedPermID:  # none falls through
+          raise RuntimeError("invalid permID " + permID)
+
+   #
+   # figure out provID type and value using regex
+   #
+   packedProvID = None # may be None if provID is None
+   if provID is not None:  # otherswise try to decode it
+   #
+   # minor planets in normal format
+   #
+      m = minorplanetProvIDRegex.match(provID)
+      if m:
+         y = int(m.group(1))  # two-digit head of year
+         if (y<18) or (y>61):
+            raise RuntimeError("Can't pack because minor planet year for " 
+                                + provID + " is invalid")
+         n = m.group(5)
+         if not n: # None is 0
+           n = 0  
+         else:
+           n = int(n)
+         if n>619: # can't encode if it's too big
+            raise RuntimeError("Can't pack because number for " 
+                                + provID + " is too big")
+         n1 = int(n/10)
+         nn = packLetters[n1]
+         n2 = "{0:0d}".format(n - 10*n1  + 10)[1:]
+         
+         packedProvID =  ' ' + packLetters[y] + m.group(2) + \
+                m.group(3) + nn + n2 + m.group(4)
+         provIDType = 'A'
+   
+      #
+      # minor planets from survey
+      #
+      m = minorplanetSurveyProvIDRegex.match(provID)
+      if m:
+         n = int(m.group(1))
+         s1 = m.group(2)[0]
+         s2 = m.group(2)[2]
+         packedProvID =  ' ' + s1 + s2 + 'S' + "{0:0d}".format(10000 + n)[1:]
+         provIDType = 'A'
+   
+      #
+      # comets
+      #
+      m = cometProvIDRegex.match(provID)
+      if m:
+         extra = '0' 
+         if m.group(4):  # handle two-letter comets -- these were originally asteroids and can't have fragments
+           extra = m.group(4)
+         n = int('0' + m.group(5)) # may be ''
+         n1 = n//10
+         n2 = n - n1*10
+         if n1 > 61:
+            raise RuntimeError("Can't pack because number for " 
+                                + provID + " is too big")
+         
+         y1 = packLetters[int(m.group(2)[0:2])]
+         y2 = m.group(2)[2:4]
+         packedProvID =  m.group(1) + y1 + y2 + m.group(3) + packLetters[n1] + packLetters[n2] + extra
+         if m.group(1) == 'A': # asteroid in disguise
+            provIDType = 'A'
+         else:
+            provIDType = 'C'
+   
+      #
+      # comet fragments
+      #
+      m = cometfragmentProvIDRegex.match(provID)
+      if m:
+         n = int(m.group(4))
+         n1 = n//10
+         n2 = n - n1*10
+         if n1 > 61:
+            raise RuntimeError("Can't pack because number for " 
+                                + provID + " is too big")
+         
+         y1 = packLetters[int(m.group(2)[0:2])]
+         y2 = m.group(2)[2:4]
+         packedProvID =  m.group(1) + y1 + y2 + m.group(3) + packLetters[n1] + packLetters[n2] + m.group(5).lower()
+         provIDType = 'F'
+         provIDFragment = m.group(5) # single character only
+         
+      #
+      # satellites
+      #
+      m = satelliteProvIDRegex.match(provID)
+      if m:
+         n = int(m.group(3))
+         n1 = n//10
+         n2 = n - n1*10
+         if n1 > 61:
+            raise RuntimeError("Can't pack because number for " 
+                                + provID + " is too big")
+         if n == 0:
+            raise RuntimeError("Can't pack because number for " 
+                                + provID + " is zero")
+         
+         
+         y1 = packLetters[int(m.group(1)[0:2])]
+         y2 = m.group(1)[2:4]
+         packedProvID =  'S' + y1 + y2 + m.group(2) + packLetters[n1] + packLetters[n2]  + '0'
+         provIDType = 'S'
+
+      if not packedProvID:  # none falls through
+          raise RuntimeError("invalid provID " + provID)
+
+
+   packedTrkSub = None # may be None if trksub is None
+   #
+   # figure out permID type and value using regex
+   #
+   packedTrkSub = None # may be None if permID is None
+   if trkSub is not None: # otherwise try to decode it
+      #
+      # check trksub regex
+      #
+      m = trksubRegex.match(trkSub)
+      if m:
+         tmp = m.group(1)
+         #print ("m.groups is ", m.groups())
+         if len(tmp) > 7:
+            raise RuntimeError("Can't pack " + trkSub + " because it it is too long")
+         packedTrkSub = m.group(1)
+
+      if not packedTrkSub:  # none falls through
+          raise RuntimeError("invalid trkSub " + trkSub)
+
+   #
+   # Now pack it in the final format
+   #
+   packed = None
+   #print ( packedPermID, packedProvID, packedTrkSub )
+   if packedPermID:  
+      if packedProvID: # must match
+        if permIDType != provIDType:
+           raise RuntimeError("Can't pack " + repr(triplet) + " because provID and permID types don't match")
+        if permIDType == 'F':
+           if permIDFragment != provIDFragment:
+              raise RuntimeError("Can't pack " + repr(triplet) + " because provID and permID fragments don't match")
+        packed = packedPermID + packedProvID[1:]  # works for all cases that match
+
+      else: # no packed provID
+        if packedTrkSub:  # is this legal?
+           pass
+        else:
+           packed = packedPermID + '       '
+           if permIDType == 'F':  # fragments are special
+             if len(permIDFragment) == 1:
+                permIDFragment = ' ' + permIDFragment
+             packed = packed[:10] + permIDFragment.lower()
+
+   else:  # no packedPermID
+      if packedProvID:
+        if packedTrkSub: # this is illegal
+          raise RuntimeError("Can't pack " + repr(triplet) + " because it has both provID and trksub")
+        packed = '    ' + packedProvID # captures column 5
+
+      else:
+        if packedTrkSub: 
+           packed = '     ' + packedTrkSub  # need to pad to column 12
+           packed = '{0:12s}'.format(packed)
+
+   if packed:
+      return packed
+
+   raise RuntimeError("Can't pack " + repr(triplet) )
+
+
+def testConverter(string, expected, converter, stream=sys.stdout):
+   """ test the converter, such as packedID -> (permID, provID, trkSub) translation 
+       Inputs:
+         string: string to be converted
+         expected: expected conversion,  or None if invalid
+         converter: converter, such as packedTupleID
+         stream: streaom on which to print result
+       Errors: None
+
+       This routine prints the result on stream
+   """
+   if expected is None:  # expect error
+      try:
+         val = converter(string)
+         print (val, file=stream)
+         raise RuntimeError("BAD")
+      except RuntimeError as e:
+            if str(e) == "BAD":
+               print ("  BAD: EXPECTED ERROR AND GOT NONE FOR", string, file=stream)
+            else:
+               print ("  OK: ", e, file=stream)
+   else:      # expect OK
+      try:
+         val = converter(string)
+         if val != expected:
+            print ("  BAD:  expected " + repr(expected) + " and got " + repr(val) + " for " + repr(string), file=stream)
+         else:
+            print ("  OK: ", string, " -> ", val, file=stream)
+      except RuntimeError as e:
+            print ("  BAD: ", e, file=stream)
+
+def testPackedRoundTrip(s):  # test for round-trip
+    """ testPackedRoundTrip checks to see whether packed ID s round-trips
+        Input:
+          s:  a packed ID
+        Output:
+          True
+        Errors:
+          RuntimeError if s does not round-trip
+    """
+        
+    try:
+      t = unpackPackedID(s)
+    except:
+      t = None
+    try:
+      u = packTupleID(t)
+    except:
+      u = None
+    if s != u:
+      raise RuntimeError("Bad RoundTrip: " + repr(s) + " vs. " + repr(u) + " through " + repr(t))
+    return True
+
+def testCases(stream=sys.stdout):
+   """ testCases is a collection of test cases """
+   #
+   # demonstrate conversions
+   #
+   print (file=stream)
+   print ("test to demonstrate A-Za-z number conversion", file=stream)
+   for i in range(len(packLetters)):
+      print(i, packLetters[i], unpackLetters[packLetters[i]], file=stream)
+
+   #
+   # test broken test report
+   #
+   print (file=stream)
+   print ("test error handler for good cases marked as bad", file=stream)
+   testConverter('00001       ', None, unpackPackedID, stream) # test error handler
+   
+
+   #
+   # test full packed ID
+   #
+   print (file=stream)
+   print ("test packed ID -> unnpacked", file=stream)
+   testConverter("     K14A00A", (None, '2014 AA', None), unpackPackedID, stream)
+   testConverter("00001       ", ('1', None, None), unpackPackedID, stream)
+   testConverter("12345       ", ('12345', None, None), unpackPackedID, stream)
+   testConverter("z9999       ", ('619999', None, None), unpackPackedID, stream)
+   testConverter("B0001       ", ('110001', None, None), unpackPackedID, stream)
+   testConverter("C1234K14A00A", ('121234', '2014 AA', None), unpackPackedID, stream)
+   testConverter("00001K14A00A", ('1', '2014 AA', None), unpackPackedID, stream)
+   testConverter("     K14A00A", (None, '2014 AA', None), unpackPackedID, stream)
+   testConverter("     K14B01A", (None, '2014 BA1', None), unpackPackedID, stream)
+   testConverter("     K14Aa0A", (None, '2014 AA360', None), unpackPackedID, stream)
+   testConverter("     K14Az9Q", (None, '2014 AQ619', None), unpackPackedID, stream)
+   testConverter("     J97B06A", (None, '1997 BA6', None), unpackPackedID, stream)
+
+   testConverter('     PLS4007', (None, '4007 P-L', None), unpackPackedID, stream)
+   testConverter('     T1S4568', (None, '4568 T-1', None), unpackPackedID, stream)
+   testConverter('     T2S1238', (None, '1238 T-2', None), unpackPackedID, stream)
+   testConverter('     T3S1438', (None, '1438 T-3', None), unpackPackedID, stream)
+   testConverter('01234PLS4007', ('1234', '4007 P-L', None), unpackPackedID, stream)
+   testConverter('01234T1S4568', ('1234', '4568 T-1', None), unpackPackedID, stream)
+   testConverter('01234T2S1238', ('1234', '1238 T-2', None), unpackPackedID, stream)
+   testConverter('01234T3S1438', ('1234', '1438 T-3', None), unpackPackedID, stream)
+
+   testConverter("a0001K14A00A", ('360001', '2014 AA', None), unpackPackedID, stream)
+   testConverter("07968J96N020", ('7968', 'A/1996 N2', None), unpackPackedID, stream)
+   testConverter("     T1S4007", (None, '4007 T-1', None), unpackPackedID, stream)
+   testConverter("     I98V00F", (None, '1898 VF', None), unpackPackedID, stream)
+   testConverter("     A      ", (None, None, 'A'), unpackPackedID, stream)
+   testConverter("     A000   ", (None, None, 'A000'), unpackPackedID, stream)
+   testConverter("     A00001 ", (None, None, 'A00001'), unpackPackedID, stream)
+   testConverter("     P00001 ", (None, None, 'P00001'), unpackPackedID, stream)
+   testConverter("     PL0001 ", (None, None, 'PL0001'), unpackPackedID, stream)
+   testConverter("     T10001 ", (None, None, 'T10001'), unpackPackedID, stream)
+   testConverter("     A00001X", (None, None, 'A00001X'), unpackPackedID, stream)
+   testConverter("     KA0001X", (None, None, 'KA0001X'), unpackPackedID, stream)
+   testConverter("     K0A001X", (None, None, 'K0A001X'), unpackPackedID, stream)
+   testConverter("     K00001X", (None, None, 'K00001X'), unpackPackedID, stream)
+   testConverter("     K0a00", (None, None, 'K0a00'), unpackPackedID, stream)
+   testConverter("     K0a00xx", (None, None, 'K0a00xx'), unpackPackedID, stream)
+   testConverter("     K00a01X", (None, None, 'K00a01X'), unpackPackedID, stream)
+   testConverter("     K00H01X", (None, '2000 HX1', None), unpackPackedID, stream)
+   testConverter("     K00001X", (None, None, 'K00001X'), unpackPackedID, stream)
+   testConverter("     K00I01X", (None, None, 'K00I01X'), unpackPackedID, stream)
+   testConverter("     K00A0AX", (None, None, 'K00A0AX'), unpackPackedID, stream)
+   testConverter("     K00001x", (None, None, 'K00001x'), unpackPackedID, stream)
+   testConverter("     J000013", (None, None, 'J000013'), unpackPackedID, stream)
+   testConverter("     P00001A", (None, None, 'P00001A'), unpackPackedID, stream)
+   testConverter("     P00001z", (None, None, 'P00001z'), unpackPackedID, stream)
+   testConverter("     P000010", (None, None, 'P000010'), unpackPackedID, stream)
+   testConverter("     T000010", (None, None, 'T000010'), unpackPackedID, stream)
+   testConverter("     PL0001X", (None, None, 'PL0001X'), unpackPackedID, stream)
+   testConverter("     T30001Q", (None, None, 'T30001Q'), unpackPackedID, stream)
+   testConverter("     T200010", (None, None, 'T200010'), unpackPackedID, stream)
+   testConverter("     PLSa210", (None, None, 'PLSa210'), unpackPackedID, stream)
+   testConverter("     PLS2a10", (None, None, 'PLS2a10'), unpackPackedID, stream)
+   testConverter("     PLS20x0", (None, None, 'PLS20x0'), unpackPackedID, stream)
+   testConverter("     PLS001X", (None, None, 'PLS001X'), unpackPackedID, stream)
+   testConverter("     T3S001Q", (None, None, 'T3S001Q'), unpackPackedID, stream)
+
+   testConverter("0073P       ", ('73P', None, None), unpackPackedID, stream)
+   testConverter("1234P       ", ('1234P', None, None), unpackPackedID, stream)
+   testConverter("0003D       ", ('3D', None, None), unpackPackedID, stream)
+   testConverter( '    CJ95A010', (None, 'C/1995 A1', None), unpackPackedID, stream)
+   testConverter( '    PJ94P01b', (None, 'P/1994 P1-B', None), unpackPackedID, stream)
+   testConverter( '    CJ94P010', (None, 'C/1994 P1', None), unpackPackedID, stream)
+   testConverter( '    CK48X130', (None, 'C/2048 X13', None), unpackPackedID, stream)
+   testConverter( '    CK33L89c', (None, 'C/2033 L89-C', None), unpackPackedID, stream)
+   testConverter( '    CK88AA30', (None, 'C/2088 A103', None), unpackPackedID, stream)
+   testConverter( '    CJ99K070', (None, 'C/1999 K7', None), unpackPackedID, stream)
+   testConverter( '    DJ99K070', (None, 'D/1999 K7', None), unpackPackedID, stream)
+   testConverter( '    PI86S010', (None, 'P/1886 S1', None), unpackPackedID, stream)
+   testConverter( '    DJ94P01b', (None, 'D/1994 P1-B', None), unpackPackedID, stream)
+   testConverter( '    PJ94P01b', (None, 'P/1994 P1-B', None), unpackPackedID, stream)
+   testConverter( '    PJ96J01a', (None, 'P/1996 J1-A', None), unpackPackedID, stream)
+   testConverter( '    PJ98Q54P', (None, 'P/1998 QP54', None), unpackPackedID, stream)
+   testConverter( '    CJ97B06A', (None, 'C/1997 BA6', None), unpackPackedID, stream)
+   testConverter( '    PJ98Q00P', (None, 'P/1998 QP', None), unpackPackedID, stream)
+   testConverter( '    PK01ND10', (None, 'P/2001 N131', None), unpackPackedID, stream)
+   testConverter( '    PK10V10b', (None, 'P/2010 V10-B', None), unpackPackedID, stream)
+   testConverter( '    DI94F010', (None, 'D/1894 F1', None), unpackPackedID, stream)
+   testConverter( '    DJ93F02e', (None, 'D/1993 F2-E', None), unpackPackedID, stream)
+   testConverter( '    XJ87A020', (None, 'X/1987 A2', None), unpackPackedID, stream)
+   testConverter( '    AJ87A020', (None, 'A/1987 A2', None), unpackPackedID, stream)
+   testConverter( '0141PJ94P01a', ('141P-A', 'P/1994 P1-A', None), unpackPackedID, stream)
+   testConverter( '0001PI35P010', ('1P', 'P/1835 P1', None), unpackPackedID, stream)
+   testConverter( '0073P     af', ('73P-AF', None, None), unpackPackedID, stream)
+   testConverter( '0073P      g', ('73P-G', None, None), unpackPackedID, stream)
+
+   testConverter("J001S       ", ('Jupiter 1', None, None), unpackPackedID, stream)
+   testConverter("S005S       ", ('Saturn 5', None, None), unpackPackedID, stream)
+   testConverter("N013S       ", ('Neptune 13', None, None), unpackPackedID, stream)
+   testConverter("U101S       ", ('Uranus 101', None, None), unpackPackedID, stream)
+   testConverter("J001SG10J010", ('Jupiter 1', 'S/1610 J 1', None), unpackPackedID, stream)
+
+   testConverter("    SG10J010", (None, 'S/1610 J 1', None), unpackPackedID, stream)
+   testConverter("    SK10JB10", (None, 'S/2010 J 111', None), unpackPackedID, stream)
+   testConverter('    SK01U090', (None, 'S/2001 U 9', None), unpackPackedID, stream)
+   testConverter('    SK01S310', (None, 'S/2001 S 31', None), unpackPackedID, stream)
+   testConverter('    SK01JD10', (None, 'S/2001 J 131', None), unpackPackedID, stream)
+   testConverter('    SK01ND10', (None, 'S/2001 N 131', None), unpackPackedID, stream)
+
+   testConverter("    SAab102 ", None, unpackPackedID, stream)
+   testConverter("0a001K14A00A", None, unpackPackedID, stream)
+
+   testConverter( '    Pbb12   ', None, unpackPackedID, stream)
+   testConverter("0a001K14A00A", None, unpackPackedID, stream)
+   testConverter("1234C       ", None, unpackPackedID, stream)
+   testConverter("1234X       ", None, unpackPackedID, stream)
+   testConverter("1234A       ", None, unpackPackedID, stream)
+   testConverter("00000       ", None, unpackPackedID, stream)
+   testConverter("0000P       ", None, unpackPackedID, stream)
+   testConverter("U000S       ", None, unpackPackedID, stream)
+   testConverter("K221S       ", None, unpackPackedID, stream)
+   testConverter("_0000       ", None, unpackPackedID, stream)
+   testConverter("     A00 01 ", None, unpackPackedID, stream)  # bogus
+   testConverter("            ", None, unpackPackedID, stream)
+
+   #
+   # test packing ID
+   #
+   print (file=stream)
+   print ("test unpacked ID -> packed", file=stream)
+   testConverter( (None, '2014 AA', None), "     K14A00A", packTupleID, stream)
+   testConverter( ('1', None, None), "00001       ", packTupleID, stream)
+   testConverter( ('121234', '2014 AA', None), "C1234K14A00A", packTupleID, stream)
+   testConverter( ('1', '2014 AA', None), "00001K14A00A", packTupleID, stream)
+   testConverter( ('360001', '2014 AA', None), "a0001K14A00A", packTupleID, stream)
+   testConverter( ('7968', 'A/1996 N2', None), "07968J96N020", packTupleID, stream)
+
+   testConverter( (None, '4007 T-1', None), "     T1S4007", packTupleID, stream)
+   testConverter( (None, None, 'A'), "     A      ", packTupleID, stream)
+   testConverter( (None, None, 'A000'), "     A000   ", packTupleID, stream)
+   testConverter( (None, None, 'A00001'), "     A00001 ", packTupleID, stream)
+
+   testConverter( ('73P', None, None), "0073P       ", packTupleID, stream)
+   testConverter( ('3D', None, None), "0003D       ", packTupleID, stream)
+   testConverter( (None, 'C/1995 A1', None), '    CJ95A010', packTupleID, stream)
+   testConverter( (None, 'P/1994 P1-B', None), '    PJ94P01b', packTupleID, stream)
+   testConverter( (None, 'C/1994 P1', None), '    CJ94P010', packTupleID, stream)
+   testConverter( (None, 'C/2048 X13', None), '    CK48X130', packTupleID, stream)
+   testConverter( (None, 'C/2033 L89-C', None), '    CK33L89c', packTupleID, stream)
+   testConverter( (None, 'C/2088 A103', None), '    CK88AA30', packTupleID, stream)
+   testConverter( (None, 'C/1999 K7', None), '    CJ99K070', packTupleID, stream)
+   testConverter( (None, 'D/1999 K7', None), '    DJ99K070', packTupleID, stream)
+   testConverter( (None, 'P/1886 S1', None), '    PI86S010', packTupleID, stream)
+   testConverter( (None, 'D/1994 P1-B', None), '    DJ94P01b', packTupleID, stream)
+   testConverter( (None, 'P/1994 P1-B', None), '    PJ94P01b', packTupleID, stream)
+   testConverter( (None, 'P/1996 J1-A', None), '    PJ96J01a', packTupleID, stream)
+   testConverter( (None, 'P/1998 QP54', None), '    PJ98Q54P', packTupleID, stream)
+   testConverter( (None, 'P/2014 QP', None), '    PK14Q00P', packTupleID, stream)
+   testConverter( (None, 'C/1997 BA6', None), '    CJ97B06A', packTupleID, stream)
+   testConverter( (None, 'P/2001 N131', None), '    PK01ND10', packTupleID, stream)
+   testConverter( (None, 'P/2010 V10-B', None), '    PK10V10b', packTupleID, stream)
+   testConverter( (None, 'D/1894 F1', None), '    DI94F010', packTupleID, stream)
+   testConverter( (None, 'D/1993 F2-E', None), '    DJ93F02e', packTupleID, stream)
+   testConverter( (None, 'X/1987 A2', None), '    XJ87A020', packTupleID, stream)
+   testConverter( ('141P-A', 'P/1994 P1-A', None), '0141PJ94P01a', packTupleID, stream)
+   testConverter( ('1P', 'P/1835 P1', None), '0001PI35P010', packTupleID, stream)
+   testConverter( ('73P-AF', None, None), '0073P     af', packTupleID, stream)
+   testConverter( ('73P-G', None, None), '0073P      g', packTupleID, stream)
+   testConverter( (None, None, 'bb12'), '     bb12   ',  packTupleID, stream)
+
+   testConverter( ('Jupiter 1', None, None), "J001S       ", packTupleID, stream)
+   testConverter( ('Saturn 1', None, None), "S001S       ", packTupleID, stream)
+   testConverter( ('Neptune 13', None, None), "N013S       ", packTupleID, stream)
+   testConverter( ('Uranus 101', None, None), "U101S       ", packTupleID, stream)
+   testConverter( ('Jupiter 1', 'S/1610 J 1', None), "J001SG10J010", packTupleID, stream)
+
+   testConverter( (None, 'S/1610 J 1', None), "    SG10J010", packTupleID, stream)
+   testConverter( (None, 'S/2010 J 111', None), "    SK10JB10", packTupleID, stream)
+   testConverter( (None, None, 'Aab102'), "     Aab102 ", packTupleID, stream)
+   testConverter( (None, None, None), None, packTupleID, stream)
+
+   testConverter( ('0', None, None), None, packTupleID, stream)
+   testConverter( ('620000', None, None), None, packTupleID, stream)
+   testConverter( "bogus", None, packTupleID, stream)
+   testConverter( ('1', 'P/1994 P1-A', None), None, packTupleID, stream)
+   testConverter( ('141P', 'P/1994 P1-A', None), None, packTupleID, stream)
+   testConverter( ('141P-C', 'P/1994 P1-A', None), None, packTupleID, stream)
+   testConverter( ('141P-AB', 'P/1994 P1-A', None), None, packTupleID, stream)
+   testConverter( ('12345P', None, None), None, packTupleID, stream)
+   testConverter( ('0P', None, None), None, packTupleID, stream)
+   testConverter( ('(45) 1', None, None), None, packTupleID, stream)
+   testConverter( (None, 'S/1610 J 1', 'Abcde'), None, packTupleID, stream)
+   testConverter( (None, 'Invalid88', None), None, packTupleID, stream)
+   testConverter( (None, None, 'A1234567'), None, packTupleID, stream)
+   testConverter( (None, None, ''), None, packTupleID, stream)
+   testConverter( (None, None, 'Ab3%xx'), None, packTupleID, stream)
+   testConverter( (None, 'S/2010 J 111'), None, packTupleID, stream)
+   testConverter( (None, 'S/2010 J 111', None, "Too long"), None, packTupleID, stream)
+
+   testConverter( (None, '568 T-1', None), None, packTupleID, stream)
+   testConverter( (None, '2014 AA620', None), None, packTupleID, stream)
+   testConverter( (None, '2014 AA12345', None), None, packTupleID, stream)
+   testConverter( (None, 'C/1997 B620', None), None, packTupleID, stream)
+   testConverter( (None, 'P/1998 QP54-A', None), None, packTupleID, stream)
+   testConverter( (None, '1700 AA', None), None, packTupleID, stream)
+   testConverter( (None, '6200 AX', None), None, packTupleID, stream)
+   testConverter( (None, '2001 IA', None), None, packTupleID, stream)
+   testConverter( (None, '2001 ZA', None), None, packTupleID, stream)
+   testConverter( (None, '2001 AI', None), None, packTupleID, stream)
+   testConverter( (None, 'S/2001 N 620', None), None, packTupleID, stream)
+   testConverter( (None, 'S/2001 N 0', None), None, packTupleID, stream)
+   testConverter( (None, 'S/2008 (41) 1', None), None, packTupleID, stream)
+   testConverter( (None, 'S/2001 (1998 WW31)) 1', None), None, packTupleID, stream)
+
+   #
+   # test packed ID round-trip
+   #
+   print (file=stream)
+   print ("test packed ID roundTrip", file=stream)
+   testConverter("     K14A00A", True, testPackedRoundTrip, stream)
+   testConverter("00001       ", True, testPackedRoundTrip, stream)
+   testConverter("C1234K14A00A", True, testPackedRoundTrip, stream)
+   testConverter("00001K14A00A", True, testPackedRoundTrip, stream)
+   testConverter("a0001K14A00A", True, testPackedRoundTrip, stream)
+   testConverter("07968J96N020", True, testPackedRoundTrip, stream)
+   testConverter("    AJ96N020", True, testPackedRoundTrip, stream)
+   testConverter("     T1S4007", True, testPackedRoundTrip, stream)
+   testConverter("     A      ", True, testPackedRoundTrip, stream)
+   testConverter("     A000   ", True, testPackedRoundTrip, stream)
+   testConverter("     A00001 ", True, testPackedRoundTrip, stream)
+   testConverter("     A00001X", True, testPackedRoundTrip, stream)
+   testConverter("     K00001X", True, testPackedRoundTrip, stream)
+   testConverter("     K00001x", True, testPackedRoundTrip, stream)
+   testConverter("     J000013", True, testPackedRoundTrip, stream)
+   testConverter("     P00001A", True, testPackedRoundTrip, stream)
+   testConverter("     P00001z", True, testPackedRoundTrip, stream)
+
+   testConverter("0073P       ", True, testPackedRoundTrip, stream)
+   testConverter("0003D       ", True, testPackedRoundTrip, stream)
+   testConverter( '    CJ95A010', True, testPackedRoundTrip, stream)
+   testConverter( '    PJ94P01b', True, testPackedRoundTrip, stream)
+   testConverter( '    CJ94P010', True, testPackedRoundTrip, stream)
+   testConverter( '    CK48X130', True, testPackedRoundTrip, stream)
+   testConverter( '    CK33L89c', True, testPackedRoundTrip, stream)
+   testConverter( '    CK88AA30', True, testPackedRoundTrip, stream)
+   testConverter( '    CJ99K070', True, testPackedRoundTrip, stream)
+   testConverter( '    DJ99K070', True, testPackedRoundTrip, stream)
+   testConverter( '    PI86S010', True, testPackedRoundTrip, stream)
+   testConverter( '    DJ94P01b', True, testPackedRoundTrip, stream)
+   testConverter( '    PJ94P01b', True, testPackedRoundTrip, stream)
+   testConverter( '    PJ96J01a', True, testPackedRoundTrip, stream)
+   testConverter( '    PJ98Q54P', True, testPackedRoundTrip, stream)
+   testConverter( '    CJ97B06A', True, testPackedRoundTrip, stream)
+   testConverter( '    PK01ND10', True, testPackedRoundTrip, stream)
+   testConverter( '    PK10V10b', True, testPackedRoundTrip, stream)
+   testConverter( '    DI94F010', True, testPackedRoundTrip, stream)
+   testConverter( '    DJ93F02e', True, testPackedRoundTrip, stream)
+   testConverter( '    XJ87A020', True, testPackedRoundTrip, stream)
+   testConverter( '0141PJ94P01a', True, testPackedRoundTrip, stream)
+   testConverter( '0001PI35P010', True, testPackedRoundTrip, stream)
+   testConverter( '0073P     af', True, testPackedRoundTrip, stream)
+   testConverter( '0073P      g', True, testPackedRoundTrip, stream)
+   testConverter( '     bb12   ', True, testPackedRoundTrip, stream)
+
+   testConverter("J001S       ", True, testPackedRoundTrip, stream)
+   testConverter("S001S       ", True, testPackedRoundTrip, stream)
+   testConverter("N013S       ", True, testPackedRoundTrip, stream)
+   testConverter("U101S       ", True, testPackedRoundTrip, stream)
+   testConverter("J001SG10J010", True, testPackedRoundTrip, stream)
+
+   testConverter("    SG10J010", True, testPackedRoundTrip, stream)
+   testConverter("    SK10JB10", True, testPackedRoundTrip, stream)
+
+#testCases(sys.stdout)
+

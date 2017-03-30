@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ades version="2017">
+  <obsBlock>
+    <obsContext>
+      <observatory>
+        <mpcCode>F51</mpcCode>
+        <name>Pan-STARRS 1</name>
+      </observatory>
+      <submitter>
+        <name>P. Villa</name>
+        <institution>Ejército Constitucionalista</institution>
+      </submitter>
+      <telescope>
+        <name>Arizona Observatory</name>
+        <aperture>1.5</aperture>
+        <design>Reflector</design>
+        <fRatio>2.8</fRatio>
+        <filter>some filter</filter>
+        <detector>CCD</detector>
+        <arraySize>1024x1024</arraySize>
+        <pixelScale>0.113</pixelScale>
+      </telescope>
+      <observers>
+        <name>P. Villa</name>
+        <name>F. Madero</name>
+      </observers>
+      <measurers>
+        <name>P. Villa</name>
+        <name>F. Madero</name>
+      </measurers>
+      <software>
+        <astrometry>Astrometry Software</astrometry>
+        <fitOrder>Fit Order</fitOrder>
+        <photometry>Photometry Software</photometry>
+        <objectDetection>Object Detection Software</objectDetection>
+      </software>
+      <coinvestigators>
+        <name>F. Franco</name>
+      </coinvestigators>
+      <collaborators>
+        <name>V. Quisling</name>
+      </collaborators>
+      <fundingSource>Wherever we can get it</fundingSource>
+      <comment>
+        <line>This is a comment</line>
+        <line>This is a second comment</line>
+        <line>This is a comment with &gt;stuff?&lt; in it  comment</line>
+      </comment>
+    </obsContext>
+    <obsData>
+      <optical>
+        <permID>1234456</permID>
+        <trkSub>aa</trkSub>
+        <mode>CCD</mode>
+        <stn>F51</stn>
+        <prog>31</prog>
+        <obsTime>2016-08-29T12:32:34Z</obsTime>
+        <ra>0</ra>
+        <dec>90</dec>
+        <rmsRA>0.15</rmsRA>
+        <rmsDec>0.13</rmsDec>
+        <rmsCorr>0.21</rmsCorr>
+        <astCat>2MA</astCat>
+        <mag>21.9</mag>
+        <rmsMag>0.25</rmsMag>
+        <band>w</band>
+        <photCat>2MA</photCat>
+        <logSNR>0.775</logSNR>
+        <notes>klmn</notes>
+        <remarks>High winds affected tracking</remarks>
+      </optical>
+    </obsData>
+  </obsBlock>
+</ades>

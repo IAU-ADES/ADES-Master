@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ades version="2017">
+  <obsBlock>
+    <obsContext>
+      <observatory>
+        <mpcCode>F51</mpcCode>
+        <name>Pan-STARRS 1</name>
+      </observatory>
+      <submitter>
+        <name>P. Villa</name>
+        <institution>Ejército Constitucionalista</institution>
+      </submitter>
+      <telescope>
+        <aperture>1.5</aperture>
+        <design>Reflector</design>
+        <detector>CCD</detector>
+      </telescope>
+      <observers>
+        <name>P. Villa</name>
+        <name>F. Madero</name>
+      </observers>
+      <measurers>
+        <name>P. Villa</name>
+        <name>F. Madero</name>
+      </measurers>
+      <comment>
+        <line>This is a comment</line>
+      </comment>
+    </obsContext>
+    <obsData>
+      <offset>
+        <permID>1234456</permID>
+        <trkSub>aa</trkSub>
+        <mode>CCD</mode>
+        <stn>F51</stn>
+        <prog>31</prog>
+        <obsTime>2016-08-29T12:32:34Z</obsTime>
+        <obsCenter>Jupiter</obsCenter>
+        <deltaRA>0.01</deltaRA>
+        <deltaDec>0.02</deltaDec>
+        <rmsRA>0.0015</rmsRA>
+        <rmsDec>0.0013</rmsDec>
+        <rmsCorr>0.0021</rmsCorr>
+        <mag>21.9</mag>
+        <rmsMag>0.25</rmsMag>
+        <band>w</band>
+        <photCat>2MA</photCat>
+        <logSNR>0.775</logSNR>
+        <notes>klmn</notes>
+        <remarks>High winds affected tracking</remarks>
+      </offset>
+    </obsData>
+  </obsBlock>
+</ades>

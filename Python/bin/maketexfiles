@@ -1,0 +1,8 @@
+#!/bin/csh -f 
+#
+# Usage:  maketexdocs <srcdir>
+#
+setenv SRC $argv[1]
+foreach table ( elementstable simpletypestable grouptypestable ades )
+${SRC}/Python/bin/applyxslt ${SRC}/xml/adesmaster.xml ${SRC}/xslt/latex//doc{$table}.xslt > {$table}.tex
+end

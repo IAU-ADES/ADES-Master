@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ades version="2017">
+  <obsBlock>
+    <obsContext>
+      <observatory>
+        <mpcCode>G96</mpcCode>
+        <name>Catalina Sky Survey</name>
+      </observatory>
+      <submitter>
+        <name>E. J. Christensen</name>
+      </submitter>
+      <observers>
+        <name>R. L. Seaman</name>
+      </observers>
+      <measurers>
+        <name>E. J. Christensen</name>
+        <name>D. C. Fuls</name>
+        <name>A. R. Gibbs</name>
+        <name>A. D. Grauer</name>
+        <name>J. A. Johnson</name>
+        <name>R. A. Kowalski</name>
+        <name>S. M. Larson</name>
+        <name>G. J. Leonard</name>
+        <name>R. G. Matheny</name>
+        <name>R. L. Seaman</name>
+        <name>F. C. Shelly</name>
+      </measurers>
+      <telescope>
+        <aperture>1.5</aperture>
+        <design>reflector</design>
+        <detector>CCD</detector>
+      </telescope>
+    </obsContext>
+    <obsData>
+      <optical>
+        <permID>1P</permID>
+        <mode>CCD</mode>
+        <stn>G96</stn>
+        <obsTime>2013-10-04T08:05:24.576Z</obsTime>
+        <ra>17.75174</ra>
+        <dec>20.21894</dec>
+        <rmsRA>0.02</rmsRA>
+        <rmsDec>0.02</rmsDec>
+        <astCat>UCAC4</astCat>
+        <mag>17.9</mag>
+        <band>V</band>
+        <photCat>UCAC4</photCat>
+        <logSNR>3.36</logSNR>
+        <remarks>/data0/seaman_ar/G96_20131004_1A_N20016_01_0001.sext</remarks>
+      </optical>
+      <optical>
+        <permID>2123P</permID>
+        <mode>CCD</mode>
+        <stn>G96</stn>
+        <obsTime>2013-10-04T08:15:29.549Z</obsTime>
+        <ra>17.75028</ra>
+        <dec>20.21827</dec>
+        <rmsRA>0.02</rmsRA>
+        <rmsDec>0.02</rmsDec>
+        <astCat>UCAC4</astCat>
+        <mag>18.0</mag>
+        <band>V</band>
+        <photCat>UCAC4</photCat>
+        <logSNR>3.32</logSNR>
+        <remarks>/data0/seaman_ar/G96_20131004_1A_N20016_01_0002.sext</remarks>
+      </optical>
+      <optical>
+        <permID>532D</permID>
+        <mode>CCD</mode>
+        <stn>G96</stn>
+        <obsTime>2013-10-04T08:25:34.867Z</obsTime>
+        <ra>17.74880</ra>
+        <dec>20.21762</dec>
+        <rmsRA>0.02</rmsRA>
+        <rmsDec>0.02</rmsDec>
+        <astCat>UCAC4</astCat>
+        <mag>18.0</mag>
+        <band>V</band>
+        <photCat>UCAC4</photCat>
+        <logSNR>3.31</logSNR>
+        <remarks>/data0/seaman_ar/G96_20131004_1A_N20016_01_0003.sext</remarks>
+      </optical>
+      <optical>
+        <permID>1532P</permID>
+        <mode>CCD</mode>
+        <stn>G96</stn>
+        <obsTime>2013-10-04T08:25:34.867Z</obsTime>
+        <ra>17.74880</ra>
+        <dec>20.21762</dec>
+        <rmsRA>0.02</rmsRA>
+        <rmsDec>0.02</rmsDec>
+        <astCat>UCAC4</astCat>
+        <mag>18.0</mag>
+        <band>V</band>
+        <photCat>UCAC4</photCat>
+        <logSNR>3.31</logSNR>
+        <remarks>/data0/seaman_ar/G96_20131004_1A_N20016_01_0003.sext</remarks>
+      </optical>
+      <optical>
+        <permID>73P-C</permID>
+        <mode>CCD</mode>
+        <stn>G96</stn>
+        <obsTime>2013-10-04T08:25:34.867Z</obsTime>
+        <ra>17.74880</ra>
+        <dec>20.21762</dec>
+        <rmsRA>0.02</rmsRA>
+        <rmsDec>0.02</rmsDec>
+        <astCat>UCAC4</astCat>
+        <mag>18.0</mag>
+        <band>V</band>
+        <photCat>UCAC4</photCat>
+        <logSNR>3.31</logSNR>
+        <remarks>/data0/seaman_ar/G96_20131004_1A_N20016_01_0003.sext</remarks>
+      </optical>
+      <optical>
+        <permID>73P-AC</permID>
+        <mode>CCD</mode>
+        <stn>G96</stn>
+        <obsTime>2013-10-04T08:25:34.867Z</obsTime>
+        <ra>17.74880</ra>
+        <dec>20.21762</dec>
+        <rmsRA>0.02</rmsRA>
+        <rmsDec>0.02</rmsDec>
+        <astCat>UCAC4</astCat>
+        <mag>18.0</mag>
+        <band>V</band>
+        <photCat>UCAC4</photCat>
+        <logSNR>3.31</logSNR>
+        <remarks>/data0/seaman_ar/G96_20131004_1A_N20016_01_0003.sext</remarks>
+      </optical>
+    </obsData>
+  </obsBlock>
+</ades>

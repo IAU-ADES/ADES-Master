@@ -1,0 +1,21 @@
+# version=2017
+# observatory
+! mpcCode F51
+! name Pan-STARRS 1
+# submitter
+! name P. Villa
+! institution Ejército Constitucionalista
+# telescope
+! aperture 1.5
+! design Reflector
+! detector CCD
+# observers
+! name P. Villa
+! name F. Madero
+# measurers
+! name P. Villa
+! name F. Madero
+# comment
+! line This is a comment
+permID |trkSub |mode|stn |prog|obsTime                |obsCenter|dist |pa    |rmsPA |rmsCorr|mag  |rmsMag|band|photCat|logSNR|notes|rmsDist|remarks
+1234456|     aa| CCD|F51 |  31|2016-08-29T12:32:34Z   |1        |0.01 |230.0 | 1.02 |0.0021 |21.9 |0.25  |   w|    2MA|0.775 |klmn |0.0015 |High winds affected tracking

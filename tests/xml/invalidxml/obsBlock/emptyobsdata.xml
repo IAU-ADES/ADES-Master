@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ades version="2017">
+  <obsBlock>
+    <obsContext>
+      <observatory>
+        <mpcCode>F51</mpcCode>
+        <name>Pan-STARRS 1</name>
+      </observatory>
+      <submitter>
+        <name>P. Villa</name>
+        <institution>Ejército Constitucionalista</institution>
+      </submitter>
+      <telescope>
+        <aperture>1.5</aperture>
+        <design>Reflector</design>
+        <detector>CCD</detector>
+      </telescope>
+      <observers>
+        <name>P. Villa</name>
+        <name>F. Madero</name>
+      </observers>
+      <measurers>
+        <name>P. Villa</name>
+        <name>F. Madero</name>
+      </measurers>
+      <comment>
+        <line>This is a comment</line>
+      </comment>
+    </obsContext>
+    <obsData>
+    </obsData>
+  </obsBlock>
+</ades>

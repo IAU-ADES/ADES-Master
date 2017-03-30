@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ades version="2017">
+  <obsBlock>
+    <obsContext>
+      <observatory>
+        <mpcCode>675</mpcCode>
+      </observatory>
+      <observers>
+        <name>J. Pittichova</name>
+      </observers>
+      <measurers>
+        <name>J. Pittichova</name>
+      </measurers>
+      <telescope>
+        <name>1.5-m f/8.75 reflector + CCD</name>
+        <design>Unknown</design>
+        <aperture>9999</aperture>
+        <detector>Unknown</detector>
+      </telescope>
+    </obsContext>
+    <obsData>
+      <optical>
+        <provID>2012 OZ</provID>
+        <mode>CCD</mode>
+        <stn>675</stn>
+        <prog>4b</prog>
+        <obsTime>2015-06-13T05:36:40.3Z</obsTime>
+        <ra>268.40692</ra>
+        <dec>9.02333</dec>
+        <astCat>UNK</astCat>
+        <mag>21.3</mag>
+        <band>R</band>
+        <subFmt>M92</subFmt>
+        <precTime>10</precTime>
+        <precRA>0.01</precRA>
+        <precDec>0.1</precDec>
+      </optical>
+      <optical>
+        <provID>2012 OZ</provID>
+        <mode>CCD</mode>
+        <stn>675</stn>
+        <prog>4b</prog>
+        <obsTime>2015-06-13T06:13:31.3Z</obsTime>
+        <ra>268.39921</ra>
+        <dec>9.02086</dec>
+        <astCat>UNK</astCat>
+        <subFmt>M92</subFmt>
+        <precTime>10</precTime>
+        <precRA>0.01</precRA>
+        <precDec>0.1</precDec>
+      </optical>
+      <optical>
+        <provID>2015 KK57</provID>
+        <mode>CCD</mode>
+        <stn>675</stn>
+        <prog>4b</prog>
+        <obsTime>2015-06-13T06:38:30.3Z</obsTime>
+        <ra>275.89787</ra>
+        <dec>19.86222</dec>
+        <astCat>UNK</astCat>
+        <mag>20.8</mag>
+        <band>R</band>
+        <subFmt>M92</subFmt>
+        <precTime>10</precTime>
+        <precRA>0.01</precRA>
+        <precDec>0.1</precDec>
+      </optical>
+      <optical>
+        <provID>2015 KK57</provID>
+        <mode>CCD</mode>
+        <stn>675</stn>
+        <prog>4b</prog>
+        <obsTime>2015-06-13T06:51:38.3Z</obsTime>
+        <ra>275.90913</ra>
+        <dec>19.87639</dec>
+        <astCat>UNK</astCat>
+        <subFmt>M92</subFmt>
+        <precTime>10</precTime>
+        <precRA>0.01</precRA>
+        <precDec>0.1</precDec>
+      </optical>
+      <optical>
+        <provID>2015 KK57</provID>
+        <mode>CCD</mode>
+        <stn>675</stn>
+        <prog>4b</prog>
+        <obsTime>2015-06-13T07:04:45.4Z</obsTime>
+        <ra>275.92033</ra>
+        <dec>19.89036</dec>
+        <astCat>UNK</astCat>
+        <subFmt>M92</subFmt>
+        <precTime>10</precTime>
+        <precRA>0.01</precRA>
+        <precDec>0.1</precDec>
+      </optical>
+    </obsData>
+  </obsBlock>
+</ades>

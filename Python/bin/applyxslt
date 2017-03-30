@@ -1,0 +1,28 @@
+#!/usr/bin/env python
+#
+# Simple python script to transform an xml file via xslt.
+#
+# Usage:  
+#   ./applyxslt.py <xml file> <xslt file>  > <output file>
+#
+#   ./applyxslt.py adesmaster.xml submitxsd.xslt > xubmit.xsd
+#    
+#
+# __future__ imports for Python 3 compliance in Python 2
+# 
+from __future__ import absolute_import, division, print_function
+from __future__ import unicode_literals
+#
+# end of __future__ imports
+#
+
+import adesutility
+import sys
+
+#
+# create transformed input file 
+#
+transformed = adesutility.transformFileViaXSLT(sys.argv[1], 
+                                               sys.argv[2])
+print (str(transformed))
+

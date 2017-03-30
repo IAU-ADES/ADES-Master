@@ -1,0 +1,38 @@
+# version=2017
+# observatory
+! mpcCode F51
+! name Pan-STARRS 1
+# submitter
+! name P. Villa
+! institution Ejército Constitucionalista
+# telescope
+! name Arizona Observatory
+! aperture 1.5
+! design Reflector
+! fRatio 2.8
+! filter some filter
+! detector CCD
+! arraySize 1024x1024
+! pixelScale 0.113
+# observers
+! name P. Villa
+! name F. Madero
+# measurers
+! name P. Villa
+! name F. Madero
+# software
+! astrometry Astrometry Software
+! fitOrder Fit Order
+! photometry Photometry Software
+! objectDetection Object Detection Software
+# coinvestigators
+! name F. Franco
+# collaborators
+! name V. Quisling
+# fundingSource Wherever we can get it
+# comment
+! line This is a comment
+! line This is a second comment
+! line This is a comment with >stuff?< in it  comment
+permID |trkSub |mode|stn |prog|obsTime                |ra         |dec        |rmsRA|rmsDec|rmsCorr|astCat|mag  |rmsMag|band|photCat|logSNR|notes|remarks
+1234456|     aa| CCD|F51 |  31|2016-08-29T12:32:34Z   |  0        | 90        |0.15 |0.13  | 0.21  |   2MA|21.9 |0.25  |   w|    2MA|0.775 |klmn |High winds affected tracking

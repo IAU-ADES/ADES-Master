@@ -1,0 +1,61 @@
+# version=2017
+# observatory
+! mpcCode G95
+! name Hereford, Ax
+# submitter
+! name P. Villa
+! institution Ejército Constitucionalista
+# telescope
+! aperture 1.5
+! design Reflector
+! detector CCD
+# observers
+! name P. Villa
+! name F. Madero
+# measurers
+! name P. Villa
+! name F. Madero
+# comment
+! line This is a comment
+permID |trkSub |mode|stn |prog|obsTime                     |ra         |dec        |rmsRA|rmsDec|rmsCorr|astCat|mag  |rmsMag|band|photCat|logSNR|notes|remarks
+1234456|     aa| CCD|G95 |  31|2016-08-29T12:32:34.1234567Z|215.65605  |-13.547872 |0.15 |0.13  | 0.21  |   2MA|21.9 |0.25  |   w|    2MA|0.775 |klmn |High winds affected tracking
+# observatory
+! mpcCode G95
+! name Hereford, Arizona
+# submitter
+! name J. J. Pershing
+! institution United States Army
+# telescope
+! aperture 1.5
+! design Reflector
+! detector CCD
+# observers
+! name J. J. Pershing
+! name F. Funsten
+# measurers
+! name J. J. Pershing
+# comment
+! line This is a comment of the second obsBlock
+! line This line has a double hyphen -- which is confusing in comments
+permID |trkSub |mode|stn |prog|obsTime                |ra         |dec        |rmsRA|rmsDec|rmsCorr|astCat|mag  |rmsMag|band|photCat|logSNR|notes|remarks
+1255456|     aa| CCD|G95 |  31|2016-02-29T12:38:34Z   |214.65605  |-14.547872 |0.15 |0.13  | 0.21  |   2MA|21.9 |0.25  |   w|    2MA|0.775 |klmn |a second observation of something else
+# observatory
+! mpcCode G95
+! name Hereford, Arizona
+# submitter
+! name P. Villa
+! institution Ejército Constitucionalista
+# telescope
+! aperture 1.5
+! design Reflector
+! detector CCD
+# observers
+! name P. Villa
+! name F. Madero
+# measurers
+! name P. Villa
+! name F. Madero
+# comment
+! line This is a comment
+permID |trkSub |mode|stn |prog|obsTime                     |ra         |dec        |rmsRA|rmsDec|rmsCorr|astCat|mag  |rmsMag|band|photCat|logSNR|notes|remarks
+1238456|     aa| CCD|G95 |  31|2016-08-21T12:32:34.1234567Z|215.65605  |-13.547872 |0.15 |0.13  | 0.21  |   2MA|21.9 |0.25  |   w|    2MA|0.775 |klmn |Recaptured observatory

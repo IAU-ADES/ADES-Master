@@ -1,0 +1,229 @@
+#
+# install prefix is same as legacypath
+#
+PREFIX = @prefix@
+#
+# location of fortran if not ${COTSPATH}
+#
+
+# Variables set in Makefile.config used by other Makefiles
+# including this one
+#
+#   These are defined by the configure step:
+#      INSTALL_SHARED:  = yes or no, whether or not to install shared libraries
+#      LINK_STATIC:  = yes or no, whether or not to link as -Bstatic.  
+#            Note LINK_STATIC has a different effect from INSTALL_SHARED:
+#               INSTALL_SHARED=no will use .a for our libs but not system libs
+#               LINK_STATIC=yes will set -Bstatic on all link steps
+#            The same products (quick, etc.) have the same names but are linked 
+#            differently with LINK_STATIC.  
+#
+#   These are commands (note some of them have flags)
+#       RANLIB:  This may not do anything but must run
+#       CP:  cp with flags for "cp -f"
+#       RM:  rm command with no flags
+#       MV:  mv command with no flags
+#       LN:  ln command with no flags
+#       MKDIR:  mkdir with flags for "mkdir -p"
+#       PYTHON:  python 
+#       CC:  normally the gcc compiler
+#       CXX:  normally the g++ compiler
+#       F77: the FORTRAN 77 compiler
+#       FC: the FORTRAN 90/95/2003/2008 compiler
+#       LD: ususally g++ to simplify flag setting; use to link programs
+#       LIB_SUFFIX: .a
+#       SHLIB_LD: ususally gcc -shared; used to make shared libraries
+#       SHLIB_SUFFIX: .so or .dylib or whatever
+#       SHLIB_CFLAGS: -fPIC or -FPIC; used to compiler programs in shared libraries
+#      
+#      
+#   System include file and library locations
+#       INCLUDEPATH: -I's for include path for compiler
+#       FORTRANPATH: Path to /bin and /lib for the FORTRAN compiler
+#                    used by master Makefile to create setup scripts
+#       
+#   Compiler flags
+#       CFLAGS: flags for CC compiler (including INCLUDEPATH)
+#       CXXFLAGS: flags for CXX compiler
+#       FFLAGS: flags for F77 compiler
+#       FCFLAGS: flags for FORTRAN (90, 95, 2003, 2008) compiler
+#       FORTLIB: -L<dir> -l<stuff> for linking a F95, F90 or F77 library with CXX or CC
+#       FORTMAINLIB: -lgfortran begin or other needed lib or .o for FORTRAN main program
+#       DEPFLAG: -M   (generate .d files)
+#       CXXDEPFLAG: -M  (generate .d files)
+#       SAVEFLAG: varies.  Act as if each subroutine and function had a SAVE statement
+#
+
+#
+# INCLUDEPATH is for the local includes and any extra system includes
+#             not set by configure.
+#
+BUILDDIRECTORY = $(PREFIX)
+INCLUDEPATH = -I$(PREFIX)/include
+#
+# Executables needed for this program.  Note some 
+# of them have flags.   There must be a ranlib
+# even if it does nothing.
+#
+RANLIB = @RANLIB@
+CP = @CP@ -f
+RM = @RM@
+MV = @MV@
+LN = @LN@
+#MKDIR = @MKDIR_P@
+# do this because Mac OS X config breaks
+MKDIR = mkdir -p   
+
+CC = @CC@
+CXX = @CXX@
+LIB_SUFFIX = .a
+SHLIB_CFLAGS = -c
+#SHLIB_CFLAGS = @SHLIB_CFLAGS@
+#SHLIB_SUFFIX = @SHLIB_SUFFIX@
+#
+#SHLIB_LD = @SHLIB_LD@
+
+LIBXML2_LIBS=@LIBXML2_LIBS@
+LIBXSLT_LIBS=@LIBXSLT_LIBS@
+LIBXML2_CFLAGS=@LIBXML2_CFLAGS@
+LIBXSLT_CFLAGS=@LIBXSLT_CFLAGS@
+
+#
+# MYCOMMONFLAGS is local to this file -- should 
+#
+MYFEXCEPTIONS = -fexceptions
+MYCOMMONFLAGS = -DADES_PATH=$(PREFIX) $(SHLIB_CFLAGS) -Wall
+#
+# Set up compiler and linker flags here
+#
+CFLAGS = @CFLAGS@ $(MYCOMMONFLAGS) $(MYFEXCEPTIONS) $(INCLUDEPATH) $(LIBXSLT_CFLAGS)
+CXXFLAGS = @CXXFLAGS@ $(MYCOMMONFLAGS) $(MYFEXCEPTIONS) $(INCLUDEPATH) $(LIBXSLT_CFLAGS)
+LDFLAGS = @LDFLAGS@
+LIBS = @LIBS@
+
+DEPFLAG = -M
+CXXDEPFLAG = -M
+
+ifeq ($(LINK_STATIC), yes) 
+LD = $(CXX) -static $(LDFLAGS) $(LIBXSLT_LIBS)
+else
+LD = $(CXX) $(LDFLAGS) $(LIBXSLT_LIBS)
+endif
+SHLIB_LD += $(DLLIB) $(LDFLAGS)
+
+
+
+#
+# Makefile rules
+#
+#  Rules to make .o files
+#  Rules to make .d files
+#  Rules to cp executables to the $(PREFIX)/bin area
+#
+
+#
+# These rules make .o files
+#
+.SUFFIXES:
+.SUFFIXES: .c .cpp
+
+#
+# remove default rules
+#
+%:%.cpp
+%:%.c
+%:%.f
+%:%.f90
+
+.PRECIOUS: %.o
+
+%.o: %.cpp
+	$(CXX) -c $(CXXFLAGS) $< -o $@
+
+%.o: %.c
+	$(CC) -c $(CFLAGS) $< -o $@
+
+%.o: %.f
+	$(F77) -c $(FFLAGS) $< -o $@
+
+%.o: %.f90
+	$(FC) -c $(FCFLAGS) $< -o $@
+
+
+#
+# These rules make .d files for dependencies
+# include $(objs:.o=.d)
+#
+# If we were to use the (%.o) rules, we would need to create
+# two rules, one for .o and the other for (.o) files.
+#
+
+%.d: %.c
+	@$(CC) $(DEPFLAG) $(CFLAGS) $<  > $@
+
+%.d: %.cpp
+	@$(CXX) $(DEPFLAG) $(CXXFLAGS) $<  > $@
+
+
+#
+# These rules copy files to $(PREFIX)/bin area
+#
+#
+# $(@D) is the directory name of the target.  This can pull in things
+# from the % as it does in Plot-Qt in Plotlibs
+#
+
+$(PREFIX)/lib/%: %
+	@$(MKDIR) $(PREFIX)/lib
+	$(CP) $< $@
+
+$(PREFIX)/bin/%: %
+	@$(MKDIR) $(PREFIX)/bin
+	$(CP) $< $@
+
+##########################################################################
+# Note on wildcarding:
+#    VPATH must be <path2>:<path2>:...:<pathn>
+#    The subst replaces the : with spaces
+#    The foreach searches all those directories 
+#      --> relative paths are OK
+#    The wildcard picks up files of the right extension
+#    The notdir makes them single filenames
+#    The sort removes duplicates (and incidentally alphabetizes)
+#      --> if the same file is in multiple directories the first ones
+#          wins along the VPATH.  These are not noted.
+#
+# The WILDCARD variables should be used like this:
+#
+# CSOURCES := $(WILDCARDSOURCES_C) 
+#
+# after VPATH is set.  The := is used so CSOURCES is evaluated exactly once
+#
+##########################################################################
+WILDCARDSOURCES_C = $(sort $(notdir $(foreach dir,$(subst :, ,$(VPATH)),$(wildcard $(dir)/*.c))))
+WILDCARDSOURCES_CXX = $(sort $(notdir $(foreach dir,$(subst :, ,$(VPATH)),$(wildcard $(dir)/*.cpp))))
+WILDCARDSOURCES_F = $(sort $(notdir $(foreach dir,$(subst :, ,$(VPATH)),$(wildcard $(dir)/*.f))))
+WILDCARDSOURCES_F90 = $(sort $(notdir $(foreach dir,$(subst :, ,$(VPATH)),$(wildcard $(dir)/*.f90))))
+
+##########################################################################
+#
+# Some targets imply the nodepend flag, even if the user doesn't
+# specify it.  If we have one of those targets, turn on the flag.
+# Then include the dependency files, if needed.  Note that the
+# initial, null definition of this make variable is required to give
+# it the appropriate flavor.  See the GNU make manual for more
+# information on flavors of make variables.
+#
+##########################################################################
+
+NODEPEND_TARGETS := 
+NODEPEND_TARGETS += clean
+NODEPEND_TARGETS += distclean
+NODEPEND_TARGETS += depend
+NODEPEND_TARGETS += doc
+NODEPEND_TARGETS += include
+NODEPEND_TARGETS += version
+
+ifneq ($(findstring $(MAKECMDGOALS),$(NODEPEND_TARGETS)),)
+   override nodepend=1
+endif

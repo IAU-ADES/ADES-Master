@@ -1,0 +1,6 @@
+set xmltopsv = $cbindir/xmltopsv
+set psvtoxml = $cbindir/psvtoxml
+set valades = $cbindir/valades
+
+# python
+set getencoding = $pybindir/getencoding # python

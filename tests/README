@@ -1,0 +1,186 @@
+This directory contains valid and invalid xml and psv files
+along with a description of which is which, and why.
+
+To run the tests:
+
+./runtest proc_c    # test C; you need to have build it in C/
+./runtest prog_python2  # uses #!/use/bin/env python
+./runtest prog_python3  # fails; you need to edit prog_python3 to point 
+                          at your python3 executable not mine.
+
+
+Notes that xml->psv->xml round-trips except for localUse,
+which is not put in the psv format.
+
+
+The .runtest does not do anything with mcp files; see
+the mpc directory for how to run things manually
+
+
+
+#-------------------------------------------------------
+
+Here are some of the test to do with these:
+
+1) XML validation.  The valid xml files should
+   be valid.  The invalid ones should be invalid.
+
+   There are three sorts of valid XML files:
+      submission
+      distribution
+      general (validates both)
+
+2) PSV validation.  The valid psv files should
+   all convert to valid XML files.  The invalid
+   psv files may convert to invalid XML files or
+   fail to convert at all.
+
+3) XML to PSV conversion
+
+   All the valid XML files should convert to 
+   valid PSV files.  
+
+   Round-trip tests:
+     XML -> PSV -> XML should still be valid
+                       but may not be identical
+  
+     XML -> PSV -> XML -> PSV the two PSV files
+                          should be identical 
+
+     XML -> PSV -> XML -> PSV -> XML the last
+              two XML files should be identical 
+
+     In all cases the data should be the same
+
+4) PSV to XML conversion
+
+     All the valid PSV files should convert
+     to valid XML files.
+  
+     PSV -> XML -> PSV may not be identical
+     PSV -> XML -> PSV -> XML The XML should
+                              be identical
+     PSV -> XML -> PSV -> XML -> PSV 
+             The last two PSV should be identical
+
+     In all cases the data should be the same.
+
+
+5) Invalid XML and PSV files
+
+     The invalid XML files should fail to validate.
+     The reason should match the expected reason
+
+     The invalid PSV files should fail to validate.
+     The reason should match the expected reason
+
+     Some invalid PSV files should fail to convert.
+     The reason should match the expected reason
+
+---------------------------
+
+Directory structure:
+
+<this directory>
+   README          This file
+   runtests prog_<what> An executable file to run the tests
+   prog_c            sets up C executables
+   prog_python2      sets up python2 executables
+   prog_python2      sets up python3 executables
+   psv/              psv test files
+     invalidpsv/       invalid test files, organized by directories
+     validpsv/         valid test files, organized by directories
+   xml/              xml test files
+     invalidxml/      invalid test files, organized by directories
+     validxml/        valid test fiels, organized by directories
+
+In each valid and invalid directories are pairs of files:
+
+<testname>.xml         # test xml file
+<testname>.xml.README  # description of test.  For valid 
+                       # xml files, says if this should
+                       # validate with submission, 
+                       # distribution or general.  For
+                       # invalid xml, describes the
+                       # expected error
+<testname>.psv         # test xml file
+<testname>.psv.README  # description of test.  For valid 
+                       # psv files, says if this should
+                       # validate with submission, 
+                       # distribution or general.  For
+                       # invalid psv, describes the
+                       # expected error
+
+-----------------------
+
+Unicode encoding
+
+See tests/xml/valid/coding/goodutf8.xml for an example of an xml file
+using unicode.  Also, tests/encodedxml has this same file in several
+different encodings.
+
+A few notes:
+   All web browsers are required to read encodings UTF-8 and UTF-16.   Most
+   will also read ASCII and ISO-5589-1 (latin-1).
+
+   Recommedation: use NFC.  This is not enforced.  
+
+   XML files use & encoding by standard for 
+     1) <, & and > symbols (&lt; &gt; &amp;)
+     2) any code point not representable in the encoding.
+
+   This means that ASCII encoded xml will render all the code points in,
+   say, hangul, by using & escapes and look the same in the browser as
+   a utf-8 encoded XML file
+
+   --> The xml reader is responsible for using the right codec and
+       translating the & escapes into the internal representation 
+       (usually utf-8 or utf-16) and back properly.  The Python
+       lxml library does this properly for the codecs in the
+       encodedxml directory.  These codecs include weird things
+       like:
+           UTF-7
+           CP500 (and EBCDIC encoding)
+           UTF-16 and UTF-32 with weird byte ordering
+       as well as the more standard
+           UTF-8
+           UTF-16
+           WINDOWS=-1252
+           ISO-5589-1
+
+  PSV notes:
+     The xml->psv conversion always converts xml to utf-8 in
+     the PSV.  This is following the ADES specification.  To
+     view and edit PSV files one must have a utf-8 editor and
+     some fonts.  
+
+     vi (vim):  set enc=utf8
+     xemacs:    will guess utf8 for xml; for psv set utf8 encoding
+     
+     Some linux boxes are set up for latin-1 or other encoding
+     by default; avoid mojibake by setting up utf8 before editing
+
+     Mac OS X XQuartz windows don't have good fonts for Arabic and
+     Mandarin.   The Mac OS X terminal does, not only will vi 
+     render and edit properly (if set enc=utf8) but the terminal
+     will display properly with cat.
+
+     UTF-8 characters are *not* monospace.  This will sometimes
+     work with latin-1 characters but not with Mandarin names.
+     Column alignment is quite meaningless and while vi/emacs
+     attempt to solve this by making some characters double-
+     width, this is not respected by the python parser for
+     psv parsing.  Fortunately, most of the none-latin 
+     characters appear in names and remarks and so will not
+     affect PSV alignment.
+
+
+  XML notes:
+     <. & and > characters will appear as &lt; &amp; and &gt; 
+     escape sequences in xml files.  They will render properly
+     in html5 browswers
+       
+     XML always encodes unicode but your library may read it
+     as utf-8 or utf-16.    
+    
+  

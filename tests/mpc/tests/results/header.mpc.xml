@@ -1,0 +1,231 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ades version="2017">
+  <obsBlock>
+    <obsContext>
+      <observatory>
+        <mpcCode>291</mpcCode>
+      </observatory>
+      <submitter>
+        <name>R S. McMillan</name>
+        <institution> Univ. of Arizona, 1629 E. Univ. Blvd, Tucson AZ 85721</institution>
+      </submitter>
+      <observers>
+        <name>T.H. Bressi</name>
+      </observers>
+      <measurers>
+        <name>T.H. Bressi</name>
+      </measurers>
+      <telescope>
+        <name>1.8-m f/2.7 reflector + CCD</name>
+        <design>Unknown</design>
+        <aperture>9999</aperture>
+        <detector>Unknown</detector>
+      </telescope>
+      <comment>
+        <line>CCD = 2048x2048 Fairchild 3041 thinned, back-illum., BB AR coated</line>
+        <line>Pixels are 15x15 microns = 0.62 arcsec on Spacewatch 1.8-m telescope</line>
+        <line>Camera = Finger Lakes Instr. ProLine Model PL3041-LC, S/N PL0144010</line>
+        <line>Filter = Schott OG-515; bandpass 515-950 nm = V+R+I</line>
+        <line>Measurements made using Astromatic (Ver. 1.14.12.19)</line>
+        <line>Directory: 2015.04.01.22</line>
+        <line>6 stacked images per pass, 60 second exposure per image</line>
+        <line>Type: CP, Last Observed: 2015 Mar 28.27, Uncertainty: N/A</line>
+        <line>Sky:  Clear.</line>
+        <line>Seeing FWHM = 2.0 arcsec</line>
+      </comment>
+    </obsContext>
+    <obsData>
+      <optical>
+        <trkSub>P10kefK</trkSub>
+        <mode>CCD</mode>
+        <stn>291</stn>
+        <obsTime>2015-04-01T11:15:30.2Z</obsTime>
+        <ra>184.49554</ra>
+        <dec>48.33117</dec>
+        <astCat>UNK</astCat>
+        <mag>20.7</mag>
+        <band>R</band>
+        <subFmt>M92</subFmt>
+        <precTime>10</precTime>
+        <precRA>0.01</precRA>
+        <precDec>0.1</precDec>
+        <notes>K</notes>
+      </optical>
+      <optical>
+        <trkSub>P10kefK</trkSub>
+        <mode>CCD</mode>
+        <stn>291</stn>
+        <obsTime>2015-04-01T11:21:59.0Z</obsTime>
+        <ra>184.49375</ra>
+        <dec>48.33206</dec>
+        <astCat>UNK</astCat>
+        <mag>20.8</mag>
+        <band>R</band>
+        <subFmt>M92</subFmt>
+        <precTime>10</precTime>
+        <precRA>0.01</precRA>
+        <precDec>0.1</precDec>
+        <notes>K</notes>
+      </optical>
+      <optical>
+        <trkSub>P10kefK</trkSub>
+        <mode>CCD</mode>
+        <stn>291</stn>
+        <obsTime>2015-04-01T11:28:30.4Z</obsTime>
+        <ra>184.49212</ra>
+        <dec>48.33311</dec>
+        <astCat>UNK</astCat>
+        <mag>21.0</mag>
+        <band>R</band>
+        <subFmt>M92</subFmt>
+        <precTime>10</precTime>
+        <precRA>0.01</precRA>
+        <precDec>0.1</precDec>
+        <notes>K</notes>
+      </optical>
+    </obsData>
+  </obsBlock>
+  <obsBlock>
+    <obsContext>
+      <observatory>
+        <mpcCode>T12</mpcCode>
+      </observatory>
+      <submitter>
+        <name>D. J. Tholen</name>
+      </submitter>
+      <observers>
+        <name>Y. Ramanjooloo</name>
+      </observers>
+      <measurers>
+        <name>D. J. Tholen</name>
+      </measurers>
+      <telescope>
+        <name>2.24-m University of Hawaii reflector</name>
+        <design>Unknown</design>
+        <aperture>9999</aperture>
+        <detector>Unknown</detector>
+      </telescope>
+    </obsContext>
+    <obsData>
+      <optical>
+        <provID>2016 RD34</provID>
+        <mode>CCD</mode>
+        <stn>T12</stn>
+        <obsTime>2016-12-22T07:32:02.34Z</obsTime>
+        <ra>40.394454</ra>
+        <dec>42.421192</dec>
+        <astCat>UNK</astCat>
+        <mag>24.2</mag>
+        <band>G</band>
+        <subFmt>M92</subFmt>
+        <precTime>1</precTime>
+        <precRA>0.001</precRA>
+        <precDec>0.01</precDec>
+      </optical>
+      <optical>
+        <provID>2016 RD34</provID>
+        <mode>CCD</mode>
+        <stn>T12</stn>
+        <obsTime>2016-12-22T07:48:51.06Z</obsTime>
+        <ra>40.398087</ra>
+        <dec>42.416514</dec>
+        <astCat>UNK</astCat>
+        <mag>23.9</mag>
+        <band>G</band>
+        <subFmt>M92</subFmt>
+        <precTime>1</precTime>
+        <precRA>0.001</precRA>
+        <precDec>0.01</precDec>
+      </optical>
+    </obsData>
+  </obsBlock>
+  <obsBlock>
+    <obsContext>
+      <observatory>
+        <mpcCode>568</mpcCode>
+      </observatory>
+      <submitter>
+        <name>D. J. Tholen</name>
+      </submitter>
+      <observers>
+        <name>D. Fohring</name>
+        <name> D. Hung</name>
+      </observers>
+      <measurers>
+        <name>D. J. Tholen</name>
+      </measurers>
+      <telescope>
+        <name>2.24-m University of Hawaii reflector</name>
+        <design>Unknown</design>
+        <aperture>9999</aperture>
+        <detector>Unknown</detector>
+      </telescope>
+    </obsContext>
+    <obsData>
+      <optical>
+        <provID>2016 JB29</provID>
+        <mode>CCD</mode>
+        <stn>568</stn>
+        <prog>20</prog>
+        <obsTime>2016-05-17T07:36:51.09Z</obsTime>
+        <ra>236.150904</ra>
+        <dec>10.974717</dec>
+        <astCat>UNK</astCat>
+        <mag>21.1</mag>
+        <band>R</band>
+        <subFmt>M92</subFmt>
+        <precTime>1</precTime>
+        <precRA>0.001</precRA>
+        <precDec>0.01</precDec>
+      </optical>
+      <optical>
+        <provID>2016 JB29</provID>
+        <mode>CCD</mode>
+        <stn>568</stn>
+        <prog>20</prog>
+        <obsTime>2016-05-17T07:38:57.24Z</obsTime>
+        <ra>236.152012</ra>
+        <dec>10.974994</dec>
+        <astCat>UNK</astCat>
+        <mag>20.9</mag>
+        <band>R</band>
+        <subFmt>M92</subFmt>
+        <precTime>1</precTime>
+        <precRA>0.001</precRA>
+        <precDec>0.01</precDec>
+      </optical>
+      <optical>
+        <provID>2016 JB29</provID>
+        <mode>CCD</mode>
+        <stn>568</stn>
+        <prog>20</prog>
+        <obsTime>2016-05-17T07:39:59.19Z</obsTime>
+        <ra>236.152562</ra>
+        <dec>10.975144</dec>
+        <astCat>UNK</astCat>
+        <mag>21.1</mag>
+        <band>R</band>
+        <subFmt>M92</subFmt>
+        <precTime>1</precTime>
+        <precRA>0.001</precRA>
+        <precDec>0.01</precDec>
+      </optical>
+      <optical>
+        <provID>2016 JB29</provID>
+        <mode>CCD</mode>
+        <stn>568</stn>
+        <prog>20</prog>
+        <obsTime>2016-05-17T07:42:01.61Z</obsTime>
+        <ra>236.153667</ra>
+        <dec>10.975406</dec>
+        <astCat>UNK</astCat>
+        <mag>21.4</mag>
+        <band>R</band>
+        <subFmt>M92</subFmt>
+        <precTime>1</precTime>
+        <precRA>0.001</precRA>
+        <precDec>0.01</precDec>
+      </optical>
+    </obsData>
+  </obsBlock>
+</ades>

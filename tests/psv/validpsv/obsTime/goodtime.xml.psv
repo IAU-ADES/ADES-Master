@@ -1,0 +1,23 @@
+# version=2017
+# observatory
+! mpcCode F51
+! name Pan-STARRS 1
+# submitter
+! name P. Villa
+! institution Ejército Constitucionalista
+# telescope
+! aperture 1.5
+! design Reflector
+! detector CCD
+# observers
+! name P. Villa
+! name F. Madero
+# measurers
+! name P. Villa
+! name F. Madero
+# comment
+! line This is a comment
+! line This line has <&>  in it
+! line This line has a double hyphen -- which is confusing in comments
+permID |trkSub |mode|stn |prog|obsTime                |ra         |dec        |rmsRA|rmsDec|rmsCorr|astCat|mag  |rmsMag|band|photCat|logSNR|notes|remarks
+1234456|     aa| CCD|F51 |  31|2016-02-29T12:32:34Z   |215.65605  |-13.547872 |0.15 |0.13  | 0.21  |   2MA|21.9 |0.25  |   w|    2MA|0.775 |klmn |High winds affected tracking
