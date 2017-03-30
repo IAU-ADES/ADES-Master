@@ -1,5 +1,7 @@
 This package consists of files in several directories:
 
+This is out of date
+
     main:  contains all the source files
     xsd:   contains makexsdfiles and the xsd files created from same
     tex:   contains maketexfiles, maketexdoc, and the tex, ps and pdf files
