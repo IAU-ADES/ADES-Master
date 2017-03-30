@@ -1,8 +1,0 @@
-#!/bin/csh -f
-./maketexfiles ../main
-rm *aux *dvi *ps *pdf *log
-latex ades.tex
-latex ades.tex
-dvips ades.dvi
-dvipdfm ades.dvi
-

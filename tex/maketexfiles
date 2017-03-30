@@ -1,8 +1,0 @@
-#!/bin/csh -f 
-#
-# Usage:  maketexdocs <srcdir>
-#
-setenv SRC $argv[1]
-foreach table ( elementstable simpletypestable grouptypestable ades )
-${SRC}/xit.py ${SRC}/adesmaster.xml ${SRC}/doc{$table}.xslt > {$table}.tex
-end

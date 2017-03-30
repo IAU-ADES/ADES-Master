@@ -1,8 +1,0 @@
-#!/bin/csh -f 
-#
-# Usage:  maketexdocs <srcdir>
-#
-setenv SRC $argv[1]
-foreach xsd ( submit submithuman distrib distribhuman general generalhuman  )
-${SRC}/xit.py ${SRC}/adesmaster.xml ${SRC}/${xsd}xsd.xslt > {$xsd}.xsd
-end
