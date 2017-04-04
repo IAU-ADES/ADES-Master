@@ -408,15 +408,73 @@
     <precRA>0.01</precRA>
     <precDec>0.1</precDec>
   </optical>
+  <optical>
+    <provID>C/1996 X4</provID>
+    <mode>CCD</mode>
+    <stn>249</stn>
+    <sys>ICRF_AU</sys>
+    <ctr>399</ctr>
+    <pos1>-0.00266005</pos1>
+    <pos2>-0.00945127</pos2>
+    <pos3>-0.00507492</pos3>
+    <prog>33</prog>
+    <obsTime>1996-12-06T09:20:05.3Z</obsTime>
+    <ra>251.2892</ra>
+    <dec>-21.6208</dec>
+    <astCat>UNK</astCat>
+    <ref>55913</ref>
+    <subFmt>M92</subFmt>
+    <precTime>10</precTime>
+    <precRA>0.1</precRA>
+    <precDec>1</precDec>
+  </optical>
+  <optical>
+    <permID>3</permID>
+    <mode>CCD</mode>
+    <stn>C51</stn>
+    <sys>ICRF_KM</sys>
+    <ctr>399</ctr>
+    <pos1>-6861.8061</pos1>
+    <pos2>+799.8571</pos2>
+    <pos3>-145.9541</pos3>
+    <obsTime>2010-12-18T02:54:40.3Z</obsTime>
+    <ra>174.69525</ra>
+    <dec>-2.16603</dec>
+    <astCat>L</astCat>
+    <ref>~0QlL</ref>
+    <subFmt>M92</subFmt>
+    <precTime>10</precTime>
+    <precRA>0.01</precRA>
+    <precDec>0.1</precDec>
+  </optical>
+  <optical>
+    <permID>3</permID>
+    <mode>CCD</mode>
+    <stn>C51</stn>
+    <sys>ICRF_KM</sys>
+    <ctr>399</ctr>
+    <pos1>-6862.3003</pos1>
+    <pos2>+788.5229</pos2>
+    <pos3>-178.2733</pos3>
+    <obsTime>2010-12-18T06:05:11.9Z</obsTime>
+    <ra>174.72179</ra>
+    <dec>-2.17283</dec>
+    <astCat>L</astCat>
+    <ref>~0QlL</ref>
+    <subFmt>M92</subFmt>
+    <precTime>10</precTime>
+    <precRA>0.01</precRA>
+    <precDec>0.1</precDec>
+  </optical>
   <radar>
     <permID>7</permID>
     <trx>251</trx>
     <rcv>251</rcv>
     <obsTime>1980-10-01T02:51:59.96Z</obsTime>
-    <delay>94121382600</delay>
-    <rmsDelay>140000</rmsDelay>
+    <delay>941213826.00</delay>
+    <rmsDelay>140.000</rmsDelay>
     <com>0</com>
-    <frq>2380</frq>
+    <frq>2380.</frq>
     <ref>JPLRS</ref>
   </radar>
   <radar>
@@ -424,10 +482,10 @@
     <trx>251</trx>
     <rcv>251</rcv>
     <obsTime>1980-10-01T03:38:00.01Z</obsTime>
-    <delay>94122409300</delay>
-    <rmsDelay>80000</rmsDelay>
+    <delay>941224093.00</delay>
+    <rmsDelay>80.000</rmsDelay>
     <com>0</com>
-    <frq>2380</frq>
+    <frq>2380.</frq>
     <ref>JPLRS</ref>
   </radar>
   <radar>
@@ -435,10 +493,10 @@
     <trx>251</trx>
     <rcv>251</rcv>
     <obsTime>1980-10-01T03:38:00.01Z</obsTime>
-    <delay>94122409300</delay>
-    <rmsDelay>80000</rmsDelay>
+    <delay>941224093.00</delay>
+    <rmsDelay>80.000</rmsDelay>
     <com>1</com>
-    <frq>2380</frq>
+    <frq>2380.</frq>
     <ref>JPLRS</ref>
   </radar>
   <optical>

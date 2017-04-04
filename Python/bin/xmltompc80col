@@ -238,11 +238,41 @@ def printRadarLine(item):
    astCat = ' '
    packedref = "{0:<5s}".format(hasKeyOrVal(item, 'ref', '      '))
 
-   doppler =     "{0:>15s}".format(hasKeyOrVal(item, 'doppler', ''))
-   rmsDoppler =  "{0:>14s}".format(hasKeyOrVal(item, 'rmsDoppler', ''))
-   delay =     "{0:>15s}".format(hasKeyOrVal(item, 'delay', ''))
-   rmsDelay =  "{0:>15s}".format(hasKeyOrVal(item, 'rmsDelay', ''))
-   frq =     "{0:<6s}".format(hasKeyOrVal(item, 'frq', ''))
+   #doppler =     "{0:>15s}".format(hasKeyOrVal(item, 'doppler', ''))
+   #rmsDoppler =  "{0:>14s}".format(hasKeyOrVal(item, 'rmsDoppler', ''))
+   #delay =     "{0:>15s}".format(hasKeyOrVal(item, 'delay', ''))
+   #rmsDelay =  "{0:>15s}".format(hasKeyOrVal(item, 'rmsDelay', ''))
+   #frq =     "{0:<6s}".format(hasKeyOrVal(item, 'frq', ''))
+
+   doppler = hasKeyOrVal(item, 'doppler', '               ')
+   od = doppler
+   doppler = packUtil.unPackSigned(doppler, 16, 12)
+   doppler = doppler[0:11] + doppler[12:] # remove '.'
+
+   rmsDoppler = hasKeyOrVal(item, 'rmsDoppler', '               ')
+   od = rmsDoppler
+   rmsDoppler = adesutility.applyPaddingAndJustification \
+                                  (rmsDoppler, 16, 'D', 12)[0]
+   rmsDoppler = rmsDoppler[0:11] + rmsDoppler[12:] # remove '.'
+   
+   delay = hasKeyOrVal(item, 'delay', '               ')
+   od = delay
+   delay = adesutility.applyPaddingAndJustification \
+                                  (delay, 16, 'D', 12)[0]
+   delay = delay[0:11] + delay[12:] # remove '.'
+
+
+   rmsDelay  = hasKeyOrVal(item, 'rmsDelay', '              ')
+   od = rmsDelay
+   rmsDelay = adesutility.applyPaddingAndJustification \
+                                  (rmsDelay, 15, 'D', 11)[0]
+   rmsDelay = rmsDelay[0:10] + rmsDelay[11:] # remove '.'
+
+   frq = hasKeyOrVal(item, 'frq', '       ')
+   od = frq
+   frq = adesutility.applyPaddingAndJustification \
+                                  (frq, 7, 'D', 6)[0]
+   frq = frq[0:5] + frq[6:] # remove '.'
 
    scval = hasKeyOrVal(item, 'com', '0') # no good default
    if scval == '0':
@@ -255,12 +285,12 @@ def printRadarLine(item):
    #         + item['stn']
    sline = packedID + disc + notes + 'R' + sexDate + \
            delay + doppler + frq +\
-           item['rcv'] + ' ' + item['ref'] + item['trx']
+           item['trx'] + ' ' + item['ref'] + item['rcv']
    print (sline, file= encodedout)
    # second radar line
    sline = packedID + disc + notes + 'r' + sexDate +\
-           sc + rmsDelay + rmsDoppler + frq +\
-           item['rcv'] + ' ' + item['ref'] + item['trx']
+           sc + rmsDelay + rmsDoppler + '      ' +\
+           item['trx'] + ' ' + item['ref'] + item['rcv']
    print (sline, file= encodedout)
    
 def printDataDicts():

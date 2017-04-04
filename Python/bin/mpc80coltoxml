@@ -184,7 +184,7 @@ radarFirstLineRegex = re.compile( ( '^'
                                    + commonRegexHelp1
                                    + '(R)'                 # code is Radar first line
                                    + commonRegexHelp2
-                                   + '([ +-][0-9 .]{14})'     # Delay loosely checked 33-47
+                                   + '([0-9 .]{15})'     # Delay loosely checked 33-47
                                    + '([ +-][0-9 .]{14})'     # Shift loosely checked 48-62
                                    + '([0-9 .]{6})'      # tfreq loosely checked 63-68
                                    + '(.{3})'              # tobs loosely checked 69-71
@@ -207,8 +207,8 @@ radarSecondLineRegex = re.compile( ( '^'
                                    + '(r)'                 # code is Radar second line
                                    + commonRegexHelp2
                                    + '([SC])'              # column 33 must be S or C
-                                   + '([ +-][0-9 .]{13})'     # Delay uncertainty loosely checked 33-47
-                                   + '([ +-][0-9 .]{14})'     # Shift uncertainty loosely checked 48-62
+                                   + '([0-9 .]{14})'     # Delay uncertainty loosely checked 33-47
+                                   + '([0-9 .]{15})'     # Shift uncertainty loosely checked 48-62
                                    + '([0-9 .]{6})'      # tfreq uncertainty loosely checked 63-68
                                    + '(.{3})'              # tobs loosely checked 69-71
                                    + '(.{6})'              # packedref 72-77
@@ -419,9 +419,19 @@ def decode80ColumnDataLine(line):
          ret['code'] = m.group(4)
          ret['date'] = m.group(5) + m.group(6) + m.group(7)
 
-         ret['delay'] = m.group(8)
-         ret['shift'] = m.group(9)
-         ret['frq'] = m.group(10)
+         if m.group(8).strip() != '':  # radar fields are blank half the time
+            ret['delay'] = m.group(8)[0:11] + '.' + m.group(8)[11:]
+         else:
+            ret['delay'] = ''
+         if m.group(9).strip() != '':  # shift has sign
+            ret['shift'] = m.group(9)[0:11] + '.' + m.group(9)[11:]
+            ret['shift'] = packUtil.packSigned(ret['shift'])
+         else: 
+            ret['shift'] = ''
+         if m.group(10).strip != '':
+            ret['frq'] = m.group(10)[0:5] + '.' + m.group(10)[5:]
+         else:
+            ret['frq'] = ''
          ret['trx']  = m.group(11)
          ret['packedref'] = m.group(12)
          ret['stn']  = m.group(13)
@@ -439,8 +449,14 @@ def decode80ColumnDataLine(line):
          ret['date'] = m.group(5) + m.group(6) + m.group(7)
 
          ret['sc']  =  m.group(8)
-         ret['delay uncertainty'] = m.group(9)
-         ret['shift uncertainty'] = m.group(10)
+         if m.group(9).strip() != '':  # radar fields are blank half the time
+            ret['delay uncertainty'] = m.group(9)[0:10] + '.' + m.group(9)[10:]
+         else:
+            ret['delay uncertainty'] = ''
+         if m.group(10).strip() != '':
+            ret['shift uncertainty'] = m.group(10)[0:11] + '.' + m.group(10)[11:]
+         else:
+            ret['shift uncertainty'] = ''
          ret['frq continuation'] = m.group(11)
          ret['trx']  = m.group(12)
          ret['packedref'] = m.group(13)
@@ -928,9 +944,9 @@ if len(sys.argv) > 2:  # usage: mpc80coltoxml <outxmlfile>
 else:
    outFile = None
 
-convertitPreamble(outFile)
-parseFile(sys.argv[1], convertit)
-convertitPostamble()
+#convertitPreamble(outFile)
+#parseFile(sys.argv[1], convertit)
+#convertitPostamble()
 try:
 
    #
