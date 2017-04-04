@@ -175,8 +175,15 @@ def printOpticalLine(item):
 
    if deprecated:
       code = deprecated  # right now just X
-   elif 'pos1' in item: # this is a rover so write second line
-      code = 'V'
+   elif 'pos1' in item: # this is a rover or satellite so write second line
+      if item['sys'] == 'WGS84':
+         code = 'V'
+      elif item['sys'] == 'ICRF_AU':
+         code = 'S'
+      elif item['sys'] == 'ICRF_KM':
+         code = 'S'
+      else: # illegal for 80-column format
+         raise RuntimeError("Illegal sys " + item['sys'] + ' for MPC 80-Col')
    elif 'subFrm' in item:
       code = 'A'
    else:
@@ -187,15 +194,31 @@ def printOpticalLine(item):
             '         ' + mag + band + \
             astCat + packedref + item['stn']
    print (sline, file= encodedout)
-   if 'pos1' in item: # this is a rover so write second line
-      pos1 = adesutility.applyPaddingAndJustification(item['pos1'], 11, 'D', 4)[0]
-      pos2 = adesutility.applyPaddingAndJustification(item['pos2'], 11, 'D', 4)[0]
-      pos3 = "{0:>5s}".format(item['pos3']) + ' '
-      sline =  packedID + disc + notes + 'v' + \
-               sexDate + '1 ' + pos1 +  pos2 +  pos3 + \
-               '         ' + astCat + packedref + item['stn']
+   if 'pos1' in item: # this is a rover or satellite so write second line
+      if item['sys'] == 'WGS84':
+         pos1 = adesutility.applyPaddingAndJustification(item['pos1'], 11, 'D', 4)[0]
+         pos2 = adesutility.applyPaddingAndJustification(item['pos2'], 11, 'D', 4)[0]
+         pos3 = "{0:>5s}".format(item['pos3']) + ' '
+         sline =  packedID + disc + notes + 'v' + \
+                  sexDate + '1 ' + pos1 +  pos2 +  pos3 + \
+                  '         ' + astCat + packedref + item['stn']
+      elif item['sys'] == 'ICRF_AU':
+         pos1 = packUtil.unPackSigned(item['pos1'], 11, 3)
+         pos2 = packUtil.unPackSigned(item['pos2'], 11, 3)
+         pos3 = packUtil.unPackSigned(item['pos3'], 11, 3)
+         sline =  packedID + disc + notes + 's' + \
+                  sexDate + '2 ' + pos1 +  ' ' + pos2 +  ' ' + pos3 + ' ' + \
+                  '  '+ packedref + item['stn']
+      elif item['sys'] == 'ICRF_KM':
+         pos1 = packUtil.unPackSigned(item['pos1'], 11, 7)
+         pos2 = packUtil.unPackSigned(item['pos2'], 11, 7)
+         pos3 = packUtil.unPackSigned(item['pos3'], 11, 7)
+         sline =  packedID + disc + notes + 's' + \
+                  sexDate + '1 ' + pos1 +  ' ' + pos2 +  ' ' + pos3 + ' ' + \
+                  '  '+ packedref + item['stn']
+      else: # illegal for 80-column format but already checked
+         pass
       print (sline, file= encodedout)
-      pass
     
 def printRadarLine(item):
    """ printRadarLine decodes and prints a radar element

@@ -12,6 +12,8 @@ from __future__ import unicode_literals
 import sys
 import re
 
+import adesutility
+
 #
 # codes and translations
 # 
@@ -118,7 +120,7 @@ def packImplicitDecimal(value, width, decimal):
    v = float(value)
    digits = width - decimal 
    fmt = '{0:'+ repr(width) + '.' + repr(digits) + 'f}'
-   print (fmt, v)
+   #print (fmt, v)
    ret = fmt.format(v)
    return ret
 
@@ -126,6 +128,62 @@ def unpackImplicitDecimal(s, decimal):
    """ unpacks a string with an implicit decimal point
        in column decimal """
    return s
+
+#
+# packSigned and unpackSigned handles case
+# where where the first character is + or -
+# and there may be spaces before the digits. 
+# This is turned into a signed number for XML
+#
+def packSigned(value):
+   """ packed a number with spaces after the sign
+      
+       This is a text-only maniuplation
+
+       Inputs:
+         value:  A signed number, such as "+   0.32"
+
+       Return Value:
+                 The packed string for xml: "+0.32"              
+   
+       Errors:  None for inputs matching regex
+
+   """
+   s = value[0] #  '+', '-' or ' '
+   ret = value[1:].strip()  # remove leading and trailing spaces
+   if s != ' ':
+     ret = s + ret
+   return ret
+  
+def unPackSigned(value, outLen, nDecimal):
+   """ unpacks a number into a signed format
+       possibly with spaces after the sign.
+
+       This is a text-only maniuplation
+
+       Inputs:
+         value:  from packedSign such as "+32.3"
+         outLen:    total length of field
+         nDecimal: position of decimal point in field
+
+       Return Value:
+         The field in in unpacked format, such as "+  32.3   "
+
+       Errors: RuntimeError for values that don't fit
+
+   """
+
+   s = value[0]
+   if s not in "+-":
+      ret = adesutility.applyPaddingAndJustification(value,
+                                           outLen, 'D', nDecimal)[0]
+   else:
+      ret = s + adesutility.applyPaddingAndJustification(value[1:],
+                                           outLen-1, 'D', nDecimal-1)[0]
+   return ret
+      
+
+
 
 # PermID and ProvID pack/unpack
 #

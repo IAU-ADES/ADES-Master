@@ -10,7 +10,7 @@ from __future__ import unicode_literals
 
 #
 # sys.argv[1]: input mpc 80-column file
-# sys.argv[2]: output xml file  (in utf-8)
+# sys.argv[2]: output xml file  (in utf-8)  (not argv[2] is scan only
 # example: ./psvtoxml.py <psv file> <xml file>
 #
 import sys
@@ -184,9 +184,9 @@ radarFirstLineRegex = re.compile( ( '^'
                                    + commonRegexHelp1
                                    + '(R)'                 # code is Radar first line
                                    + commonRegexHelp2
-                                   + '([-+0-9 .]{15})'     # Delay loosely checked 33-47
-                                   + '([-+0-9 .]{15})'     # Shift loosely checked 48-62
-                                   + '([-+0-9 .]{6})'      # tfreq loosely checked 63-68
+                                   + '([ +-][0-9 .]{14})'     # Delay loosely checked 33-47
+                                   + '([ +-][0-9 .]{14})'     # Shift loosely checked 48-62
+                                   + '([0-9 .]{6})'      # tfreq loosely checked 63-68
                                    + '(.{3})'              # tobs loosely checked 69-71
                                    + '(.{6})'              # packedref 72-77
                                    + '(.{3})'              # obs stn 78-80
@@ -207,9 +207,9 @@ radarSecondLineRegex = re.compile( ( '^'
                                    + '(r)'                 # code is Radar second line
                                    + commonRegexHelp2
                                    + '([SC])'              # column 33 must be S or C
-                                   + '([-+0-9 .]{14})'     # Delay uncertainty loosely checked 33-47
-                                   + '([-+0-9 .]{15})'     # Shift uncertainty loosely checked 48-62
-                                   + '([-+0-9 .]{6})'      # tfreq uncertainty loosely checked 63-68
+                                   + '([ +-][0-9 .]{13})'     # Delay uncertainty loosely checked 33-47
+                                   + '([ +-][0-9 .]{14})'     # Shift uncertainty loosely checked 48-62
+                                   + '([0-9 .]{6})'      # tfreq uncertainty loosely checked 63-68
                                    + '(.{3})'              # tobs loosely checked 69-71
                                    + '(.{6})'              # packedref 72-77
                                    + '(.{3})'              # obs stn 78-80
@@ -231,11 +231,11 @@ satelliteSecondLineRegex = re.compile( ( '^'
                                    + commonRegexHelp2
                                    + '([12])'              # column 33 must be parallax type 1 or 2
                                    + '.'                   # column 34 is unpsecified
-                                   + '([-+0-9 .]{11})'     # x columns 35-45
+                                   + '([+-][0-9 .]{10})'  # x columns 35-45
                                    + '.'                   # column 46 is unpsecified
-                                   + '([-+0-9 .]{11})'     # y columns 47-57
+                                   + '([+-][0-9 .]{10})'  # y columns 47-57
                                    + '.'                   # column 58 is unpsecified
-                                   + '([-+0-9 .]{11})'     # z columns 59-69
+                                   + '([+-][0-9 .]{10})'  # z columns 59-69
                                    + ' {2}'                # colunms 70-72 must be blank but 72 is astCode for packedref
                                    + '( .{5})'             # packedref 72-77 but 72 must be blank
                                    + '(.{3})'              # obs stn 78-80
@@ -457,9 +457,22 @@ def decode80ColumnDataLine(line):
          ret['date'] = m.group(5) + m.group(6) + m.group(7)
 
          ret['parallax_type'] = m.group(8)
-         ret['x'] = m.group(9)
-         ret['y'] = m.group(10)
-         ret['z'] = m.group(11)
+         ret['ctr'] = '399'
+         ret['pos1'] = packUtil.packSigned(m.group(9))
+         ret['pos2'] = packUtil.packSigned(m.group(10))
+         ret['pos3'] = packUtil.packSigned(m.group(11))
+         if ret['parallax_type'] == '1': # ICRF-KM
+            ret['sys'] = "ICRF_KM"
+            if m.group(9)  != packUtil.unPackSigned(ret['pos1'], 11, 7) or \
+               m.group(10) != packUtil.unPackSigned(ret['pos2'], 11, 7) or \
+               m.group(11) != packUtil.unPackSigned(ret['pos3'], 11, 7):
+                error80("Improper decimal point location", line)
+         else: # ret['parallax_type'] == '2' ICRF-AU
+            ret['sys'] = "ICRF_AU"
+            if m.group(9)  != packUtil.unPackSigned(ret['pos1'], 11, 3) or \
+               m.group(10) != packUtil.unPackSigned(ret['pos2'], 11, 3) or \
+               m.group(11) != packUtil.unPackSigned(ret['pos3'], 11, 3):
+                error80("Improper decimal point location", line)
          ret['packedref'] = m.group(12)
          ret['stn'] = m.group(13)
          #print (m.groups())
@@ -596,10 +609,11 @@ def parseFile(fname, callBack):
                      #print ("Rr at",lineNumber,":")
    
                   if (oldCode == 'S'): # satellite
-                     oldLine['parallax_type'] = line['parallax_type']
-                     oldLine['x'] = line['x']
-                     oldLine['y'] = line['y']
-                     oldLine['z'] = line['z']
+                     oldLine['sys'] = line['sys']
+                     oldLine['ctr'] = line['ctr']  # always 399
+                     oldLine['pos1'] = line['pos1']
+                     oldLine['pos2'] = line['pos2']
+                     oldLine['pos3'] = line['pos3']
                      #print ("Ss at",lineNumber,":")
    
                   if (oldCode == 'V'): # rover
@@ -691,13 +705,19 @@ def printit(item, lineNumber):
 #
 # convert to XML -- note preamble and postamble since we aren't using yield
 #
+outXMLFile = None
 def convertitPreamble(fname):  # set up elementTree
-   print ("set up elementTree")
+   global outXMLFile
    global stack
    global allowedElementDict
    global firstElement
    global inObsBlock
    global firstObsBlock
+   if fname is None:
+       return
+   print ("set up elementTree")
+   outXMLFile = fname
+
    (allowedElementDict, requiredElementDict, psvFormatDict)  = adesutility.getAdesTables()
    MPC80OpticalElements = ['permID', 'provID', 'trkSub', 'mode', 'stn',
                            'obsTime', 'ra', 'dec', 'mag', 'band']
@@ -711,8 +731,11 @@ def convertitPreamble(fname):  # set up elementTree
 
 
 
-def convertitPostamble(fname):
-   print ("write tree on ", fname)
+def convertitPostamble():
+   global outXMLFile
+   if outXMLFile is None:
+       return
+   print ("write tree on ", outXMLFile)
    xmlencoding = 'UTF-8'
    # Tested encodings: 'UTF-16' 'UTF-16LE' 'UTF-16BE' 'UCS-4' 'UTF32' 'UTF-32BE' 'UTF-32LE'
    #                   'LATIN1' 'ISO-LATIN-1' 'ISO-8859-1' 'ASCII' 'cp500' 'cp037' 'UTF-7'
@@ -729,6 +752,8 @@ def convertit(item, lineNumber):
   global commentList
   global obsContextList
   global obsContextSeen
+  if outXMLFile is None:
+      return
   code = item['code']
   try:
      codeType = codeTable[code]
@@ -756,8 +781,7 @@ def convertit(item, lineNumber):
   # how to convert 'Offset' and 'Occultation' values? -- as Optical with 
   # 'OFF' and 'OCC' as the 'mode' field.  This round-trips.
   #
-  if codeType == 'Satellite':
-     print ("Satellite observations (Ss) not yet handled")
+  if codeType == 'Satellite': # same as rover fields for ICRF_AU and ICRF_KM
      pass
   if codeType == 'Offset': # same as optical but code E -> 'OFF'
      pass
@@ -765,7 +789,11 @@ def convertit(item, lineNumber):
      pass
   if codeType == 'Rover':  # same as optical but extra fields
      pass
-  if codeType == 'Optical' or codeType == 'Rover' or codeType == 'Offset' or codeType == 'Occultation':
+  if codeType == 'Optical' or \
+     codeType == 'Rover' or \
+     codeType == 'Satellite' or \
+     codeType == 'Offset' or \
+     codeType == 'Occultation':
      if (firstElement):
          stack.addPush('optical')
          firstElement = False
@@ -787,6 +815,8 @@ def convertit(item, lineNumber):
         item['subFrm'] = 'B1950.0' # PHA mode but set below
         code = 'P'
      elif code == 'V':  # Rover
+        code = 'C' # CCD
+     elif code == 'S':  # Satellite
         code = 'C' # CCD
      item['mode'] = packUtil.codeDict[code]
      if not item['astCat'] or not item['astCat'].strip():
@@ -893,15 +923,20 @@ def convertit(item, lineNumber):
 
 #parseFile(sys.argv[1], convertit)
 
-convertitPreamble(sys.argv[2])
+if len(sys.argv) > 2:  # usage: mpc80coltoxml <outxmlfile>
+   outFile = sys.argv[2]
+else:
+   outFile = None
+
+convertitPreamble(outFile)
 parseFile(sys.argv[1], convertit)
-convertitPostamble(sys.argv[2])
+convertitPostamble()
 try:
 
    #
    # for xml output
    #
-   convertitPreamble(sys.argv[2])
+   convertitPreamble(outFile)
    try:
       pass
    except:
@@ -909,7 +944,7 @@ try:
       exit()
    try:
       parseFile(sys.argv[1], convertit)
-      convertitPostamble(sys.argv[2])
+      convertitPostamble()
    except RuntimeError as e:
       print ("Error", e)
       exit()
