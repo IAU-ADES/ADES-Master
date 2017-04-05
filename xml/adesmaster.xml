@@ -679,7 +679,7 @@ decimal types must be in a range
 
 <simpletype name="ProvIDType">
    <restriction base="xsd:string">
-      <restrict name="xsd:pattern" value="\d{4} [A-HJ-Y][A-HJ-Z]\d*|\d{4} [PT]-[L123]|[ADCPX]/\d{4} [A-Z]{1,2}\d?\d?(-[A-Z])?|S/\d{4} ((M|J|S|U|N)|\((\d+|\d{4} [A-HJ-Y][A-HJ-Z]?\d+)\)) \d+"/>
+      <restrict name="xsd:pattern" value="\d{4} [A-HJ-Y][A-HJ-Z]\d*|\d{4} [PT]-[L123]|[ADCPX]/\d{4} [A-Z]{1,2}\d*(-[A-Z])?|S/\d{4} ((M|J|S|U|N)|\((\d+|\d{4} [A-HJ-Y][A-HJ-Z]?\d+)\)) \d+"/>
    </restriction>
    <doc> A provID (provisional ID) is may be a minor planet provid, 
       which is a 4-digit year followed by a space followd by two letters
