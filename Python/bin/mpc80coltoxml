@@ -804,6 +804,10 @@ def convertit(item, lineNumber):
   if codeType == 'Occultation': # same as optical but code O -> 'OCC'
      pass
   if codeType == 'Rover':  # same as optical but extra fields
+     if item['pos3'].strip() == '':  # this is an error so quit
+        print ("skipping line ", lineNumber,
+               "because altitude is missing for rover")
+        return
      pass
   if codeType == 'Optical' or \
      codeType == 'Rover' or \

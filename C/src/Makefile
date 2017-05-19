@@ -20,7 +20,7 @@ OBJECTS = $(C_SOURCES:.c=.o) $(CXX_SOURCES:.cpp=.o)
 #
 # programs to build
 #
-PROGRAMS = unittest testthings testthings2 valall valgeneral valsubmit valades oldvalades xmltopsv psvtoxml writexml
+PROGRAMS = unittest testthings testthings2 valall valgeneral valsubmit valades oldvalades xmltopsv psvtoxml writexml writexmlc readxmlc
 
 #
 # all programs are put in $(PREFIX)/bin 

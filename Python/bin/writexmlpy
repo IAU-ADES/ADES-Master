@@ -1,0 +1,197 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+#
+# writexml.py
+#
+# simple python script to demonstrate how to read xml
+# files and walk though the elements and their children
+# using the python lxml library directly.
+#
+# The five simple functions 
+#    createADESTree
+#    addElement
+#    addDataElement
+#    writeADESTree
+#    freeADESTree
+#
+# are provided so that Fortran and C translations
+# of this example can handle all the memory management
+# in these functions.
+#
+#
+# This script is designed to work with both
+# python 2 and python 3
+#
+#
+# This implementaiton uses lxml, which is not part of
+# the default python installation and so must
+# be installed separately. 
+#
+#
+# __future__ imports for Python 3 compliance in Python 2
+# 
+from __future__ import absolute_import, division, print_function
+from __future__ import unicode_literals
+#
+# end of __future__ imports
+#
+
+
+#
+# Use the names XMLTree and XMLElement to easily find
+# all references to the xml library object ctors
+#
+
+from lxml import etree as XMLTree
+from lxml.etree import Element as XMLElement
+
+import sys
+
+#
+# sys.argv[1]: output xml file
+# sys.argv[2]: output xml encoding
+# example: ./writexml <xml file>
+# example: ./writexml <xml file> UTF-8
+#
+
+utf8 = "UTF-8";
+
+def usage(name):
+    print("Usage: %s <xml file> [<xml_encoding>]" % (name));
+
+def createADESTree():
+   """ createADESTree creates and returns
+       a top-level ADES tree.  This returned
+       pointer must be freed at the end
+   """
+   property = {}
+   property["version"] = "2017"
+   ades = XMLElement("ades", property)
+   return ades
+       
+
+def addDataElement(branch, tag, text):
+   """ addDataElement(branch, tag, text)
+       makes a new element with tag and text
+       extends branch with the new element (which now owns memory)
+       and returns the new element for later extension itself
+   """
+   el = XMLElement(tag)
+   el.text = text
+   branch.extend([el])
+   return el # so it can be extended itself
+
+def addElement(branch, tag):
+   """ addElement(branch, tag)
+       makes a new element with tag
+       extends branch with the new element (which now owns memory)
+       and returns the new element for later extension itself
+   """
+   el = XMLElement(tag)
+   branch.extend([el])
+   return el # so it can be extended itself
+
+def writeADESTree(filename, ades, xmlEncoding):
+   """ writes the completed tree to filename
+       with the requested encoding and returns
+       the object to free.
+   """
+   mytree = XMLTree.ElementTree(ades)
+   mytree.write(filename,
+                pretty_print=True, 
+                xml_declaration=True, 
+                encoding=xmlEncoding)
+
+def freeADESTree(tree):
+   """ freeADESTree(tree) calls XMLFree on the
+       input tree
+   """
+   pass # python does not need this since it collects garbage
+   
+
+def doit(argc, argv):
+	xmlEncoding = utf8;
+
+	if (argc <= 1):
+		usage(argv[0])
+		return(1)
+
+	if (argc == 3):
+		xmlEncoding = argv[2]
+
+	if (argc > 3):
+		usage(argv[0])
+		return(1)
+
+        ades = createADESTree()
+
+        obsBlock = addElement(ades, "obsBlock")
+        obsContext = addElement(obsBlock, "obsContext")
+
+        item = addElement(obsContext, "observatory")
+	addDataElement(item, "mpcCode", "F51")
+	addDataElement(item, "name", "Pan-STARRS 1")
+
+        item = addElement(obsContext, "submitter")
+	addDataElement(item, "name", "P. Villa")
+	addDataElement(item, "institution", "Ejército Constitutionalista")
+ 
+	item = addElement(obsContext, "observers")
+	addDataElement(item, "name", "P. Villa")
+	addDataElement(item, "name", "F. Madero")
+
+	item = addElement(obsContext, "measurers")
+	addDataElement(item, "name", "P. Villa")
+	addDataElement(item, "name", "F. Madero")
+
+	item = addElement(obsContext, "telescope")
+	addDataElement(item, "aperture", "1.5")
+	addDataElement(item, "design", "Reflector")
+	addDataElement(item, "detector", "CCD")
+
+	item = addDataElement(obsContext, "fundingSource", "Your favorite funding agency")
+
+	item = addElement(obsContext, "comment");
+	addDataElement(item, "line", "A comment line with >stuff< in it")
+	addDataElement(item, "line", "Another comment line")
+
+
+
+	obsData = addElement(obsBlock, "obsData")
+
+	optical = addElement(obsData, "optical")
+	addDataElement(optical, "permID", "1234456")
+	addDataElement(optical, "trkSub", "aa")
+	addDataElement(optical, "mode", "CCD")
+	addDataElement(optical, "stn", "F51")
+	addDataElement(optical, "obsTime", "2016-08-29T12:32:34Z")
+	addDataElement(optical, "ra", "10.21")
+	addDataElement(optical, "dec", "21.21")
+	addDataElement(optical, "astCat", "2MA")
+	addDataElement(optical, "mag", "15.3")
+	addDataElement(optical, "band", "w")
+	addDataElement(optical, "notes", "klmn")
+	addDataElement(optical, "remarks", "A free-form \"remark\" <with stuff>")
+
+	optical = addElement(obsData, "optical")
+	addDataElement(optical, "permID", "1334456")
+	addDataElement(optical, "trkSub", "aa")
+	addDataElement(optical, "mode", "CCD")
+	addDataElement(optical, "stn", "F51")
+	addDataElement(optical, "obsTime", "2016-08-29T12:32:34Z")
+	addDataElement(optical, "ra", "10.21")
+	addDataElement(optical, "dec", "21.21")
+	addDataElement(optical, "astCat", "2MA")
+	addDataElement(optical, "mag", "15.3")
+	addDataElement(optical, "band", "w")
+	addDataElement(optical, "notes", "klmn")
+	addDataElement(optical, "remarks", "Another One")
+
+
+        freeADESTree(writeADESTree(sys.argv[1], ades, xmlEncoding))
+
+
+	
+doit(len(sys.argv), sys.argv)
+
+

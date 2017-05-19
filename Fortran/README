@@ -1,0 +1,31 @@
+The Fortran 90 routines use FoX, a Fortran XML library available with a FreeBSD-like license.
+
+To obtain Fox, go to 
+
+https://github.com/andreww/fox
+
+and download fox-master.zip from the download link
+
+unzip this tarball, cd into fox-master and build it
+
+To Build:
+   step one is to ./configure
+     Note you may need to edit the configure lines finding gfortran to find that language first.
+
+   step two:  make and make check
+
+Then the exmaples can be build using the Makefile
+
+
+
+readxmlfox.f90 
+writexmlfox.f90
+
+are examples showing how to use FoX in fortran 90.
+
+They do the pretty much the same job as writexmlpy/readxmlpy using lxml in python 
+and writexmlc/readxmlc using -lxml2 in C.  These all use the same base lxml2
+library.
+
+Note FoX is confused about UTF-8 and any other non-ASCII encodings, because
+Fortran does not handle those in a consistent way.  

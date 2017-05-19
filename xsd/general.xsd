@@ -1,0 +1,683 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:simpleType name="AlphaNumericType">
+    <xsd:restriction base="StringType">
+      <xsd:pattern value="[A-Za-z0-9_]*"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="BandType">
+    <xsd:restriction base="AlphaNumericType">
+      <xsd:maxLength value="3"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CatType">
+    <xsd:restriction base="AlphaNumericType">
+      <xsd:maxLength value="8"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CorrDecimalType">
+    <xsd:restriction base="xsd:decimal">
+      <xsd:minInclusive value="-1.0"/>
+      <xsd:maxInclusive value="1.0"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="DeclinationType">
+    <xsd:restriction base="xsd:decimal">
+      <xsd:minInclusive value="-90.0"/>
+      <xsd:maxInclusive value="90.0"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="DeprecatedType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="X"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="DiscType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="*"/>
+      <xsd:enumeration value="+"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="SubFrmType">
+    <xsd:restriction base="StringType">
+      <xsd:pattern value="([BJ]\d{4}.0)|APP\."/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="LeapSecondsHelp">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="19(72|81|82|83|85|92|93|94|97)-06-30T23:59:60(\.\d+)?Z"/>
+      <xsd:pattern value="19(72|73|74|75|76|77|78|79|87|89|90|95|98)-12-31T23:59:60(\.\d+)?Z"/>
+      <xsd:pattern value="20(12|15)-06-30T23:59:60(\.\d+)?Z"/>
+      <xsd:pattern value="20(05|08|16)-12-31T23:59:60(.\d+)?Z"/>
+      <xsd:pattern value="(2[1-9]\d{2}|20[2-9]\d|201[7-9])-12-31T23:59:60(\.\d+)?Z"/>
+      <xsd:pattern value="(2[1-9]\d{2}|20[2-9]\d|201[7-9])-06-30T23:59:60(\.\d+)?Z"/>
+      <xsd:pattern value="[3-9]\d{3}-06-30T23:59:60(\.\d+)?Z"/>
+      <xsd:pattern value="[3-9]\d{3}-12-31T23:59:60(\.\d+)?Z"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="LogicalType">
+    <xsd:restriction base="xsd:integer">
+      <xsd:enumeration value="0"/>
+      <xsd:enumeration value="1"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ModeType">
+    <xsd:restriction base="AlphaNumericType">
+      <xsd:maxLength value="3"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ObsCenterType">
+    <xsd:union memberTypes="PermIDType ProvIDType PlanetNameType"/>
+  </xsd:simpleType>
+  <xsd:simpleType name="NotesType">
+    <xsd:restriction base="AlphaNumericType">
+      <xsd:maxLength value="6"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ObsIDType">
+    <xsd:restriction base="AlphaNumericType">
+      <xsd:maxLength value="19"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PermIDType">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="\d+([PD](-[A-Z]{1,2})?)?|((Mars|Jupiter|Saturn|Uranus|Neptune) \d{1,3}|\(\d+\) \d{1,3})"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PhotModType">
+    <xsd:restriction base="AlphaNumericType">
+      <xsd:maxLength value="8"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PlanetNameType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Mercury"/>
+      <xsd:enumeration value="Venus"/>
+      <xsd:enumeration value="Earth"/>
+      <xsd:enumeration value="Moon"/>
+      <xsd:enumeration value="Mars"/>
+      <xsd:enumeration value="Jupiter"/>
+      <xsd:enumeration value="Saturn"/>
+      <xsd:enumeration value="Uranus"/>
+      <xsd:enumeration value="Neptune"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PosDecimalType">
+    <xsd:restriction base="xsd:decimal">
+      <xsd:minExclusive value="0.0"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ProgType">
+    <xsd:restriction base="AlphaNumericType">
+      <xsd:maxLength value="2"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ProvIDType">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="\d{4} [A-HJ-Y][A-HJ-Z]\d*|\d{4} [PT]-[L123]|[ADCPX]/\d{4} [A-Z]{1,2}\d*(-[A-Z])?|S/\d{4} ((M|J|S|U|N)|\((\d+|\d{4} [A-HJ-Y][A-HJ-Z]?\d+)\)) \d+"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="RaDecPrecType">
+    <xsd:restriction base="xsd:decimal">
+      <xsd:enumeration value="0.1"/>
+      <xsd:enumeration value="0.6"/>
+      <xsd:enumeration value="0.01"/>
+      <xsd:enumeration value="0.001"/>
+      <xsd:enumeration value="60"/>
+      <xsd:enumeration value="6"/>
+      <xsd:enumeration value="1"/>
+      <xsd:enumeration value="60.0"/>
+      <xsd:enumeration value="6.0"/>
+      <xsd:enumeration value="1.0"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="RAType">
+    <xsd:restriction base="xsd:decimal">
+      <xsd:minInclusive value="0.0"/>
+      <xsd:maxExclusive value="360.0"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="RefType">
+    <xsd:restriction base="StringType">
+      <xsd:maxLength value="16"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="RemarkType">
+    <xsd:restriction base="StringType">
+      <xsd:maxLength value="200"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="SelResType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="A"/>
+      <xsd:enumeration value="a"/>
+      <xsd:enumeration value="D"/>
+      <xsd:enumeration value="d"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="StationType">
+    <xsd:restriction base="AlphaNumericType">
+      <xsd:minLength value="3"/>
+      <xsd:maxLength value="4"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="StringType">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[^|]*[\w-[|]][^|]*"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="SubFmtType">
+    <xsd:restriction base="AlphaNumericType">
+      <xsd:maxLength value="4"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="SysType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="WGS84"/>
+      <xsd:enumeration value="ITRF"/>
+      <xsd:enumeration value="IAU"/>
+      <xsd:enumeration value="ICRF_AU"/>
+      <xsd:enumeration value="ICRF_KM"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TimeHelp">
+    <xsd:restriction base="xsd:dateTime">
+      <xsd:pattern value="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TimePrecType">
+    <xsd:restriction base="xsd:decimal">
+      <xsd:enumeration value="100000"/>
+      <xsd:enumeration value="10000"/>
+      <xsd:enumeration value="1000"/>
+      <xsd:enumeration value="100"/>
+      <xsd:enumeration value="10"/>
+      <xsd:enumeration value="1"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TimeType">
+    <xsd:union memberTypes="TimeHelp LeapSecondsHelp"/>
+  </xsd:simpleType>
+  <xsd:simpleType name="TrkIDType">
+    <xsd:restriction base="AlphaNumericType">
+      <xsd:maxLength value="12"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TrkSubType">
+    <xsd:restriction base="AlphaNumericType">
+      <xsd:maxLength value="8"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="VersionType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="2017"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="NamesType">
+    <xsd:sequence>
+      <xsd:element name="name" type="StringType" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ObservatoryType">
+    <xsd:all>
+      <xsd:element name="mpcCode" type="StationType"/>
+      <xsd:element name="name" type="StringType" minOccurs="0"/>
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:complexType name="SubmitterType">
+    <xsd:all>
+      <xsd:element name="name" type="StringType"/>
+      <xsd:element name="institution" type="StringType" minOccurs="0"/>
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:complexType name="TelescopeType">
+    <xsd:all>
+      <xsd:element name="name" type="StringType" minOccurs="0"/>
+      <xsd:element name="design" type="StringType"/>
+      <xsd:element name="aperture" type="PosDecimalType"/>
+      <xsd:element name="detector" type="StringType"/>
+      <xsd:element name="fRatio" type="PosDecimalType" minOccurs="0"/>
+      <xsd:element name="filter" type="StringType" minOccurs="0"/>
+      <xsd:element name="arraySize" type="StringType" minOccurs="0"/>
+      <xsd:element name="pixelScale" type="PosDecimalType" minOccurs="0"/>
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:complexType name="SoftwareType">
+    <xsd:all>
+      <xsd:element name="astrometry" type="StringType" minOccurs="0"/>
+      <xsd:element name="fitOrder" type="StringType" minOccurs="0"/>
+      <xsd:element name="photometry" type="StringType" minOccurs="0"/>
+      <xsd:element name="objectDetection" type="StringType" minOccurs="0"/>
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:complexType name="CommentType">
+    <xsd:sequence>
+      <xsd:element name="line" type="StringType" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:group name="MPCID">
+    <xsd:choice>
+      <xsd:sequence>
+        <xsd:element ref="permID"/>
+        <xsd:element ref="provID" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:sequence>
+        <xsd:element ref="provID"/>
+      </xsd:sequence>
+      <xsd:sequence>
+        <xsd:element ref="artSat"/>
+      </xsd:sequence>
+    </xsd:choice>
+  </xsd:group>
+  <xsd:group name="OpticalID">
+    <xsd:sequence>
+      <xsd:choice>
+        <xsd:sequence>
+          <xsd:group ref="MPCID"/>
+          <xsd:element ref="trkSub" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:sequence>
+          <xsd:element ref="trkSub"/>
+        </xsd:sequence>
+      </xsd:choice>
+      <xsd:element ref="obsID" minOccurs="0"/>
+      <xsd:element ref="trkID" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:group>
+  <xsd:group name="RadarID">
+    <xsd:sequence>
+      <xsd:group ref="MPCID"/>
+      <xsd:element ref="trkSub" minOccurs="0"/>
+      <xsd:element ref="obsID" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:group>
+  <xsd:group name="RadarValue">
+    <xsd:choice>
+      <xsd:sequence>
+        <xsd:element ref="doppler"/>
+        <xsd:element ref="rmsDoppler"/>
+      </xsd:sequence>
+      <xsd:sequence>
+        <xsd:element ref="delay"/>
+        <xsd:element ref="rmsDelay"/>
+      </xsd:sequence>
+    </xsd:choice>
+  </xsd:group>
+  <xsd:group name="Precision">
+    <xsd:sequence>
+      <xsd:element ref="precTime"/>
+      <xsd:element ref="precRA"/>
+      <xsd:element ref="precDec"/>
+    </xsd:sequence>
+  </xsd:group>
+  <xsd:group name="Location">
+    <xsd:sequence>
+      <xsd:element ref="sys"/>
+      <xsd:element ref="ctr"/>
+      <xsd:element ref="pos1"/>
+      <xsd:element ref="pos2"/>
+      <xsd:element ref="pos3"/>
+      <xsd:element ref="posCov11" minOccurs="0"/>
+      <xsd:element ref="posCov12" minOccurs="0"/>
+      <xsd:element ref="posCov13" minOccurs="0"/>
+      <xsd:element ref="posCov22" minOccurs="0"/>
+      <xsd:element ref="posCov23" minOccurs="0"/>
+      <xsd:element ref="posCov33" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:group>
+  <xsd:group name="Photometry">
+    <xsd:sequence>
+      <xsd:element ref="mag"/>
+      <xsd:element ref="rmsMag" minOccurs="0"/>
+      <xsd:element ref="band"/>
+      <xsd:element ref="photCat" minOccurs="0"/>
+      <xsd:element ref="photAp" minOccurs="0"/>
+      <xsd:element ref="nucMag" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:group>
+  <xsd:group name="OffsetVal">
+    <xsd:choice>
+      <xsd:sequence>
+        <xsd:element ref="deltaRA"/>
+        <xsd:element ref="deltaDec"/>
+        <xsd:element ref="rmsRA" minOccurs="0"/>
+        <xsd:element ref="rmsDec" minOccurs="0"/>
+        <xsd:element ref="rmsCorr" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:sequence>
+        <xsd:element ref="dist"/>
+        <xsd:element ref="pa"/>
+        <xsd:element ref="rmsDist" minOccurs="0"/>
+        <xsd:element ref="rmsPA" minOccurs="0"/>
+        <xsd:element ref="rmsCorr" minOccurs="0"/>
+      </xsd:sequence>
+    </xsd:choice>
+  </xsd:group>
+  <xsd:group name="OpticalRes">
+    <xsd:sequence>
+      <xsd:element ref="resRA"/>
+      <xsd:element ref="resDec"/>
+      <xsd:element ref="selAst"/>
+      <xsd:element ref="sigRA"/>
+      <xsd:element ref="sigDec"/>
+      <xsd:element ref="sigCorr" minOccurs="0"/>
+      <xsd:element ref="sigTime" minOccurs="0"/>
+      <xsd:element ref="biasRA" minOccurs="0"/>
+      <xsd:element ref="biasDec" minOccurs="0"/>
+      <xsd:element ref="biasTime" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:group>
+  <xsd:group name="OpticalResMag">
+    <xsd:sequence>
+      <xsd:element ref="photProd" minOccurs="0"/>
+      <xsd:element ref="resMag"/>
+      <xsd:element ref="selPhot"/>
+      <xsd:element ref="sigMag"/>
+      <xsd:element ref="biasMag" minOccurs="0"/>
+      <xsd:element ref="photMod" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:group>
+  <xsd:group name="OpticalResiduals">
+    <xsd:sequence>
+      <xsd:element ref="orbProd"/>
+      <xsd:element ref="orbID"/>
+      <xsd:group ref="OpticalRes" minOccurs="0"/>
+      <xsd:group ref="OpticalResMag" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:group>
+  <xsd:group name="RadarResiduals">
+    <xsd:sequence>
+      <xsd:element ref="orbProd"/>
+      <xsd:element ref="orbID"/>
+      <xsd:choice>
+        <xsd:sequence>
+          <xsd:element ref="resDelay"/>
+          <xsd:element ref="selDelay"/>
+          <xsd:element ref="sigDelay"/>
+        </xsd:sequence>
+        <xsd:sequence>
+          <xsd:element ref="resDoppler"/>
+          <xsd:element ref="selDoppler"/>
+          <xsd:element ref="sigDoppler"/>
+        </xsd:sequence>
+      </xsd:choice>
+    </xsd:sequence>
+  </xsd:group>
+  <xsd:complexType name="LocalUseType">
+    <xsd:sequence>
+      <xsd:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="OpticalType">
+    <xsd:sequence>
+      <xsd:group ref="OpticalID"/>
+      <xsd:element ref="mode"/>
+      <xsd:element ref="stn"/>
+      <xsd:group ref="Location" minOccurs="0"/>
+      <xsd:element ref="prog" minOccurs="0"/>
+      <xsd:element ref="obsTime"/>
+      <xsd:element ref="ra"/>
+      <xsd:element ref="dec"/>
+      <xsd:element ref="rmsRA" minOccurs="0"/>
+      <xsd:element ref="rmsDec" minOccurs="0"/>
+      <xsd:element ref="rmsCorr" minOccurs="0"/>
+      <xsd:element ref="astCat"/>
+      <xsd:group ref="Photometry" minOccurs="0"/>
+      <xsd:element ref="logSNR" minOccurs="0"/>
+      <xsd:element ref="seeing" minOccurs="0"/>
+      <xsd:element ref="exp" minOccurs="0"/>
+      <xsd:element ref="rmsFit" minOccurs="0"/>
+      <xsd:element ref="nStars" minOccurs="0"/>
+      <xsd:element ref="ref" minOccurs="0"/>
+      <xsd:element ref="disc" minOccurs="0"/>
+      <xsd:element ref="subFrm" minOccurs="0"/>
+      <xsd:element ref="subFmt" minOccurs="0"/>
+      <xsd:group ref="Precision" minOccurs="0"/>
+      <xsd:element ref="uncTime" minOccurs="0"/>
+      <xsd:element ref="notes" minOccurs="0"/>
+      <xsd:element ref="remarks" minOccurs="0"/>
+      <xsd:group ref="OpticalResiduals" minOccurs="0"/>
+      <xsd:element ref="deprecated" minOccurs="0"/>
+      <xsd:element ref="localUse" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="OffsetType">
+    <xsd:sequence>
+      <xsd:group ref="OpticalID"/>
+      <xsd:element ref="mode"/>
+      <xsd:element ref="stn"/>
+      <xsd:group ref="Location" minOccurs="0"/>
+      <xsd:element ref="prog" minOccurs="0"/>
+      <xsd:element ref="obsTime"/>
+      <xsd:element ref="obsCenter"/>
+      <xsd:group ref="OffsetVal"/>
+      <xsd:group ref="Photometry" minOccurs="0"/>
+      <xsd:element ref="logSNR" minOccurs="0"/>
+      <xsd:element ref="seeing" minOccurs="0"/>
+      <xsd:element ref="exp" minOccurs="0"/>
+      <xsd:element ref="rmsFit" minOccurs="0"/>
+      <xsd:element ref="nStars" minOccurs="0"/>
+      <xsd:element ref="ref" minOccurs="0"/>
+      <xsd:element ref="disc" minOccurs="0"/>
+      <xsd:element ref="subFrm" minOccurs="0"/>
+      <xsd:element ref="subFmt" minOccurs="0"/>
+      <xsd:group ref="Precision" minOccurs="0"/>
+      <xsd:element ref="uncTime" minOccurs="0"/>
+      <xsd:element ref="notes" minOccurs="0"/>
+      <xsd:element ref="remarks" minOccurs="0"/>
+      <xsd:group ref="OpticalResiduals" minOccurs="0"/>
+      <xsd:element ref="deprecated" minOccurs="0"/>
+      <xsd:element ref="localUse" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="OccultationType">
+    <xsd:sequence>
+      <xsd:group ref="OpticalID"/>
+      <xsd:element ref="stn"/>
+      <xsd:group ref="Location" minOccurs="0"/>
+      <xsd:element ref="prog" minOccurs="0"/>
+      <xsd:element ref="obsTime"/>
+      <xsd:element ref="raStar"/>
+      <xsd:element ref="decStar"/>
+      <xsd:group ref="OffsetVal"/>
+      <xsd:element ref="astCat"/>
+      <xsd:group ref="Photometry" minOccurs="0"/>
+      <xsd:element ref="logSNR" minOccurs="0"/>
+      <xsd:element ref="seeing" minOccurs="0"/>
+      <xsd:element ref="ref" minOccurs="0"/>
+      <xsd:element ref="disc" minOccurs="0"/>
+      <xsd:element ref="subFrm" minOccurs="0"/>
+      <xsd:element ref="subFmt" minOccurs="0"/>
+      <xsd:group ref="Precision" minOccurs="0"/>
+      <xsd:element ref="uncTime" minOccurs="0"/>
+      <xsd:element ref="notes" minOccurs="0"/>
+      <xsd:element ref="remarks" minOccurs="0"/>
+      <xsd:group ref="OpticalResiduals" minOccurs="0"/>
+      <xsd:element ref="deprecated" minOccurs="0"/>
+      <xsd:element ref="localUse" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="RadarType">
+    <xsd:sequence>
+      <xsd:group ref="RadarID"/>
+      <xsd:element ref="trx"/>
+      <xsd:element ref="rcv"/>
+      <xsd:element ref="prog" minOccurs="0"/>
+      <xsd:element ref="obsTime"/>
+      <xsd:group ref="RadarValue"/>
+      <xsd:element ref="logSNR" minOccurs="0"/>
+      <xsd:element ref="com" minOccurs="0"/>
+      <xsd:element ref="frq"/>
+      <xsd:element ref="ref" minOccurs="0"/>
+      <xsd:element ref="remarks" minOccurs="0"/>
+      <xsd:group ref="RadarResiduals" minOccurs="0"/>
+      <xsd:element ref="localUse" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ObsContextType">
+    <xsd:all>
+      <xsd:element ref="observatory"/>
+      <xsd:element ref="submitter"/>
+      <xsd:element ref="observers"/>
+      <xsd:element ref="measurers"/>
+      <xsd:element ref="telescope" minOccurs="0"/>
+      <xsd:element ref="software" minOccurs="0"/>
+      <xsd:element ref="coinvestigators" minOccurs="0"/>
+      <xsd:element ref="collaborators" minOccurs="0"/>
+      <xsd:element ref="fundingSource" minOccurs="0"/>
+      <xsd:element ref="comment" minOccurs="0"/>
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:complexType name="ObsDataType">
+    <xsd:choice>
+      <xsd:element ref="optical" maxOccurs="unbounded"/>
+      <xsd:element ref="offset" maxOccurs="unbounded"/>
+      <xsd:element ref="occultation" maxOccurs="unbounded"/>
+      <xsd:element ref="radar" maxOccurs="unbounded"/>
+    </xsd:choice>
+  </xsd:complexType>
+  <xsd:complexType name="ObsBlockType">
+    <xsd:sequence>
+      <xsd:element ref="obsContext"/>
+      <xsd:element ref="obsData"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="OpticalResType">
+    <xsd:sequence>
+      <xsd:group ref="OpticalID"/>
+      <xsd:element ref="obsTime"/>
+      <xsd:group ref="OpticalResiduals"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="RadarResType">
+    <xsd:sequence>
+      <xsd:group ref="RadarID"/>
+      <xsd:element ref="obsTime"/>
+      <xsd:group ref="RadarResiduals"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ADESType">
+    <xsd:choice maxOccurs="unbounded">
+      <xsd:element ref="optical" minOccurs="0"/>
+      <xsd:element ref="offset" minOccurs="0"/>
+      <xsd:element ref="occultation" minOccurs="0"/>
+      <xsd:element ref="radar" minOccurs="0"/>
+      <xsd:element ref="opticalResidual" minOccurs="0"/>
+      <xsd:element ref="radarResidual" minOccurs="0"/>
+      <xsd:element ref="obsBlock"/>
+    </xsd:choice>
+    <xsd:attribute name="version" type="VersionType" use="required"/>
+  </xsd:complexType>
+  <xsd:element name="permID" type="PermIDType"/>
+  <xsd:element name="provID" type="ProvIDType"/>
+  <xsd:element name="artSat" type="StringType"/>
+  <xsd:element name="trkSub" type="TrkSubType"/>
+  <xsd:element name="obsID" type="ObsIDType"/>
+  <xsd:element name="trkID" type="TrkIDType"/>
+  <xsd:element name="mode" type="ModeType"/>
+  <xsd:element name="stn" type="StationType"/>
+  <xsd:element name="trx" type="StationType"/>
+  <xsd:element name="rcv" type="StationType"/>
+  <xsd:element name="sys" type="SysType"/>
+  <xsd:element name="ctr" type="xsd:integer"/>
+  <xsd:element name="pos1" type="xsd:decimal"/>
+  <xsd:element name="pos2" type="xsd:decimal"/>
+  <xsd:element name="pos3" type="xsd:decimal"/>
+  <xsd:element name="posCov11" type="xsd:decimal"/>
+  <xsd:element name="posCov12" type="xsd:decimal"/>
+  <xsd:element name="posCov13" type="xsd:decimal"/>
+  <xsd:element name="posCov22" type="xsd:decimal"/>
+  <xsd:element name="posCov23" type="xsd:decimal"/>
+  <xsd:element name="posCov33" type="xsd:decimal"/>
+  <xsd:element name="prog" type="ProgType"/>
+  <xsd:element name="obsTime" type="TimeType"/>
+  <xsd:element name="ra" type="RAType"/>
+  <xsd:element name="dec" type="DeclinationType"/>
+  <xsd:element name="raStar" type="RAType"/>
+  <xsd:element name="decStar" type="DeclinationType"/>
+  <xsd:element name="obsCenter" type="ObsCenterType"/>
+  <xsd:element name="deltaRA" type="xsd:decimal"/>
+  <xsd:element name="deltaDec" type="xsd:decimal"/>
+  <xsd:element name="dist" type="PosDecimalType"/>
+  <xsd:element name="pa" type="RAType"/>
+  <xsd:element name="rmsRA" type="PosDecimalType"/>
+  <xsd:element name="rmsDec" type="PosDecimalType"/>
+  <xsd:element name="rmsDist" type="PosDecimalType"/>
+  <xsd:element name="rmsPA" type="PosDecimalType"/>
+  <xsd:element name="rmsCorr" type="CorrDecimalType"/>
+  <xsd:element name="delay" type="PosDecimalType"/>
+  <xsd:element name="rmsDelay" type="PosDecimalType"/>
+  <xsd:element name="doppler" type="xsd:decimal"/>
+  <xsd:element name="rmsDoppler" type="PosDecimalType"/>
+  <xsd:element name="astCat" type="CatType"/>
+  <xsd:element name="mag" type="xsd:decimal"/>
+  <xsd:element name="rmsMag" type="PosDecimalType"/>
+  <xsd:element name="band" type="BandType"/>
+  <xsd:element name="photCat" type="CatType"/>
+  <xsd:element name="photAp" type="PosDecimalType"/>
+  <xsd:element name="nucMag" type="LogicalType"/>
+  <xsd:element name="logSNR" type="xsd:decimal"/>
+  <xsd:element name="seeing" type="PosDecimalType"/>
+  <xsd:element name="exp" type="PosDecimalType"/>
+  <xsd:element name="rmsFit" type="PosDecimalType"/>
+  <xsd:element name="nStars" type="xsd:positiveInteger"/>
+  <xsd:element name="com" type="LogicalType"/>
+  <xsd:element name="frq" type="PosDecimalType"/>
+  <xsd:element name="ref" type="RefType"/>
+  <xsd:element name="disc" type="DiscType"/>
+  <xsd:element name="subFmt" type="SubFmtType"/>
+  <xsd:element name="subFrm" type="SubFrmType"/>
+  <xsd:element name="precTime" type="TimePrecType"/>
+  <xsd:element name="precRA" type="RaDecPrecType"/>
+  <xsd:element name="precDec" type="RaDecPrecType"/>
+  <xsd:element name="uncTime" type="PosDecimalType"/>
+  <xsd:element name="notes" type="NotesType"/>
+  <xsd:element name="remarks" type="RemarkType"/>
+  <xsd:element name="deprecated" type="DeprecatedType"/>
+  <xsd:element name="localUse" type="LocalUseType"/>
+  <xsd:element name="orbProd" type="StringType"/>
+  <xsd:element name="orbID" type="StringType"/>
+  <xsd:element name="resRA" type="xsd:decimal"/>
+  <xsd:element name="resDec" type="xsd:decimal"/>
+  <xsd:element name="selAst" type="SelResType"/>
+  <xsd:element name="sigRA" type="PosDecimalType"/>
+  <xsd:element name="sigDec" type="PosDecimalType"/>
+  <xsd:element name="sigCorr" type="CorrDecimalType"/>
+  <xsd:element name="sigTime" type="PosDecimalType"/>
+  <xsd:element name="biasRA" type="xsd:decimal"/>
+  <xsd:element name="biasDec" type="xsd:decimal"/>
+  <xsd:element name="biasTime" type="xsd:decimal"/>
+  <xsd:element name="photProd" type="StringType"/>
+  <xsd:element name="resMag" type="xsd:decimal"/>
+  <xsd:element name="selPhot" type="SelResType"/>
+  <xsd:element name="sigMag" type="PosDecimalType"/>
+  <xsd:element name="biasMag" type="xsd:decimal"/>
+  <xsd:element name="photMod" type="PhotModType"/>
+  <xsd:element name="resDelay" type="xsd:decimal"/>
+  <xsd:element name="selDelay" type="SelResType"/>
+  <xsd:element name="sigDelay" type="PosDecimalType"/>
+  <xsd:element name="resDoppler" type="xsd:decimal"/>
+  <xsd:element name="selDoppler" type="SelResType"/>
+  <xsd:element name="sigDoppler" type="PosDecimalType"/>
+  <xsd:element name="observatory" type="ObservatoryType"/>
+  <xsd:element name="submitter" type="SubmitterType"/>
+  <xsd:element name="observers" type="NamesType"/>
+  <xsd:element name="measurers" type="NamesType"/>
+  <xsd:element name="telescope" type="TelescopeType"/>
+  <xsd:element name="software" type="SoftwareType"/>
+  <xsd:element name="coinvestigators" type="NamesType"/>
+  <xsd:element name="collaborators" type="NamesType"/>
+  <xsd:element name="fundingSource" type="StringType"/>
+  <xsd:element name="comment" type="CommentType"/>
+  <xsd:element name="optical" type="OpticalType"/>
+  <xsd:element name="offset" type="OffsetType"/>
+  <xsd:element name="occultation" type="OccultationType"/>
+  <xsd:element name="radar" type="RadarType"/>
+  <xsd:element name="obsContext" type="ObsContextType"/>
+  <xsd:element name="obsData" type="ObsDataType"/>
+  <xsd:element name="obsBlock" type="ObsBlockType"/>
+  <xsd:element name="opticalResidual" type="OpticalResType"/>
+  <xsd:element name="radarResidual" type="RadarResType"/>
+  <xsd:element name="ades" type="ADESType"/>
+</xsd:schema>
+
