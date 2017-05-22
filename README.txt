@@ -1,17 +1,85 @@
-2017 Mar 29  GMH
+2017 May 19  GMH
+
+   CONTENTS:
+      This contains the xsd files for ades in the xsd
+      directory
+
+        xsd/submit
+
+     There are example programs demontrating how to read
+     and write xml files using lxml in 
+
+     Fortran/readxmlfox.f90
+     Fortran/writexmlfox.f90
+     C/src/readxmlc.c
+     C/src/writexmlc.
+     Python/bin/readxmlpy
+     Python/bin/writexmlpy
   
-   INSTALLATION:
-      Untar this tarball.  Ensure you have a correctly installed
-      python 2 or 3 and know its path.  You can have both.  You'll
-      have to install the python lxml module for your python 
-      separately; the best way to do that is to build from source.
-      See google for instructions, which change regularly.
+     These all use the xml library.  
+
+     Python: install lxml
+     C: make sure liblxml2 is available
+     Fortran: install FoX
+
+     The Python and FoX libarires use liblxml2
+
+ 
+   INSTALLATION and PREREQUISITES:
+      Untar this tarball.  
+
+      Python: Ensure you have a correctly installed
+      python 2 or 3 and know its path.  You can have both.  
+
+         You'll have to install the python lxml module for 
+         your python separately; the best way to do that is 
+         to build from source using a compatible C compiler.  
+         See google for instructions, which change regularly.  
+
+      C: Ensure you have a correctly installed C/C++ compiler 
+      and you know its path.  
+
+         You will need liblxml2.a and liblxml2.so, which normally 
+         come installed as prt of the compiler installation.  If 
+         not, you'll need to obtain and install this library
+
+      Fortran: Ensure you have a correctly installed Fortran
+      compiler and you know its path
+
+
+         You will need to install FoX, a Fortran XML library 
+         (or something similar).  This is available (it has 
+         a FreeBSD-like license) from:
+
+         https://github.com/andreww/fox
+
+         You'll retrieve fox-master.zip.  Unzip that into
+         the Fortran directory
+
+
+    BUILD C Examples:
 
       To build the C programs, go to the C/ directory, configure
       to build Makefile.config, and then cd into src and type 'make'.
       The README file in C/ has more details.  If you're on a MAC OS X,
       you'll need to read it since the instructions are different.
 
+
+    BUILD Fortran Examples:
+
+      First, build FoX.  Go to the fox-master directory and
+      run the ./configure, which may pick up the wrong 
+      fortran.  If it does, edit the "configure" file and
+      edit the two lines containing "gfortran" so that your
+      Fortran compiler is *first* in the list.  The make
+      sure your Fortran compiler in in you PATH and run
+      ./configure again.
+ 
+      The run "make" and "make check" to build FoX.  Documentation
+      for FoX is in FoX/DoX as html.
+
+      After that, go to the Fortran directory and run "make" to 
+      build writexmlf90 and readxmlf90 using FoX.
 
    USAGE:  
 

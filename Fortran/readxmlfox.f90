@@ -54,6 +54,7 @@ recursive subroutine printElement(depth, p)
     logical :: first
    
     character(len=200) :: commentLine
+    character(len=2000) :: textLIne
     double precision :: ra
   
     character :: indent(40)
@@ -63,8 +64,12 @@ recursive subroutine printElement(depth, p)
     if (hasSubElements(p)) then
       !
       ! If the node has sub-elements it does not have ades data
+      ! FoX will report the text as a all the text in all the
+      ! children put together, which is not what is wanted.
       !
       print *, indent(1:2*depth), getLocalName(p)
+      !call extractDataContent(p, textLine)
+      !print *, indent(1:2*depth) , getLocalName(p), ': ', trim(textLine)
 
       !
       ! now call all elements recursively
@@ -81,6 +86,8 @@ recursive subroutine printElement(depth, p)
       ! nodes with no sub-element have data
       !
       print *, indent(1:2*depth) , getLocalName(p), ': ', getTextContent(p)
+      !call extractDataContent(p, textLine)
+      !print *, indent(1:2*depth) , getLocalName(p), ': ', trim(textLine)
 
       !
       ! now demonstrate a few extraction features
