@@ -3,9 +3,9 @@ along with a description of which is which, and why.
 
 To run the tests:
 
-./runtest proc_c    # test C; you need to have build it in C/
-./runtest prog_python2  # uses #!/use/bin/env python
-./runtest prog_python3  # fails; you need to edit prog_python3 to point 
+./runtests proc_c    # test C; you need to have build it in C/
+./runtests prog_python2  # uses #!/use/bin/env python
+./runtests prog_python3  # fails; you need to edit prog_python3 to point 
                           at your python3 executable not mine.
 
 

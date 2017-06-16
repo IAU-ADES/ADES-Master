@@ -66,7 +66,6 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     </xsl:element>
 </xsl:template>
 
-
 <!-- process element or group elements into element or group declarations
      Pay attention to whether this is using "ref" or "name, type" since 
      it is allowed to mix them.  
@@ -88,6 +87,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 <xsl:template name="processUse">
   <xsl:choose> <!-- add attributes for @use -->
      <xsl:when test="@use='NoSubmitDistribRequired'">
+        <xsl:attribute name="minOccurs">0</xsl:attribute>
      </xsl:when>
      <xsl:when test="@use='NoSubmit'">
         <xsl:attribute name="minOccurs">0</xsl:attribute>

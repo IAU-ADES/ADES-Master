@@ -10,8 +10,6 @@
  * xslt files:               All of thsee transform adesmaster.xml to a schema
  *    submitxsd.xslt         creates xsd file to validate submission xml
  *    submithumanxsd.xslt    Same but in human-readable form
- *    distribxsd.xslt        creates xsd file to validate distribution xml
- *    distribhumanxsd.xslt   Same but in human-readable form
  *    generalxsd.xslt        creates xsd file to validate in general
  *    generalhumanxsd.xslt   Same but in human-readable form
  *

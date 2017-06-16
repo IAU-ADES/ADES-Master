@@ -39,7 +39,6 @@ masterfile = adesutility.adesmaster
 #
 #       machine              human
 #    submitxsd.xslt       submithumanxsd.xslt    -- submissions only
-#    distribxsd.xslt      distribhumanxsd.xslt   -- distributions only
 #    generalxsd.xslt      generalhumanxsd.xslt   -- both
 #
 #

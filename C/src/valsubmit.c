@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
 	//	xmlFree(test);
 	//}
 	
-	return xmlValidateAll(argv[1], 4);
+	return xmlValidateAll(argv[1], 2);
 
 }
 

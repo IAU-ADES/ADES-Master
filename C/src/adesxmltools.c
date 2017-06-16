@@ -488,9 +488,9 @@ int xmlValidateAdes(char *adesmaster, char *schemaxslt, char *xmldatafile) {
 //
 //  If called with schema = -1, it validates against all the
 //  schemas.  If called with schema=n, it just validates
-//  against n.  Use schema=4 for submit and shema=2 for general
+//  against n.  Use schema=2 for submit and schema=0 for general
 
-#define nxsds 6
+#define nxsds 4
 int xmlValidateAll(char *xmldatafile, int schema) {
 	int i;
 	int validFlag = 0;
@@ -508,30 +508,22 @@ int xmlValidateAll(char *xmldatafile, int schema) {
 	char *xsdFilenames[nxsds];
 	xmlChar *xsdErrors[nxsds];
 	int xsdValid[nxsds];
-	xsdFilenames[0] = "distribxsd.xslt";
-	xsdFilenames[1] = "distribhumanxsd.xslt";
-	xsdFilenames[2] = "generalxsd.xslt";
-	xsdFilenames[3] = "generalhumanxsd.xslt";
-	xsdFilenames[4] = "submitxsd.xslt";
-	xsdFilenames[5] = "submithumanxsd.xslt";
-	xsdNicknames[0] = "distrib";
-	xsdNicknames[1] = "distribhuman";
-	xsdNicknames[2] = "general";
-	xsdNicknames[3] = "generalhuman";
-	xsdNicknames[4] = "submit";
-	xsdNicknames[5] = "submithuman";
+	xsdFilenames[0] = "generalxsd.xslt";
+	xsdFilenames[1] = "generalhumanxsd.xslt";
+	xsdFilenames[2] = "submitxsd.xslt";
+	xsdFilenames[3] = "submithumanxsd.xslt";
+	xsdNicknames[0] = "general";
+	xsdNicknames[1] = "generalhuman";
+	xsdNicknames[2] = "submit";
+	xsdNicknames[3] = "submithuman";
 	xsdErrors[0] = NULL;
 	xsdErrors[1] = NULL;
 	xsdErrors[2] = NULL;
 	xsdErrors[3] = NULL;
-	xsdErrors[4] = NULL;
-	xsdErrors[5] = NULL;
 	xsdValid[0] = 0;
 	xsdValid[1] = 0;
 	xsdValid[2] = 0;
 	xsdValid[3] = 0;
-	xsdValid[4] = 0;
-	xsdValid[5] = 0;
 
 	if ((schema > -1) && (schema < stopschema)) {
 		startschema = schema;
