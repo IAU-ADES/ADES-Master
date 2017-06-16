@@ -96,8 +96,6 @@ adestablexslt = os.path.join(xsltpath, "util", "tableades.xslt")
 xsdpath = os.path.join(xsltpath, 'xsd')
 schemaxslts = {'submit': os.path.join(xsdpath,  "submitxsd.xslt"),
                'submithuman': os.path.join(xsdpath, "submithumanxsd.xslt"),
-               'distrib': os.path.join(xsdpath, "distribxsd.xslt"),
-               'distribhuman': os.path.join(xsdpath, "distribhumanxsd.xslt"),
                'general': os.path.join(xsdpath, "generalxsd.xslt"),
                'generalhuman': os.path.join(xsdpath, "generalhumanxsd.xslt") }
 
