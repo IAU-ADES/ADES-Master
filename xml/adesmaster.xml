@@ -1258,7 +1258,7 @@ decimal types must be in a range
        <element ref="submitter"       />
        <element ref="observers"       />
        <element ref="measurers"       />
-       <element ref="telescope"       use="optional"/>
+       <element ref="telescope"       />
        <element ref="software"        use="optional"/>
        <element ref="coinvestigators" use="optional"/>
        <element ref="collaborators"   use="optional"/>
