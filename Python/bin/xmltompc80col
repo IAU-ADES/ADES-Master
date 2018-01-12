@@ -23,6 +23,7 @@ encodedout = io.open(sys.argv[2], 'w', encoding=psvencoding)
 #
 # sys.argv[1]: input xml file
 # sys.argv[2]: output mpc file
+# sys.argv[3]: -hp flag to reset defaultPrecTime
 # example: ./xmltomcp80col.py <xml file> mpc file>
 #
 import sys
@@ -151,17 +152,20 @@ def printOpticalLine(item):
    packedID = packUtil.packTupleID( (permID, provID, trkSub) )
    disc = hasKeyOrVal(item, 'disc', ' ')
    notes = hasKeyOrVal(item, 'notes', ' ')
-   precTime = float(hasKeyOrVal(item, 'precTime', '1') )
-   precRa = float(hasKeyOrVal(item, 'precRA', '0.6') )
-   precDec = float(hasKeyOrVal(item, 'precDec', '0.6') )
+   precTime = float(hasKeyOrVal(item, 'precTime', defaultPrecTime) )
+   precRa = float(hasKeyOrVal(item, 'precRA', defaultPrecRA) )
+   precDec = float(hasKeyOrVal(item, 'precDec', defaultPrecDec) )
    sexDate = sexVals.isoToSexDate(item['obsTime'], precTime)
    sexRa = sexVals.decRaToSexRa(item['ra'], precRa)
    sexDecl = sexVals.degDeclToSexDecl(item['dec'], precDec)
    #mag = "{0:5s}".format(hasKeyOrVal(item, 'mag', ''))
    mag = adesutility.applyPaddingAndJustification(hasKeyOrVal(item, 'mag', ''), 5, 'D', 3)[0]
+   mag = mag[0:5] # restrict to length of 5
    band = hasKeyOrVal(item, 'band', ' ')
    astCat = item['astCat']
    if astCat == 'UNK':
+      astCat = ' '
+   if len(astCat) > 1:  # temporary fix for now -- need map
       astCat = ' '
    packedref = "{0:<5s}".format(hasKeyOrVal(item, 'ref', ' '))
 
@@ -233,7 +237,7 @@ def printRadarLine(item):
    packedID = packUtil.packTupleID( (permID, provID, trkSub) )
    disc = hasKeyOrVal(item, 'disc', ' ')
    notes = hasKeyOrVal(item, 'notes', ' ')
-   precTime = 1
+   precTime = 1  # fixed for radar
    sexDate = sexVals.isoToSexDate(item['obsTime'], precTime)
    astCat = ' '
    packedref = "{0:<5s}".format(hasKeyOrVal(item, 'ref', '      '))
@@ -376,15 +380,15 @@ def processObsContext(element):
 
     else:  # not an orignal entry so just do stuff or ignore it
        pass
-       sline = "# " + tag + ' ' + text # in python2, unicode + bytes -> unicode
-       sline = sline.rstrip() # remove trailing whitespace
-       print (sline, file=encodedout)
-       for j in i:
-         (childtag, childtext) = adesutility.getElementTagText(j)
-         # check for tag being allowed
-         sline = "! " + childtag + ' ' + childtext  # in python2, unicode + bytes -> unicode
-         sline = sline.rstrip() # remove trailing whitespace
-         print (sline, file=encodedout)
+       #sline = "# " + tag + ' ' + text # in python2, unicode + bytes -> unicode
+       #sline = sline.rstrip() # remove trailing whitespace
+       #print (sline, file=encodedout)
+       #for j in i:
+       #  (childtag, childtext) = adesutility.getElementTagText(j)
+       #  # check for tag being allowed
+       #  sline = "! " + childtag + ' ' + childtext  # in python2, unicode + bytes -> unicode
+       #  sline = sline.rstrip() # remove trailing whitespace
+       #  print (sline, file=encodedout)
   
     
         
@@ -394,6 +398,16 @@ def processObsContext(element):
 (allowedElementDict, requiredElementDict, psvFormatDict) = \
                                          adesutility.getAdesTables()
 
+defaultPrecTime = '10'
+defaultPrecRA = '0.01'
+defaultPrecDec = '0.1'
+try:  # fix this to really parse arguments later
+  if sys.argv[3] == "-hp":  # "high precision"
+    defaultPrecTime = '1'
+    defaultPrecRA = '0.001'
+    defaultPrecDec = '0.01'
+except:
+  pass
 inputTree = adesutility.readXML(sys.argv[1])
 
 allowedObsDataSet = setFromElementDictList('obsData')
