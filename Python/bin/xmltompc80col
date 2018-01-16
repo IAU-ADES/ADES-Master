@@ -162,11 +162,15 @@ def printOpticalLine(item):
    mag = adesutility.applyPaddingAndJustification(hasKeyOrVal(item, 'mag', ''), 5, 'D', 3)[0]
    mag = mag[0:5] # restrict to length of 5
    band = hasKeyOrVal(item, 'band', ' ')
+
+   #
+   # map astCat to single-character packing
+   #
    astCat = item['astCat']
-   if astCat == 'UNK':
+   if astCat.strip() not in packUtil.rCatCodes:
       astCat = ' '
-   if len(astCat) > 1:  # temporary fix for now -- need map
-      astCat = ' '
+   else:
+      astCat = packUtil.rCatCodes[item['astCat']]
    packedref = "{0:<5s}".format(hasKeyOrVal(item, 'ref', ' '))
 
    deprecated = hasKeyOrVal(item, 'deprecated', None)

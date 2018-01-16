@@ -13,3 +13,8 @@ diff <run>.mpc <run>.mpc.xml.mpc shows differences realated mostly to
 
 1) if mag is present but band is not the band is set to B
 2) if band is present but mag is not then band is removed
+
+
+As of Jan 16, 2018, this handles the astCat codes properly,
+translating the single-character codes into and out of the
+IAU-ADES 2017 codes.  The test.mpc file demonstrates this.

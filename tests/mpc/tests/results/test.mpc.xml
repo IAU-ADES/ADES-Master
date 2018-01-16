@@ -41,7 +41,7 @@
     <obsTime>2000-09-21T11:57:13.2Z</obsTime>
     <ra>21.16708</ra>
     <dec>0.54208</dec>
-    <astCat>c</astCat>
+    <astCat>USNOA2</astCat>
     <mag>19.7</mag>
     <band>V</band>
     <ref>c0106</ref>
@@ -58,7 +58,7 @@
     <obsTime>2010-04-09T10:41:20.0Z</obsTime>
     <ra>273.59737</ra>
     <dec>-21.78372</dec>
-    <astCat>o</astCat>
+    <astCat>USNOB1</astCat>
     <mag>7.5</mag>
     <band>R</band>
     <ref>~0GFr</ref>
@@ -88,7 +88,7 @@
     <obsTime>2014-03-14T00:04:36.48Z</obsTime>
     <ra>159.743625</ra>
     <dec>9.266317</dec>
-    <astCat>g</astCat>
+    <astCat>Tyc2</astCat>
     <ref>~18Jb</ref>
     <subFmt>M92</subFmt>
     <precTime>1</precTime>
@@ -103,7 +103,7 @@
     <obsTime>2017-01-04T12:27:08.6Z</obsTime>
     <ra>160.367900</ra>
     <dec>17.345753</dec>
-    <astCat>L</astCat>
+    <astCat>2MASS</astCat>
     <mag>21.4</mag>
     <band>w</band>
     <ref>~252U</ref>
@@ -149,7 +149,7 @@
     <obsTime>2010-02-01T20:02:50.8Z</obsTime>
     <ra>25.57379</ra>
     <dec>25.30636</dec>
-    <astCat>c</astCat>
+    <astCat>USNOA2</astCat>
     <mag>19.2</mag>
     <band>N</band>
     <ref>68641</ref>
@@ -183,7 +183,7 @@
     <obsTime>2005-05-13T21:04:16.6Z</obsTime>
     <ra>193.04233</ra>
     <dec>8.77303</dec>
-    <astCat>o</astCat>
+    <astCat>USNOB1</astCat>
     <mag>13.4</mag>
     <band>N</band>
     <ref>54329</ref>
@@ -217,7 +217,7 @@
     <obsTime>1913-10-08T22:02:33.2Z</obsTime>
     <ra>320.81583</ra>
     <dec>7.85339</dec>
-    <astCat>p</astCat>
+    <astCat>PPM</astCat>
     <ref>JO002</ref>
     <subFmt>M92</subFmt>
     <precTime>10</precTime>
@@ -282,7 +282,7 @@
     <obsTime>2015-08-26T05:08:36.4Z</obsTime>
     <ra>110.35996</ra>
     <dec>26.55003</dec>
-    <astCat>q</astCat>
+    <astCat>UCAC4</astCat>
     <mag>18.7</mag>
     <band>T</band>
     <ref>95367</ref>
@@ -298,7 +298,7 @@
     <obsTime>2006-05-06T00:04:02.8Z</obsTime>
     <ra>274.85638</ra>
     <dec>32.06378</dec>
-    <astCat>c</astCat>
+    <astCat>USNOA2</astCat>
     <ref>56788</ref>
     <subFmt>M92</subFmt>
     <precTime>10</precTime>
@@ -312,7 +312,7 @@
     <obsTime>2006-05-06T00:04:02.8Z</obsTime>
     <ra>274.85638</ra>
     <dec>32.06378</dec>
-    <astCat>c</astCat>
+    <astCat>USNOA2</astCat>
     <ref>56788</ref>
     <subFmt>M92</subFmt>
     <precTime>10</precTime>
@@ -326,7 +326,7 @@
     <obsTime>2006-05-06T00:04:02.8Z</obsTime>
     <ra>274.85638</ra>
     <dec>32.06378</dec>
-    <astCat>c</astCat>
+    <astCat>USNOA2</astCat>
     <ref>56788</ref>
     <subFmt>M92</subFmt>
     <precTime>10</precTime>
@@ -341,7 +341,7 @@
     <obsTime>2006-05-06T00:04:02.8Z</obsTime>
     <ra>274.85638</ra>
     <dec>32.06378</dec>
-    <astCat>c</astCat>
+    <astCat>USNOA2</astCat>
     <ref>56788</ref>
     <subFmt>M92</subFmt>
     <precTime>10</precTime>
@@ -355,7 +355,7 @@
     <obsTime>2006-05-06T00:04:02.8Z</obsTime>
     <ra>274.85638</ra>
     <dec>32.06378</dec>
-    <astCat>c</astCat>
+    <astCat>USNOA2</astCat>
     <ref>56788</ref>
     <subFmt>M92</subFmt>
     <precTime>10</precTime>
@@ -387,7 +387,7 @@
     <obsTime>2006-05-06T00:04:02.8Z</obsTime>
     <ra>274.85638</ra>
     <dec>32.06378</dec>
-    <astCat>c</astCat>
+    <astCat>USNOA2</astCat>
     <ref>56788</ref>
     <subFmt>M92</subFmt>
     <precTime>10</precTime>
@@ -401,7 +401,7 @@
     <obsTime>2006-05-06T00:04:02.8Z</obsTime>
     <ra>274.85638</ra>
     <dec>32.06378</dec>
-    <astCat>c</astCat>
+    <astCat>USNOA2</astCat>
     <ref>56788</ref>
     <subFmt>M92</subFmt>
     <precTime>10</precTime>
@@ -440,7 +440,7 @@
     <obsTime>2010-12-18T02:54:40.3Z</obsTime>
     <ra>174.69525</ra>
     <dec>-2.16603</dec>
-    <astCat>L</astCat>
+    <astCat>2MASS</astCat>
     <ref>~0QlL</ref>
     <subFmt>M92</subFmt>
     <precTime>10</precTime>
@@ -459,7 +459,7 @@
     <obsTime>2010-12-18T06:05:11.9Z</obsTime>
     <ra>174.72179</ra>
     <dec>-2.17283</dec>
-    <astCat>L</astCat>
+    <astCat>2MASS</astCat>
     <ref>~0QlL</ref>
     <subFmt>M92</subFmt>
     <precTime>10</precTime>

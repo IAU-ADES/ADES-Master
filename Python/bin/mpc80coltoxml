@@ -839,8 +839,14 @@ def convertit(item, lineNumber):
      elif code == 'S':  # Satellite
         code = 'C' # CCD
      item['mode'] = packUtil.codeDict[code]
-     if not item['astCat'] or not item['astCat'].strip():
+     #
+     # translate astCat char into IAU ADES value
+     #
+     astCodeVal = item['astCat']
+     if not astCodeVal or astCodeVal not in packUtil.catCodes:
         item['astCat'] = 'UNK'
+     else:
+        item['astCat'] = packUtil.catCodes[astCodeVal]
      if item['mag']:
         if not item['band'].strip():
           item['band'] = 'V'  # V is default if blank

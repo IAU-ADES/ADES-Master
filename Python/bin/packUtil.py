@@ -16,6 +16,10 @@ import adesutility
 
 #
 # codes and translations
+#
+#   codeDict for optical type
+#   programCodeSites for station codes
+#   catCodes for astcAT translation
 # 
 codeDict = {  # converts code to mode for optical type
  # 'A': 'PHA', # sets subFrm to 'B1950.0' maps to 'PHO'
@@ -103,6 +107,62 @@ set([ "010",
       "249",
       "C49",
       "C50 ", ])
+
+catCodes = { ' ': 'UNK',
+             'a': 'USNOA1',
+             'b': 'USNOSA1',
+             'c': 'USNOA2',
+             'd': 'USNOSA2',
+             'e': 'UCAC1',
+             'f': 'Tyc1',
+             'g': 'Tyc2',
+             'h': 'GSC1.0',
+             'i': 'GSC1.1',
+             'j': 'GSC1.2',
+             'k': 'GSC2.2',
+             'l': 'ACT',
+             'm': 'GSCACT',
+             'n': 'SSDS8',
+             'o': 'USNOB1',
+             'p': 'PPM',
+             'q': 'UCAC4',
+             'r': 'UCAC2',
+             's': 'USNOB2',  # USNOB2 missing on ADES web page
+             't': 'PPMXL',
+             'u': 'UCAC3',
+             'v': 'NOMAD',
+             'w': 'CMC14',
+             'x': 'Hip2',
+             'y': 'Hip1',
+             'z': 'GSC',
+             'A': 'AC',
+             'B': 'SAO1984',
+             'C': 'SAO',
+             'D': 'AGK3',
+             'E': 'FK4',
+             'F': 'ACRS',
+             'G': 'LickGas',
+             'H': 'Ida93',
+             'I': 'Perth70',
+             'J': 'COSMOS',
+             'K': 'Yale',
+             'L': '2MASS',
+             'M': 'GSC2.3',
+             'N': 'SDSS7',
+             'O': 'SSTRC1',
+             'P': 'MPOSC3',
+             'Q': 'CMC15',
+             'R': 'SSTRC4',
+             'S': 'URAT1',
+             'T': 'URAT2',  # URAT2 missing on ADES web page
+             'U': 'Gaia1',
+             'V': 'Gaia2',
+             'W': 'UCAC5',  # UCAC5 mission on ADES web page
+           }
+
+rCatCodes = { catCodes[i]:i for i in catCodes }
+
+
 
 def packProgID(c): # for program code id -- must be alpha
    return  hex(ord(c))[-2:]  # code in hex
