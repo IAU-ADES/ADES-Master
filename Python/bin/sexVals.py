@@ -252,8 +252,8 @@ def sexDateToISO(sexDate):
      yyyy = int(m.group(1))
      mm = int(m.group(3))
      dd = float(m.group(4))
-     prec = int( 10.0**(6 - len(m.group(6))))
-     if prec == 1: _countDate1 += 1
+     prec = int( 10.0**(6 - len(m.group(6)))) # >1 for legel mpc
+     if prec <= 1: _countDate1 += 1
      if prec == 10: _countDate10 += 1
      if prec == 100: _countDate100 += 1
      if prec == 1000: _countDate1000 += 1
@@ -270,6 +270,8 @@ def sexDateToISO(sexDate):
      fracdd = fracdd - mm*60.0
      if (prec==1):
          ss = "{0:.2f}".format(fracdd+100.0)[1:]
+         if ss == "60.0":  # round-off case for prec < 1 (not legal mpc)
+          ss = "59.9"
      else:
          ss = "{0:.1f}".format(fracdd+100.0)[1:]
      isodate = m.group(1) + '-' + m.group(3)  + '-' + m.group(4)[0:2]  + 'T' + twoDigit(hh) + ':' + twoDigit(mm) + ':' + ss+ 'Z'
@@ -300,7 +302,7 @@ def isoToSexDate(isodate, prec):
    ss = isodate[17:-1]
    xx = int(hh)*3600.0 + int(mm)*60.0 + float(ss)
    #print (yyyy, month, day, hh, mm, ss, xx, prec)
-   if (prec == 1):
+   if (prec <= 1): # < never copmes from legal input mpc
       yy = "{0:.6f}".format(xx/86400.0)[1:]
    if (prec == 10):
       yy = "{0:.5f}".format(xx/86400.0)[1:]
@@ -310,7 +312,7 @@ def isoToSexDate(isodate, prec):
       yy = "{0:.3f}".format(xx/86400.0)[1:]
    if (prec == 10000):
       yy = "{0:.2f}".format(xx/86400.0)[1:]
-   if (prec == 100000):
+   if (prec >= 100000): # > never comes from legal input mpc
       yy = "{0:.1f}".format(xx/86400.0)[1:]
    #print (yy)
    sexdate = yyyy + ' ' + month + ' ' + day + yy
