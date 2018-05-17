@@ -757,7 +757,7 @@ decimal types must be in a range
 
 <simpletype name="StringType">
    <restriction base="xsd:string">
-     <restrict name="xsd:pattern" value="[^|]*[\w-[|]][^|]*"/>
+     <restrict name="xsd:pattern" value="[^|]*[^|\s][^|]*"/>
    </restriction>
    <doc> String follows the 
          ADES specification in that the pipe character is disallowed in PSV.
