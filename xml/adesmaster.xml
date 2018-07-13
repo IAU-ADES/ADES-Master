@@ -1144,6 +1144,7 @@ decimal types must be in a range
       <group   ref="Location"    use="optional"/>
       <element ref="prog"        use="NoSubmit"/>
       <element ref="obsTime"     />
+      <element ref="rmsTime"     use="optional"/>
       <element ref="ra"          />
       <element ref="dec"         />
       <element ref="rmsRA"       use="optional"/>
@@ -1179,6 +1180,7 @@ decimal types must be in a range
       <group   ref="Location"       use="optional"/>
       <element ref="prog"           use="NoSubmit"/>
       <element ref="obsTime"        />
+      <element ref="rmsTime"        use="optional"/>
       <element ref="obsCenter"      />
       <group   ref="OffsetVal"      />
       <group   ref="Photometry"     use="optional"/>
@@ -1209,6 +1211,7 @@ decimal types must be in a range
       <group   ref="Location"    use="optional"/>
       <element ref="prog"        use="NoSubmit"/>
       <element ref="obsTime"     />
+      <element ref="rmsTime"     use="optional"/>
       <element ref="raStar"      />
       <element ref="decStar"     />
       <group   ref="OffsetVal"   />
@@ -1365,6 +1368,7 @@ decimal types must be in a range
    <element name="deltaDec" type="xsd:decimal"             doc="Measured  $\Delta$DEC in  arcseconds.  For offset measurements of a satellite with respect to its primary, or for occultation observations with respect to the star in rectangular coordinates, J2000.0 frame"/>
    <element name="dist"     type="PosDecimalType"          doc="Measured distance in arcseconds.  For offset measurements of a satellite with respect to its primary, or for occultation observations with respect to the star in polar coordinates."/>
    <element name="pa"       type="RAType"                  doc="Measured position angle in degrees.  For offset measurements of a satellite with respect to its primary, or for occultation observations with respect to the star in polar coordinates."/>
+   <element name="rmsTime"  type="PosDecimalType"          doc="Random component of the obsTime $1\sigma$ uncertainty in seconds as estimated by the observer."/>
    <element name="rmsRA"    type="PosDecimalType"          doc="Random component of the $\mathrm{RA}\cos\mathrm{DEC}$ $1\sigma$ uncertainty in arcseconds as estimated by the observer as part of the image processing and astrometric reduction."/>
    <element name="rmsDec"   type="PosDecimalType"          doc="Random component of the DEC $1\sigma$ uncertainty in arcseconds as estimated by the observer as part of the image processing and astrometric reduction."/>
    <element name="rmsDist"  type="PosDecimalType"          doc="Random component of the distance $1\sigma$ uncertainty in arcseconds as estimated by the observer as part of the image processing and astrometric reduction."/>
