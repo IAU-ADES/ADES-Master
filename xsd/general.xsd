@@ -163,7 +163,7 @@
   </xsd:simpleType>
   <xsd:simpleType name="StringType">
     <xsd:restriction base="xsd:string">
-      <xsd:pattern value="[^|]*[\w-[|]][^|]*"/>
+      <xsd:pattern value="[^|]*[^|\s][^|]*"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="SubFmtType">
@@ -520,7 +520,7 @@
       <xsd:element ref="submitter"/>
       <xsd:element ref="observers"/>
       <xsd:element ref="measurers"/>
-      <xsd:element ref="telescope" minOccurs="0"/>
+      <xsd:element ref="telescope"/>
       <xsd:element ref="software" minOccurs="0"/>
       <xsd:element ref="coinvestigators" minOccurs="0"/>
       <xsd:element ref="collaborators" minOccurs="0"/>
