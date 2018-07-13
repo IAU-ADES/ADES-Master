@@ -411,6 +411,7 @@
       <xsd:element ref="stn"/>
       <xsd:group ref="Location" minOccurs="0"/>
       <xsd:element ref="obsTime"/>
+      <xsd:element ref="rmsTime" minOccurs="0"/>
       <xsd:element ref="ra"/>
       <xsd:element ref="dec"/>
       <xsd:element ref="rmsRA" minOccurs="0"/>
@@ -436,6 +437,7 @@
       <xsd:element ref="stn"/>
       <xsd:group ref="Location" minOccurs="0"/>
       <xsd:element ref="obsTime"/>
+      <xsd:element ref="rmsTime" minOccurs="0"/>
       <xsd:element ref="obsCenter"/>
       <xsd:group ref="OffsetVal"/>
       <xsd:group ref="Photometry" minOccurs="0"/>
@@ -456,6 +458,7 @@
       <xsd:element ref="stn"/>
       <xsd:group ref="Location" minOccurs="0"/>
       <xsd:element ref="obsTime"/>
+      <xsd:element ref="rmsTime" minOccurs="0"/>
       <xsd:element ref="raStar"/>
       <xsd:element ref="decStar"/>
       <xsd:group ref="OffsetVal"/>
@@ -562,6 +565,7 @@
   <xsd:element name="deltaDec" type="xsd:decimal"/>
   <xsd:element name="dist" type="PosDecimalType"/>
   <xsd:element name="pa" type="RAType"/>
+  <xsd:element name="rmsTime" type="PosDecimalType"/>
   <xsd:element name="rmsRA" type="PosDecimalType"/>
   <xsd:element name="rmsDec" type="PosDecimalType"/>
   <xsd:element name="rmsDist" type="PosDecimalType"/>
