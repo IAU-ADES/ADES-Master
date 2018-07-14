@@ -1,4 +1,6 @@
-2017 May 19  GMH
+13-Jul-2018 - Minor fixes were applied to the documentation and schema. 
+              See ADES_Description.pdf for details.
+
 
    CONTENTS:
       This contains the xsd files for ades in the xsd
