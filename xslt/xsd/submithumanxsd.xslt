@@ -29,7 +29,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:when test="name(.)='simpletype'">                           <!-- simpletype with restrictions -->
 &lt;xsd:simpleType name="<xsl:value-of select='@name'/>"&gt;
     <xsl:apply-templates select="doc"/>
-    <xsl:apply-templates select="union"/>
+    <xsl:apply-templates select="submitunion"/>
     <xsl:apply-templates select="restriction"/>
 &lt;/xsd:simpleType&gt;
 </xsl:when>
@@ -89,7 +89,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     &lt;/xsd:restriction&gt; 
 </xsl:template>
 
-<xsl:template match="union">
+<xsl:template match="submitunion">
     &lt;xsd:union memberTypes="<xsl:value-of select='@memberTypes'/>"/&gt;
 </xsl:template>
 

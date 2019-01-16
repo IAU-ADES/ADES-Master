@@ -536,7 +536,8 @@ decimal types must be in a range
 </simpletype>
 
 <simpletype name="CatType">
-   <restriction base="AlphaNumericType">
+   <restriction base="StringType">
+      <restrict name="xsd:pattern" value="[.A-Za-z0-9_]*"/>
       <restrict name="xsd:maxLength" value="8"/>
    </restriction>
    <doc>MPC maintains a list of current astrometry and photometry catalogs</doc>
@@ -613,7 +614,8 @@ decimal types must be in a range
 
 <simpletype name="ObsCenterType">
    <union memberTypes="PermIDType ProvIDType PlanetNameType"/>
-   <doc>May be PlanetNameType, PermIDType or ProvIDType</doc>
+   <submitunion memberTypes="PermIDType ProvIDType PlanetNameType"/>
+   <doc>May be PlanetNameType, PermIDType or ProvIDType for both submissions and in general</doc>
 </simpletype>
 
 <simpletype name="NotesType">
@@ -625,20 +627,21 @@ decimal types must be in a range
 
 <simpletype name="ObsIDType">
    <restriction base="AlphaNumericType">
-     <restrict name="xsd:maxLength" value="19"/>
+     <restrict name="xsd:maxLength" value="25"/>
    </restriction>
-   <doc>An obsID is up to nineteen alphanumeric characters</doc>
+   <doc>An obsID is up to twenty-five alphanumeric characters</doc>
 </simpletype>
 
 <simpletype name="PermIDType">
    <restriction base="xsd:string">
-   <restrict name="xsd:pattern" value="\d+([PD](-[A-Z]{1,2})?)?|((Mars|Jupiter|Saturn|Uranus|Neptune) \d{1,3}|\(\d+\) \d{1,3})"/>
+   <restrict name="xsd:pattern" value="\d+([IPD](-[A-Z]{1,2})?)?|((Mars|Jupiter|Saturn|Uranus|Neptune) \d{1,3}|\(\d+\) \d{1,3})"/>
    </restriction>
    <doc> A permID (permanent ID) string may be a positive integer, a positive integer 
-       followed by P or D, a planet name followed by a positive integer, or a 
+       followed by P or D or I (P is for periodic comets; D is for defunct comets; 
+       I is for interstellar objects), a planet name followed by a positive integer, or a 
        positive integer in parentheses followed by a postive integer.  These
-       indicate a minor planet, a comet, a natural satellite of a planet, and
-       a natural satellite of a minor planet respectively.</doc>
+       indicate a minor planet, a comet or interstellar object, a natural satellite of a 
+       planet, and a natural satellite of a minor planet respectively.</doc>
 </simpletype>
 
 <simpletype name="PhotModType">
@@ -677,9 +680,9 @@ decimal types must be in a range
    <doc>MPC maintains a list of 1 and 2 character program codes</doc>
 </simpletype>
 
-<simpletype name="ProvIDType">
+<simpletype name="BaseProvIDType">
    <restriction base="xsd:string">
-      <restrict name="xsd:pattern" value="\d{4} [A-HJ-Y][A-HJ-Z]\d*|\d{4} [PT]-[L123]|[ADCPX]/\d{4} [A-Z]{1,2}\d*(-[A-Z])?|S/\d{4} ((M|J|S|U|N)|\((\d+|\d{4} [A-HJ-Y][A-HJ-Z]?\d+)\)) \d+"/>
+      <restrict name="xsd:pattern" value="\d{4} [A-HJ-Y][A-HJ-Z]\d*|\d{4} (P-L|T-[123])|[ADCPX]/\d{4} [A-Z]{1,2}\d*(-[A-Z])?|S/\d{4} ((M|J|S|U|N)|\((\d+|\d{4} [A-HJ-Y][A-HJ-Z]?\d+)\)) \d+"/>
    </restriction>
    <doc> A provID (provisional ID) is may be a minor planet provid, 
       which is a 4-digit year followed by a space followd by two letters
@@ -692,6 +695,35 @@ decimal types must be in a range
       either (by a minor planet PermID in parentheses or the bare letter 
       M, J, S, N, U) followed by a space followed by digits.
       </doc>
+</simpletype>
+
+<simpletype name="OldProvIDType">
+   <restriction base="xsd:string">
+      <restrict name="xsd:pattern" value="A[89]\d{2} [A-HJ-Y][A-HJ-Z]"/>
+   </restriction>
+   <doc> An old-style provID (provisional ID) for object recorded before
+         1925 is of the from A903 AA, where A903 means 1903, A888 means
+         1888. and the two letters are the same as currently
+         </doc>
+</simpletype>
+
+<simpletype name="ProvIDType">
+   <union memberTypes="BaseProvIDType OldProvIDType"/>
+   <submitunion memberTypes="BaseProvIDType"/>
+   <doc> A provID (provisional ID) is may be a minor planet provid, 
+      which is a 4-digit year followed by a space followd by two letters
+      followed optinally by digits; or a comet it, which is C/ or P/ or D/ 
+      or X/ or A/ (for asteroids with comet numbers, which may not have fragments)
+      followed by a 4-digit year follwed by a space followed by one
+      or two digits optinally followed by one or two digits optionally
+      followed by "-[A-Z]" (for a commet fragment); or a satellite, 
+      which is S/ followed by a 4-digit year followed a space followed
+      either (by a minor planet PermID in parentheses or the bare letter 
+      M, J, S, N, U) followed by a space followed by digits.   For
+      data before 1926, the OldProvIDType may occur -- this is not allowed
+      in new submissions
+      </doc>
+
 </simpletype>
 
 <simpletype name="RaDecPrecType">
@@ -732,9 +764,9 @@ decimal types must be in a range
 
 <simpletype name="RemarkType">
    <restriction base="StringType">
-     <restrict name="xsd:maxLength" value="200"/>
+     <restrict name="xsd:maxLength" value="300"/>
    </restriction>
-   <doc> A remark is a String limited to 200 characters</doc>
+   <doc> A remark is a String limited to 300 characters</doc>
 </simpletype>
 
 <simpletype name="SelResType" base="xsd:string">
@@ -793,6 +825,14 @@ decimal types must be in a range
    <doc>Restrict dateTime to 4-digit positive years and Z for UTC</doc>
 </simpletype>
 
+<simpletype name="OldTime">
+    <restriction base="StringType">
+        <restrict name="xsd:pattern" value="1\d{3}-(0\d|10|11|12)-([0-2]\d|30|31)T[0-2]\d(:[0-5]\d)?(\.\d+)?Z" />
+    </restriction>
+   <doc>Restrict OldTime to match years before 2000 and only the hh.hhh and hh:mm.mmm formats excluded 
+        by xsd:dateTime, with slightly less value checking for days allowed in months.</doc>
+</simpletype>
+
 <simpletype name="TimePrecType">
    <restriction base="xsd:decimal">
      <restrict name="xsd:enumeration" value="100000"/>
@@ -811,29 +851,51 @@ decimal types must be in a range
 </simpletype>
 
 <simpletype name="TimeType">
-    <union memberTypes="TimeHelp LeapSecondsHelp"/>
+    <union memberTypes="TimeHelp LeapSecondsHelp OldTime"/>
+    <submitunion memberTypes="TimeHelp LeapSecondsHelp"/>
     <doc> TimeType is an ISO8601 UTC time in the format yyyy-mm-ddThh:mm:ss(.s+)Z.  The trailing Z
           means it is interpreted as UTC.  It is not a restriction of xsd:dateTime because that
           does not properly validate leapseconds. It allows positive 4-digit years and validates
           the Gregorian calendar for all dates. Note this works because
           xsd or's all the restrictions and accepts any match.  LeapSecondsHelp matches any 
-          leapsecond before 2017 and any potential new leapseconds from 2017. </doc>
+          leapsecond before 2017 and any potential new leapseconds from 2017.  The ISO8601
+          fractional hours and minutes (hh, hh.hh, hh:mm, hh:mm.mmm) is allowed only for
+          existing data and only for dates before 2000, and not allowed at all in submissions</doc>
 
 </simpletype>
 
 <simpletype name="TrkIDType">
-   <restriction base="AlphaNumericType">
+   <restriction base="StringType">
+     <restrict name="xsd:pattern" value="[-A-Za-z0-9_]*"/>
      <restrict name="xsd:maxLength" value="12"/>
    </restriction>
    <doc>A trkID is up to twelve alphanumeric characters</doc>
 </simpletype>
 
-<simpletype name="TrkSubType">
-   <restriction base="AlphaNumericType">
+<simpletype name="BaseTrkSubType">
+   <restriction base="StringType">
+     <restrict name="xsd:pattern" value="[-A-Za-z0-9_]*"/>
      <restrict name="xsd:maxLength" value="8"/>
    </restriction>
-   <doc>A trkSub is up to eight alphanumeric characters</doc>
+   <doc>A trkSub is up to eight alphanumeric or - characters</doc>
 </simpletype>
+
+<simpletype name="OldTrkSubType">
+   <restriction base="StringType">
+     <restrict name="xsd:pattern" value="[- ?+@.()/\\A-Za-z0-9_]*"/>
+     <restrict name="xsd:maxLength" value="8"/>
+   </restriction>
+   <doc>A trkSub is up to eight funky characters</doc>
+</simpletype>
+
+<simpletype name="TrkSubType">
+   <union memberTypes="BaseTrkSubType OldTrkSubType"/>
+   <submitunion memberTypes="BaseTrkSubType"/>
+   <doc>A trkSub is up to eight characters.  For new submission, the 
+        allowed character set is alphanumeric with "-".  For older
+        data, a wider character set was allowed</doc>
+</simpletype>
+
 
 <simpletype name="VersionType">
    <restriction base="xsd:string">

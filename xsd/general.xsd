@@ -11,7 +11,8 @@
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="CatType">
-    <xsd:restriction base="AlphaNumericType">
+    <xsd:restriction base="StringType">
+      <xsd:pattern value="[.A-Za-z0-9_]*"/>
       <xsd:maxLength value="8"/>
     </xsd:restriction>
   </xsd:simpleType>
@@ -76,12 +77,12 @@
   </xsd:simpleType>
   <xsd:simpleType name="ObsIDType">
     <xsd:restriction base="AlphaNumericType">
-      <xsd:maxLength value="19"/>
+      <xsd:maxLength value="25"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="PermIDType">
     <xsd:restriction base="xsd:string">
-      <xsd:pattern value="\d+([PD](-[A-Z]{1,2})?)?|((Mars|Jupiter|Saturn|Uranus|Neptune) \d{1,3}|\(\d+\) \d{1,3})"/>
+      <xsd:pattern value="\d+([IPD](-[A-Z]{1,2})?)?|((Mars|Jupiter|Saturn|Uranus|Neptune) \d{1,3}|\(\d+\) \d{1,3})"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="PhotModType">
@@ -112,10 +113,18 @@
       <xsd:maxLength value="2"/>
     </xsd:restriction>
   </xsd:simpleType>
-  <xsd:simpleType name="ProvIDType">
+  <xsd:simpleType name="BaseProvIDType">
     <xsd:restriction base="xsd:string">
-      <xsd:pattern value="\d{4} [A-HJ-Y][A-HJ-Z]\d*|\d{4} [PT]-[L123]|[ADCPX]/\d{4} [A-Z]{1,2}\d*(-[A-Z])?|S/\d{4} ((M|J|S|U|N)|\((\d+|\d{4} [A-HJ-Y][A-HJ-Z]?\d+)\)) \d+"/>
+      <xsd:pattern value="\d{4} [A-HJ-Y][A-HJ-Z]\d*|\d{4} (P-L|T-[123])|[ADCPX]/\d{4} [A-Z]{1,2}\d*(-[A-Z])?|S/\d{4} ((M|J|S|U|N)|\((\d+|\d{4} [A-HJ-Y][A-HJ-Z]?\d+)\)) \d+"/>
     </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="OldProvIDType">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="A[89]\d{2} [A-HJ-Y][A-HJ-Z]"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ProvIDType">
+    <xsd:union memberTypes="BaseProvIDType OldProvIDType"/>
   </xsd:simpleType>
   <xsd:simpleType name="RaDecPrecType">
     <xsd:restriction base="xsd:decimal">
@@ -144,7 +153,7 @@
   </xsd:simpleType>
   <xsd:simpleType name="RemarkType">
     <xsd:restriction base="StringType">
-      <xsd:maxLength value="200"/>
+      <xsd:maxLength value="300"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="SelResType">
@@ -185,6 +194,11 @@
       <xsd:pattern value="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z"/>
     </xsd:restriction>
   </xsd:simpleType>
+  <xsd:simpleType name="OldTime">
+    <xsd:restriction base="StringType">
+      <xsd:pattern value="1\d{3}-(0\d|10|11|12)-([0-2]\d|30|31)T[0-2]\d(:[0-5]\d)?(\.\d+)?Z"/>
+    </xsd:restriction>
+  </xsd:simpleType>
   <xsd:simpleType name="TimePrecType">
     <xsd:restriction base="xsd:decimal">
       <xsd:enumeration value="100000"/>
@@ -196,17 +210,28 @@
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="TimeType">
-    <xsd:union memberTypes="TimeHelp LeapSecondsHelp"/>
+    <xsd:union memberTypes="TimeHelp LeapSecondsHelp OldTime"/>
   </xsd:simpleType>
   <xsd:simpleType name="TrkIDType">
-    <xsd:restriction base="AlphaNumericType">
+    <xsd:restriction base="StringType">
+      <xsd:pattern value="[-A-Za-z0-9_]*"/>
       <xsd:maxLength value="12"/>
     </xsd:restriction>
   </xsd:simpleType>
-  <xsd:simpleType name="TrkSubType">
-    <xsd:restriction base="AlphaNumericType">
+  <xsd:simpleType name="BaseTrkSubType">
+    <xsd:restriction base="StringType">
+      <xsd:pattern value="[-A-Za-z0-9_]*"/>
       <xsd:maxLength value="8"/>
     </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="OldTrkSubType">
+    <xsd:restriction base="StringType">
+      <xsd:pattern value="[- ?+@.()/\\A-Za-z0-9_]*"/>
+      <xsd:maxLength value="8"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="TrkSubType">
+    <xsd:union memberTypes="BaseTrkSubType OldTrkSubType"/>
   </xsd:simpleType>
   <xsd:simpleType name="VersionType">
     <xsd:restriction base="xsd:string">

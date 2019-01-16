@@ -17,7 +17,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <xsl:when test="name(.)='simpletype'">                           <!-- simpletype with restrictions -->
     <xsl:element name="xsd:simpleType">
         <xsl:attribute name="name"><xsl:value-of select="@name"/></xsl:attribute>
-        <xsl:apply-templates select="union"/>
+        <xsl:apply-templates select="submitunion"/>
         <xsl:apply-templates select="restriction"/>
     </xsl:element>
     </xsl:when>
@@ -60,7 +60,7 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     </xsl:element>
 </xsl:template>
 
-<xsl:template match="union">
+<xsl:template match="submitunion">
     <xsl:element name="xsd:union">
        <xsl:attribute name="memberTypes"><xsl:value-of select="@memberTypes"/></xsl:attribute>
     </xsl:element>

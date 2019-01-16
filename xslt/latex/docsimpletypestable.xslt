@@ -24,7 +24,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 \hline
 
 <xsl:for-each select="/ades/XSDTypes/simpletype[not(url)]" >
-\textbf{<xsl:value-of select='@name'/>} <xsl:apply-templates select="restriction|union"/> &amp; <xsl:value-of select='doc'/> \\ 
+\textbf{<xsl:value-of select='@name'/>} <xsl:apply-templates select="restriction|union|submitunion"/> &amp; <xsl:value-of select='doc'/> \\ 
 \hline
 </xsl:for-each>
 
@@ -50,6 +50,11 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <xsl:template match="union">
     \footnotesize \newline union of \newline <xsl:value-of select='@memberTypes'/>
+       <xsl:apply-templates select="restrict"/>
+</xsl:template>
+
+<xsl:template match="submitunion">
+    \footnotesize \newline ---------------------------------- \newline Submissions Only Allow: \newline ---------------------------------- \newline union of \newline <xsl:value-of select='@memberTypes'/>
        <xsl:apply-templates select="restrict"/>
 </xsl:template>
 
