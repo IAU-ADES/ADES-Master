@@ -194,11 +194,6 @@
       <xsd:pattern value="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z"/>
     </xsd:restriction>
   </xsd:simpleType>
-  <xsd:simpleType name="OldTime">
-    <xsd:restriction base="StringType">
-      <xsd:pattern value="1\d{3}-(0\d|10|11|12)-([0-2]\d|30|31)T[0-2]\d(:[0-5]\d)?(\.\d+)?Z"/>
-    </xsd:restriction>
-  </xsd:simpleType>
   <xsd:simpleType name="TimePrecType">
     <xsd:restriction base="xsd:decimal">
       <xsd:enumeration value="100000"/>
@@ -207,6 +202,10 @@
       <xsd:enumeration value="100"/>
       <xsd:enumeration value="10"/>
       <xsd:enumeration value="1"/>
+      <xsd:enumeration value="41667"/>
+      <xsd:enumeration value="4167"/>
+      <xsd:enumeration value="694"/>
+      <xsd:enumeration value="69"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="TimeType">

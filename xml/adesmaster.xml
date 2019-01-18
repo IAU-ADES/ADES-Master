@@ -739,11 +739,12 @@ decimal types must be in a range
      <restrict name="xsd:enumeration" value="6.0"/>
      <restrict name="xsd:enumeration" value="1.0"/>
    </restriction>
-   <doc> RaDecPrecType is used to describe the precision of a decimal value
+   <doc> RaDecPrecType is used to describe the precision of a historical decimal value
          when the orignal measurement was made in sexagesimal.  The allowed values
          are applied to the last sexagesimal element, which may be seconds or 
          arcseconds, and mean (for time) the value is accurate to an hour,
-         10 minutes, 1 minute, 6 seconds, 1 second, .1 second and so forth.
+         10 minutes, 1 minute, 6 seconds, 1 second, .1 second and so forth.  This
+         is not allowed in new submissions
          </doc>
 </simpletype>
 
@@ -825,14 +826,6 @@ decimal types must be in a range
    <doc>Restrict dateTime to 4-digit positive years and Z for UTC</doc>
 </simpletype>
 
-<simpletype name="OldTime">
-    <restriction base="StringType">
-        <restrict name="xsd:pattern" value="1\d{3}-(0\d|10|11|12)-([0-2]\d|30|31)T[0-2]\d(:[0-5]\d)?(\.\d+)?Z" />
-    </restriction>
-   <doc>Restrict OldTime to match years before 2000 and only the hh.hhh and hh:mm.mmm formats excluded 
-        by xsd:dateTime, with slightly less value checking for days allowed in months.</doc>
-</simpletype>
-
 <simpletype name="TimePrecType">
    <restriction base="xsd:decimal">
      <restrict name="xsd:enumeration" value="100000"/>
@@ -841,27 +834,31 @@ decimal types must be in a range
      <restrict name="xsd:enumeration" value="100"/>
      <restrict name="xsd:enumeration" value="10"/>
      <restrict name="xsd:enumeration" value="1"/>
+     <restrict name="xsd:enumeration" value="41667"/>
+     <restrict name="xsd:enumeration" value="4167"/>
+     <restrict name="xsd:enumeration" value="694"/>
+     <restrict name="xsd:enumeration" value="69"/>
    </restriction>
-   <doc> TimePrecType is used to describe the precision of a Time value
+   <doc> TimePrecType is used to describe the precision of a historical Time value
          when the orignal measurement was made in fractional days.
          The accuracy is in millionths of decimal day, so 10 means
          1/100,000 of a day, a little better than a second.  The large
-         values are only for historic data on comets.
+         values are only for historic data on comets.  Historic data
+         may also have been reported to integer hours (41667), tenths
+         of hours (4167), integer minutes (694) or tenths of minutes (69).
+         This is not allowed in new submissions.
          </doc>
 </simpletype>
 
 <simpletype name="TimeType">
-    <union memberTypes="TimeHelp LeapSecondsHelp OldTime"/>
+    <union memberTypes="TimeHelp LeapSecondsHelp"/>
     <submitunion memberTypes="TimeHelp LeapSecondsHelp"/>
     <doc> TimeType is an ISO8601 UTC time in the format yyyy-mm-ddThh:mm:ss(.s+)Z.  The trailing Z
           means it is interpreted as UTC.  It is not a restriction of xsd:dateTime because that
           does not properly validate leapseconds. It allows positive 4-digit years and validates
           the Gregorian calendar for all dates. Note this works because
           xsd or's all the restrictions and accepts any match.  LeapSecondsHelp matches any 
-          leapsecond before 2017 and any potential new leapseconds from 2017.  The ISO8601
-          fractional hours and minutes (hh, hh.hh, hh:mm, hh:mm.mmm) is allowed only for
-          existing data and only for dates before 2000, and not allowed at all in submissions</doc>
-
+          leapsecond before 2017 and any potential new leapseconds from 2017.</doc>
 </simpletype>
 
 <simpletype name="TrkIDType">

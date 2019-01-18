@@ -1,3 +1,21 @@
+15-Jan-2019 - Some changes to the schema were made to reflect historical data
+       # PermIDType for permID needs to accept `1I' and any more `I' objects
+       # ProvIDType should restrict to P-L, T-1, T-2 and T-3 only and not allow T-L or P-3
+       # CatType for astCat and photCat needs to accept the '.' character (e.g., GSC1.2)
+       # ObsIDType for obsID should allow up to 25 characters
+       # TrkIDType for trkID should allow the hyphen `-`
+       # TrkSubType for trkSub should allow the hyphen `-`
+       # (Not for submissions) TrkSubType for trkSub should allow these characters: "/",
+       "\", "(", ")", "@", "?", ".", "+"
+       # (Not for submissions) ProvIDType for provID should allow pre-1925 values of the
+       form "A902 AA"
+       # TimePrecType for precTime should allow additional values (prec not in submissions)
+            41667 (integer hours)
+            4167 (tenths of an hour)
+            694 (integer minutes)
+            69 (tenths of a minute)
+       # Expand length of remarks to 300 characters
+
 13-Jul-2018 - Minor fixes were applied to the documentation and schema. 
               See ADES_Description.pdf for details.
 
