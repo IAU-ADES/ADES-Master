@@ -289,8 +289,8 @@ cometfragmentProvIDRegex = re.compile('^([CDPX])/(\d{4}) ([A-Z])(\d*)-([A-Z])$')
 satelliteProvIDRegex = re.compile('^S/(\d{4}) ([JSUN]) (\d+)$')
 
 minorplanetPermIDRegex = re.compile('^(\d+)$')
-cometPermIDRegex = re.compile('^(\d+)([PD])$')
-cometfragmentPermIDRegex = re.compile('^(\d+)([PD])-([A-Z]{1,2})$')
+cometPermIDRegex = re.compile('^(\d+)([PDI])$') # add I for interstellar objects
+cometfragmentPermIDRegex = re.compile('^(\d+)([PDI])-([A-Z]{1,2})$') # like this will happen for interstellar objects
 satellitePermIDRegex = re.compile('^(Jupiter|Saturn|Uranus|Neptune) (\d+)$')
 asteroidsatellitePermIDRegex = re.compile('^\((\d+|\d{4} [A-Z]{2}\d+)\) (\d+)$')
 
@@ -367,7 +367,9 @@ minorplanetPackedIDRegex = re.compile('^(?: {5}|([0-9A-Za-z])(\d{4}))'+
 #   10: a-z; comet fragment first letter or blank
 #   11: a-z; comet fragment 
 #
-cometPackedIDRegex = re.compile('^(?: {4}|(\d{4}))([APCDX])'  
+# Add "I" for interstellar objects
+#
+cometPackedIDRegex = re.compile('^(?: {4}|(\d{4}))([APCDXI])'
                                   + '(?:' + '([0-9A-Za-z])(\d{2})([A-HJ-Y])([a-zA-Z0-9])(\d)(?:0|([A-Z])|([a-z]))' + '|'
                                           + '     ([a-z ])([a-z])'  + '|'
                                           + ' *$'
