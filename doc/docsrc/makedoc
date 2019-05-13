@@ -1,5 +1,6 @@
 #!/usr/bin/env csh
-set tex="/usr/local/texlive/2016/bin/x86_64-darwin/"
+#set tex="/usr/local/texlive/2016/bin/x86_64-darwin/"
+set tex="/Library/Tex/texbin/"
 #set tex="/bin"
 ./cleanup
 ../../Python/bin/maketexfiles "../.."
