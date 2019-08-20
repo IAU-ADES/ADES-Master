@@ -18,3 +18,8 @@ diff <run>.mpc <run>.mpc.xml.mpc shows differences realated mostly to
 As of Jan 16, 2018, this handles the astCat codes properly,
 translating the single-character codes into and out of the
 IAU-ADES 2017 codes.  The test.mpc file demonstrates this.
+
+As of Aug 20, 2019, this handles the extended minor planet
+permID's  (above 619999; ~000z format).  This only affects
+mpc80coltoxml and xmltompc80col; the xmltopsv allows
+and still allows arbitrary positive integers for the ID
