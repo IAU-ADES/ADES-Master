@@ -137,7 +137,7 @@ headerRegex = re.compile( '(ACK|COD|CON|OBS|MEA|TEL|NET|BND|COM|NUM|AC2) (.*)$' 
 #   6: blank or a-e for asteroid satellites (embedded in obsDat)
 #   7: rest of obsDate
 
-commonRegexHelp1 = ( '([A-za-z0-9 ]{12})'    # id group 1-12
+commonRegexHelp1 = ( '([ A-Za-z0-9~][A-Za-z0-9 ]{11})'    # id group 1-12
                      + '([ *+])'                # discovery group 13 may be ' ', '*' or '+'
                      #+ '( AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345vzjeL16789])' # notes group 14
                      + '(.)'                 # notes can be anything
@@ -546,8 +546,8 @@ def decode80ColumnDataLine(line):
      packtest =  packUtil.packTupleID( (permID, provID, trkSub) )
      if packtest != ret['totalid']:
         print ("ID does not round-trip; " + packtest + " vs. " + ret['totalid'])
-   except:
-     print ("fails pack: ", permID, provID, trkSub)
+   except Exception as e:
+     print ("fails pack: ", permID, provID, trkSub, e)
 
    return ret
 

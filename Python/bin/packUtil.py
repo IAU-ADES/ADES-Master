@@ -342,7 +342,7 @@ trksubRegex = re.compile('^' + trksubRegexHelp + '$')
 #   trkSub:  None if not present
 #      11: six characters starting with a letter
 #
-minorplanetPackedIDRegex = re.compile('^(?: {5}|([0-9A-Za-z])(\d{4}))'+ 
+minorplanetPackedIDRegex = re.compile('^(?: {5}|([0-9A-Za-z])(\d{4})|(~[0-9A-Za-z]{4}))'+ 
                                       '(?:' + '([I-K])(\d{2})([A-HJ-Y])([a-zA-Z0-9])(\d)(?:([A-HJ-Z])|0)' + '|'
                                             + '(PL|T1|T2|T3)S(\d{4})' + '|'
                                             + trksubRegexHelp + ' *|'
@@ -431,35 +431,48 @@ def unpackPackedID(packedID):
    provID = None
    trkSub = None
    #
-   # groups:  0: <letnum> or None  1: 4 digits or None -- 2: <letnum> 3: yy 4: <halfmonth> : 5: <letnum> 6: digig 7: order
+   # groups:
+   #   permID: None if not present
+   #        may be all spaces, which is None
+   #        five digits  ( to 99999 )
+   #        a letter and four digits  (to Z9999  or 619999)
+   #        a tilde and four [0-9A-Za-z] in base 62
+   #   provID: None if not present
+   #   trkSub: None if not present
    #
    m = minorplanetPackedIDRegex.match(packedID)
    if m: 
-      if m.group(1):  # check for permID presence
-         n = int(m.group(2)) + 10000*unpackLetters[m.group(1)]
+      if m.group(1) or m.group(3):  # check for permID presence
+         if m.group(1):
+           n = int(m.group(2)) + 10000*unpackLetters[m.group(1)]
+         elif m.group(3):
+           n = 620000 + (((unpackLetters[m.group(3)[1]]*62 +
+                           unpackLetters[m.group(3)[2]])*62 +
+                           unpackLetters[m.group(3)[3]])*62 +
+                           unpackLetters[m.group(3)[4]])
          if (n == 0):
             raise RuntimeError("Can't unpack because minor planet number for " 
                                 + packedID + " is zero")
          permID = str(n)
       
-      if m.group(3): # check for normal provID presence
-         y = unpackLetters[m.group(3)] * 100 + int(m.group(4))
+      if m.group(4): # check for normal provID presence
+         y = unpackLetters[m.group(4)] * 100 + int(m.group(5))
          y = "{0:0d}".format(y)
-         n = unpackLetters[m.group(6)] * 10 + int(m.group(7))
+         n = unpackLetters[m.group(7)] * 10 + int(m.group(8))
          if n==0:
             ns = ''
          else:
             ns = str(n)
-         if m.group(8):  # normal asteroid provid
-             provID =  y + ' ' + m.group(5) + m.group(8) + ns
+         if m.group(9):  # normal asteroid provid
+             provID =  y + ' ' + m.group(6) + m.group(9) + ns
          else:           # comet ID -- use A/
-             provID =  'A/' + y + ' ' + m.group(5) + ns
+             provID =  'A/' + y + ' ' + m.group(6) + ns
 
-      if m.group(9): # check for survey provID presence
-         provID =  m.group(10) + ' ' + m.group(9)[0] + '-' + m.group(9)[1]
+      if m.group(10): # check for survey provID presence
+         provID =  m.group(11) + ' ' + m.group(10)[0] + '-' + m.group(10)[1]
 
-      if not permID and m.group(11): # check for trkSub -- can't be provID may not have permID
-         trkSub = m.group(11).strip()
+      if not permID and m.group(12): # check for trkSub -- can't be provID may not have permID
+         trkSub = m.group(12).strip()
 
    #
    # Comet groups:
@@ -582,14 +595,24 @@ def packTupleID(triplet):
       #
       m = minorplanetPermIDRegex.match(permID)
       if m:
+         #print (permID, m.groups())
          mp = int(m.group(1))
-         if (mp > 0) and (mp < 620000): # 1 through 619999 allowed
-             firstDigit = mp//10000   
-             lastDigits = mp - firstDigit * 10000
-             packedPermID =  packLetters[firstDigit] + "{0:0d}".format(lastDigits + 10000)[1:]
+         if (mp > 0) and (mp < 15396336): # 1 through 15396335 allowed
+             if (mp < 620000):
+                firstDigit = mp//10000   
+                lastDigits = mp - firstDigit * 10000
+                packedPermID =  packLetters[firstDigit] + "{0:0d}".format(lastDigits + 10000)[1:]
+             else:
+                packedPermID = ''
+                mp -= 620000 # 620000 is ~0000
+                for i in range(1,5):
+                  digit = mp % 62
+                  mp = mp//62
+                  packedPermID = packLetters[digit] + packedPermID
+                packedPermID = '~' + packedPermID
              permIDType = 'A'
          else:
-             raise RuntimeError("Can't pack permID " + permID + " because it is not in range 1-619000")
+             raise RuntimeError("Can't pack permID " + permID + " because it is not in range 1-15396335")
 
       #
       # may be a comet
