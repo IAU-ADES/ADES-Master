@@ -796,7 +796,10 @@ def packTupleID(triplet):
          packedTrkSub = m.group(1)
 
       if not packedTrkSub:  # none falls through
-          raise RuntimeError("invalid trkSub " + trkSub)
+          if packedProvID:  # sometimes trkSub is packedProvID minus a space
+              pass          # if both are present trkSub will most likely be illegal
+          else:
+              raise RuntimeError("invalid trkSub " + trkSub)
 
    #
    # Now pack it in the final format
