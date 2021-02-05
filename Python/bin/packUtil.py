@@ -827,8 +827,8 @@ def packTupleID(triplet):
 
    else:  # no packedPermID
       if packedProvID:
-        if packedTrkSub: # this is illegal
-          raise RuntimeError("Can't pack " + repr(triplet) + " because it has both provID and trksub")
+        #if packedTrkSub: # this is illegal in mpc80 but ignore it if in xml
+        #  raise RuntimeError("Can't pack " + repr(triplet) + " because it has both provID and trksub")
         packed = '    ' + packedProvID # captures column 5
 
       else:
