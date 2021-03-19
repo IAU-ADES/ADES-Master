@@ -165,9 +165,11 @@ rCatCodes = { catCodes[i]:i for i in catCodes }
 
 
 def packProgID(c): # for program code id -- must be alpha
+   # should be radix-52 with 0-1 first
    return  hex(ord(c))[-2:]  # code in hex
 
 def unpackProgID(s): # for program code id -- must be alpha
+   # should be radix-52 with 0-1 first
    return  chr(int(s, 16))  # decode into alpha
 
 #
