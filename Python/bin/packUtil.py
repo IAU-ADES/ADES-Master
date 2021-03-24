@@ -48,6 +48,7 @@ reverseCodeDict = { codeDict[i] : i for i in codeDict }  # no duplicates
 validCodes = "A PeCTMcEOHNnRrSsVvXx"+"0"  # 0 is special for header lines
 validNotes = ' AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345vzjeL16789'
 validProgramCodes = ' AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345016789=#$%"&\+-![]`!|(){}.?@,^;:_/~*<>eLvzjZ'"'"
+programCodesArray = "0123456789!\"#$%&'()*+,-./[\]^_`{|}~:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 programCodeSites = \
 set([ "010",
       "012",
@@ -166,11 +167,34 @@ rCatCodes = { catCodes[i]:i for i in catCodes }
 
 def packProgID(c): # for program code id -- must be alpha
    # should be radix-52 with 0-1 first
-   return  hex(ord(c))[-2:]  # code in hex
+   try:
+      codeIndex = programCodesArray.index(c)
+   except:
+      raise RuntimeError("Illegal program code " + c)
+   
+   if codeIndex > 51:
+      first = '1'
+   else:
+      first = '0' 
+
+   second = packLetters[codeIndex%52]
+
+   return  first + second 
 
 def unpackProgID(s): # for program code id -- must be alpha
    # should be radix-52 with 0-1 first
-   return  chr(int(s, 16))  # decode into alpha
+   if len(s) != 2 or s[0] not in "01":
+      raise RuntimeError ("Illegal packed prog ID " + s + " in xml")
+  
+   try:
+      codeIndex = unpackLetters[s[1]]
+      if s[0] == 1:
+        codeIndex += 52
+      packed = programCodesArray[codeIndex]
+   except:
+      raise RuntimeError ("Illegal packed prog ID " + s + " in xml")
+
+   return packed
 
 #
 # packed implicit decimal converter
@@ -782,10 +806,12 @@ def packTupleID(triplet):
 
    packedTrkSub = None # may be None if trksub is None
    #
-   # figure out permID type and value using regex
+   # figure out trkSub type and value using regex
+   # if packedPermID is None don't try this since
+   # trkSub will not be used in the packing and may be an 
+   # invalid value
    #
-   packedTrkSub = None # may be None if permID is None
-   if trkSub is not None: # otherwise try to decode it
+   if trkSub is not None and packedPermID is None: # otherwise try to decode it
       #
       # check trksub regex
       #

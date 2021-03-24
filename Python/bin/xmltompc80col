@@ -152,6 +152,7 @@ def printOpticalLine(item):
    packedID = packUtil.packTupleID( (permID, provID, trkSub) )
    disc = hasKeyOrVal(item, 'disc', ' ')
    notes = hasKeyOrVal(item, 'notes', ' ')
+   notes = notes[0] # restrict to length of 1
    precTime = float(hasKeyOrVal(item, 'precTime', defaultPrecTime) )
    precRa = float(hasKeyOrVal(item, 'precRA', defaultPrecRA) )
    precDec = float(hasKeyOrVal(item, 'precDec', defaultPrecDec) )
@@ -162,6 +163,9 @@ def printOpticalLine(item):
    mag = adesutility.applyPaddingAndJustification(hasKeyOrVal(item, 'mag', ''), 5, 'D', 3)[0]
    mag = mag[0:5] # restrict to length of 5
    band = hasKeyOrVal(item, 'band', ' ')
+   if len(band) > 1:
+      band = band[1] # take the second character for 2-character band.  This does not invert
+
 
    #
    # map astCat to single-character packing
