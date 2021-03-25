@@ -175,7 +175,8 @@ def printOpticalLine(item):
       astCat = ' '
    else:
       astCat = packUtil.rCatCodes[item['astCat']]
-   packedref = "{0:<5s}".format(hasKeyOrVal(item, 'ref', ' ')[-5:])
+   #packedref = "{0:<5s}".format(hasKeyOrVal(item, 'ref', ' ')[-5:])
+   packedref = packUtil.packRef(hasKeyOrVal(item, 'ref', ' '))
 
    deprecated = hasKeyOrVal(item, 'deprecated', None)
    if deprecated:
@@ -248,7 +249,8 @@ def printRadarLine(item):
    precTime = 1  # fixed for radar
    sexDate = sexVals.isoToSexDate(item['obsTime'], precTime)
    astCat = ' '
-   packedref = "{0:<5s}".format(hasKeyOrVal(item, 'ref', '      ')[-5:])
+   #packedref = "{0:<5s}".format(hasKeyOrVal(item, 'ref', '      ')[-5:])
+   packedref = packUtil.packRef(hasKeyOrVal(item, 'ref', ' '))
 
    #doppler =     "{0:>15s}".format(hasKeyOrVal(item, 'doppler', ''))
    #rmsDoppler =  "{0:>14s}".format(hasKeyOrVal(item, 'rmsDoppler', ''))

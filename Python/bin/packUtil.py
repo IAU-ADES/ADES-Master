@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# !/usr/bin/env python
 #
 # __future__ imports for Python 3 compliance in Python 2
 # 
@@ -163,6 +163,56 @@ catCodes = { ' ': 'UNK',
 
 rCatCodes = { catCodes[i]:i for i in catCodes }
 
+#
+# see https://minorplanetcenter.net/iau/info/References.html
+# for a description of how references are packed and unpacked
+# for cols 72-77 in the 80-col format
+#
+# This only handles cases A, B, C, D and E for now. The reference
+# to journals are just clumsily copied
+#
+def packRef(ref):
+   #
+   # first is "MPC"
+   #
+   newref = ref
+   if ref[0:3] == "MPC":  # cases A-C on the web page
+      s = int(ref.split()[1] )
+      if s < 100000:  # case A: a 5-digit number
+         newref = str(s + 100000)[1:] # with leading zeroes
+      elif s < 200000: # case B: @ + 4-digit number
+         newref = '@' + str(s-100000+10000)[1:] # with leading zeroes
+      else: # case C:  # + radix62_4
+        newref = '#' + radix62_4(s - 110000)[1:]
+   elif ref[0:3] == "MPS":
+      s = int(ref.split()[1] )
+      if s < 259999: # digit as letter and 4 digits case D
+        c = "abcdefghijklmnopqrstuvwxyz"[int(s/10000)]
+        newref = c + str(int(s%10000)+10000)[1:] # with leading zeroes
+      else:  # tilde and base-62 -- case E in the web page
+        newref = radix62_4(s - 260000)
+
+   packedref = "{0:<5s}".format(newref[-5:])
+   return packedref
+
+def unpackRef(packedref):
+   if packedref[0] in '0123456789': # MPC case A
+      packedref = "MPC  " + str(int(packedref)) # <5-digit number>
+   elif packedref[0] == '@': # MPC case B
+      packedref = "MPC  " + str(100000 + int(packedref[1:])) # @<4-digit number>
+   elif packedref[0] == '#': # MPC case C
+      print ("packedref = ", '~'+packedref[1:])
+      n = 110000 + unRadix62_4(packedref) # ~<4-digit radix 62>
+      packedref = "MPC  " + str(n)
+  
+   elif packedref[0] in 'abcdefghijklmnopqrstuvwxyz':  # MPS case D
+      n = int(packedref[1:]) + 10000*'abcdefghijklmnopqrstuvwxyz'.index(packedref[0])
+      packedref = "MPS  " + str(n) # <letter + 4-digit base 10>
+   elif packedref[0] == '~': # MPS case E
+      n = 260000 + unRadix62_4(packedref) # ~<4-digit radix 62>
+      packedref = "MPS  " + str(n)
+     
+   return packedref
 
 
 def packProgID(c): # for program code id -- must be alpha
@@ -442,7 +492,20 @@ def _initpackLetters():
 
 _initpackLetters()
 
+def radix62_4(mp): # pack a number in 4 digits of radix62 with leading ~
+   packed = ''
+   for i in range(1,5):
+     digit = mp % 62
+     mp = mp//62
+     packed = packLetters[digit] + packed
+   return '~' + packed
 
+def unRadix62_4(s): # unpack a number in radix62 with leading ~ assumed
+   n = (((unpackLetters[s[1]]*62 +
+          unpackLetters[s[2]])*62 +
+          unpackLetters[s[3]])*62 +
+          unpackLetters[s[4]])
+   return n
 
         
 
@@ -631,11 +694,12 @@ def packTupleID(triplet):
              else:
                 packedPermID = ''
                 mp -= 620000 # 620000 is ~0000
-                for i in range(1,5):
-                  digit = mp % 62
-                  mp = mp//62
-                  packedPermID = packLetters[digit] + packedPermID
-                packedPermID = '~' + packedPermID
+                packedPermID = radix62_4(mp)
+                #for i in range(1,5):
+                #  digit = mp % 62
+                #  mp = mp//62
+                #  packedPermID = packLetters[digit] + packedPermID
+                #packedPermID = '~' + packedPermID
              permIDType = 'A'
          else:
              raise RuntimeError("Can't pack permID " + permID + " because it is not in range 1-15396335")
