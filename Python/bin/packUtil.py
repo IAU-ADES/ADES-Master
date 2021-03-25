@@ -310,6 +310,15 @@ def unPackSigned(value, outLen, nDecimal):
    """
 
    s = value[0]
+   #
+   # adjust if there is no leading '+' since mpc 80-col needs one
+   #
+   # s must be all digits but the regex ensures that
+   #
+   if s in "0123456789":
+      value = '+' + value # add leading +
+      s = '+'
+
    if s not in "+-":
       ret = adesutility.applyPaddingAndJustification(value,
                                            outLen, 'D', nDecimal)[0]
