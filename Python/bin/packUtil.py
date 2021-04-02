@@ -24,8 +24,8 @@ import adesutility
 codeDict = {  # converts code to mode for optical type
  # 'A': 'PHA', # sets subFrm to 'B1950.0' maps to 'PHO'
 
-  ' ': 'PHo', # blank means photographic -- see Xx
-  'P': 'PHO',
+  'P': 'PHo', # P is obsolete MPC conversion for photographic -- see Xx
+  ' ': 'PHO', # blank means photographic
   'e': 'ENC',
   'C': 'CCD',
   'T': 'MER',

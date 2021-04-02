@@ -139,6 +139,26 @@ def hasKeyOrVal(d, key, val):
    else: 
      return val
 
+# from https://bitbucket.org/mpcdev/xmlto80/src/master/
+bandconv = {'Vj': 'V',
+            'Rc': 'R',
+            'Ic': 'I',
+            'Bj': 'B',
+            'Uj': 'U',
+            'Sg': 'g',
+            'Sr': 'r',
+            'Si': 'i',
+            'Sz': 'z',
+            'Pg': 'g',
+            'Pr': 'r',
+            'Pi': 'i',
+            'Pz': 'z',
+            'Pw': 'w',
+            'Ao': 'o',
+            'Ac': 'c',
+            'Gb': 'G',
+            'Gr': 'G'}
+
 def printOpticalLine(item):
    """ printOpticalLine decodes and prints an optical element
        Input:
@@ -164,8 +184,11 @@ def printOpticalLine(item):
    mag = mag[0:5] # restrict to length of 5
    band = hasKeyOrVal(item, 'band', ' ')
    if len(band) > 1:
-      band = band[1] # take the second character for 2-character band.  This does not invert
-
+      #band = band[1] # take the second character for 2-character band.  This does not invert
+      if band in bandconv:
+          band = bandconv[band]
+      else:
+          band = ' '
 
    #
    # map astCat to single-character packing
