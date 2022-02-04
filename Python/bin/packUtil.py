@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# !/usr/bin/env python
 #
 # __future__ imports for Python 3 compliance in Python 2
 # 
@@ -24,8 +24,8 @@ import adesutility
 codeDict = {  # converts code to mode for optical type
  # 'A': 'PHA', # sets subFrm to 'B1950.0' maps to 'PHO'
 
-  ' ': 'PHo', # blank means photographic -- see Xx
-  'P': 'PHO',
+  'P': 'PHo', # P is obsolete MPC conversion for photographic -- see Xx
+  ' ': 'PHO', # blank means photographic
   'e': 'ENC',
   'C': 'CCD',
   'T': 'MER',
@@ -48,6 +48,7 @@ reverseCodeDict = { codeDict[i] : i for i in codeDict }  # no duplicates
 validCodes = "A PeCTMcEOHNnRrSsVvXx"+"0"  # 0 is special for header lines
 validNotes = ' AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345vzjeL16789'
 validProgramCodes = ' AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345016789=#$%"&\+-![]`!|(){}.?@,^;:_/~*<>eLvzjZ'"'"
+programCodesArray = "0123456789!\"#$%&'()*+,-./[\]^_`{|}~:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 programCodeSites = \
 set([ "010",
       "012",
@@ -122,7 +123,7 @@ catCodes = { ' ': 'UNK',
              'k': 'GSC2.2',
              'l': 'ACT',
              'm': 'GSCACT',
-             'n': 'SSDS8',
+             'n': 'SDSS8',
              'o': 'USNOB1',
              'p': 'PPM',
              'q': 'UCAC4',
@@ -162,13 +163,88 @@ catCodes = { ' ': 'UNK',
 
 rCatCodes = { catCodes[i]:i for i in catCodes }
 
+#
+# see https://minorplanetcenter.net/iau/info/References.html
+# for a description of how references are packed and unpacked
+# for cols 72-77 in the 80-col format
+#
+# This only handles cases A, B, C, D and E for now. The reference
+# to journals are just clumsily copied
+#
+def packRef(ref):
+   #
+   # first is "MPC"
+   #
+   newref = ref
+   if ref[0:3] == "MPC":  # cases A-C on the web page
+      s = int(ref.split()[1] )
+      if s < 100000:  # case A: a 5-digit number
+         newref = str(s + 100000)[1:] # with leading zeroes
+      elif s < 200000: # case B: @ + 4-digit number
+         newref = '@' + str(s-100000+10000)[1:] # with leading zeroes
+      else: # case C:  # + radix62_4
+        newref = '#' + radix62_4(s - 110000)[1:]
+   elif ref[0:3] == "MPS":
+      s = int(ref.split()[1] )
+      if s < 259999: # digit as letter and 4 digits case D
+        c = "abcdefghijklmnopqrstuvwxyz"[int(s/10000)]
+        newref = c + str(int(s%10000)+10000)[1:] # with leading zeroes
+      else:  # tilde and base-62 -- case E in the web page
+        newref = radix62_4(s - 260000)
+
+   packedref = "{0:<5s}".format(newref[-5:])
+   return packedref
+
+def unpackRef(packedref):
+   if packedref[0] in '0123456789': # MPC case A
+      packedref = "MPC  " + str(int(packedref)) # <5-digit number>
+   elif packedref[0] == '@': # MPC case B
+      packedref = "MPC  " + str(100000 + int(packedref[1:])) # @<4-digit number>
+   elif packedref[0] == '#': # MPC case C
+      print ("packedref = ", '~'+packedref[1:])
+      n = 110000 + unRadix62_4(packedref) # ~<4-digit radix 62>
+      packedref = "MPC  " + str(n)
+  
+   elif packedref[0] in 'abcdefghijklmnopqrstuvwxyz':  # MPS case D
+      n = int(packedref[1:]) + 10000*'abcdefghijklmnopqrstuvwxyz'.index(packedref[0])
+      packedref = "MPS  " + str(n) # <letter + 4-digit base 10>
+   elif packedref[0] == '~': # MPS case E
+      n = 260000 + unRadix62_4(packedref) # ~<4-digit radix 62>
+      packedref = "MPS  " + str(n)
+     
+   return packedref
 
 
 def packProgID(c): # for program code id -- must be alpha
-   return  hex(ord(c))[-2:]  # code in hex
+   # should be radix-52 with 0-1 first
+   try:
+      codeIndex = programCodesArray.index(c)
+   except:
+      raise RuntimeError("Illegal program code " + c)
+   
+   if codeIndex > 51:
+      first = '1'
+   else:
+      first = '0' 
+
+   second = packLetters[codeIndex%52]
+
+   return  first + second 
 
 def unpackProgID(s): # for program code id -- must be alpha
-   return  chr(int(s, 16))  # decode into alpha
+   # should be radix-52 with 0-1 first
+   if len(s) != 2 or s[0] not in "01":
+      raise RuntimeError ("Illegal packed prog ID " + s + " in xml")
+  
+   try:
+      codeIndex = unpackLetters[s[1]]
+      if s[0] == 1:
+        codeIndex += 52
+      packed = programCodesArray[codeIndex]
+   except:
+      raise RuntimeError ("Illegal packed prog ID " + s + " in xml")
+
+   return packed
 
 #
 # packed implicit decimal converter
@@ -234,6 +310,15 @@ def unPackSigned(value, outLen, nDecimal):
    """
 
    s = value[0]
+   #
+   # adjust if there is no leading '+' since mpc 80-col needs one
+   #
+   # s must be all digits but the regex ensures that
+   #
+   if s in "0123456789":
+      value = '+' + value # add leading +
+      s = '+'
+
    if s not in "+-":
       ret = adesutility.applyPaddingAndJustification(value,
                                            outLen, 'D', nDecimal)[0]
@@ -416,7 +501,20 @@ def _initpackLetters():
 
 _initpackLetters()
 
+def radix62_4(mp): # pack a number in 4 digits of radix62 with leading ~
+   packed = ''
+   for i in range(1,5):
+     digit = mp % 62
+     mp = mp//62
+     packed = packLetters[digit] + packed
+   return '~' + packed
 
+def unRadix62_4(s): # unpack a number in radix62 with leading ~ assumed
+   n = (((unpackLetters[s[1]]*62 +
+          unpackLetters[s[2]])*62 +
+          unpackLetters[s[3]])*62 +
+          unpackLetters[s[4]])
+   return n
 
         
 
@@ -605,11 +703,12 @@ def packTupleID(triplet):
              else:
                 packedPermID = ''
                 mp -= 620000 # 620000 is ~0000
-                for i in range(1,5):
-                  digit = mp % 62
-                  mp = mp//62
-                  packedPermID = packLetters[digit] + packedPermID
-                packedPermID = '~' + packedPermID
+                packedPermID = radix62_4(mp)
+                #for i in range(1,5):
+                #  digit = mp % 62
+                #  mp = mp//62
+                #  packedPermID = packLetters[digit] + packedPermID
+                #packedPermID = '~' + packedPermID
              permIDType = 'A'
          else:
              raise RuntimeError("Can't pack permID " + permID + " because it is not in range 1-15396335")
@@ -780,10 +879,12 @@ def packTupleID(triplet):
 
    packedTrkSub = None # may be None if trksub is None
    #
-   # figure out permID type and value using regex
+   # figure out trkSub type and value using regex
+   # if packedPermID is None don't try this since
+   # trkSub will not be used in the packing and may be an 
+   # invalid value
    #
-   packedTrkSub = None # may be None if permID is None
-   if trkSub is not None: # otherwise try to decode it
+   if trkSub is not None and packedPermID is None: # otherwise try to decode it
       #
       # check trksub regex
       #
@@ -827,8 +928,8 @@ def packTupleID(triplet):
 
    else:  # no packedPermID
       if packedProvID:
-        if packedTrkSub: # this is illegal
-          raise RuntimeError("Can't pack " + repr(triplet) + " because it has both provID and trksub")
+        #if packedTrkSub: # this is illegal in mpc80 but ignore it if in xml
+        #  raise RuntimeError("Can't pack " + repr(triplet) + " because it has both provID and trksub")
         packed = '    ' + packedProvID # captures column 5
 
       else:

@@ -20,11 +20,78 @@
               See ADES_Description.pdf for details.
 
 
-   CONTENTS:
-      This contains the xsd files for ades in the xsd
-      directory
 
-        xsd/submit
+
+
+
+   CONTENTS:
+     xml/     The adesmaster.xml file lives here.  This is not
+              the place for example xml files
+
+               adesmaster.xml
+
+
+               The adesmaster.xml file is transformed by various .xlst
+               files into .xsd files and .tex files fo ps and pdf documentation
+
+     xslt/util/  location for xslt files used by the /bin files as helpers
+          Currently only has adestables.xslt
+
+          adestables.xlst
+   
+     xslt/xsd/   location for xslt files used to create xsd files.  I didn't
+                 include the xsd files themselves since they can be made
+                 with applyxslt.py.  They'd go in a top-level xsd/
+                 directory anyway
+
+          distribhumanxsd.xslt #currently not used
+          distribxsd.xslt #currently not used
+          generalhumanxsd.xslt #currently not used
+          generalxsd.xslt
+          submithumanxsd.xslt #currently not used
+          submitxsd.xslt
+
+
+     xslt/latex/  Location for xslt files used to translate adesmaster.xml
+                  into latex input.
+
+          docades.xslt
+          docelementstable.xslt
+          docgrouptypestable.xslt
+          docsimpletypestable.xslt
+
+
+     tests/    Location of test files.   It has its own README.
+               The runtests script must be run when in the 
+               tests/ directory -- it creates some extra dirs
+               and knows about the sub-directories.
+                                                               
+
+     xsd/    Contains generated xsd files and makexsdfiles
+         
+          makexsdfiles generates xsd files if run in this directory
+
+          Currently only submit.xsd and general.xsd are needed
+      
+    doc/ contains pdf and ps files documenting ADES tables
+          ades.ps  # generated ades documenation file
+          ades.pdf # generated ades documenation file
+          docsrc contains code to build these in latex.  It uses
+                 xslt to generate the tex files from adesmaster.  
+                 You'll need to edit the makedoc file to point to 
+                 latex your tex installation.
+     
+                 ./makedoc will generate ades.ps and ades.pdf
+                           in this directory.   Copy those to doc/
+                           to update the documentation if adesmaster.xml
+                           or the xslt files have changed.
+
+                 ./cleanum removes the evidence since the latex temp
+                           files should not be in github.
+                
+
+
+ 
 
      There are example programs demontrating how to read
      and write xml files using lxml in 
@@ -370,43 +437,6 @@ Both of these are legal.
 
 "writexml myfile UTF-7" is interesting.  
 
-
-
-xml/     The adesmaster.xml file lives here.  This is not
-         the place for example xml files
-     adesmaster.xml
-
-xslt/util/  location for xslt files used by the /bin files as helpers
-     Currently only has adestables.xslt
-
-     adestables.xlst
-   
-xslt/xsd/   location for xslt files used to create xsd files.  I didn't
-            include the xsd files themselves since they can be made
-            with applyxslt.py.  They'd go in a top-level xsd/
-            directory anyway
-     distribhumanxsd.xslt
-     distribxsd.xslt
-     generalhumanxsd.xslt
-     generalxsd.xslt
-     submithumanxsd.xslt
-     submitxsd.xslt
-
-
-xslt/latex/  Location for xslt files used to translate adesmaster.xml
-             into latex input.
-
-     docades.xslt
-     docelementstable.xslt
-     docgrouptypestable.xslt
-     docsimpletypestable.xslt
-
-
-tests/    Localtion of test files.   It has its own README.
-          The runtests script must be run when in the 
-          tests/ directory -- it creates some extra dirs
-          and knows about the sub-directories.
-   
 
 
 ---------------------------------

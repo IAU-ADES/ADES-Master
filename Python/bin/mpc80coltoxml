@@ -875,7 +875,9 @@ def convertit(item, lineNumber):
          item['prog'] = packUtil.packProgID(item['notes'])  # convert to hex or something else
          item['notes'] = ' ' # need to put notes somewhere else
 
-     item['ref'] = item['packedref'][1:]  # astCat now has first character
+     #item['ref'] = item['packedref'][1:]  # astCat now has first character
+     item['ref'] = packUtil.unpackRef(item['packedref'][1:])  # astCat now has first character
+
 
      d = allowedElementDict['optical']
      #print ( [x for x in item if x not in d ] )
