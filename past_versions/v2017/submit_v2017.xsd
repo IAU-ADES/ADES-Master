@@ -124,7 +124,7 @@
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="ProvIDType">
-    <xsd:union memberTypes="BaseProvIDType OldProvIDType"/>
+    <xsd:union memberTypes="BaseProvIDType"/>
   </xsd:simpleType>
   <xsd:simpleType name="RaDecPrecType">
     <xsd:restriction base="xsd:decimal">
@@ -230,11 +230,11 @@
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="TrkSubType">
-    <xsd:union memberTypes="BaseTrkSubType OldTrkSubType"/>
+    <xsd:union memberTypes="BaseTrkSubType"/>
   </xsd:simpleType>
   <xsd:simpleType name="VersionType">
     <xsd:restriction base="xsd:string">
-      <xsd:enumeration value="2022"/>
+      <xsd:enumeration value="2017"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:complexType name="NamesType">
@@ -304,17 +304,13 @@
           <xsd:element ref="trkSub"/>
         </xsd:sequence>
       </xsd:choice>
-      <xsd:element ref="obsID" minOccurs="0"/>
       <xsd:element ref="obsSubID" minOccurs="0"/>
-      <xsd:element ref="trkID" minOccurs="0"/>
-      <xsd:element ref="trkMPC" minOccurs="0"/>
     </xsd:sequence>
   </xsd:group>
   <xsd:group name="RadarID">
     <xsd:sequence>
       <xsd:group ref="MPCID"/>
       <xsd:element ref="trkSub" minOccurs="0"/>
-      <xsd:element ref="obsID" minOccurs="0"/>
     </xsd:sequence>
   </xsd:group>
   <xsd:group name="RadarValue">
@@ -358,7 +354,6 @@
       <xsd:element ref="band"/>
       <xsd:element ref="photCat" minOccurs="0"/>
       <xsd:element ref="photAp" minOccurs="0"/>
-      <xsd:element ref="nucMag" minOccurs="0"/>
     </xsd:sequence>
   </xsd:group>
   <xsd:group name="OffsetVal">
@@ -440,7 +435,6 @@
       <xsd:element ref="mode"/>
       <xsd:element ref="stn"/>
       <xsd:group ref="Location" minOccurs="0"/>
-      <xsd:element ref="prog" minOccurs="0"/>
       <xsd:element ref="obsTime"/>
       <xsd:element ref="rmsTime" minOccurs="0"/>
       <xsd:element ref="ra"/>
@@ -455,17 +449,10 @@
       <xsd:element ref="exp" minOccurs="0"/>
       <xsd:element ref="rmsFit" minOccurs="0"/>
       <xsd:element ref="nStars" minOccurs="0"/>
-      <xsd:element ref="ref" minOccurs="0"/>
       <xsd:element ref="disc" minOccurs="0"/>
-      <xsd:element ref="subFrm" minOccurs="0"/>
-      <xsd:element ref="subFmt" minOccurs="0"/>
-      <xsd:group ref="Precision" minOccurs="0"/>
       <xsd:element ref="uncTime" minOccurs="0"/>
       <xsd:element ref="notes" minOccurs="0"/>
       <xsd:element ref="remarks" minOccurs="0"/>
-      <xsd:group ref="OpticalResiduals" minOccurs="0"/>
-      <xsd:element ref="deprecated" minOccurs="0"/>
-      <xsd:element ref="localUse" minOccurs="0"/>
     </xsd:sequence>
   </xsd:complexType>
   <xsd:complexType name="OffsetType">
@@ -474,7 +461,6 @@
       <xsd:element ref="mode"/>
       <xsd:element ref="stn"/>
       <xsd:group ref="Location" minOccurs="0"/>
-      <xsd:element ref="prog" minOccurs="0"/>
       <xsd:element ref="obsTime"/>
       <xsd:element ref="rmsTime" minOccurs="0"/>
       <xsd:element ref="obsCenter"/>
@@ -485,17 +471,10 @@
       <xsd:element ref="exp" minOccurs="0"/>
       <xsd:element ref="rmsFit" minOccurs="0"/>
       <xsd:element ref="nStars" minOccurs="0"/>
-      <xsd:element ref="ref" minOccurs="0"/>
       <xsd:element ref="disc" minOccurs="0"/>
-      <xsd:element ref="subFrm" minOccurs="0"/>
-      <xsd:element ref="subFmt" minOccurs="0"/>
-      <xsd:group ref="Precision" minOccurs="0"/>
       <xsd:element ref="uncTime" minOccurs="0"/>
       <xsd:element ref="notes" minOccurs="0"/>
       <xsd:element ref="remarks" minOccurs="0"/>
-      <xsd:group ref="OpticalResiduals" minOccurs="0"/>
-      <xsd:element ref="deprecated" minOccurs="0"/>
-      <xsd:element ref="localUse" minOccurs="0"/>
     </xsd:sequence>
   </xsd:complexType>
   <xsd:complexType name="OccultationType">
@@ -503,7 +482,6 @@
       <xsd:group ref="OpticalID"/>
       <xsd:element ref="stn"/>
       <xsd:group ref="Location" minOccurs="0"/>
-      <xsd:element ref="prog" minOccurs="0"/>
       <xsd:element ref="obsTime"/>
       <xsd:element ref="rmsTime" minOccurs="0"/>
       <xsd:element ref="raStar"/>
@@ -514,17 +492,10 @@
       <xsd:element ref="logSNR" minOccurs="0"/>
       <xsd:element ref="shapeOcc" minOccurs="0"/>
       <xsd:element ref="seeing" minOccurs="0"/>
-      <xsd:element ref="ref" minOccurs="0"/>
       <xsd:element ref="disc" minOccurs="0"/>
-      <xsd:element ref="subFrm" minOccurs="0"/>
-      <xsd:element ref="subFmt" minOccurs="0"/>
-      <xsd:group ref="Precision" minOccurs="0"/>
       <xsd:element ref="uncTime" minOccurs="0"/>
       <xsd:element ref="notes" minOccurs="0"/>
       <xsd:element ref="remarks" minOccurs="0"/>
-      <xsd:group ref="OpticalResiduals" minOccurs="0"/>
-      <xsd:element ref="deprecated" minOccurs="0"/>
-      <xsd:element ref="localUse" minOccurs="0"/>
     </xsd:sequence>
   </xsd:complexType>
   <xsd:complexType name="RadarType">
@@ -532,16 +503,12 @@
       <xsd:group ref="RadarID"/>
       <xsd:element ref="trx"/>
       <xsd:element ref="rcv"/>
-      <xsd:element ref="prog" minOccurs="0"/>
       <xsd:element ref="obsTime"/>
       <xsd:group ref="RadarValue"/>
       <xsd:element ref="logSNR" minOccurs="0"/>
       <xsd:element ref="com" minOccurs="0"/>
       <xsd:element ref="frq"/>
-      <xsd:element ref="ref" minOccurs="0"/>
       <xsd:element ref="remarks" minOccurs="0"/>
-      <xsd:group ref="RadarResiduals" minOccurs="0"/>
-      <xsd:element ref="localUse" minOccurs="0"/>
     </xsd:sequence>
   </xsd:complexType>
   <xsd:complexType name="ObsContextType">
@@ -588,12 +555,6 @@
   </xsd:complexType>
   <xsd:complexType name="ADESType">
     <xsd:choice maxOccurs="unbounded">
-      <xsd:element ref="optical" minOccurs="0"/>
-      <xsd:element ref="offset" minOccurs="0"/>
-      <xsd:element ref="occultation" minOccurs="0"/>
-      <xsd:element ref="radar" minOccurs="0"/>
-      <xsd:element ref="opticalResidual" minOccurs="0"/>
-      <xsd:element ref="radarResidual" minOccurs="0"/>
       <xsd:element ref="obsBlock"/>
     </xsd:choice>
     <xsd:attribute name="version" type="VersionType" use="required"/>

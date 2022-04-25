@@ -1,3 +1,10 @@
+25-Apr-2022 - Incremented ADES version from v2017 to v2022
+
+03-Feb-2022 - Added a few new fields and other minor revisions
+       # Added shapeOcc, obsSubID and trkMPC elements.
+       # obsID can be up to 25 alphanumeric characters
+       # Minor typographical and layout corrections
+
 15-Jan-2019 - Some changes to the schema were made to reflect historical data
        # PermIDType for permID needs to accept `1I' and any more `I' objects
        # ProvIDType should restrict to P-L, T-1, T-2 and T-3 only and not allow T-L or P-3

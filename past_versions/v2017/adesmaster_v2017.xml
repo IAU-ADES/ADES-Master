@@ -896,9 +896,9 @@ decimal types must be in a range
 
 <simpletype name="VersionType">
    <restriction base="xsd:string">
-      <restrict name="xsd:enumeration"  value="2022" />
+      <restrict name="xsd:enumeration"  value="2017" />
    </restriction>
-   <doc>Version attribute for the current ADES schema must be ``2022" </doc>
+   <doc>Version attribute for the current ADES schema must be ``2017" </doc>
 </simpletype>
 
 <!-- These complex types are for the observation context -->

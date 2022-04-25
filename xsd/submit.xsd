@@ -234,7 +234,7 @@
   </xsd:simpleType>
   <xsd:simpleType name="VersionType">
     <xsd:restriction base="xsd:string">
-      <xsd:enumeration value="2017"/>
+      <xsd:enumeration value="2022"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:complexType name="NamesType">
@@ -304,6 +304,7 @@
           <xsd:element ref="trkSub"/>
         </xsd:sequence>
       </xsd:choice>
+      <xsd:element ref="obsSubID" minOccurs="0"/>
     </xsd:sequence>
   </xsd:group>
   <xsd:group name="RadarID">
@@ -489,6 +490,7 @@
       <xsd:element ref="astCat"/>
       <xsd:group ref="Photometry" minOccurs="0"/>
       <xsd:element ref="logSNR" minOccurs="0"/>
+      <xsd:element ref="shapeOcc" minOccurs="0"/>
       <xsd:element ref="seeing" minOccurs="0"/>
       <xsd:element ref="disc" minOccurs="0"/>
       <xsd:element ref="uncTime" minOccurs="0"/>
@@ -562,7 +564,9 @@
   <xsd:element name="artSat" type="StringType"/>
   <xsd:element name="trkSub" type="TrkSubType"/>
   <xsd:element name="obsID" type="ObsIDType"/>
+  <xsd:element name="obsSubID" type="ObsIDType"/>
   <xsd:element name="trkID" type="TrkIDType"/>
+  <xsd:element name="trkMPC" type="TrkIDType"/>
   <xsd:element name="mode" type="ModeType"/>
   <xsd:element name="stn" type="StationType"/>
   <xsd:element name="trx" type="StationType"/>
@@ -607,6 +611,7 @@
   <xsd:element name="photAp" type="PosDecimalType"/>
   <xsd:element name="nucMag" type="LogicalType"/>
   <xsd:element name="logSNR" type="xsd:decimal"/>
+  <xsd:element name="shapeOcc" type="LogicalType"/>
   <xsd:element name="seeing" type="PosDecimalType"/>
   <xsd:element name="exp" type="PosDecimalType"/>
   <xsd:element name="rmsFit" type="PosDecimalType"/>

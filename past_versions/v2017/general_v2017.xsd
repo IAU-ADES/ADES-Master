@@ -234,7 +234,7 @@
   </xsd:simpleType>
   <xsd:simpleType name="VersionType">
     <xsd:restriction base="xsd:string">
-      <xsd:enumeration value="2022"/>
+      <xsd:enumeration value="2017"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:complexType name="NamesType">
