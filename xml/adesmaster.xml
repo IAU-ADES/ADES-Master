@@ -1375,7 +1375,7 @@ decimal types must be in a range
 <complextype name="ADESType">
   <doc>This is what is allowed in ades documents -- any
        of these in any order</doc>
-    <attribute name="version" type="VersionType" use="requiredAttribute" doc="must be 2017"/>
+    <attribute name="version" type="VersionType" use="requiredAttribute" doc="must be 2022"/>
     <choice use="unbounded">
        <element ref="optical" use="NoSubmit"/>
        <element ref="offset" use="NoSubmit"/>
