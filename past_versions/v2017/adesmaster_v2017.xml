@@ -996,9 +996,7 @@ decimal types must be in a range
          </sequence>
        </choice>
        <element ref="obsID" use="NoSubmit"/>
-       <element ref="obsSubID" use="optional"/>
        <element ref="trkID" use="NoSubmit"/>
-       <element ref="trkMPC" use="NoSubmit"/>
      </sequence>
      <doc> An MPCID group or trkSub or both in that order.
            Of permID, provID, artSat or trkSub at least one must
@@ -1279,7 +1277,6 @@ decimal types must be in a range
       <element ref="astCat"      />
       <group   ref="Photometry"  use="optional"/>
       <element ref="logSNR"      use="optional"/>
-      <element ref="shapeOcc"    use="optional"/>
       <element ref="seeing"      use="optional"/>
       <element ref="ref"         use="NoSubmit"/>
       <element ref="disc"        use="optional"/>
@@ -1403,9 +1400,7 @@ decimal types must be in a range
    <element name="artSat"   type="StringType"              doc="Name of an artificial satellite"/>
    <element name="trkSub"   type="TrkSubType"              doc="Observer-assigned tracklet identifier, unique within submission batch."/>
    <element name="obsID"    type="ObsIDType"               doc="Globally Unique Observation ID assigned by MPC."/>
-   <element name="obsSubID" type="ObsIDType"               doc="Observation identifier, optionally included with the submission, that is unique to a given observing program. This element is intended to support extended analyses associated with major observing programs."/>
    <element name="trkID"    type="TrkIDType"               doc="Globally Unique alphnumeric tracklet ID assigned by MPC"/>
-   <element name="trkMPC"   type="TrkIDType"               doc="MPC-internal tracklet identifier, used in cases where the value of the trkSub element should be considered deprecated."/>
    <element name="mode"     type="ModeType"                doc="Mode of optical and offset observations."/>
    <element name="stn"      type="StationType"             doc="Obervatory code from MPC list."/>
    <element name="trx"      type="StationType"             doc="Station code of transmiting antenna."/>
@@ -1450,7 +1445,6 @@ decimal types must be in a range
    <element name="photAp"   type="PosDecimalType"          doc="Photometric aperture radius in arcseconds."/>
    <element name="nucMag"   type="LogicalType"             doc="Nuclear magnitude flag for comets.  0 for total magnitude (i.e., for most archival comet observations and all asteroid observations), 1 for nuclear magnitude. Primarily used for archival data as photAp should be used to communicate this information in the new standard"/>
    <element name="logSNR"   type="xsd:decimal"             doc="$\log_{10}$ of the signal-to-noise ratio of the source in the image integrated on the entire aperture used for the astrometric centroid."/>
-   <element name="shapeOcc" type="LogicalType"             doc="For occultation observations, a flag to indicate that the observation reduction assumes a shape-based (non-circular) plane-of-sky cross-section. False implies that a circular cross section was assumed."/>
    <element name="seeing"   type="PosDecimalType"          doc="Size of seeing disc in arcseconds, measured at Full Width Half Maximum (FWHM) of target point spread function (PSF). "/>
    <element name="exp"      type="PosDecimalType"          doc="Exposure time in \si{\second}.  Total exposure time in the case of stacked image detections "/>
    <element name="rmsFit"   type="PosDecimalType"          doc="RMS of fit of astrometric comparison stars in arcseconds. "/>
@@ -1637,7 +1631,6 @@ PSVObservationFields doc
    <psv tagtype="occultation" name="photCat"   width="3"  justification="R" dpos="0"/>
    <psv tagtype="occultation" name="photAp"    width="4"  justification="D" dpos="3"/>
    <psv tagtype="occultation" name="logSNR"    width="4"  justification="D" dpos="2"/>
-   <psv tagtype="occultation" name="shapeOcc"  width="1"  justification="L" dpos="0"/>
    <psv tagtype="occultation" name="seeing"    width="3"  justification="D" dpos="2"/>
    <psv tagtype="occultation" name="exp"       width="4"  justification="R" dpos="0"/>
    <psv tagtype="occultation" name="notes"     width="5"  justification="L" dpos="0"/>
