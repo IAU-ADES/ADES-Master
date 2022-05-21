@@ -547,16 +547,46 @@ decimal types must be in a range
    <restriction base="xsd:decimal">
       <restrict name="xsd:minInclusive" value="-1.0"/>
       <restrict name="xsd:maxInclusive" value="1.0"/>
+      <restrict name="xsd:pattern" value="[+\-]?[0123456789\.]{1,13}"/>
    </restriction>
-   <doc> CorrDecimal in range [-1.0, 1.0] </doc>
+   <doc> Decimal in range [-1.0, 1.0] with no more that 13 characters plus optional sign </doc>
+</simpletype>
+
+<simpletype name="DecimalTypeW6">
+   <restriction base="xsd:decimal">
+      <restrict name="xsd:pattern" value="[+\-]?[0123456789\.]{1,5}"/>
+   </restriction>
+   <doc> Decimal in range (-inf, +inf) with no more that 5 characters plus optional sign</doc>
+</simpletype>
+
+<simpletype name="DecimalTypeW8">
+   <restriction base="xsd:decimal">
+      <restrict name="xsd:pattern" value="[+\-]?[0123456789\.]{1,7}"/>
+   </restriction>
+   <doc> Decimal in range (-inf, +inf) with no more that 7 characters plus optional sign</doc>
+</simpletype>
+
+<simpletype name="DecimalTypeW10">
+   <restriction base="xsd:decimal">
+      <restrict name="xsd:pattern" value="[+\-]?[0123456789\.]{1,9}"/>
+   </restriction>
+   <doc> Decimal in range (-inf, +inf) with no more that 9 characters plus optional sign</doc>
+</simpletype>
+
+<simpletype name="DecimalTypeW14">
+  <restriction base="xsd:decimal">
+    <restrict name="xsd:pattern" value="[+\-]?[0123456789\.]{1,13}"/>
+  </restriction>
+  <doc> Decimal in range (-inf, +inf) with no more that 13 characters plus optional sign</doc>
 </simpletype>
 
 <simpletype name="DeclinationType">
-   <restriction base="xsd:decimal">
-     <restrict name="xsd:minInclusive" value="-90.0"/>
-     <restrict name="xsd:maxInclusive" value="90.0"/>
-   </restriction>
-   <doc> $\mathrm{DEC}$ in degrees in range [-90.0, 90.0] </doc>
+  <restriction base="xsd:decimal">
+    <restrict name="xsd:minInclusive" value="-90.0"/>
+    <restrict name="xsd:maxInclusive" value="90.0"/>
+    <restrict name="xsd:pattern" value="[+\-]?([1-9]?[0-9])?(\.[0123456789]{0,8})?"/>
+  </restriction>
+  <doc> $\mathrm{DEC}$ in degrees in range [-90.0, 90.0] with no more that 8 characters after the decimal</doc>
 </simpletype>
 
 <simpletype name="DeprecatedType">
@@ -572,6 +602,20 @@ decimal types must be in a range
       <restrict name="xsd:enumeration"  value="+"/>
    </restriction>
    <doc> Used to mark the discovery record -- must be `*' or `+' if present</doc>
+</simpletype>
+
+<simpletype name="DoubleTypeW7">
+   <restriction base="xsd:double">
+      <restrict name="xsd:pattern" value="[+\-]?[+\-Ee0123456789\.]{1,6}"/>
+   </restriction>
+   <doc> Double (i.e., decimal or exponential) in range (-inf, +inf) with no more that 6 characters plus optional sign</doc>
+</simpletype>
+
+<simpletype name="DoubleTypeW21">
+   <restriction base="xsd:double">
+      <restrict name="xsd:pattern" value="[+\-]?[+\-Ee0123456789\.]{1,20}"/>
+   </restriction>
+   <doc> Double (i.e., decimal or exponential) in range (-inf, +inf) with no more that 20 characters plus optional sign</doc>
 </simpletype>
 
 <simpletype name="SubFrmType">
@@ -633,7 +677,7 @@ decimal types must be in a range
 </simpletype>
 
 <simpletype name="PermIDType">
-   <restriction base="xsd:string">
+   <restriction base="StringTypeW25">
    <restrict name="xsd:pattern" value="\d+([IPD](-[A-Z]{1,2})?)?|((Mars|Jupiter|Saturn|Uranus|Neptune) \d{1,3}|\(\d+\) \d{1,3})"/>
    </restriction>
    <doc> A permID (permanent ID) string may be a positive integer, a positive integer 
@@ -652,7 +696,7 @@ decimal types must be in a range
 </simpletype>
 
 <simpletype name="PlanetNameType">
-   <restriction base="xsd:string">
+   <restriction base="StringTypeW25">
       <restrict name="xsd:enumeration"  value="Mercury" />
       <restrict name="xsd:enumeration"  value="Venus" />
       <restrict name="xsd:enumeration"  value="Earth" />
@@ -669,8 +713,59 @@ decimal types must be in a range
 <simpletype name="PosDecimalType">
    <restriction base="xsd:decimal">
       <restrict name="xsd:minExclusive" value="0.0"/>
+      <restrict name="xsd:maxExclusive" value="100000.0"/>
    </restriction>
-   <doc> PositiveDecimal in range (0.0, +inf) </doc>
+   <doc> PositiveDecimal in range (0.0, 100,000) </doc>
+</simpletype>
+
+<simpletype name="PosIntegerTypeW6">
+   <restriction base="xsd:positiveInteger">
+      <restrict name="xsd:maxExclusive" value="1000000"/>
+   </restriction>
+   <doc> Positive integer in range (0, 1,000,000). Thus no more than 6 characters. </doc>
+</simpletype>
+
+<simpletype name="SPICEIDType">
+   <restriction base="xsd:integer">
+      <restrict name="xsd:pattern" value="[\-0123456789]{1,9}"/>
+   </restriction>
+   <doc> Positive integer in range (0, 1,000,000,000). Thus no more than 9 characters. </doc>
+</simpletype>
+
+<simpletype name="PosDecimalTypeW6">
+   <restriction base="PosDecimalType">
+      <restrict name="xsd:pattern" value="[0123456789\.]{1,6}"/>
+   </restriction>
+   <doc> Unsigned decimal in range (0.0, 100,000) with no more that 6 characters</doc>
+</simpletype>
+
+<simpletype name="PosDecimalTypeW8">
+   <restriction base="PosDecimalType">
+      <restrict name="xsd:pattern" value="[0123456789\.]{1,8}"/>
+   </restriction>
+   <doc> Unsigned decimal in range (0.0, 100,000) with no more that 8 characters</doc>
+</simpletype>
+
+<simpletype name="PosDecimalTypeW10">
+   <restriction base="PosDecimalType">
+      <restrict name="xsd:pattern" value="[0123456789\.]{1,10}"/>
+   </restriction>
+   <doc> Unsigned decimal in range (0.0, 100,000) with no more that 10 characters</doc>
+</simpletype>
+
+<simpletype name="PosDecimalTypeW14">
+   <restriction base="PosDecimalType">
+      <restrict name="xsd:pattern" value="[0123456789\.]{1,14}"/>
+   </restriction>
+   <doc> Unsigned decimal in range (0.0, 100,000) with no more that 14 characters</doc>
+</simpletype>
+
+<simpletype name="FrequencyType">
+   <restriction base="xsd:decimal">
+      <restrict name="xsd:minExclusive" value="0.0"/>
+      <restrict name="xsd:pattern" value="[0123456789\.]{1,16}"/>
+   </restriction>
+   <doc> Unsigned decimal in range (0.0, +inf) with no more that 16 characters</doc>
 </simpletype>
 
 <simpletype name="ProgType">
@@ -681,12 +776,12 @@ decimal types must be in a range
 </simpletype>
 
 <simpletype name="BaseProvIDType">
-   <restriction base="xsd:string">
+   <restriction base="StringTypeW25">
       <restrict name="xsd:pattern" value="\d{4} [A-HJ-Y][A-HJ-Z]\d*|\d{4} (P-L|T-[123])|[ADCPX]/\d{4} [A-Z]{1,2}\d*(-[A-Z])?|S/\d{4} ((M|J|S|U|N)|\((\d+|\d{4} [A-HJ-Y][A-HJ-Z]?\d+)\)) \d+"/>
    </restriction>
-   <doc> A provID (provisional ID) is may be a minor planet provid, 
+   <doc> A provID (provisional ID) may be a minor planet provid,
       which is a 4-digit year followed by a space followd by two letters
-      followed optinally by digits; or a comet it, which is C/ or P/ or D/ 
+      followed optinally by digits; or a comet id, which is C/ or P/ or D/
       or X/ or A/ (for asteroids with comet numbers, which may not have fragments)
       followed by a 4-digit year follwed by a space followed by one
       or two digits optinally followed by one or two digits optionally
@@ -698,7 +793,7 @@ decimal types must be in a range
 </simpletype>
 
 <simpletype name="OldProvIDType">
-   <restriction base="xsd:string">
+   <restriction base="StringTypeW25">
       <restrict name="xsd:pattern" value="A[89]\d{2} [A-HJ-Y][A-HJ-Z]"/>
    </restriction>
    <doc> An old-style provID (provisional ID) for object recorded before
@@ -735,9 +830,6 @@ decimal types must be in a range
      <restrict name="xsd:enumeration" value="60"/>
      <restrict name="xsd:enumeration" value="6"/>
      <restrict name="xsd:enumeration" value="1"/>
-     <restrict name="xsd:enumeration" value="60.0"/>
-     <restrict name="xsd:enumeration" value="6.0"/>
-     <restrict name="xsd:enumeration" value="1.0"/>
    </restriction>
    <doc> RaDecPrecType is used to describe the precision of a historical decimal value
          when the orignal measurement was made in sexagesimal.  The allowed values
@@ -749,35 +841,36 @@ decimal types must be in a range
 </simpletype>
 
 <simpletype name="RAType">
-   <restriction base="xsd:decimal">
-     <restrict name="xsd:minInclusive" value="0.0"/>
-     <restrict name="xsd:maxExclusive" value="360.0"/>
-   </restriction>
-   <doc> RA in degrees limited to [0.0, 360.0) </doc>
+  <restriction base="xsd:decimal">
+    <restrict name="xsd:minInclusive" value="0.0"/>
+    <restrict name="xsd:maxExclusive" value="360.0"/>
+    <restrict name="xsd:pattern" value="([1-3][0-9]{2}|[1-9]?[0-9])?(\.[0-9]{0,8})?"/>
+  </restriction>
+  <doc> Unsigned RA in degrees limited to [0.0, 360.0) with no more that 8 characters after the decimal</doc>
 </simpletype>
 
 <simpletype name="RefType">
-   <restriction base="StringType">
-     <restrict name="xsd:maxLength" value="16"/>
-   </restriction>
-   <doc>MPC-assigned reference, up to sixteen characters</doc>
+  <restriction base="StringType">
+    <restrict name="xsd:maxLength" value="16"/>
+  </restriction>
+  <doc>MPC-assigned reference, up to sixteen characters</doc>
 </simpletype>
 
 <simpletype name="RemarkType">
-   <restriction base="StringType">
-     <restrict name="xsd:maxLength" value="300"/>
-   </restriction>
-   <doc> A remark is a String limited to 300 characters</doc>
+  <restriction base="StringType">
+    <restrict name="xsd:maxLength" value="300"/>
+  </restriction>
+  <doc> A remark is a String limited to 300 characters</doc>
 </simpletype>
 
 <simpletype name="SelResType" base="xsd:string">
-   <restriction base="xsd:string">
-     <restrict name="xsd:enumeration" value="A"/>
-     <restrict name="xsd:enumeration" value="a"/>
-     <restrict name="xsd:enumeration" value="D"/>
-     <restrict name="xsd:enumeration" value="d"/>
-   </restriction>
-   <doc> SelRes must be ``A," (automatic accept) ``a," (manual accept)``D," (automatic delete) or ``d" (manual delete)</doc>
+  <restriction base="xsd:string">
+    <restrict name="xsd:enumeration" value="A"/>
+    <restrict name="xsd:enumeration" value="a"/>
+    <restrict name="xsd:enumeration" value="D"/>
+    <restrict name="xsd:enumeration" value="d"/>
+  </restriction>
+  <doc> SelRes must be ``A," (automatic accept) ``a," (manual accept)``D," (automatic delete) or ``d" (manual delete)</doc>
 </simpletype>
 
 <simpletype name="StationType">
@@ -797,6 +890,20 @@ decimal types must be in a range
          To allow data conversion from XML, it must disallowed in XML as well.
          Also disallow blank elements.  Therefore, all elements must match
          this pattern </doc>
+</simpletype>
+
+<simpletype name="StringTypeW25">
+   <restriction base="StringType">
+     <restrict name="xsd:maxLength" value="25"/>
+   </restriction>
+   <doc> A StringType limited to 25 characters</doc>
+</simpletype>
+
+<simpletype name="StringTypeW100">
+   <restriction base="StringType">
+     <restrict name="xsd:maxLength" value="100"/>
+   </restriction>
+   <doc> A StringType limited to 100 characters</doc>
 </simpletype>
 
 <simpletype name="SubFmtType">
@@ -821,7 +928,7 @@ decimal types must be in a range
 
 <simpletype name="TimeHelp">
     <restriction base="xsd:dateTime">
-        <restrict name="xsd:pattern" value="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z" />
+      <restrict name="xsd:pattern" value="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,6})?Z" />
     </restriction>
    <doc>Restrict dateTime to 4-digit positive years and Z for UTC</doc>
 </simpletype>
@@ -905,7 +1012,7 @@ decimal types must be in a range
 
 <complextype name="NamesType">
      <sequence>
-       <element name="name" type="StringType" use="unbounded" doc="list of names"/>
+       <element name="name" type="StringTypeW100" use="unbounded" doc="list of names"/>
      </sequence>
      <doc> List of one or more names of type String</doc>
 </complextype>
@@ -913,46 +1020,46 @@ decimal types must be in a range
 <complextype name="ObservatoryType">
      <all>
        <element name="mpcCode" type="StationType" doc="observatory mpc code name"/>
-       <element name="name" type="StringType" use="optional" doc="observatory name"/>
+       <element name="name" type="StringTypeW100" use="optional" doc="observatory name"/>
      </all>
      <doc> Observatory Identification</doc>
 </complextype>
 
 <complextype name="SubmitterType">
      <all>
-       <element name="name" type="StringType" doc="observer name"/>
-       <element name="institution" type="StringType" use="optional" doc="observer institution"/>
+       <element name="name" type="StringTypeW100" doc="observer name"/>
+       <element name="institution" type="StringTypeW100" use="optional" doc="observer institution"/>
      </all>
      <doc>Submitter information.  A name field (initials plus surname), an institution string</doc>
 </complextype>
 
 <complextype name="TelescopeType">
      <all>
-       <element name="name" type="StringType" use="optional" doc="telescope name"/>
-       <element name="design" type="StringType" doc="telescope design"/>
-       <element name="aperture" type="PosDecimalType" doc="telescope aperture"/>
-       <element name="detector" type="StringType" doc="telescope detector"/>
-       <element name="fRatio" type="PosDecimalType" use="optional" doc="telescope f number"/>
-       <element name="filter" type="StringType" use="optional" doc="telescope filter"/>
-       <element name="arraySize" type="StringType" use="optional" doc="telescope array size"/>
-       <element name="pixelScale" type="PosDecimalType" use="optional" doc="telescope sensor pixel size"/>
+       <element name="name" type="StringTypeW100" use="optional" doc="telescope name"/>
+       <element name="design" type="StringTypeW100" doc="telescope design"/>
+       <element name="aperture" type="PosDecimalTypeW6" doc="telescope aperture"/>
+       <element name="detector" type="StringTypeW100" doc="telescope detector"/>
+       <element name="fRatio" type="PosDecimalTypeW6" use="optional" doc="telescope f number"/>
+       <element name="filter" type="StringTypeW100" use="optional" doc="telescope filter"/>
+       <element name="arraySize" type="StringTypeW100" use="optional" doc="telescope array size"/>
+       <element name="pixelScale" type="PosDecimalTypeW6" use="optional" doc="telescope sensor pixel size"/>
      </all>
      <doc>telescope information</doc>
 </complextype>
 
 <complextype name="SoftwareType">
      <all>
-       <element name="astrometry" type="StringType" use="optional" />
-       <element name="fitOrder" type="StringType" use="optional" />
-       <element name="photometry" type="StringType" use="optional" />
-       <element name="objectDetection" type="StringType" use="optional" />
+       <element name="astrometry" type="StringTypeW100" use="optional" />
+       <element name="fitOrder" type="StringTypeW100" use="optional" />
+       <element name="photometry" type="StringTypeW100" use="optional" />
+       <element name="objectDetection" type="StringTypeW100" use="optional" />
      </all>
      <doc>information about software used in processing</doc>
 </complextype>
 
 <complextype name="CommentType">
      <sequence>
-       <element name="line" type="StringType" use="unbounded" doc="list of ocmment lines"/>
+       <element name="line" type="StringTypeW100" use="unbounded" doc="list of ocmment lines"/>
      </sequence>
      <doc> List of one or more lines of type String</doc>
 </complextype>
@@ -1398,107 +1505,106 @@ decimal types must be in a range
 -->
 <XSDElementTypes purpose="ADES observation sub-elements">
    <doc>These elements are for the observation types in the required order</doc>
-   <element name="permID"   type="PermIDType"              doc="IAU permanent designation, i.e., IAU number"/>
-   <element name="provID"   type="ProvIDType"              doc="MPC provisional designation (unpacked form) for unnumbered object"/>
-   <element name="artSat"   type="StringType"              doc="Name of an artificial satellite"/>
-   <element name="trkSub"   type="TrkSubType"              doc="Observer-assigned tracklet identifier, unique within submission batch."/>
-   <element name="obsID"    type="ObsIDType"               doc="Globally Unique Observation ID assigned by MPC."/>
-   <element name="obsSubID" type="ObsIDType"               doc="Observation identifier, optionally included with the submission, that is unique to a given observing program. This element is intended to support extended analyses associated with major observing programs."/>
-   <element name="trkID"    type="TrkIDType"               doc="Globally Unique alphnumeric tracklet ID assigned by MPC"/>
-   <element name="trkMPC"   type="TrkIDType"               doc="MPC-internal tracklet identifier, used in cases where the value of the trkSub element should be considered deprecated."/>
-   <element name="mode"     type="ModeType"                doc="Mode of optical and offset observations."/>
-   <element name="stn"      type="StationType"             doc="Obervatory code from MPC list."/>
-   <element name="trx"      type="StationType"             doc="Station code of transmiting antenna."/>
-   <element name="rcv"      type="StationType"             doc="Station code of receiving antenna."/>
-   <element name="sys"      type="SysType"                 doc="Coordinate system for station coordinates and covariance."/>
-   <element name="ctr"      type="xsd:integer"             doc="Origin of the reference system.  Use public SPICE codes, e.g., 399 is the geocenter, 10 is the Sun center.  Note;  sys=WGS84 implies ctr=399"/>
-   <element name="pos1"     type="xsd:decimal"             doc="Position of observer, first value." />
-   <element name="pos2"     type="xsd:decimal"             doc="Position second value per sys"/>
-   <element name="pos3"     type="xsd:decimal"             doc="Position third value per sys"/>
-   <element name="posCov11" type="xsd:decimal"             doc="11 covariance per sys"/>
-   <element name="posCov12" type="xsd:decimal"             doc="12 covariance per sys"/>
-   <element name="posCov13" type="xsd:decimal"             doc="13 covariance per sys"/>
-   <element name="posCov22" type="xsd:decimal"             doc="22 covariance per sys"/>
-   <element name="posCov23" type="xsd:decimal"             doc="23 covariance per sys"/>
-   <element name="posCov33" type="xsd:decimal"             doc="33 covariance per sys"/>
-   <element name="prog"     type="ProgType"                doc="Program code as assigned by the MPC."/>
-   <element name="obsTime"  type="TimeType"                doc="UTC time of the observation in ISO 8601 format, i.e., {\em yyyy-mm-ddThh:mm:ss.ssZ}."/>
-   <element name="ra"       type="RAType"                  doc="J2000.0 Astrometric equatorial right ascension in decimal degrees."/>
-   <element name="dec"      type="DeclinationType"         doc="J2000.0 Astrometric equatorial declination in decimal degrees.  Positive DEC values may optionally include a \verb|+| sign"/>
-   <element name="raStar"   type="RAType"                  doc="J2000.0 RA in decimal degrees of the occulted star"/>
-   <element name="decStar"  type="DeclinationType"         doc="J2000.0 DEC in decimal degrees of the occulted star"/>
-   <element name="obsCenter" type="ObsCenterType"          doc="Center of offset observation may be planet or other body with PermID or ProvID"/>
-   <element name="deltaRA"  type="xsd:decimal"             doc="Measured $\Delta(\mathrm{RA}\cos\mathrm{ DEC})$ in arcseconds.  For offset measurements of a satellite with respect to its primary, or for occultation observations with respect to the star in rectangular coordinates, J2000.0 frame."/>
-   <element name="deltaDec" type="xsd:decimal"             doc="Measured  $\Delta$DEC in  arcseconds.  For offset measurements of a satellite with respect to its primary, or for occultation observations with respect to the star in rectangular coordinates, J2000.0 frame"/>
-   <element name="dist"     type="PosDecimalType"          doc="Measured distance in arcseconds.  For offset measurements of a satellite with respect to its primary, or for occultation observations with respect to the star in polar coordinates."/>
-   <element name="pa"       type="RAType"                  doc="Measured position angle in degrees.  For offset measurements of a satellite with respect to its primary, or for occultation observations with respect to the star in polar coordinates."/>
-   <element name="rmsTime"  type="PosDecimalType"          doc="Random component of the obsTime $1\sigma$ uncertainty in seconds as estimated by the observer."/>
-   <element name="rmsRA"    type="PosDecimalType"          doc="Random component of the $\mathrm{RA}\cos\mathrm{DEC}$ $1\sigma$ uncertainty in arcseconds as estimated by the observer as part of the image processing and astrometric reduction."/>
-   <element name="rmsDec"   type="PosDecimalType"          doc="Random component of the DEC $1\sigma$ uncertainty in arcseconds as estimated by the observer as part of the image processing and astrometric reduction."/>
-   <element name="rmsDist"  type="PosDecimalType"          doc="Random component of the distance $1\sigma$ uncertainty in arcseconds as estimated by the observer as part of the image processing and astrometric reduction."/>
-   <element name="rmsPA"    type="PosDecimalType"          doc="Random component of the polar angle $1\sigma$ uncertainty in degrees  as estimated by the observer as part of the image processing and astrometric reduction."/>
-   <element name="rmsCorr"  type="CorrDecimalType"         doc="Correlation between RA and DEC or dist and PA that may result from the astrometric reduction.  This is derived from the $\mathrm{RA}$-$\mathrm{DEC}$ or $\mathrm{dist}$-$\mathrm{PA}$ covariance matrix, where the off-diagonal term is $\mathrm{rmsCorr} * \mathrm{rmsRA} * \mathrm{rmsDec}$ or $\mathrm{rmsCorr} * \mathrm{rmsDist} * \mathrm{rmsPA}$."/>
-   <element name="delay"      type="PosDecimalType"        doc="Observed radar delay value in seconds."/>
-   <element name="rmsDelay"   type="PosDecimalType"        doc="Measurement $1\sigma$ uncertainty in \si{\micro\second} for radar delay"/>
-   <element name="doppler"    type="xsd:decimal"           doc="observed radar doppler value in \si{\hertz}"/>
-   <element name="rmsDoppler" type="PosDecimalType"        doc="Measurement $1\sigma$ uncertainty in \si{\hertz} for radar doppler"/>
-   <element name="astCat"   type="CatType"                 doc="Star catalog used for the astrometric reduction or for the occulted star in the case of occultation observations.)"/>
-   <element name="mag"      type="xsd:decimal"             doc="Apparent Magnitude in specified band"/>
-   <element name="rmsMag"   type="PosDecimalType"          doc="Apparent magnitude $1\sigma$ uncertainty in magnitudes."/>
-   <element name="band"     type="BandType"                doc="Filter designation for photometry."/>
-   <element name="photCat"  type="CatType"                 doc="Star catalog used for photometry measurements."/>
-   <element name="photAp"   type="PosDecimalType"          doc="Photometric aperture radius in arcseconds."/>
-   <element name="nucMag"   type="LogicalType"             doc="Nuclear magnitude flag for comets.  0 for total magnitude (i.e., for most archival comet observations and all asteroid observations), 1 for nuclear magnitude. Primarily used for archival data as photAp should be used to communicate this information in the new standard"/>
-   <element name="logSNR"   type="xsd:decimal"             doc="$\log_{10}$ of the signal-to-noise ratio of the source in the image integrated on the entire aperture used for the astrometric centroid."/>
-   <element name="shapeOcc" type="LogicalType"             doc="For occultation observations, a flag to indicate that the observation reduction assumes a shape-based (non-circular) plane-of-sky cross-section. False implies that a circular cross section was assumed."/>
-   <element name="seeing"   type="PosDecimalType"          doc="Size of seeing disc in arcseconds, measured at Full Width Half Maximum (FWHM) of target point spread function (PSF). "/>
-   <element name="exp"      type="PosDecimalType"          doc="Exposure time in \si{\second}.  Total exposure time in the case of stacked image detections "/>
-   <element name="rmsFit"   type="PosDecimalType"          doc="RMS of fit of astrometric comparison stars in arcseconds. "/>
-   <element name="nStars"   type="xsd:positiveInteger"     doc="Number of stars in astrometric fit."/>
-   <element name="com"        type="LogicalType"           doc="Flag to indicate that the observation is reduced to the center of mass.  0 implies a measurement to the peak power position, which is usually interpreted as the leading edge of the target, with the reflection point being modeled one object radius prior to the center of mass."/>
-   <element name="frq"        type="PosDecimalType"        doc="Carrier reference frequence in \si{\mega\hertz}"/>
-   <element name="ref"      type="RefType"                 doc="Standard reference field used for citations."/>
-   <element name="disc"     type="DiscType"                doc="Discovery flag; `*' marks a new discovery record; '+' marks the first measurement of a previously observed object; otherwise not present"/>
-   <element name="subFmt"   type="SubFmtType"              doc="Format in which the observation was originally submitted to the MPC, e.g., M92 for MPC1992 format or A17 for the current standard standard.  Filled by the MPC according to a list provided and maintained by the MPC."/>
-   <element name="subFrm"   type="SubFrmType"              doc="Reference frame for the original submission of reported angular measurements."/>
-   <element name="precTime" type="TimePrecType"            doc="Precision in millionths of a day of the reported obeservation time for archived MPC1992 data records"/>
-   <element name="precRA"   type="RaDecPrecType"           doc="Precision in seconds of the reported RA for archived MPC1992 data records."/>
-   <element name="precDec"  type="RaDecPrecType"           doc="Precision in arcseconds of the reported DEC for archived MPC1992 data records."/>
-   <element name="uncTime"  type="PosDecimalType"          doc="Estimated time uncertainty in seconds. Unlike the preceding RMS fields, which indicate random errors, this field indicates a presumed level of systematic clock error.  NB: This field is generally only to be used to communicate exceptions and problems with clock calibration and is not intended to be used in routine submissions where clock errors are not a significant source of astrometric error."/>
-   <element name="notes"    type="NotesType"               doc="A set of one-character note flags to communicate observing circumstances."/>
-   <element name="remarks"  type="RemarkType"              doc="Comment field provided by the observer.  This field can be used to report additional information that is not reportable in the notes field, but that may be of relevance for interpretation of the observations."/>
-   <element name="deprecated" type="DeprecatedType"        doc="Marks deprecated observation."/>
-   <element name="localUse"   type="LocalUseType"          doc="For user-defined fields in observations"/>
+   <element name="permID"     type="PermIDType"         doc="IAU permanent designation, i.e., IAU number"/>
+   <element name="provID"     type="ProvIDType"         doc="MPC provisional designation (unpacked form) for unnumbered object"/>
+   <element name="artSat"     type="StringTypeW25"      doc="Name of an artificial satellite"/>
+   <element name="trkSub"     type="TrkSubType"         doc="Observer-assigned tracklet identifier, unique within submission batch."/>
+   <element name="obsID"      type="ObsIDType"          doc="Globally Unique Observation ID assigned by MPC."/>
+   <element name="obsSubID"   type="ObsIDType"          doc="Observation identifier, optionally included with the submission, that is unique to a given observing program. This element is intended to support extended analyses associated with major observing programs."/>
+   <element name="trkID"      type="TrkIDType"          doc="Globally Unique alphnumeric tracklet ID assigned by MPC"/>
+   <element name="trkMPC"     type="TrkIDType"          doc="MPC-internal tracklet identifier, used in cases where the value of the trkSub element should be considered deprecated."/>
+   <element name="mode"       type="ModeType"           doc="Mode of optical and offset observations."/>
+   <element name="stn"        type="StationType"        doc="Obervatory code from MPC list."/>
+   <element name="trx"        type="StationType"        doc="Station code of transmiting antenna."/>
+   <element name="rcv"        type="StationType"        doc="Station code of receiving antenna."/>
+   <element name="sys"        type="SysType"            doc="Coordinate system for station coordinates and covariance."/>
+   <element name="ctr"        type="SPICEIDType"        doc="Origin of the reference system.  Use public SPICE codes, e.g., 399 is the geocenter, 10 is the Sun center.  Note;  sys=WGS84 implies ctr=399"/>
+   <element name="pos1"       type="DoubleTypeW21"      doc="Position of observer, first value." />
+   <element name="pos2"       type="DoubleTypeW21"      doc="Position second value per sys"/>
+   <element name="pos3"       type="DoubleTypeW21"      doc="Position third value per sys"/>
+   <element name="posCov11"   type="DoubleTypeW21"      doc="11 covariance per sys"/>
+   <element name="posCov12"   type="DoubleTypeW21"      doc="12 covariance per sys"/>
+   <element name="posCov13"   type="DoubleTypeW21"      doc="13 covariance per sys"/>
+   <element name="posCov22"   type="DoubleTypeW21"      doc="22 covariance per sys"/>
+   <element name="posCov23"   type="DoubleTypeW21"      doc="23 covariance per sys"/>
+   <element name="posCov33"   type="DoubleTypeW21"      doc="33 covariance per sys"/>
+   <element name="prog"       type="ProgType"           doc="Program code as assigned by the MPC."/>
+   <element name="obsTime"    type="TimeType"           doc="UTC time of the observation in ISO 8601 format, i.e., {\em yyyy-mm-ddThh:mm:ss.ssZ}."/>
+   <element name="rmsTime"    type="PosDecimalTypeW8"   doc="Random component of the obsTime $1\sigma$ uncertainty in seconds as estimated by the observer."/>
+   <element name="ra"         type="RAType"             doc="J2000.0 Astrometric equatorial right ascension in decimal degrees."/>
+   <element name="dec"        type="DeclinationType"    doc="J2000.0 Astrometric equatorial declination in decimal degrees.  Positive DEC values may optionally include a \verb|+| sign"/>
+   <element name="raStar"     type="RAType"             doc="J2000.0 RA in decimal degrees of the occulted star"/>
+   <element name="decStar"    type="DeclinationType"    doc="J2000.0 DEC in decimal degrees of the occulted star"/>
+   <element name="obsCenter"  type="ObsCenterType"      doc="Center of offset observation may be planet or other body with PermID or ProvID"/>
+   <element name="deltaRA"    type="DecimalTypeW10"     doc="Measured $\Delta(\mathrm{RA}\cos\mathrm{ DEC})$ in arcseconds.  For offset measurements of a satellite with respect to its primary, or for occultation observations with respect to the star in rectangular coordinates, J2000.0 frame."/>
+   <element name="deltaDec"   type="DecimalTypeW10"     doc="Measured  $\Delta$DEC in  arcseconds.  For offset measurements of a satellite with respect to its primary, or for occultation observations with respect to the star in rectangular coordinates, J2000.0 frame"/>
+   <element name="dist"       type="PosDecimalTypeW10"  doc="Measured distance in arcseconds.  For offset measurements of a satellite with respect to its primary, or for occultation observations with respect to the star in polar coordinates."/>
+   <element name="pa"         type="RAType"             doc="Measured position angle in degrees.  For offset measurements of a satellite with respect to its primary, or for occultation observations with respect to the star in polar coordinates."/>
+   <element name="rmsRA"      type="PosDecimalTypeW6"   doc="Random component of the $\mathrm{RA}\cos\mathrm{DEC}$ $1\sigma$ uncertainty in arcseconds as estimated by the observer as part of the image processing and astrometric reduction."/>
+   <element name="rmsDec"     type="PosDecimalTypeW6"   doc="Random component of the DEC $1\sigma$ uncertainty in arcseconds as estimated by the observer as part of the image processing and astrometric reduction."/>
+   <element name="rmsDist"    type="PosDecimalTypeW6"   doc="Random component of the distance $1\sigma$ uncertainty in arcseconds as estimated by the observer as part of the image processing and astrometric reduction."/>
+   <element name="rmsPA"      type="PosDecimalTypeW6"   doc="Random component of the polar angle $1\sigma$ uncertainty in degrees  as estimated by the observer as part of the image processing and astrometric reduction."/>
+   <element name="rmsCorr"    type="CorrDecimalType"    doc="Correlation between RA and DEC or dist and PA that may result from the astrometric reduction.  This is derived from the $\mathrm{RA}$-$\mathrm{DEC}$ or $\mathrm{dist}$-$\mathrm{PA}$ covariance matrix, where the off-diagonal term is $\mathrm{rmsCorr} * \mathrm{rmsRA} * \mathrm{rmsDec}$ or $\mathrm{rmsCorr} * \mathrm{rmsDist} * \mathrm{rmsPA}$."/>
+   <element name="delay"      type="PosDecimalTypeW14"  doc="Observed radar delay value in seconds."/>
+   <element name="rmsDelay"   type="PosDecimalTypeW6"   doc="Measurement $1\sigma$ uncertainty in \si{\micro\second} for radar delay"/>
+   <element name="doppler"    type="DecimalTypeW14"     doc="observed radar doppler value in \si{\hertz}"/>
+   <element name="rmsDoppler" type="PosDecimalTypeW6"   doc="Measurement $1\sigma$ uncertainty in \si{\hertz} for radar doppler"/>
+   <element name="astCat"     type="CatType"            doc="Star catalog used for the astrometric reduction or for the occulted star in the case of occultation observations.)"/>
+   <element name="mag"        type="DecimalTypeW8"      doc="Apparent Magnitude in specified band"/>
+   <element name="rmsMag"     type="PosDecimalTypeW6"   doc="Apparent magnitude $1\sigma$ uncertainty in magnitudes."/>
+   <element name="band"       type="BandType"           doc="Filter designation for photometry."/>
+   <element name="photCat"    type="CatType"            doc="Star catalog used for photometry measurements."/>
+   <element name="photAp"     type="PosDecimalTypeW6"   doc="Photometric aperture radius in arcseconds."/>
+   <element name="nucMag"     type="LogicalType"        doc="Nuclear magnitude flag for comets.  0 for total magnitude (i.e., for most archival comet observations and all asteroid observations), 1 for nuclear magnitude. Primarily used for archival data as photAp should be used to communicate this information in the new standard"/>
+   <element name="logSNR"     type="DecimalTypeW6"      doc="$\log_{10}$ of the signal-to-noise ratio of the source in the image integrated on the entire aperture used for the astrometric centroid."/>
+   <element name="shapeOcc"   type="LogicalType"        doc="For occultation observations, a flag to indicate that the observation reduction assumes a shape-based (non-circular) plane-of-sky cross-section. False implies that a circular cross section was assumed."/>
+   <element name="seeing"     type="PosDecimalTypeW6"   doc="Size of seeing disc in arcseconds, measured at Full Width Half Maximum (FWHM) of target point spread function (PSF). "/>
+   <element name="exp"        type="PosDecimalTypeW6"   doc="Exposure time in \si{\second}.  Total exposure time in the case of stacked image detections "/>
+   <element name="rmsFit"     type="PosDecimalTypeW6"   doc="RMS of fit of astrometric comparison stars in arcseconds. "/>
+   <element name="nStars"     type="PosIntegerTypeW6"     doc="Number of stars in astrometric fit."/>
+   <element name="com"        type="LogicalType"        doc="Flag to indicate that the observation is reduced to the center of mass.  0 implies a measurement to the peak power position, which is usually interpreted as the leading edge of the target, with the reflection point being modeled one object radius prior to the center of mass."/>
+   <element name="frq"        type="FrequencyType"      doc="Carrier reference frequence in \si{\mega\hertz}"/>
+   <element name="ref"        type="RefType"            doc="Standard reference field used for citations."/>
+   <element name="disc"       type="DiscType"           doc="Discovery flag; `*' marks a new discovery record; '+' marks the first measurement of a previously observed object; otherwise not present"/>
+   <element name="subFrm"     type="SubFrmType"         doc="Reference frame for the original submission of reported angular measurements."/>
+   <element name="subFmt"     type="SubFmtType"         doc="Format in which the observation was originally submitted to the MPC, e.g., M92 for MPC1992 format or A17 for the current standard standard.  Filled by the MPC according to a list provided and maintained by the MPC."/>
+   <element name="precTime"   type="TimePrecType"       doc="Precision in millionths of a day of the reported obeservation time for archived MPC1992 data records"/>
+   <element name="precRA"     type="RaDecPrecType"      doc="Precision in seconds of the reported RA for archived MPC1992 data records."/>
+   <element name="precDec"    type="RaDecPrecType"      doc="Precision in arcseconds of the reported DEC for archived MPC1992 data records."/>
+   <element name="uncTime"    type="PosDecimalTypeW8"   doc="Estimated time uncertainty in seconds. Unlike the preceding RMS fields, which indicate random errors, this field indicates a presumed level of systematic clock error.  NB: This field is generally only to be used to communicate exceptions and problems with clock calibration and is not intended to be used in routine submissions where clock errors are not a significant source of astrometric error."/>
+   <element name="notes"      type="NotesType"          doc="A set of one-character note flags to communicate observing circumstances."/>
+   <element name="remarks"    type="RemarkType"         doc="Comment field provided by the observer.  This field can be used to report additional information that is not reportable in the notes field, but that may be of relevance for interpretation of the observations."/>
+   <element name="deprecated" type="DeprecatedType"     doc="Marks deprecated observation."/>
+   <element name="localUse"   type="LocalUseType"       doc="For user-defined fields in observations"/>
 </XSDElementTypes>
 
    <!-- sub-elements for observation residuals  -->
 
 <XSDElementTypes purpose="observations residual sub-elements">
-  <element name="orbProd"         type="StringType"            doc="Orbit producer.  Can be institution, individual, or even email address, e.g.`MPC'"/>
-  <element name="orbID"           type="StringType"            doc="Local reference for orbit, e.g., `JPL 7' or `MPO 12345'." />
-  <element name="resRA"           type="xsd:decimal"           doc="Residuals in $\mathrm{RA}\cos\mathrm{DEC}$ in arcseconds"/>
-  <element name="resDec"          type="xsd:decimal"           doc="Residuals in DEC in arcseconds"/>
-  <element name="selAst"          type="SelResType"            doc="Inclusion/rejection flag for astrometry"/>
-
-  <element name="sigRA"           type="PosDecimalType"        doc="Adopted $\mathrm{RA}\cos\mathrm{DEC}$ $1\sigma$ uncertainty in arcseconds."/>
-  <element name="sigDec"          type="PosDecimalType"        doc="Adopted DEC $1\sigma$ uncertainty in arcseconds."/>
-  <element name="sigCorr"         type="CorrDecimalType"       doc="Adopted correlation between $\mathrm{RA}\cos\mathrm{DEC}$ and $\mathrm{DEC}$."/>
-  <element name="sigTime"         type="PosDecimalType"        doc="Adopted $1\sigma$ time uncertainty in seconds."/>
-  <element name="biasRA"          type="xsd:decimal"           doc="Adopted $\mathrm{RA}\cos\mathrm{DEC}$ bias in arcseconds."/>
-  <element name="biasDec"         type="xsd:decimal"           doc="Adopted $\mathrm{DEC}$ bias in arcseconds."/>
-  <element name="biasTime"        type="xsd:decimal"           doc="Adopted time bias in \si{\second}."/>
-  <element name="photProd"        type="StringType"            doc="Producer of photometric residuals.   Can be institution, individual, or even email address, e.g.`MPC'"/>         
-  <element name="resMag"          type="xsd:decimal"           doc="Photometric residual in magnitudes"/>
-  <element name="selPhot"         type="SelResType"            doc="Inclusion/rejection flag for photometry"/>
-  <element name="sigMag"          type="PosDecimalType"        doc="Adopted $1\sigma$ magnitude uncertainy in magnitudees."/>
-  <element name="biasMag"         type="xsd:decimal"           doc="Adopted photometric bias in magnitudes"/>
-  <element name="photMod"         type="PhotModType"           doc="Description of the photometric model."/>
-  <element name="resDelay"          type="xsd:decimal"           doc="Residual of the radar measurement in \si{\micro\second} for delay"/>
-  <element name="selDelay"          type="SelResType"            doc="Inclusion/rejection flag for radar astrometry"/>
-  <element name="sigDelay"          type="PosDecimalType"        doc="Adopted uncertainty for the radar measurement in \si{\micro\second} for delay"/>
-  <element name="resDoppler"          type="xsd:decimal"           doc="Residual of the radar measurement in \si{\hertz} for Doppler"/>
-  <element name="selDoppler"          type="SelResType"            doc="Inclusion/rejection flag for radar astrometry"/>
-  <element name="sigDoppler"          type="PosDecimalType"        doc="Adopted uncertainty for the radar measurement in \si{\hertz} for Doppler"/>
+  <element name="orbProd"     type="StringTypeW100"     doc="Orbit producer.  Can be institution, individual, or even email address, e.g.`MPC'"/>
+  <element name="orbID"       type="StringTypeW25"      doc="Local reference for orbit, e.g., `JPL 7' or `MPO 12345'." />
+  <element name="resRA"       type="DoubleTypeW7"       doc="Residuals in $\mathrm{RA}\cos\mathrm{DEC}$ in arcseconds"/>
+  <element name="resDec"      type="DoubleTypeW7"       doc="Residuals in DEC in arcseconds"/>
+  <element name="selAst"      type="SelResType"         doc="Inclusion/rejection flag for astrometry"/>
+  <element name="sigRA"       type="PosDecimalTypeW6"   doc="Adopted $\mathrm{RA}\cos\mathrm{DEC}$ $1\sigma$ uncertainty in arcseconds."/>
+  <element name="sigDec"      type="PosDecimalTypeW6"   doc="Adopted DEC $1\sigma$ uncertainty in arcseconds."/>
+  <element name="sigCorr"     type="CorrDecimalType"    doc="Adopted correlation between $\mathrm{RA}\cos\mathrm{DEC}$ and $\mathrm{DEC}$."/>
+  <element name="sigTime"     type="PosDecimalTypeW8"   doc="Adopted $1\sigma$ time uncertainty in seconds."/>
+  <element name="biasRA"      type="DecimalTypeW8"      doc="Adopted $\mathrm{RA}\cos\mathrm{DEC}$ bias in arcseconds."/>
+  <element name="biasDec"     type="DecimalTypeW8"      doc="Adopted $\mathrm{DEC}$ bias in arcseconds."/>
+  <element name="biasTime"    type="DecimalTypeW10"     doc="Adopted time bias in \si{\second}."/>
+  <element name="photProd"    type="StringTypeW100"     doc="Producer of photometric residuals.   Can be institution, individual, or even email address, e.g.`MPC'"/>
+  <element name="resMag"      type="DoubleTypeW7"       doc="Photometric residual in magnitudes"/>
+  <element name="selPhot"     type="SelResType"         doc="Inclusion/rejection flag for photometry"/>
+  <element name="sigMag"      type="PosDecimalTypeW6"   doc="Adopted $1\sigma$ magnitude uncertainy in magnitudees."/>
+  <element name="biasMag"     type="DecimalTypeW6"      doc="Adopted photometric bias in magnitudes"/>
+  <element name="photMod"     type="PhotModType"        doc="Description of the photometric model."/>
+  <element name="resDelay"    type="DoubleTypeW7"       doc="Residual of the radar measurement in \si{\micro\second} for delay"/>
+  <element name="selDelay"    type="SelResType"         doc="Inclusion/rejection flag for radar astrometry"/>
+  <element name="sigDelay"    type="PosDecimalTypeW6"   doc="Adopted uncertainty for the radar measurement in \si{\micro\second} for delay"/>
+  <element name="resDoppler"  type="DoubleTypeW7"       doc="Residual of the radar measurement in \si{\hertz} for Doppler"/>
+  <element name="selDoppler"  type="SelResType"         doc="Inclusion/rejection flag for radar astrometry"/>
+  <element name="sigDoppler"  type="PosDecimalTypeW6"   doc="Adopted uncertainty for the radar measurement in \si{\hertz} for Doppler"/>
 
 </XSDElementTypes>
 
@@ -1514,7 +1620,7 @@ decimal types must be in a range
    <element name="software"        type="SoftwareType"    doc="Description of software"/>
    <element name="coinvestigators" type="NamesType"       doc="list of coinvestigator names (initials then surname)"/>
    <element name="collaborators"   type="NamesType"       doc="list of collaborator names (initials then surname)"/>
-   <element name="fundingSource"   type="StringType"      doc="funding source"/>
+   <element name="fundingSource"   type="StringTypeW100"  doc="funding source"/>
    <element name="comment"         type="CommentType"     doc="comment for observation context"/>
 </XSDElementTypes>
 

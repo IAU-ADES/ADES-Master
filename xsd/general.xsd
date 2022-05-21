@@ -106,6 +106,14 @@
   <xsd:simpleType name="PosDecimalType">
     <xsd:restriction base="xsd:decimal">
       <xsd:minExclusive value="0.0"/>
+      <xsd:maxExclusive value="99999"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PosDecimalTypeW8">
+    <xsd:restriction base="xsd:decimal">
+      <xsd:minExclusive value="0.0"/>
+      <xsd:maxExclusive value="100000"/>
+      <xsd:pattern value="[+\-]?[0123456789\.]{1,8}"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="ProgType">
@@ -191,7 +199,7 @@
   </xsd:simpleType>
   <xsd:simpleType name="TimeHelp">
     <xsd:restriction base="xsd:dateTime">
-      <xsd:pattern value="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z"/>
+      <xsd:pattern value="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,6})?Z"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="TimePrecType">
