@@ -547,37 +547,48 @@ decimal types must be in a range
    <restriction base="xsd:decimal">
       <restrict name="xsd:minInclusive" value="-1.0"/>
       <restrict name="xsd:maxInclusive" value="1.0"/>
-      <restrict name="xsd:pattern" value="[+\-]?[0123456789\.]{1,13}"/>
+      <restrict name="xsd:pattern" value="[+\-]?(0|1)(\.[0123456789]{0,11})?"/>
    </restriction>
-   <doc> Decimal in range [-1.0, 1.0] with no more that 13 characters plus optional sign </doc>
+   <doc> Decimal in range [-1.0, 1.0] with no more that 11 digits
+   after the decimal point. Decimal point is optional, but if present
+   the integer portion must be present (i.e., '.1' and '-.1' are invalid.)</doc>
+</simpletype>
+
+<simpletype name="DecimalType">
+   <restriction base="xsd:decimal">
+      <restrict name="xsd:pattern" value="[+\-]?(0|([1-9][0-9]*))(\.[0-9]*)?"/>
+   </restriction>
+   <doc> Decimal in range (-inf, +inf). Decimal point is optional, but
+   if present the integer portion must be present (i.e., '.1' and '-.1' are
+   invalid.) </doc>
 </simpletype>
 
 <simpletype name="DecimalTypeW6">
-   <restriction base="xsd:decimal">
+   <restriction base="DecimalType">
       <restrict name="xsd:pattern" value="[+\-]?[0123456789\.]{1,5}"/>
    </restriction>
-   <doc> Decimal in range (-inf, +inf) with no more that 5 characters plus optional sign</doc>
+   <doc> DecimalType with no more than 5 characters plus optional sign</doc>
 </simpletype>
 
 <simpletype name="DecimalTypeW8">
-   <restriction base="xsd:decimal">
+   <restriction base="DecimalType">
       <restrict name="xsd:pattern" value="[+\-]?[0123456789\.]{1,7}"/>
    </restriction>
-   <doc> Decimal in range (-inf, +inf) with no more that 7 characters plus optional sign</doc>
+   <doc> DecimalType with no more than 7 characters plus optional sign</doc>
 </simpletype>
 
 <simpletype name="DecimalTypeW10">
-   <restriction base="xsd:decimal">
+   <restriction base="DecimalType">
       <restrict name="xsd:pattern" value="[+\-]?[0123456789\.]{1,9}"/>
    </restriction>
-   <doc> Decimal in range (-inf, +inf) with no more that 9 characters plus optional sign</doc>
+   <doc> DecimalType with no more than 9 characters plus optional sign</doc>
 </simpletype>
 
 <simpletype name="DecimalTypeW14">
-  <restriction base="xsd:decimal">
+  <restriction base="DecimalType">
     <restrict name="xsd:pattern" value="[+\-]?[0123456789\.]{1,13}"/>
   </restriction>
-  <doc> Decimal in range (-inf, +inf) with no more that 13 characters plus optional sign</doc>
+  <doc> DecimalType with no more than 13 characters plus optional sign</doc>
 </simpletype>
 
 <simpletype name="DeclinationType">
@@ -714,8 +725,11 @@ decimal types must be in a range
    <restriction base="xsd:decimal">
       <restrict name="xsd:minExclusive" value="0.0"/>
       <restrict name="xsd:maxExclusive" value="100000.0"/>
+      <restrict name="xsd:pattern" value="(0|([1-9][0-9]*))(\.[0-9]*)?"/>
    </restriction>
-   <doc> PositiveDecimal in range (0.0, 100,000) </doc>
+   <doc> Unsigned positive decimal in range (0.0, 100,000). Decimal point is
+   optional, but if present the integer portion must be present (i.e.,
+   '.1' is invalid.) </doc>
 </simpletype>
 
 <simpletype name="PosIntegerTypeW6">
@@ -727,37 +741,38 @@ decimal types must be in a range
 
 <simpletype name="SPICEIDType">
    <restriction base="xsd:integer">
-      <restrict name="xsd:pattern" value="[\-0123456789]{1,9}"/>
+      <restrict name="xsd:maxExclusive" value="+1000000000"/>
+      <restrict name="xsd:minExclusive" value="-1000000000"/>
    </restriction>
-   <doc> Positive integer in range (0, 1,000,000,000). Thus no more than 9 characters. </doc>
+   <doc> Integer having absolute value strictly less than 1,000,000,000.</doc>
 </simpletype>
 
 <simpletype name="PosDecimalTypeW6">
    <restriction base="PosDecimalType">
       <restrict name="xsd:pattern" value="[0123456789\.]{1,6}"/>
    </restriction>
-   <doc> Unsigned decimal in range (0.0, 100,000) with no more that 6 characters</doc>
+   <doc> PosDecimalType with no more that 6 characters</doc>
 </simpletype>
 
 <simpletype name="PosDecimalTypeW8">
    <restriction base="PosDecimalType">
       <restrict name="xsd:pattern" value="[0123456789\.]{1,8}"/>
    </restriction>
-   <doc> Unsigned decimal in range (0.0, 100,000) with no more that 8 characters</doc>
+   <doc> PosDecimalType with no more that 8 characters</doc>
 </simpletype>
 
 <simpletype name="PosDecimalTypeW10">
    <restriction base="PosDecimalType">
       <restrict name="xsd:pattern" value="[0123456789\.]{1,10}"/>
    </restriction>
-   <doc> Unsigned decimal in range (0.0, 100,000) with no more that 10 characters</doc>
+   <doc> PosDecimalType with no more that 10 characters</doc>
 </simpletype>
 
 <simpletype name="PosDecimalTypeW14">
    <restriction base="PosDecimalType">
       <restrict name="xsd:pattern" value="[0123456789\.]{1,14}"/>
    </restriction>
-   <doc> Unsigned decimal in range (0.0, 100,000) with no more that 14 characters</doc>
+   <doc> PosDecimalType with no more that 14 characters</doc>
 </simpletype>
 
 <simpletype name="FrequencyType">
@@ -1519,9 +1534,9 @@ decimal types must be in a range
    <element name="rcv"        type="StationType"        doc="Station code of receiving antenna."/>
    <element name="sys"        type="SysType"            doc="Coordinate system for station coordinates and covariance."/>
    <element name="ctr"        type="SPICEIDType"        doc="Origin of the reference system.  Use public SPICE codes, e.g., 399 is the geocenter, 10 is the Sun center.  Note;  sys=WGS84 implies ctr=399"/>
-   <element name="pos1"       type="DoubleTypeW21"      doc="Position of observer, first value." />
-   <element name="pos2"       type="DoubleTypeW21"      doc="Position second value per sys"/>
-   <element name="pos3"       type="DoubleTypeW21"      doc="Position third value per sys"/>
+   <element name="pos1"       type="DecimalTypeW14"     doc="Position of observer per sys, 1st value" />
+   <element name="pos2"       type="DecimalTypeW14"     doc="Position of observer per sys, 2nd value"/>
+   <element name="pos3"       type="DecimalTypeW14"     doc="Position of observer per sys, 3rd value"/>
    <element name="posCov11"   type="DoubleTypeW21"      doc="11 covariance per sys"/>
    <element name="posCov12"   type="DoubleTypeW21"      doc="12 covariance per sys"/>
    <element name="posCov13"   type="DoubleTypeW21"      doc="13 covariance per sys"/>
