@@ -20,26 +20,31 @@
     <xsd:restriction base="xsd:decimal">
       <xsd:minInclusive value="-1.0"/>
       <xsd:maxInclusive value="1.0"/>
-      <xsd:pattern value="[+\-]?[0123456789\.]{1,13}"/>
+      <xsd:pattern value="[+\-]?(0|1)(\.[0123456789]{0,11})?"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="DecimalType">
+    <xsd:restriction base="xsd:decimal">
+      <xsd:pattern value="[+\-]?(0|([1-9][0-9]*))(\.[0-9]*)?"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="DecimalTypeW6">
-    <xsd:restriction base="xsd:decimal">
+    <xsd:restriction base="DecimalType">
       <xsd:pattern value="[+\-]?[0123456789\.]{1,5}"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="DecimalTypeW8">
-    <xsd:restriction base="xsd:decimal">
+    <xsd:restriction base="DecimalType">
       <xsd:pattern value="[+\-]?[0123456789\.]{1,7}"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="DecimalTypeW10">
-    <xsd:restriction base="xsd:decimal">
+    <xsd:restriction base="DecimalType">
       <xsd:pattern value="[+\-]?[0123456789\.]{1,9}"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="DecimalTypeW14">
-    <xsd:restriction base="xsd:decimal">
+    <xsd:restriction base="DecimalType">
       <xsd:pattern value="[+\-]?[0123456789\.]{1,13}"/>
     </xsd:restriction>
   </xsd:simpleType>
@@ -139,6 +144,7 @@
     <xsd:restriction base="xsd:decimal">
       <xsd:minExclusive value="0.0"/>
       <xsd:maxExclusive value="100000.0"/>
+      <xsd:pattern value="(0|([1-9][0-9]*))(\.[0-9]*)?"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="PosIntegerTypeW6">
@@ -148,7 +154,8 @@
   </xsd:simpleType>
   <xsd:simpleType name="SPICEIDType">
     <xsd:restriction base="xsd:integer">
-      <xsd:pattern value="[\-0123456789]{1,9}"/>
+      <xsd:maxExclusive value="+1000000000"/>
+      <xsd:minExclusive value="-1000000000"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="PosDecimalTypeW6">
@@ -334,19 +341,19 @@
   <xsd:complexType name="TelescopeType">
     <xsd:all>
       <xsd:element name="name" type="StringTypeW100" minOccurs="0"/>
-      <xsd:element name="design" type="StringTypeW100"/>
+      <xsd:element name="design" type="StringTypeW25"/>
       <xsd:element name="aperture" type="PosDecimalTypeW6"/>
-      <xsd:element name="detector" type="StringTypeW100"/>
+      <xsd:element name="detector" type="StringTypeW25"/>
       <xsd:element name="fRatio" type="PosDecimalTypeW6" minOccurs="0"/>
-      <xsd:element name="filter" type="StringTypeW100" minOccurs="0"/>
-      <xsd:element name="arraySize" type="StringTypeW100" minOccurs="0"/>
+      <xsd:element name="filter" type="StringTypeW25" minOccurs="0"/>
+      <xsd:element name="arraySize" type="StringTypeW25" minOccurs="0"/>
       <xsd:element name="pixelScale" type="PosDecimalTypeW6" minOccurs="0"/>
     </xsd:all>
   </xsd:complexType>
   <xsd:complexType name="SoftwareType">
     <xsd:all>
       <xsd:element name="astrometry" type="StringTypeW100" minOccurs="0"/>
-      <xsd:element name="fitOrder" type="StringTypeW100" minOccurs="0"/>
+      <xsd:element name="fitOrder" type="StringTypeW25" minOccurs="0"/>
       <xsd:element name="photometry" type="StringTypeW100" minOccurs="0"/>
       <xsd:element name="objectDetection" type="StringTypeW100" minOccurs="0"/>
     </xsd:all>
@@ -689,9 +696,9 @@
   <xsd:element name="rcv" type="StationType"/>
   <xsd:element name="sys" type="SysType"/>
   <xsd:element name="ctr" type="SPICEIDType"/>
-  <xsd:element name="pos1" type="DoubleTypeW21"/>
-  <xsd:element name="pos2" type="DoubleTypeW21"/>
-  <xsd:element name="pos3" type="DoubleTypeW21"/>
+  <xsd:element name="pos1" type="DecimalTypeW14"/>
+  <xsd:element name="pos2" type="DecimalTypeW14"/>
+  <xsd:element name="pos3" type="DecimalTypeW14"/>
   <xsd:element name="posCov11" type="DoubleTypeW21"/>
   <xsd:element name="posCov12" type="DoubleTypeW21"/>
   <xsd:element name="posCov13" type="DoubleTypeW21"/>

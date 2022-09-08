@@ -945,7 +945,7 @@ decimal types must be in a range
     <restriction base="xsd:dateTime">
       <restrict name="xsd:pattern" value="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,6})?Z" />
     </restriction>
-   <doc>Restrict dateTime to 4-digit positive years and Z for UTC</doc>
+   <doc>Restrict dateTime to 4-digit positive years and Z for UTC. Allow no more than microsecond precision.</doc>
 </simpletype>
 
 <simpletype name="TimePrecType">
@@ -1051,12 +1051,12 @@ decimal types must be in a range
 <complextype name="TelescopeType">
      <all>
        <element name="name" type="StringTypeW100" use="optional" doc="telescope name"/>
-       <element name="design" type="StringTypeW100" doc="telescope design"/>
+       <element name="design" type="StringTypeW25" doc="telescope design"/>
        <element name="aperture" type="PosDecimalTypeW6" doc="telescope aperture"/>
-       <element name="detector" type="StringTypeW100" doc="telescope detector"/>
+       <element name="detector" type="StringTypeW25" doc="telescope detector"/>
        <element name="fRatio" type="PosDecimalTypeW6" use="optional" doc="telescope f number"/>
-       <element name="filter" type="StringTypeW100" use="optional" doc="telescope filter"/>
-       <element name="arraySize" type="StringTypeW100" use="optional" doc="telescope array size"/>
+       <element name="filter" type="StringTypeW25" use="optional" doc="telescope filter"/>
+       <element name="arraySize" type="StringTypeW25" use="optional" doc="telescope array size"/>
        <element name="pixelScale" type="PosDecimalTypeW6" use="optional" doc="telescope sensor pixel size"/>
      </all>
      <doc>telescope information</doc>
@@ -1065,7 +1065,7 @@ decimal types must be in a range
 <complextype name="SoftwareType">
      <all>
        <element name="astrometry" type="StringTypeW100" use="optional" />
-       <element name="fitOrder" type="StringTypeW100" use="optional" />
+       <element name="fitOrder" type="StringTypeW25" use="optional" />
        <element name="photometry" type="StringTypeW100" use="optional" />
        <element name="objectDetection" type="StringTypeW100" use="optional" />
      </all>
