@@ -28,6 +28,7 @@ codeDict = {  # converts code to mode for optical type
   ' ': 'PHO', # blank means photographic
   'e': 'ENC',
   'C': 'CCD',
+  'B': 'CMO',
   'T': 'MER',
   'M': 'MIC',
   'c': 'ccd',
