@@ -20,12 +20,39 @@
     <xsd:restriction base="xsd:decimal">
       <xsd:minInclusive value="-1.0"/>
       <xsd:maxInclusive value="1.0"/>
+      <xsd:pattern value="[+\-]?(0|1)(\.[0123456789]{0,11})?"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="DecimalType">
+    <xsd:restriction base="xsd:decimal">
+      <xsd:pattern value="[+\-]?(0|([1-9][0-9]*))(\.[0-9]*)?"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="DecimalTypeW6">
+    <xsd:restriction base="DecimalType">
+      <xsd:pattern value="[+\-]?[0123456789\.]{1,5}"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="DecimalTypeW8">
+    <xsd:restriction base="DecimalType">
+      <xsd:pattern value="[+\-]?[0123456789\.]{1,7}"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="DecimalTypeW10">
+    <xsd:restriction base="DecimalType">
+      <xsd:pattern value="[+\-]?[0123456789\.]{1,9}"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="DecimalTypeW14">
+    <xsd:restriction base="DecimalType">
+      <xsd:pattern value="[+\-]?[0123456789\.]{1,13}"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="DeclinationType">
     <xsd:restriction base="xsd:decimal">
       <xsd:minInclusive value="-90.0"/>
       <xsd:maxInclusive value="90.0"/>
+      <xsd:pattern value="[+\-]?([1-9]?[0-9])?(\.[0123456789]{0,8})?"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="DeprecatedType">
@@ -37,6 +64,16 @@
     <xsd:restriction base="xsd:string">
       <xsd:enumeration value="*"/>
       <xsd:enumeration value="+"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="DoubleTypeW7">
+    <xsd:restriction base="xsd:double">
+      <xsd:pattern value="[+\-]?[+\-Ee0123456789\.]{1,6}"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="DoubleTypeW21">
+    <xsd:restriction base="xsd:double">
+      <xsd:pattern value="[+\-]?[+\-Ee0123456789\.]{1,20}"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="SubFrmType">
@@ -81,7 +118,7 @@
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="PermIDType">
-    <xsd:restriction base="xsd:string">
+    <xsd:restriction base="StringTypeW25">
       <xsd:pattern value="\d+([IPD](-[A-Z]{1,2})?)?|((Mars|Jupiter|Saturn|Uranus|Neptune) \d{1,3}|\(\d+\) \d{1,3})"/>
     </xsd:restriction>
   </xsd:simpleType>
@@ -91,7 +128,7 @@
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="PlanetNameType">
-    <xsd:restriction base="xsd:string">
+    <xsd:restriction base="StringTypeW25">
       <xsd:enumeration value="Mercury"/>
       <xsd:enumeration value="Venus"/>
       <xsd:enumeration value="Earth"/>
@@ -106,6 +143,45 @@
   <xsd:simpleType name="PosDecimalType">
     <xsd:restriction base="xsd:decimal">
       <xsd:minExclusive value="0.0"/>
+      <xsd:maxExclusive value="100000.0"/>
+      <xsd:pattern value="(0|([1-9][0-9]*))(\.[0-9]*)?"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PosIntegerTypeW6">
+    <xsd:restriction base="xsd:positiveInteger">
+      <xsd:maxExclusive value="1000000"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="SPICEIDType">
+    <xsd:restriction base="xsd:integer">
+      <xsd:maxExclusive value="+1000000000"/>
+      <xsd:minExclusive value="-1000000000"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PosDecimalTypeW6">
+    <xsd:restriction base="PosDecimalType">
+      <xsd:pattern value="[0123456789\.]{1,6}"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PosDecimalTypeW8">
+    <xsd:restriction base="PosDecimalType">
+      <xsd:pattern value="[0123456789\.]{1,8}"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PosDecimalTypeW10">
+    <xsd:restriction base="PosDecimalType">
+      <xsd:pattern value="[0123456789\.]{1,10}"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="PosDecimalTypeW14">
+    <xsd:restriction base="PosDecimalType">
+      <xsd:pattern value="[0123456789\.]{1,14}"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="FrequencyType">
+    <xsd:restriction base="xsd:decimal">
+      <xsd:minExclusive value="0.0"/>
+      <xsd:pattern value="[0123456789\.]{1,16}"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="ProgType">
@@ -114,12 +190,12 @@
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="BaseProvIDType">
-    <xsd:restriction base="xsd:string">
+    <xsd:restriction base="StringTypeW25">
       <xsd:pattern value="\d{4} [A-HJ-Y][A-HJ-Z]\d*|\d{4} (P-L|T-[123])|[ADCPX]/\d{4} [A-Z]{1,2}\d*(-[A-Z])?|S/\d{4} ((M|J|S|U|N)|\((\d+|\d{4} [A-HJ-Y][A-HJ-Z]?\d+)\)) \d+"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="OldProvIDType">
-    <xsd:restriction base="xsd:string">
+    <xsd:restriction base="StringTypeW25">
       <xsd:pattern value="A[89]\d{2} [A-HJ-Y][A-HJ-Z]"/>
     </xsd:restriction>
   </xsd:simpleType>
@@ -135,15 +211,13 @@
       <xsd:enumeration value="60"/>
       <xsd:enumeration value="6"/>
       <xsd:enumeration value="1"/>
-      <xsd:enumeration value="60.0"/>
-      <xsd:enumeration value="6.0"/>
-      <xsd:enumeration value="1.0"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="RAType">
     <xsd:restriction base="xsd:decimal">
       <xsd:minInclusive value="0.0"/>
       <xsd:maxExclusive value="360.0"/>
+      <xsd:pattern value="([1-3][0-9]{2}|[1-9]?[0-9])?(\.[0-9]{0,8})?"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="RefType">
@@ -175,6 +249,16 @@
       <xsd:pattern value="[^|]*[^|\s][^|]*"/>
     </xsd:restriction>
   </xsd:simpleType>
+  <xsd:simpleType name="StringTypeW25">
+    <xsd:restriction base="StringType">
+      <xsd:maxLength value="25"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="StringTypeW100">
+    <xsd:restriction base="StringType">
+      <xsd:maxLength value="100"/>
+    </xsd:restriction>
+  </xsd:simpleType>
   <xsd:simpleType name="SubFmtType">
     <xsd:restriction base="AlphaNumericType">
       <xsd:maxLength value="4"/>
@@ -191,7 +275,7 @@
   </xsd:simpleType>
   <xsd:simpleType name="TimeHelp">
     <xsd:restriction base="xsd:dateTime">
-      <xsd:pattern value="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z"/>
+      <xsd:pattern value="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,6})?Z"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="TimePrecType">
@@ -239,44 +323,44 @@
   </xsd:simpleType>
   <xsd:complexType name="NamesType">
     <xsd:sequence>
-      <xsd:element name="name" type="StringType" maxOccurs="unbounded"/>
+      <xsd:element name="name" type="StringTypeW100" maxOccurs="unbounded"/>
     </xsd:sequence>
   </xsd:complexType>
   <xsd:complexType name="ObservatoryType">
     <xsd:all>
       <xsd:element name="mpcCode" type="StationType"/>
-      <xsd:element name="name" type="StringType" minOccurs="0"/>
+      <xsd:element name="name" type="StringTypeW100" minOccurs="0"/>
     </xsd:all>
   </xsd:complexType>
   <xsd:complexType name="SubmitterType">
     <xsd:all>
-      <xsd:element name="name" type="StringType"/>
-      <xsd:element name="institution" type="StringType" minOccurs="0"/>
+      <xsd:element name="name" type="StringTypeW100"/>
+      <xsd:element name="institution" type="StringTypeW100" minOccurs="0"/>
     </xsd:all>
   </xsd:complexType>
   <xsd:complexType name="TelescopeType">
     <xsd:all>
-      <xsd:element name="name" type="StringType" minOccurs="0"/>
-      <xsd:element name="design" type="StringType"/>
-      <xsd:element name="aperture" type="PosDecimalType"/>
-      <xsd:element name="detector" type="StringType"/>
-      <xsd:element name="fRatio" type="PosDecimalType" minOccurs="0"/>
-      <xsd:element name="filter" type="StringType" minOccurs="0"/>
-      <xsd:element name="arraySize" type="StringType" minOccurs="0"/>
-      <xsd:element name="pixelScale" type="PosDecimalType" minOccurs="0"/>
+      <xsd:element name="name" type="StringTypeW100" minOccurs="0"/>
+      <xsd:element name="design" type="StringTypeW25"/>
+      <xsd:element name="aperture" type="PosDecimalTypeW6"/>
+      <xsd:element name="detector" type="StringTypeW25"/>
+      <xsd:element name="fRatio" type="PosDecimalTypeW6" minOccurs="0"/>
+      <xsd:element name="filter" type="StringTypeW25" minOccurs="0"/>
+      <xsd:element name="arraySize" type="StringTypeW25" minOccurs="0"/>
+      <xsd:element name="pixelScale" type="PosDecimalTypeW6" minOccurs="0"/>
     </xsd:all>
   </xsd:complexType>
   <xsd:complexType name="SoftwareType">
     <xsd:all>
-      <xsd:element name="astrometry" type="StringType" minOccurs="0"/>
-      <xsd:element name="fitOrder" type="StringType" minOccurs="0"/>
-      <xsd:element name="photometry" type="StringType" minOccurs="0"/>
-      <xsd:element name="objectDetection" type="StringType" minOccurs="0"/>
+      <xsd:element name="astrometry" type="StringTypeW100" minOccurs="0"/>
+      <xsd:element name="fitOrder" type="StringTypeW25" minOccurs="0"/>
+      <xsd:element name="photometry" type="StringTypeW100" minOccurs="0"/>
+      <xsd:element name="objectDetection" type="StringTypeW100" minOccurs="0"/>
     </xsd:all>
   </xsd:complexType>
   <xsd:complexType name="CommentType">
     <xsd:sequence>
-      <xsd:element name="line" type="StringType" maxOccurs="unbounded"/>
+      <xsd:element name="line" type="StringTypeW100" maxOccurs="unbounded"/>
     </xsd:sequence>
   </xsd:complexType>
   <xsd:group name="MPCID">
@@ -600,7 +684,7 @@
   </xsd:complexType>
   <xsd:element name="permID" type="PermIDType"/>
   <xsd:element name="provID" type="ProvIDType"/>
-  <xsd:element name="artSat" type="StringType"/>
+  <xsd:element name="artSat" type="StringTypeW25"/>
   <xsd:element name="trkSub" type="TrkSubType"/>
   <xsd:element name="obsID" type="ObsIDType"/>
   <xsd:element name="obsSubID" type="ObsIDType"/>
@@ -611,88 +695,88 @@
   <xsd:element name="trx" type="StationType"/>
   <xsd:element name="rcv" type="StationType"/>
   <xsd:element name="sys" type="SysType"/>
-  <xsd:element name="ctr" type="xsd:integer"/>
-  <xsd:element name="pos1" type="xsd:decimal"/>
-  <xsd:element name="pos2" type="xsd:decimal"/>
-  <xsd:element name="pos3" type="xsd:decimal"/>
-  <xsd:element name="posCov11" type="xsd:decimal"/>
-  <xsd:element name="posCov12" type="xsd:decimal"/>
-  <xsd:element name="posCov13" type="xsd:decimal"/>
-  <xsd:element name="posCov22" type="xsd:decimal"/>
-  <xsd:element name="posCov23" type="xsd:decimal"/>
-  <xsd:element name="posCov33" type="xsd:decimal"/>
+  <xsd:element name="ctr" type="SPICEIDType"/>
+  <xsd:element name="pos1" type="DecimalTypeW14"/>
+  <xsd:element name="pos2" type="DecimalTypeW14"/>
+  <xsd:element name="pos3" type="DecimalTypeW14"/>
+  <xsd:element name="posCov11" type="DoubleTypeW21"/>
+  <xsd:element name="posCov12" type="DoubleTypeW21"/>
+  <xsd:element name="posCov13" type="DoubleTypeW21"/>
+  <xsd:element name="posCov22" type="DoubleTypeW21"/>
+  <xsd:element name="posCov23" type="DoubleTypeW21"/>
+  <xsd:element name="posCov33" type="DoubleTypeW21"/>
   <xsd:element name="prog" type="ProgType"/>
   <xsd:element name="obsTime" type="TimeType"/>
+  <xsd:element name="rmsTime" type="PosDecimalTypeW8"/>
   <xsd:element name="ra" type="RAType"/>
   <xsd:element name="dec" type="DeclinationType"/>
   <xsd:element name="raStar" type="RAType"/>
   <xsd:element name="decStar" type="DeclinationType"/>
   <xsd:element name="obsCenter" type="ObsCenterType"/>
-  <xsd:element name="deltaRA" type="xsd:decimal"/>
-  <xsd:element name="deltaDec" type="xsd:decimal"/>
-  <xsd:element name="dist" type="PosDecimalType"/>
+  <xsd:element name="deltaRA" type="DecimalTypeW10"/>
+  <xsd:element name="deltaDec" type="DecimalTypeW10"/>
+  <xsd:element name="dist" type="PosDecimalTypeW10"/>
   <xsd:element name="pa" type="RAType"/>
-  <xsd:element name="rmsTime" type="PosDecimalType"/>
-  <xsd:element name="rmsRA" type="PosDecimalType"/>
-  <xsd:element name="rmsDec" type="PosDecimalType"/>
-  <xsd:element name="rmsDist" type="PosDecimalType"/>
-  <xsd:element name="rmsPA" type="PosDecimalType"/>
+  <xsd:element name="rmsRA" type="PosDecimalTypeW6"/>
+  <xsd:element name="rmsDec" type="PosDecimalTypeW6"/>
+  <xsd:element name="rmsDist" type="PosDecimalTypeW6"/>
+  <xsd:element name="rmsPA" type="PosDecimalTypeW6"/>
   <xsd:element name="rmsCorr" type="CorrDecimalType"/>
-  <xsd:element name="delay" type="PosDecimalType"/>
-  <xsd:element name="rmsDelay" type="PosDecimalType"/>
-  <xsd:element name="doppler" type="xsd:decimal"/>
-  <xsd:element name="rmsDoppler" type="PosDecimalType"/>
+  <xsd:element name="delay" type="PosDecimalTypeW14"/>
+  <xsd:element name="rmsDelay" type="PosDecimalTypeW6"/>
+  <xsd:element name="doppler" type="DecimalTypeW14"/>
+  <xsd:element name="rmsDoppler" type="PosDecimalTypeW6"/>
   <xsd:element name="astCat" type="CatType"/>
-  <xsd:element name="mag" type="xsd:decimal"/>
-  <xsd:element name="rmsMag" type="PosDecimalType"/>
+  <xsd:element name="mag" type="DecimalTypeW8"/>
+  <xsd:element name="rmsMag" type="PosDecimalTypeW6"/>
   <xsd:element name="band" type="BandType"/>
   <xsd:element name="photCat" type="CatType"/>
-  <xsd:element name="photAp" type="PosDecimalType"/>
+  <xsd:element name="photAp" type="PosDecimalTypeW6"/>
   <xsd:element name="nucMag" type="LogicalType"/>
-  <xsd:element name="logSNR" type="xsd:decimal"/>
+  <xsd:element name="logSNR" type="DecimalTypeW6"/>
   <xsd:element name="shapeOcc" type="LogicalType"/>
-  <xsd:element name="seeing" type="PosDecimalType"/>
-  <xsd:element name="exp" type="PosDecimalType"/>
-  <xsd:element name="rmsFit" type="PosDecimalType"/>
-  <xsd:element name="nStars" type="xsd:positiveInteger"/>
+  <xsd:element name="seeing" type="PosDecimalTypeW6"/>
+  <xsd:element name="exp" type="PosDecimalTypeW6"/>
+  <xsd:element name="rmsFit" type="PosDecimalTypeW6"/>
+  <xsd:element name="nStars" type="PosIntegerTypeW6"/>
   <xsd:element name="com" type="LogicalType"/>
-  <xsd:element name="frq" type="PosDecimalType"/>
+  <xsd:element name="frq" type="FrequencyType"/>
   <xsd:element name="ref" type="RefType"/>
   <xsd:element name="disc" type="DiscType"/>
-  <xsd:element name="subFmt" type="SubFmtType"/>
   <xsd:element name="subFrm" type="SubFrmType"/>
+  <xsd:element name="subFmt" type="SubFmtType"/>
   <xsd:element name="precTime" type="TimePrecType"/>
   <xsd:element name="precRA" type="RaDecPrecType"/>
   <xsd:element name="precDec" type="RaDecPrecType"/>
-  <xsd:element name="uncTime" type="PosDecimalType"/>
+  <xsd:element name="uncTime" type="PosDecimalTypeW8"/>
   <xsd:element name="notes" type="NotesType"/>
   <xsd:element name="remarks" type="RemarkType"/>
   <xsd:element name="deprecated" type="DeprecatedType"/>
   <xsd:element name="localUse" type="LocalUseType"/>
-  <xsd:element name="orbProd" type="StringType"/>
-  <xsd:element name="orbID" type="StringType"/>
-  <xsd:element name="resRA" type="xsd:decimal"/>
-  <xsd:element name="resDec" type="xsd:decimal"/>
+  <xsd:element name="orbProd" type="StringTypeW100"/>
+  <xsd:element name="orbID" type="StringTypeW25"/>
+  <xsd:element name="resRA" type="DoubleTypeW7"/>
+  <xsd:element name="resDec" type="DoubleTypeW7"/>
   <xsd:element name="selAst" type="SelResType"/>
-  <xsd:element name="sigRA" type="PosDecimalType"/>
-  <xsd:element name="sigDec" type="PosDecimalType"/>
+  <xsd:element name="sigRA" type="PosDecimalTypeW6"/>
+  <xsd:element name="sigDec" type="PosDecimalTypeW6"/>
   <xsd:element name="sigCorr" type="CorrDecimalType"/>
-  <xsd:element name="sigTime" type="PosDecimalType"/>
-  <xsd:element name="biasRA" type="xsd:decimal"/>
-  <xsd:element name="biasDec" type="xsd:decimal"/>
-  <xsd:element name="biasTime" type="xsd:decimal"/>
-  <xsd:element name="photProd" type="StringType"/>
-  <xsd:element name="resMag" type="xsd:decimal"/>
+  <xsd:element name="sigTime" type="PosDecimalTypeW8"/>
+  <xsd:element name="biasRA" type="DecimalTypeW8"/>
+  <xsd:element name="biasDec" type="DecimalTypeW8"/>
+  <xsd:element name="biasTime" type="DecimalTypeW10"/>
+  <xsd:element name="photProd" type="StringTypeW100"/>
+  <xsd:element name="resMag" type="DoubleTypeW7"/>
   <xsd:element name="selPhot" type="SelResType"/>
-  <xsd:element name="sigMag" type="PosDecimalType"/>
-  <xsd:element name="biasMag" type="xsd:decimal"/>
+  <xsd:element name="sigMag" type="PosDecimalTypeW6"/>
+  <xsd:element name="biasMag" type="DecimalTypeW6"/>
   <xsd:element name="photMod" type="PhotModType"/>
-  <xsd:element name="resDelay" type="xsd:decimal"/>
+  <xsd:element name="resDelay" type="DoubleTypeW7"/>
   <xsd:element name="selDelay" type="SelResType"/>
-  <xsd:element name="sigDelay" type="PosDecimalType"/>
-  <xsd:element name="resDoppler" type="xsd:decimal"/>
+  <xsd:element name="sigDelay" type="PosDecimalTypeW6"/>
+  <xsd:element name="resDoppler" type="DoubleTypeW7"/>
   <xsd:element name="selDoppler" type="SelResType"/>
-  <xsd:element name="sigDoppler" type="PosDecimalType"/>
+  <xsd:element name="sigDoppler" type="PosDecimalTypeW6"/>
   <xsd:element name="observatory" type="ObservatoryType"/>
   <xsd:element name="submitter" type="SubmitterType"/>
   <xsd:element name="observers" type="NamesType"/>
@@ -701,7 +785,7 @@
   <xsd:element name="software" type="SoftwareType"/>
   <xsd:element name="coinvestigators" type="NamesType"/>
   <xsd:element name="collaborators" type="NamesType"/>
-  <xsd:element name="fundingSource" type="StringType"/>
+  <xsd:element name="fundingSource" type="StringTypeW100"/>
   <xsd:element name="comment" type="CommentType"/>
   <xsd:element name="optical" type="OpticalType"/>
   <xsd:element name="offset" type="OffsetType"/>
