@@ -462,15 +462,15 @@ def parsePSV(parsedPSVLine):
       firstLine = False
       l = line.split('=')
       if len(l) != 2:
-        raise RuntimeError("first line of PSV must be '#version=2017'")
+        raise RuntimeError("first line of PSV must specify version, e.g., '#version=2017'")
       #
       # strip all white space
       #
-      if (''.join(l[0].split()) != '#version') or (''.join(l[1].split()) != '2017'):
-        raise RuntimeError("first line of PSV must be '#version=2017'")
-
+      if (''.join(l[0].split()) != '#version') :
+        raise RuntimeError("first line of PSV must specify version, e.g., '#version=2017'")
+      version_id = ''.join(l[1].split())
       # root node has no text or tail and one attribute
-      stack = adesutility.ElementStack('ades', None, {'version':'2017'} )
+      stack = adesutility.ElementStack('ades', None, {'version':version_id} )
       return
 
    record = parsedLine[0]
