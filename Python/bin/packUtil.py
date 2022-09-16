@@ -46,7 +46,7 @@ codeDict = {  # converts code to mode for optical type
 }
 reverseCodeDict = { codeDict[i] : i for i in codeDict }  # no duplicates
 
-validCodes = "A PeCTMcEOHNnRrSsVvXx"+"0"  # 0 is special for header lines
+validCodes = "A PeCBTMcEOHNnRrSsVvXx"+"0"  # 0 is special for header lines
 validNotes = ' AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345vzjeL16789'
 validProgramCodes = ' AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345016789=#$%"&\+-![]`!|(){}.?@,^;:_/~*<>eLvzjZ'"'"
 programCodesArray = "0123456789!\"#$%&'()*+,-./[\]^_`{|}~:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"

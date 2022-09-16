@@ -156,7 +156,7 @@ commonRegexHelp2 = ( '(\d{4})'            # yyyy from obsDate 16-19
 #
 normalLineRegex = re.compile( ( '^' 
                                    + commonRegexHelp1  
-                                   + '([A PeCTMcEOHNnSVXx])' # codes group -- include SVXx but not Rrsv 15
+                                   + '([A PeCBTMcEOHNnSVXx])' # codes group -- include SVXx but not Rrsv 15
                                    + commonRegexHelp2  
                                    + '([0-9 .]{12})'       # Ra loosely checked 33-44
                                    + '([-+ ][0-9 .]{11})'  # Dec loosely checked 45-56
@@ -693,7 +693,7 @@ headerCodes = "0"  # header lines
 roverCodes = "V"   # rover lines
 radarCodes = "R"   # radar lines
 satelliteCodes = "S" # satellite lines
-opticalCodes = "A PeCTMcHNnXs"   # optical codes are also detector types, and include Xx
+opticalCodes = "A PeCBTMcHNnXs"   # optical codes are also detector types, and include Xx
 offsetCodes = "E"       # offset -- how to process?
 occultationCodes = "O"  # occultation -- how to process?
 codeTable = {}
@@ -754,7 +754,7 @@ def convertitPreamble(fname):  # set up elementTree
    firstObsBlock = True
    inObsBlock = False
    # root node has no text or tail and one attribute
-   stack = adesutility.ElementStack('ades', None, {'version':'2017'} )
+   stack = adesutility.ElementStack('ades', None, {'version':'2022'} )
    
 
 
