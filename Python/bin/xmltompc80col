@@ -285,9 +285,10 @@ def printRadarLine(item):
    
    delay = hasKeyOrVal(item, 'delay', '               ')
    od = delay
+   # delay is in seconds in ADES. So decimal (to be dropped) is 6th character...
    delay = adesutility.applyPaddingAndJustification \
-                                  (delay, 16, 'D', 12)[0]
-   delay = delay[0:11] + delay[12:] # remove '.'
+                                  (delay, 16, 'D', 6)[0]
+   delay = delay[0:5] + delay[6:] # remove '.'
 
 
    rmsDelay  = hasKeyOrVal(item, 'rmsDelay', '              ')

@@ -415,9 +415,9 @@ def decode80ColumnDataLine(line):
          ret['notes'] = m.group(3)
          ret['code'] = m.group(4)
          ret['date'] = m.group(5) + m.group(6) + m.group(7)
-
+         # For delay, the implied decimal is after 11th col for microsec and after 5th col for sec.
          if m.group(8).strip() != '':  # radar fields are blank half the time
-            ret['delay'] = m.group(8)[0:11] + '.' + m.group(8)[11:]
+            ret['delay'] = m.group(8)[0:5] + '.' + m.group(8)[5:]
          else:
             ret['delay'] = ''
          if m.group(9).strip() != '':  # shift has sign
