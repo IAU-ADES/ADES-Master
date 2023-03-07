@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-#
-   # __future__ imports for Python 3 compliance in Python 2
+# __future__ imports for Python 3 compliance in Python 2
 # 
 from __future__ import absolute_import, division, print_function
 from __future__ import unicode_literals
@@ -17,7 +15,7 @@ import adesutility
 import packUtil
 import sexVals
 
-def setFromElementDictList(element):
+def setFromElementDictList(element,allowedElementDict):
    """ makes a set from the allowedElementDict list for elemnt """
    return set([t for t in allowedElementDict[element]])
 
@@ -40,7 +38,7 @@ def processDataElement(first, element):
    dataDicts.append(subDict) # add to the list
 
 
-def processObsBlock(element):
+def processObsBlock(element,allowedObsBlockSet,allowedObsDataSet):
    first = True
    for child in element:
       tag = child.tag
@@ -67,7 +65,7 @@ def processObsBlock(element):
 #
 #
 #
-def processAdesElement(element):
+def processAdesElement(element,allowedObsDataSet,allowedAdesSet,allowedObsBlockSet):
    """ processAdesElement (element)
  
        Inputs:
@@ -95,7 +93,7 @@ def processAdesElement(element):
       if tag == "obsBlock":
          printDataDicts()
          lastDataTagType = None
-         processObsBlock(child)  # do not print data dicts inside
+         processObsBlock(child,allowedObsBlockSet,allowedObsDataSet)  # do not print data dicts inside
          lastDataTagType = tag
 
       else: # must be allowed non-obsBlock data element
@@ -171,7 +169,12 @@ def printOpticalLine(item):
    mag = adesutility.applyPaddingAndJustification(hasKeyOrVal(item, 'mag', ''), 5, 'D', 3)[0]
    mag = mag[0:5] # restrict to length of 5
    band = hasKeyOrVal(item, 'band', ' ')
-   if len(band) > 1: band = '!' # Don't truncate the band, but instead write a nonsense character
+   # NEW APPROACH: USE 1ST CHARACTER
+   if len(band) > 1:
+      band = band[1]
+   
+   #This won't work
+   #if len(band) > 1: band = '!' # Don't truncate the band, but instead write a nonsense character
 
    # OLD APPROACH: USE 2ND CHARACTER IF IN BANDCONV HASH ABOVE...
    #   if len(band) > 1:
@@ -415,42 +418,49 @@ def processObsContext(element):
        #  sline = sline.rstrip() # remove trailing whitespace
        #  print (sline, file=encodedout)
   
-    
+#----------------------------------------------------------------------
+#Main routine
+def xmltompc80col(args):
+   #
+   # read in allowedElementDict, requiredElementDict  and psvFormatDict
+   #
+
+   (allowedElementDict, requiredElementDict, psvFormatDict) = \
+      adesutility.getAdesTables()
+
+   # Let's do this!
+   inputTree = adesutility.readXML(args.xml)
+
+   allowedObsDataSet = setFromElementDictList('obsData',allowedElementDict)
+   allowedObsBlockSet = setFromElementDictList('obsBlock',allowedElementDict)
+   allowedAdesSet = setFromElementDictList('ades',allowedElementDict)
+
+   processAdesElement(inputTree.getroot(),allowedObsDataSet,allowedAdesSet,allowedObsBlockSet)
+       
 # --- Start executable code -----------------------------
-# Input arguments
-parser = argparse.ArgumentParser(description='Convert ADES XML to MPC obs80 format.')
-parser.add_argument("xml", help = "XML file name")
-parser.add_argument("obs80", help = "obs80 file name")
-parser.add_argument("--lowPrec", action='store_true', \
-                        help= "Export Time, RA, and DEC in lower precision.")
-parser.add_argument("--noHeader", action='store_true', \
-                        help = "Do not export ADES obsContext information to obs80 header.")
-args = parser.parse_args()
+if __name__ == '__main__':
+   # Input arguments
+   parser = argparse.ArgumentParser(description='Convert ADES XML to MPC obs80 format.')
+   parser.add_argument("xml", help = "XML file name")
+   parser.add_argument("obs80", help = "obs80 file name")
+   parser.add_argument("--lowPrec", action='store_true', \
+                       help= "Export Time, RA, and DEC in lower precision.")
+   parser.add_argument("--noHeader", action='store_true', \
+                       help = "Do not export ADES obsContext information to obs80 header.")
+   args = parser.parse_args()
 
-# Open output file
-encodedout = io.open(args.obs80, 'w', encoding='utf-8')
+   # Set obs80 precision constants
+   defaultPrecTime = '1'
+   defaultPrecRA = '0.001'
+   defaultPrecDec = '0.01'
+   if args.lowPrec:
+      defaultPrecTime = '10'
+      defaultPrecRA = '0.01'
+      defaultPrecDec = '0.1'
    
-#
-# read in allowedElementDict, requiredElementDict  and psvFormatDict
-#
-(allowedElementDict, requiredElementDict, psvFormatDict) = \
-  adesutility.getAdesTables()
+   # Open output file
+   encodedout = io.open(args.obs80, 'w', encoding='utf-8')
 
-# Set obs80 precision constants
-defaultPrecTime = '1'
-defaultPrecRA = '0.001'
-defaultPrecDec = '0.01'
-if args.lowPrec:
-    defaultPrecTime = '10'
-    defaultPrecRA = '0.01'
-    defaultPrecDec = '0.1'
+   xmltompc80col(args)
 
-# Let's do this!
-inputTree = adesutility.readXML(args.xml)
-
-allowedObsDataSet = setFromElementDictList('obsData')
-allowedObsBlockSet = setFromElementDictList('obsBlock')
-allowedAdesSet = setFromElementDictList('ades')
-
-processAdesElement(inputTree.getroot())
 

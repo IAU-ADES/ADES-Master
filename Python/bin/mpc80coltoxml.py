@@ -1,5 +1,3 @@
-#!/usr/bin/env python 
-#
 # __future__ imports for Python 3 compliance in Python 2
 # 
 from __future__ import absolute_import, division, print_function
@@ -1076,69 +1074,73 @@ def splitRadar(fname):
 
 
 #Usage: mpc80coltoxml [--nosplit] <inmpcfile> [<outxmlfile>]
-
-argc = len(sys.argv)
-outFile = None
-try:
-   if sys.argv[1] == '--nosplit':
-      if argc > 4:
-         raise RuntimeError("bad arg list")
-      func = doNotSplitRadar
-      inFile = sys.argv[2]
-      if argc == 4:
-         outFile = sys.argv[3]
-   else:
-      if argc > 3:
-         raise RuntimeError("bad arg list")
-      func = splitRadar
-      inFile = sys.argv[1]
-      if argc == 3:
-         outFile = sys.argv[2]
-except:
-   print ("Usage: mpc80coltoxml [--nosplit] <inmpcfile> [<outxmlfile>]")
-   print ("    --nosplit will not split doppler/delay radar into two elements")
-   print ("              elements with doppler and delay will not validate")
-   print ("    inmpcfile is the input mpc file")
-   print ("    outxmlfile is the optional output xml file")
-   print ("               without outxmlfile the input will still be checked")
-
-   exit(-1)
-
-try:
-
-   #
-   # for xml output
-   #
-   convertitPreamble(outFile)
+def mpc80coltoxml(args):
+   argc = len(args)
+   outFile = None
    try:
-      pass
+      if args[1] == '--nosplit':
+         if argc > 4:
+            raise RuntimeError("bad arg list")
+         func = doNotSplitRadar
+         inFile = args[2]
+         if argc == 4:
+            outFile = args[3]
+      else:
+         if argc > 3:
+            raise RuntimeError("bad arg list")
+         func = splitRadar
+         inFile = args[1]
+         if argc == 3:
+            outFile = args[2]
    except:
-      print("Usage: <mpc80coltoxml> [--nosplit] <inmpcfile> <outxmlfile>")
+      print ("Usage: mpc80coltoxml [--nosplit] <inmpcfile> [<outxmlfile>]")
+      print ("    --nosplit will not split doppler/delay radar into two elements")
+      print ("              elements with doppler and delay will not validate")
+      print ("    inmpcfile is the input mpc file")
+      print ("    outxmlfile is the optional output xml file")
+      print ("               without outxmlfile the input will still be checked")
+
       exit(-1)
+
    try:
-      parseFile(func(inFile), convertit)
-      convertitPostamble(outFile)
-   except RuntimeError as e:
-      print ("Error", e)
-      exit()
+
+      #
+      # for xml output
+      #
+      convertitPreamble(outFile)
+      try:
+         pass
+      except:
+         print("Usage: <mpc80coltoxml> [--nosplit] <inmpcfile> <outxmlfile>")
+         exit(-1)
+      try:
+         parseFile(func(inFile), convertit)
+         convertitPostamble(outFile)
+      except RuntimeError as e:
+         print ("Error", e)
+         exit()
       
 
-except:
-   try:
-      parseFile(func(inFile), None)
    except:
-      print("Usage: <mpc80coltoxml> [--nosplit] <inmpcfile> <outxmlfile>")
+      try:
+         parseFile(func(inFile), None)
+      except:
+         print("Usage: <mpc80coltoxml> [--nosplit] <inmpcfile> <outxmlfile>")
 
 
-print()
-print()
-if nSplit:
-    print (nSplit, "radar lines split out of", lineNumber, "lines")
-    print ("split lines:")
-    for i in splitLines:
-       print (i, '/', i+1)
-print ("Statistics:")
-sexVals.printCounts()
+   print()
+   print()
+   if nSplit:
+      print (nSplit, "radar lines split out of", lineNumber, "lines")
+      print ("split lines:")
+      for i in splitLines:
+         print (i, '/', i+1)
+   print ("Statistics:")
+   sexVals.printCounts()
+
+#---------------------------------------------------------------------
+if __name__ == '__main__':
+   mpc80coltoxml(sys.argv)
 
 
 
