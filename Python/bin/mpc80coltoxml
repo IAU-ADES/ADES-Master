@@ -407,6 +407,7 @@ def decode80ColumnDataLine(line):
          sexVals.checkDate(ret) # check date first
          sexVals.checkRa(ret)
          sexVals.checkDec(ret)
+
    if not m:
       m = radarFirstLineRegex.match(line)  # R
       if m:
@@ -432,9 +433,6 @@ def decode80ColumnDataLine(line):
          ret['trx']  = m.group(11)
          ret['packedref'] = m.group(12)
          ret['stn']  = m.group(13)
-
-         #print (m.groups())
-         pass
 
    if not m:
       m = radarSecondLineRegex.match(line) # r
@@ -515,7 +513,9 @@ def decode80ColumnDataLine(line):
    # 
    # more value sanity checks
    #
-   sexVals.checkDate(ret) # check date always
+   rdr = 'trx' in ret.keys()
+   sexVals.checkDate(ret, rdr) # check date always
+
    #if ( ret['notes'] == 'X' ): 
    #    print (lineNumber, ":", line)
    if ( ret['code'] not in packUtil.validCodes):
@@ -1124,13 +1124,12 @@ try:
       
 
 except:
+
    try:
       parseFile(func(inFile), None)
    except:
       print("Usage: <mpc80coltoxml> [--nosplit] <inmpcfile> <outxmlfile>")
 
-
-print()
 print()
 if nSplit:
     print (nSplit, "radar lines split out of", lineNumber, "lines")

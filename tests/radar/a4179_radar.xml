@@ -4,7 +4,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-11-27T22:20:00.04Z</obsTime>
+    <obsTime>1992-11-27T22:20:00Z</obsTime>
     <doppler>+613910.60</doppler>
     <rmsDoppler>1.000</rmsDoppler>
     <com>1</com>
@@ -15,7 +15,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-11-27T23:39:59.99Z</obsTime>
+    <obsTime>1992-11-27T23:40:00Z</obsTime>
     <delay>71.24915200</delay>
     <rmsDelay>10.000</rmsDelay>
     <com>1</com>
@@ -26,7 +26,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-02T21:40:00.02Z</obsTime>
+    <obsTime>1992-12-02T21:40:00Z</obsTime>
     <delay>42.18031212</delay>
     <rmsDelay>0.650</rmsDelay>
     <com>1</com>
@@ -37,7 +37,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-02T21:40:00.02Z</obsTime>
+    <obsTime>1992-12-02T21:40:00Z</obsTime>
     <doppler>+523514.76</doppler>
     <rmsDoppler>0.52</rmsDoppler>
     <com>1</com>
@@ -48,7 +48,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-03T19:30:00.00Z</obsTime>
+    <obsTime>1992-12-03T19:30:00Z</obsTime>
     <delay>37.45092334</delay>
     <rmsDelay>1.440</rmsDelay>
     <com>1</com>
@@ -59,7 +59,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-03T19:30:00.00Z</obsTime>
+    <obsTime>1992-12-03T19:30:00Z</obsTime>
     <doppler>+494766.02</doppler>
     <rmsDoppler>0.280</rmsDoppler>
     <com>1</com>
@@ -70,7 +70,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-04T18:09:59.96Z</obsTime>
+    <obsTime>1992-12-04T18:10:00Z</obsTime>
     <delay>32.97571108</delay>
     <rmsDelay>1.640</rmsDelay>
     <com>1</com>
@@ -81,7 +81,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-04T18:09:59.96Z</obsTime>
+    <obsTime>1992-12-04T18:10:00Z</obsTime>
     <doppler>+443775.73</doppler>
     <rmsDoppler>0.320</rmsDoppler>
     <com>1</com>
@@ -92,7 +92,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-05T17:30:00.03Z</obsTime>
+    <obsTime>1992-12-05T17:30:00Z</obsTime>
     <delay>29.02780400</delay>
     <rmsDelay>1.200</rmsDelay>
     <com>1</com>
@@ -103,7 +103,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-05T17:30:00.03Z</obsTime>
+    <obsTime>1992-12-05T17:30:00Z</obsTime>
     <doppler>+362243.90</doppler>
     <rmsDoppler>0.240</rmsDoppler>
     <com>1</com>
@@ -114,7 +114,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>252</rcv>
-    <obsTime>1992-12-06T16:39:59.96Z</obsTime>
+    <obsTime>1992-12-06T16:40:00Z</obsTime>
     <delay>26.05649720</delay>
     <rmsDelay>0.920</rmsDelay>
     <com>1</com>
@@ -125,7 +125,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>252</rcv>
-    <obsTime>1992-12-06T16:39:59.96Z</obsTime>
+    <obsTime>1992-12-06T16:40:00Z</obsTime>
     <doppler>+248335.94</doppler>
     <rmsDoppler>0.160</rmsDoppler>
     <com>1</com>
@@ -136,7 +136,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>252</rcv>
-    <obsTime>1992-12-07T17:19:59.98Z</obsTime>
+    <obsTime>1992-12-07T17:20:00Z</obsTime>
     <delay>24.30730575</delay>
     <rmsDelay>2.440</rmsDelay>
     <com>1</com>
@@ -147,7 +147,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-08T14:39:59.99Z</obsTime>
+    <obsTime>1992-12-08T14:40:00Z</obsTime>
     <delay>24.20281927</delay>
     <rmsDelay>0.480</rmsDelay>
     <com>1</com>
@@ -158,7 +158,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-08T14:39:59.99Z</obsTime>
+    <obsTime>1992-12-08T14:40:00Z</obsTime>
     <doppler>-58768.69</doppler>
     <rmsDoppler>0.08</rmsDoppler>
     <com>1</com>
@@ -169,7 +169,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-09T17:30:00.03Z</obsTime>
+    <obsTime>1992-12-09T17:30:00Z</obsTime>
     <delay>25.93886212</delay>
     <rmsDelay>1.360</rmsDelay>
     <com>1</com>
@@ -180,7 +180,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-09T17:30:00.03Z</obsTime>
+    <obsTime>1992-12-09T17:30:00Z</obsTime>
     <doppler>-250054.87</doppler>
     <rmsDoppler>0.24</rmsDoppler>
     <com>1</com>
@@ -191,7 +191,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-10T16:59:59.97Z</obsTime>
+    <obsTime>1992-12-10T17:00:00Z</obsTime>
     <delay>28.86756581</delay>
     <rmsDelay>1.520</rmsDelay>
     <com>1</com>
@@ -202,7 +202,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-10T16:59:59.97Z</obsTime>
+    <obsTime>1992-12-10T17:00:00Z</obsTime>
     <doppler>-364551.38</doppler>
     <rmsDoppler>0.28</rmsDoppler>
     <com>1</com>
@@ -213,7 +213,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-11T09:40:00.02Z</obsTime>
+    <obsTime>1992-12-11T09:40:00Z</obsTime>
     <delay>31.54208278</delay>
     <rmsDelay>1.360</rmsDelay>
     <com>1</com>
@@ -224,7 +224,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-11T09:40:00.02Z</obsTime>
+    <obsTime>1992-12-11T09:40:00Z</obsTime>
     <doppler>-389322.67</doppler>
     <rmsDoppler>0.24</rmsDoppler>
     <com>1</com>
@@ -235,7 +235,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-12T09:20:00.01Z</obsTime>
+    <obsTime>1992-12-12T09:20:00Z</obsTime>
     <delay>35.93978186</delay>
     <rmsDelay>1.280</rmsDelay>
     <com>1</com>
@@ -246,7 +246,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-12T09:20:00.01Z</obsTime>
+    <obsTime>1992-12-12T09:20:00Z</obsTime>
     <doppler>-450249.23</doppler>
     <rmsDoppler>0.24</rmsDoppler>
     <com>1</com>
@@ -257,7 +257,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-13T08:10:00.02Z</obsTime>
+    <obsTime>1992-12-13T08:10:00Z</obsTime>
     <delay>40.66448245</delay>
     <rmsDelay>1.640</rmsDelay>
     <com>1</com>
@@ -268,7 +268,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-13T08:10:00.02Z</obsTime>
+    <obsTime>1992-12-13T08:10:00Z</obsTime>
     <doppler>-487485.65</doppler>
     <rmsDoppler>0.32</rmsDoppler>
     <com>1</com>
@@ -279,7 +279,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-14T07:50:00.01Z</obsTime>
+    <obsTime>1992-12-14T07:50:00Z</obsTime>
     <delay>45.89128751</delay>
     <rmsDelay>1.920</rmsDelay>
     <com>1</com>
@@ -290,7 +290,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-14T07:50:00.01Z</obsTime>
+    <obsTime>1992-12-14T07:50:00Z</obsTime>
     <doppler>-515942.55</doppler>
     <rmsDoppler>1.92</rmsDoppler>
     <com>1</com>
@@ -301,7 +301,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-15T07:50:00.01Z</obsTime>
+    <obsTime>1992-12-15T07:50:00Z</obsTime>
     <delay>51.43365666</delay>
     <rmsDelay>2.360</rmsDelay>
     <com>1</com>
@@ -312,7 +312,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-15T07:50:00.01Z</obsTime>
+    <obsTime>1992-12-15T07:50:00Z</obsTime>
     <doppler>-537151.85</doppler>
     <rmsDoppler>0.440</rmsDoppler>
     <com>1</com>
@@ -323,7 +323,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-16T07:09:59.99Z</obsTime>
+    <obsTime>1992-12-16T07:10:00Z</obsTime>
     <delay>56.99784170</delay>
     <rmsDelay>3.200</rmsDelay>
     <com>1</com>
@@ -334,7 +334,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-16T07:09:59.99Z</obsTime>
+    <obsTime>1992-12-16T07:10:00Z</obsTime>
     <doppler>-550720.99</doppler>
     <rmsDoppler>0.640</rmsDoppler>
     <com>1</com>
@@ -345,7 +345,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-17T06:49:59.98Z</obsTime>
+    <obsTime>1992-12-17T06:50:00Z</obsTime>
     <delay>62.76776117</delay>
     <rmsDelay>3.360</rmsDelay>
     <com>1</com>
@@ -356,7 +356,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-17T06:49:59.98Z</obsTime>
+    <obsTime>1992-12-17T06:50:00Z</obsTime>
     <doppler>-561924.36</doppler>
     <rmsDoppler>0.640</rmsDoppler>
     <com>1</com>
@@ -367,7 +367,7 @@
     <permID>4179</permID>
     <trx>251</trx>
     <rcv>251</rcv>
-    <obsTime>1992-12-17T07:59:59.97Z</obsTime>
+    <obsTime>1992-12-17T08:00:00Z</obsTime>
     <delay>63.03010888</delay>
     <rmsDelay>4.520</rmsDelay>
     <com>1</com>
@@ -378,7 +378,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-18T07:09:59.99Z</obsTime>
+    <obsTime>1992-12-18T07:10:00Z</obsTime>
     <delay>68.80097411</delay>
     <rmsDelay>1.880</rmsDelay>
     <com>1</com>
@@ -389,7 +389,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>1992-12-18T07:09:59.99Z</obsTime>
+    <obsTime>1992-12-18T07:10:00Z</obsTime>
     <doppler>-572657.34</doppler>
     <rmsDoppler>0.36</rmsDoppler>
     <com>1</com>
@@ -400,7 +400,7 @@
     <permID>4179</permID>
     <trx>251</trx>
     <rcv>251</rcv>
-    <obsTime>1992-12-18T07:59:59.97Z</obsTime>
+    <obsTime>1992-12-18T08:00:00Z</obsTime>
     <delay>68.98908084</delay>
     <rmsDelay>4.520</rmsDelay>
     <com>1</com>
@@ -411,7 +411,7 @@
     <permID>4179</permID>
     <trx>251</trx>
     <rcv>251</rcv>
-    <obsTime>1992-12-19T07:39:59.96Z</obsTime>
+    <obsTime>1992-12-19T07:40:00Z</obsTime>
     <delay>74.94857201</delay>
     <rmsDelay>4.520</rmsDelay>
     <com>1</com>
@@ -422,7 +422,7 @@
     <permID>4179</permID>
     <trx>251</trx>
     <rcv>251</rcv>
-    <obsTime>1992-12-19T07:39:59.96Z</obsTime>
+    <obsTime>1992-12-19T07:40:00Z</obsTime>
     <doppler>-167522.91</doppler>
     <rmsDoppler>0.24</rmsDoppler>
     <com>1</com>
@@ -433,7 +433,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>252</rcv>
-    <obsTime>1996-11-25T19:50:00.01Z</obsTime>
+    <obsTime>1996-11-25T19:50:00Z</obsTime>
     <doppler>+335217.76</doppler>
     <rmsDoppler>0.070</rmsDoppler>
     <com>1</com>
@@ -444,7 +444,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>252</rcv>
-    <obsTime>1996-11-26T18:00:00.00Z</obsTime>
+    <obsTime>1996-11-26T18:00:00Z</obsTime>
     <delay>40.12841509</delay>
     <rmsDelay>0.500</rmsDelay>
     <com>1</com>
@@ -455,7 +455,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>252</rcv>
-    <obsTime>1996-11-26T18:00:00.00Z</obsTime>
+    <obsTime>1996-11-26T18:00:00Z</obsTime>
     <doppler>+283557.37</doppler>
     <rmsDoppler>0.070</rmsDoppler>
     <com>1</com>
@@ -466,7 +466,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>252</rcv>
-    <obsTime>1996-11-27T17:50:00.04Z</obsTime>
+    <obsTime>1996-11-27T17:50:00Z</obsTime>
     <doppler>+206061.47</doppler>
     <rmsDoppler>0.070</rmsDoppler>
     <com>1</com>
@@ -477,7 +477,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>252</rcv>
-    <obsTime>1996-11-28T17:30:00.03Z</obsTime>
+    <obsTime>1996-11-28T17:30:00Z</obsTime>
     <doppler>+117850.31</doppler>
     <rmsDoppler>0.070</rmsDoppler>
     <com>1</com>
@@ -488,7 +488,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>252</rcv>
-    <obsTime>1996-11-29T15:40:00.02Z</obsTime>
+    <obsTime>1996-11-29T15:40:00Z</obsTime>
     <doppler>+36193.59</doppler>
     <rmsDoppler>0.070</rmsDoppler>
     <com>1</com>
@@ -499,7 +499,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>252</rcv>
-    <obsTime>1996-11-30T14:39:59.99Z</obsTime>
+    <obsTime>1996-11-30T14:40:00Z</obsTime>
     <doppler>-54016.24</doppler>
     <rmsDoppler>0.070</rmsDoppler>
     <com>1</com>
@@ -510,7 +510,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>252</rcv>
-    <obsTime>1996-12-01T13:20:00.04Z</obsTime>
+    <obsTime>1996-12-01T13:20:00Z</obsTime>
     <doppler>-135658.74</doppler>
     <rmsDoppler>0.070</rmsDoppler>
     <com>1</com>
@@ -521,7 +521,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>252</rcv>
-    <obsTime>1996-12-02T13:09:59.99Z</obsTime>
+    <obsTime>1996-12-02T13:10:00Z</obsTime>
     <doppler>-216056.67</doppler>
     <rmsDoppler>0.070</rmsDoppler>
     <com>1</com>
@@ -532,7 +532,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>252</rcv>
-    <obsTime>1996-12-03T12:09:59.96Z</obsTime>
+    <obsTime>1996-12-03T12:10:00Z</obsTime>
     <doppler>-276563.59</doppler>
     <rmsDoppler>0.070</rmsDoppler>
     <com>1</com>
@@ -543,7 +543,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>2000-11-02T18:09:59.96Z</obsTime>
+    <obsTime>2000-11-02T18:10:00Z</obsTime>
     <doppler>-114782.50</doppler>
     <rmsDoppler>0.600</rmsDoppler>
     <com>1</com>
@@ -554,7 +554,7 @@
     <permID>4179</permID>
     <trx>251</trx>
     <rcv>251</rcv>
-    <obsTime>2004-10-09T13:36:00.03Z</obsTime>
+    <obsTime>2004-10-09T13:36:00Z</obsTime>
     <delay>64.48445210</delay>
     <rmsDelay>0.900</rmsDelay>
     <com>1</com>
@@ -565,7 +565,7 @@
     <permID>4179</permID>
     <trx>251</trx>
     <rcv>251</rcv>
-    <obsTime>2008-11-23T10:59:59.97Z</obsTime>
+    <obsTime>2008-11-23T11:00:00Z</obsTime>
     <delay>89.22229990</delay>
     <rmsDelay>2.000</rmsDelay>
     <com>1</com>
@@ -576,7 +576,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>2012-12-04T03:29:59.97Z</obsTime>
+    <obsTime>2012-12-04T03:30:00Z</obsTime>
     <delay>71.95486133</delay>
     <rmsDelay>4.000</rmsDelay>
     <com>1</com>
@@ -587,7 +587,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>2012-12-06T04:30:00.00Z</obsTime>
+    <obsTime>2012-12-06T04:30:00Z</obsTime>
     <delay>62.05148794</delay>
     <rmsDelay>2.500</rmsDelay>
     <com>1</com>
@@ -598,7 +598,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>2012-12-07T04:39:59.96Z</obsTime>
+    <obsTime>2012-12-07T04:40:00Z</obsTime>
     <delay>57.73463283</delay>
     <rmsDelay>3.000</rmsDelay>
     <com>1</com>
@@ -609,7 +609,7 @@
     <permID>4179</permID>
     <trx>253</trx>
     <rcv>253</rcv>
-    <obsTime>2012-12-08T03:00:00.00Z</obsTime>
+    <obsTime>2012-12-08T03:00:00Z</obsTime>
     <delay>54.18581893</delay>
     <rmsDelay>3.000</rmsDelay>
     <com>1</com>
