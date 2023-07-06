@@ -14,7 +14,7 @@ def test_mpc80coltoxml_mpcfile():
     if os.path.exists(xmlfile):
         os.remove(xmlfile)
     subprocess.run("python3 ../Python/bin/mpc80coltoxml.py "+obsfile+" "+xmlfile,shell=True)
-    assert(os.path.exists(xmlfile))
+    assert(os.path.exists(xmlfile) and os.stat(xmlfile).st_size != 0)
     print('******* Test 1 should pass ********\n')
     
 #Testing file with the header - this test should pass
@@ -24,7 +24,7 @@ def test_mpc80coltoxml_submitted_nosplit():
     if os.path.exists(xmlfile):
         os.remove(xmlfile)
     subprocess.run("python3 ../Python/bin/mpc80coltoxml.py --nosplit "+obsfile+" "+xmlfile,shell=True)
-    assert(os.path.exists(xmlfile))
+    assert(os.path.exists(xmlfile) and os.stat(xmlfile).st_size != 0)
     print('******* Test 2 should pass ********\n')
     
 #Testing file with the header, but without using --nosplit -- this test does not pass

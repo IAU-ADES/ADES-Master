@@ -1,0 +1,21 @@
+# version=2017
+# observatory
+! mpcCode J95
+! name Great Shefford
+# submitter
+! name P. Birtwhistle
+# observers
+! name P. Birtwhistle
+# measurers
+! name P. Birtwhistle
+# telescope
+! design Schmidt-Cassegrain
+! aperture 0.41
+! fRatio 6.3
+! detector CCD
+# software
+! astrometry Astrometrica 4.12.0.448
+! photometry Astrometrica 4.12.0.448
+permID |provID     |trkSub  |artSat      |mode|stn |obsTime                |ra         |dec        |rmsRA|rmsDec|astCat  |mag  |rmsMag|band|photCat |photAp|logSNR|seeing|exp |rmsFit|nStars|notes|remarks
+       |2023 MQ5   |        |            | CCD|J95 |2023-07-06T00:17:43.77Z|273.13141  |+40.61177  |0.11 |0.12  |   Gaia2|20.2 |0.14  |   G|   Gaia2| 7.5  |0.95  |3.8   | 658|0.13  |   183|K    |
+       |2023 MQ5   |        |            | CCD|J95 |2023-07-06T00:39:17.00Z|273.15447  |+40.59873  |0.14 |0.14  |   Gaia2|     |      |    |        |      |0.44  |4.3   |1316|0.12  |   178|K    |

@@ -84,20 +84,24 @@ def processOptical(opticalList, depth=0):
       print (depth*'  ', tag, '=', text)
    
              
+def readxmlpy(args):
+   try:
+      xmlFile = args[1]
+   except:
+      print ("Usage: python readxml.py <xmlfilename>")
 
-try:
-   xmlFile = sys.argv[1]
-except:
-   print ("Usage: python readxml.py <xmlfilename>")
+   #
+   # read the xml file into python.  This grabs the whole thing
+   #
+   xmlTree = XMLTree.parse(xmlFile)
 
-#
-# read the xml file into python.  This grabs the whole thing
-#
-xmlTree = XMLTree.parse(xmlFile)
-
-#
-# now call the routine to print it recursively
-#
-printElement(xmlTree.getroot(), 0)
+   #
+   # now call the routine to print it recursively
+   #
+   printElement(xmlTree.getroot(), 0)
+   
+# ------------------------------------------------------
+if __name__ == '__main__':
+   readxmlpy(sys.argv)
 
 

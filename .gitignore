@@ -2,6 +2,9 @@
 new_tests/__pycache__
 new_tests/.pytest_cache
 new_tests/output/2023MQ5.xml
+new_tests/output/read_xml_out.txt
+new_tests/output/K20Q04A_test.xml
+new_tests/output/trksub_sub.obs
 tests/testarea/
 C/bin/
 C/config.log
