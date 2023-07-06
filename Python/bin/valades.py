@@ -5,8 +5,8 @@
 # xml file
 #
 # Usage:
-#   ./valit.py <adesmaster file> <xslt file for schema> <xml file to validate>
-#   ./valit.py adesmaster.xml submitxsd.xslt newsubmit.xml
+#   ./valades.py <adesmaster file> <xslt file for schema> <xml file to validate>
+#   ./valades.py adesmaster.xml submitxsd.xslt newsubmit.xml
 #
 # xslt files:               All of thsee transform adesmaster.xml to a schema
 #    submitxsd.xslt         creates xsd file to validate submission xml
@@ -26,10 +26,15 @@ import sys
 
 import xmlutility
 
-xml_tree = xmlutility.readXML(sys.argv[1])
-xslt_tree = xmlutility.readXML(sys.argv[2])
-schema = xmlutility.XMLtoSchemaViaXSLT(xml_tree, xslt_tree)
+def valades(args):
+    xml_tree = xmlutility.readXML(args[1])
+    xslt_tree = xmlutility.readXML(args[2])
+    schema = xmlutility.XMLtoSchemaViaXSLT(xml_tree, xslt_tree)
 
-candidate =xmlutility.readXML(sys.argv[3])
+    candidate =xmlutility.readXML(args[3])
 
-schema.assertValid(candidate)
+    schema.assertValid(candidate)
+
+# ---------------------------------------------------------------
+if __name__ == '__main__':
+    valades(sys.argv)

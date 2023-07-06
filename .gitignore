@@ -6,6 +6,7 @@ new_tests/output/read_xml_out.txt
 new_tests/output/K20Q04A_test.xml
 new_tests/output/trksub_sub.obs
 new_tests/output/obs.psv
+new_tests/validation.file
 tests/testarea/
 C/bin/
 C/config.log
@@ -25,4 +26,5 @@ C/src/valsubmit
 C/src/writexml
 C/src/xmltopsv
 Python/bin/__pycache__
+.vscode
 
