@@ -405,6 +405,7 @@ def decode80ColumnDataLine(line):
          sexVals.checkDate(ret) # check date first
          sexVals.checkRa(ret)
          sexVals.checkDec(ret)
+
    if not m:
       m = radarFirstLineRegex.match(line)  # R
       if m:
@@ -430,9 +431,6 @@ def decode80ColumnDataLine(line):
          ret['trx']  = m.group(11)
          ret['packedref'] = m.group(12)
          ret['stn']  = m.group(13)
-
-         #print (m.groups())
-         pass
 
    if not m:
       m = radarSecondLineRegex.match(line) # r
@@ -513,7 +511,9 @@ def decode80ColumnDataLine(line):
    # 
    # more value sanity checks
    #
-   sexVals.checkDate(ret) # check date always
+   rdr = 'trx' in ret.keys()
+   sexVals.checkDate(ret, rdr) # check date always
+
    #if ( ret['notes'] == 'X' ): 
    #    print (lineNumber, ":", line)
    if ( ret['code'] not in packUtil.validCodes):
@@ -1121,6 +1121,7 @@ def mpc80coltoxml(args):
          exit()
       
 
+<<<<<<< HEAD:Python/bin/mpc80coltoxml.py
    except:
       try:
          parseFile(func(inFile), None)
@@ -1141,6 +1142,23 @@ def mpc80coltoxml(args):
 #---------------------------------------------------------------------
 if __name__ == '__main__':
    mpc80coltoxml(sys.argv)
+=======
+except:
+
+   try:
+      parseFile(func(inFile), None)
+   except:
+      print("Usage: <mpc80coltoxml> [--nosplit] <inmpcfile> <outxmlfile>")
+
+print()
+if nSplit:
+    print (nSplit, "radar lines split out of", lineNumber, "lines")
+    print ("split lines:")
+    for i in splitLines:
+       print (i, '/', i+1)
+print ("Statistics:")
+sexVals.printCounts()
+>>>>>>> 3691da65b140fa1bac194d986301bfcd24b13caa:Python/bin/mpc80coltoxml
 
 
 

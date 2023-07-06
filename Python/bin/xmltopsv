@@ -208,9 +208,10 @@ def processAdesElement(element):
    lastDataTagType = None  # logic here is to print the dataDict when
                            # the next block is found.
    # 
-   # write header with version
+   # write header with same version found in XML input
    #
-   sline = "# version=2017"
+   ades_ver = element.attrib['version'];
+   sline = "# version=" + ades_ver
    print (sline, file=encodedout)
 
    for child in element:
