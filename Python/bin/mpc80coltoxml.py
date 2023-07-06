@@ -1121,7 +1121,6 @@ def mpc80coltoxml(args):
          exit()
       
 
-<<<<<<< HEAD:Python/bin/mpc80coltoxml.py
    except:
       try:
          parseFile(func(inFile), None)
@@ -1142,23 +1141,6 @@ def mpc80coltoxml(args):
 #---------------------------------------------------------------------
 if __name__ == '__main__':
    mpc80coltoxml(sys.argv)
-=======
-except:
-
-   try:
-      parseFile(func(inFile), None)
-   except:
-      print("Usage: <mpc80coltoxml> [--nosplit] <inmpcfile> <outxmlfile>")
-
-print()
-if nSplit:
-    print (nSplit, "radar lines split out of", lineNumber, "lines")
-    print ("split lines:")
-    for i in splitLines:
-       print (i, '/', i+1)
-print ("Statistics:")
-sexVals.printCounts()
->>>>>>> 3691da65b140fa1bac194d986301bfcd24b13caa:Python/bin/mpc80coltoxml
 
 
 

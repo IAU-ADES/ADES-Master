@@ -1,4 +1,7 @@
 *.pyc
+new_tests/__pycache__
+new_tests/.pytest_cache
+new_tests/output/2023MQ5.xml
 tests/testarea/
 C/bin/
 C/config.log
@@ -17,4 +20,5 @@ C/src/valgeneral
 C/src/valsubmit
 C/src/writexml
 C/src/xmltopsv
+Python/bin/__pycache__
 
