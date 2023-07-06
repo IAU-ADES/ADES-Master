@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-#
 # Validates an xml file against a schema
 #
 # Usage:

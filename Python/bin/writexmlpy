@@ -1,9 +1,8 @@
-#!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 #
 # writexml.py
 #
-# simple python script to demonstrate how to read xml
+# simple python script to demonstrate how to write xml
 # files and walk though the elements and their children
 # using the python lxml library directly.
 #

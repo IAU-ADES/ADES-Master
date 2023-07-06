@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 #
    # __future__ imports for Python 3 compliance in Python 2
 # 
@@ -300,8 +299,12 @@ def processObsContext(element):
 #
 # read in allowedElementDict, requiredElementDict  and psvFormatDict
 #
+
+# Important note: it is very complicated and time consuming to change this routine.
+# I will keep it as it is and we can only call it through command line
+
 (allowedElementDict, requiredElementDict, psvFormatDict) = \
-                                         adesutility.getAdesTables()
+                                       adesutility.getAdesTables()
 
 inputTree = adesutility.readXML(sys.argv[1])
 
@@ -310,4 +313,5 @@ allowedObsBlockSet = setFromElementDictList('obsBlock')
 allowedAdesSet = setFromElementDictList('ades')
 
 processAdesElement(inputTree.getroot())
+   
 

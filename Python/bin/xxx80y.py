@@ -1,4 +1,3 @@
-#!/usr/env/bin python
 #
 # __future__ imports for Python 3 compliance in Python 2
 # 
