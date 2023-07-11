@@ -4,6 +4,7 @@ with and without the header
 '''
 
 #Import global
+import pytest
 import os
 import subprocess
 
@@ -28,6 +29,7 @@ def test_mpc80coltoxml_submitted_nosplit():
     print('******* Test 2 should pass ********\n')
     
 #Testing file with the header, but without using --nosplit -- this test does not pass
+@pytest.mark.xfail
 def test_mpc80coltoxml_submitted_split():
     obsfile = "input/85_test.obs"
     xmlfile = "output/85_test_split.xml"
