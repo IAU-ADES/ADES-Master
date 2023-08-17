@@ -1,6 +1,6 @@
 #
    # __future__ imports for Python 3 compliance in Python 2
-# 
+#
 from __future__ import absolute_import, division, print_function
 from __future__ import unicode_literals
 #
@@ -13,11 +13,11 @@ import io
 from collections import OrderedDict
 
 #
-# write encoded output for psv.  Default encoding 
+# write encoded output for psv.  Default encoding
 # for psv is utf-8
 #
 psvencoding = 'utf-8'
-encodedout = io.open(sys.argv[2], 'w', encoding=psvencoding)
+encodedout = None
 
 #
 # sys.argv[1]: input xml file
@@ -47,7 +47,7 @@ def processDataElement(first, element):
       if childtext:      # add to dict if child has text -- this excludes localUse
                          # because localUse has no text
          subDict[childtag] = childtext
- 
+
    #
    # see if we already have a header for the type
    #
@@ -57,28 +57,28 @@ def processDataElement(first, element):
      #
      headerInfo =  []
      headerDict = {}
-     tag = element.tag 
+     tag = element.tag
      psvList = []
      #
      # headerItem entries are:
-     # 
+     #
      #             [name   width     fmt   dpos  seen]
      #  headerItem[0]: name of the field
      #  headerItem[1]: width of the field (may expand)
      #  headerItem[2]: fmt is 'L', 'R', or 'D'
      #  headerItem[3]: dpos the decimal point location for 'D' (integer)
-     #  headerItem[4]:  True/False, whether this has been seen.  Only 
+     #  headerItem[4]:  True/False, whether this has been seen.  Only
      #                  headerItems from the psvList may have seen=False,
      #                  since the other are geneerated when seen.
-     #   
-     # 
+     #
+     #
      for j in psvFormatDict[tag]:
        #             [name   width     fmt   dpos  seen]
        psvList.append(j[0])  # keep for adding other elements
        headerItem = [ j[0], int(j[1]), j[2], j[3], False ]
        headerInfo.append(headerItem)
        headerDict[j[0]] = headerItem # reference semantics is your friend
- 
+
      #
      # adjust lengths if header doesn't fit
      #
@@ -97,12 +97,12 @@ def processDataElement(first, element):
             headerItem = [j, len(j), 'R', 0, False ]
             headerInfo.insert(-1, headerItem)
             headerDict[j] = headerItem
-            
+
 
      dataDicts = []  # store subDicts
-      
 
-   for i in subDict:  # now adjust headerInfo 
+
+   for i in subDict:  # now adjust headerInfo
       if i in headerDict:  # apply justification and extend if needed
          headerItem = headerDict[i]  # reference semantics means update headerInfo
          #
@@ -110,8 +110,8 @@ def processDataElement(first, element):
          #
          if not (headerItem[0] in psvList) and not headerItem[4] and headerItem[2] in 'RL':
             #
-            # justification is unchanged unless there is a '.' character.  
-            # This heuristic is not fool-proof but works for our 
+            # justification is unchanged unless there is a '.' character.
+            # This heuristic is not fool-proof but works for our
             # typical cases.
             just = headerItem[2]
             n = 0
@@ -122,7 +122,7 @@ def processDataElement(first, element):
                pass
             headerItem[2] = just
             headerItem[3] = n
-             
+
          headerItem[4] = True # this has been seen
          (stemp, width, dposnew) = applyPaddingAndJustification(subDict[i],
                                                                 headerItem[1],
@@ -143,8 +143,8 @@ def processDataElement(first, element):
            l = len(i)
 
          #
-         # justification is 'R' unless there is a '.' character.  
-         # This heuristic is not fool-proof but works for our 
+         # justification is 'R' unless there is a '.' character.
+         # This heuristic is not fool-proof but works for our
          # typical cases.
          just = 'R'
          n = 0
@@ -184,7 +184,7 @@ def processObsBlock(element):
                if tag not in allowedObsDataSet:
                   raise RuntimeError("Cannot have tag " + tag + " in obsData");
             elif tag != obsDataType:
-               raise RuntimeError("Cannot mix tag " + tag + " with tag " + 
+               raise RuntimeError("Cannot mix tag " + tag + " with tag " +
                                   obsDataType + "in obsData")
             processDataElement(first, grandchild)
             first = False
@@ -194,7 +194,7 @@ def processObsBlock(element):
 #
 def processAdesElement(element):
    """ processAdesElement (element)
- 
+
        Inputs:
           element:  element of a tree
 
@@ -206,7 +206,7 @@ def processAdesElement(element):
    dataDicts = []   # printDataDicts won't print anything if empty
    lastDataTagType = None  # logic here is to print the dataDict when
                            # the next block is found.
-   # 
+   #
    # write header with same version found in XML input
    #
    ades_ver = element.attrib['version'];
@@ -215,7 +215,7 @@ def processAdesElement(element):
 
    for child in element:
       tag = child.tag
-      if tag not in allowedAdesSet: 
+      if tag not in allowedAdesSet:
          raise RuntimeError("tag " + tag + " not allowend in ades")
 
       if tag == "obsBlock":
@@ -268,7 +268,7 @@ def printDataDicts():
             if not first:
                sline += '|'
             first = False
-            if headerItem[0] in subDict: 
+            if headerItem[0] in subDict:
               (stemp, w, dposnew) = applyPaddingAndJustification(subDict[headerItem[0]],
                                                                  headerItem[1],
                                                                  headerItem[2],
@@ -294,8 +294,8 @@ def processObsContext(element):
       sline = "! " + childtag + ' ' + childtext  # in python2, unicode + bytes -> unicode
       sline = sline.rstrip() # remove trailing whitespace
       print (sline, file=encodedout)
-    
-        
+
+
 #
 # read in allowedElementDict, requiredElementDict  and psvFormatDict
 #
@@ -306,12 +306,17 @@ def processObsContext(element):
 (allowedElementDict, requiredElementDict, psvFormatDict) = \
                                        adesutility.getAdesTables()
 
-inputTree = adesutility.readXML(sys.argv[1])
-
 allowedObsDataSet = setFromElementDictList('obsData')
 allowedObsBlockSet = setFromElementDictList('obsBlock')
 allowedAdesSet = setFromElementDictList('ades')
 
-processAdesElement(inputTree.getroot())
-   
 
+def xmltopsv(args):
+   global encodedout
+   inputTree = adesutility.readXML(args[1])
+   encodedout = io.open(args[2], 'w', encoding=psvencoding)
+   processAdesElement(inputTree.getroot())
+
+
+if __name__ == "__main__":
+   xmltopsv(sys.argv)
