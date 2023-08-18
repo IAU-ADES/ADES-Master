@@ -1,7 +1,8 @@
 *.pyc
 new_tests/__pycache__
 new_tests/.pytest_cache
-new_tests/output
+new_tests/output/*
+!new_tests/output/.gitkeep
 new_tests/validation.file
 tests/testarea/
 C/bin/
