@@ -1,5 +1,5 @@
 # __future__ imports for Python 3 compliance in Python 2
-# 
+#
 from __future__ import absolute_import, division, print_function
 from __future__ import unicode_literals
 #
@@ -12,6 +12,7 @@ import sys
 import re
 import io
 import math
+import argparse
 
 import adesutility
 import packUtil
@@ -139,7 +140,7 @@ commonRegexHelp1 = ( '([ A-Za-z0-9~][A-Za-z0-9 ]{11})'    # id group 1-12
                      )
 commonRegexHelp2 = ( '(\d{4})'            # yyyy from obsDate 16-19
                      + '([ a-e])'            # asteroid satellite embedded in date 20
-                     + '([0-9 .]{12})'       # rest of obsDate loosely checked 21-32 
+                     + '([0-9 .]{12})'       # rest of obsDate loosely checked 21-32
                      )
 
 
@@ -152,10 +153,10 @@ commonRegexHelp2 = ( '(\d{4})'            # yyyy from obsDate 16-19
 #  13: packedref and astCode as first character
 #  14: 3-character obs stn code
 #
-normalLineRegex = re.compile( ( '^' 
-                                   + commonRegexHelp1  
+normalLineRegex = re.compile( ( '^'
+                                   + commonRegexHelp1
                                    + '([A PeCBTMcEOHNnSVXx])' # codes group -- include SVXx but not Rrsv 15
-                                   + commonRegexHelp2  
+                                   + commonRegexHelp2
                                    + '([0-9 .]{12})'       # Ra loosely checked 33-44
                                    + '([-+ ][0-9 .]{11})'  # Dec loosely checked 45-56
                                    + '(.{9})'              # mpc doc says blank but not 57-65
@@ -175,7 +176,7 @@ normalLineRegex = re.compile( ( '^'
 #  12: packedref 72-77
 #  13: obs stn   78-80
 #
-radarFirstLineRegex = re.compile( ( '^' 
+radarFirstLineRegex = re.compile( ( '^'
                                    + commonRegexHelp1
                                    + '(R)'                 # code is Radar first line
                                    + commonRegexHelp2
@@ -197,7 +198,7 @@ radarFirstLineRegex = re.compile( ( '^'
 #  12: tobs  69-71
 #  13: packedref 72-77
 #  14: obs stn  78-80
-radarSecondLineRegex = re.compile( ( '^' 
+radarSecondLineRegex = re.compile( ( '^'
                                    + commonRegexHelp1
                                    + '(r)'                 # code is Radar second line
                                    + commonRegexHelp2
@@ -220,7 +221,7 @@ radarSecondLineRegex = re.compile( ( '^'
 #  11: z 59-69
 #  12: packedref 72-77
 #  13: obs stn  78-80
-satelliteSecondLineRegex = re.compile( ( '^' 
+satelliteSecondLineRegex = re.compile( ( '^'
                                    + commonRegexHelp1
                                    + '(s)'                 # code is satellite second line
                                    + commonRegexHelp2
@@ -244,7 +245,7 @@ satelliteSecondLineRegex = re.compile( ( '^'
 #  10: altitude 57-61
 #  11: packedref 72-77
 #  12: obs stn  78-80 must be 247
-roverSecondLineRegex = re.compile( ( '^' 
+roverSecondLineRegex = re.compile( ( '^'
                                    + commonRegexHelp1
                                    + '(v)'                 # code is rover second line
                                    + commonRegexHelp2
@@ -281,18 +282,18 @@ def valueError(s, line, c1, c2, value=None):
    if value:
       if s not in value:
         if (c1 != c2):
-           error80('columns ' + repr(c1) + '-' + repr(c2) + 
+           error80('columns ' + repr(c1) + '-' + repr(c2) +
                   ' must be "' + repr(value) + '" not "' + s + '"', line)
         else:
-           error80('column ' + repr(c1) +  
+           error80('column ' + repr(c1) +
                    ' must be "' + repr(value) + '" not "' + s + '"', line)
    else:
       if not s.isspace():
         if (c1 != c2):
-           error80('columns ' + repr(c1) + '-' + repr(c2) + 
+           error80('columns ' + repr(c1) + '-' + repr(c2) +
                   ' must be blank not "' + s + '"', line)
         else:
-           error80('column ' + repr(c1) +  
+           error80('column ' + repr(c1) +
                    ' must be blank not "' + s + '"', line)
 
 
@@ -309,7 +310,7 @@ def decode80ColumnDataLine(line):
        format into its constituent parts and types.  The type may mean
        the next line is a continuation
 
-       Input:  A line in 80-col format.  This is padded with spaces by 
+       Input:  A line in 80-col format.  This is padded with spaces by
                the caller
 
        Output:  A tuple.  If this is an optical first line:
@@ -319,18 +320,18 @@ def decode80ColumnDataLine(line):
            trkSub: trkSub field or None
            disc:   '*" (for discovery) or ''
            note:   1-character note or program code
-           code:   This is an overloaded character.  
-                   'V/v' means a roving observation with a second record.  
+           code:   This is an overloaded character.
+                   'V/v' means a roving observation with a second record.
                    'R/r' means a radar observation with a second record.
                    'S/s' means a satellite observation
                    'O' means an offset observation (used only for natural satellites)
                    'E' means an occultation-derived observation
                    other values mean other things.  Black and 'P' mean the same thing
-           date:  date of observtion in 'YYYY MM DD.dddddd' format.  The number of 'd's 
+           date:  date of observtion in 'YYYY MM DD.dddddd' format.  The number of 'd's
                   is important so this is returned as a string.
            ra:    observed j2000.0 ra in 'HH MM SS.ddd' format.  The number if 'd's is
                   so this is returned as a string
-           decl:  observed j2000.0 dec in 'sDD MM SS.dd' format.  The 's' is +, -, or 
+           decl:  observed j2000.0 dec in 'sDD MM SS.dd' format.  The 's' is +, -, or
                   ' ' which means +.  The number of 'd's is important
            mag:   Observed magnitude
            band:  band for observed magnitude
@@ -341,14 +342,14 @@ def decode80ColumnDataLine(line):
            provid: unpacked Provisional ID or None
            disc:   '*" (for discovery) or ''
            note:   1-character note or program code
-           code:   This is an overloaded character.  
-                   'V/v' means a roving observation with a second record.  
+           code:   This is an overloaded character.
+                   'V/v' means a roving observation with a second record.
                    'R/r' means a radar observation with a second record.
                    'S/s' means a satellite observation
                    'O' means an offset observation (used only for natural satellites)
                    'E' means an occultation-derived observation
                    other values mean other things.  Black and 'P' mean the same thing
-           date:  date of observtion in 'YYYY MM DD.dddddd' format.  The number of 'd's 
+           date:  date of observtion in 'YYYY MM DD.dddddd' format.  The number of 'd's
                   is important so this is returned as a string.
            delay: delay time
            shfit: doppler shift
@@ -357,7 +358,7 @@ def decode80ColumnDataLine(line):
            rfreq: receive frequency
            robs:  receive observatory three-character code
 
-       Exceptions:  raises "Invalid MPC80COL line (<reason>): <line> " is the line 
+       Exceptions:  raises "Invalid MPC80COL line (<reason>): <line> " is the line
                     is not valid for some reason
    """
    if not line:
@@ -401,7 +402,7 @@ def decode80ColumnDataLine(line):
          ret['band'] =   m.group(12)
          ret['packedref'] = m.group(13)
          ret['stn']  =   m.group(14)
-      
+
          sexVals.checkDate(ret) # check date first
          sexVals.checkRa(ret)
          sexVals.checkDec(ret)
@@ -422,7 +423,7 @@ def decode80ColumnDataLine(line):
          if m.group(9).strip() != '':  # shift has sign
             ret['shift'] = m.group(9)[0:11] + '.' + m.group(9)[11:]
             ret['shift'] = packUtil.packSigned(ret['shift'])
-         else: 
+         else:
             ret['shift'] = ''
          if m.group(10).strip != '':
             ret['frq'] = m.group(10)[0:5] + '.' + m.group(10)[5:]
@@ -508,13 +509,13 @@ def decode80ColumnDataLine(line):
    if not m:
       error80 ("no match for line", line)
 
-   # 
+   #
    # more value sanity checks
    #
    rdr = 'trx' in ret.keys()
    sexVals.checkDate(ret, rdr) # check date always
 
-   #if ( ret['notes'] == 'X' ): 
+   #if ( ret['notes'] == 'X' ):
    #    print (lineNumber, ":", line)
    if ( ret['code'] not in packUtil.validCodes):
       error80 ("invalid column 14 " + ret['code']+ " in line " +  repr(lineNumber), line)
@@ -549,13 +550,13 @@ def decode80ColumnDataLine(line):
    #
    # compute unpacked ID fields.  This may be only a trkSub
    #
-  
+
    (permID, provID, trkSub) = packUtil.unpackPackedID(ret['totalid'])
    ret['permID'] = permID
    ret['provID'] = provID
    ret['trkSub'] = trkSub
    #print(permid, provid, trkSub)
-   
+
    try:
      packtest =  packUtil.packTupleID( (permID, provID, trkSub) )
      if packtest != ret['totalid']:
@@ -585,8 +586,8 @@ def parseFile(f, callBack):
             dataLine = l[:-1]
             line = decode80ColumnDataLine(dataLine)
             newCode = line['code']
-   
-   
+
+
             #
             # check for two-line mismatch
             #
@@ -596,15 +597,15 @@ def parseFile(f, callBack):
                print ("oldDataLLine", oldDataLine)
                print ("dataLine    ", dataLine)
                badCombo = True
-          
+
             if (newCode in 'rsv' and newCode.upper() != oldCode):
                print ()
                print (newCode + '/' + newCode.upper() +  " mismatch at" ,lineNumber,"old was " + oldCode  + ":")
                print ("oldDataLLine", oldDataLine)
                print ("dataLine    ", dataLine)
                badCombo = True
-          
-   
+
+
             #
             # now yield valid lines and combinations
             #
@@ -634,7 +635,7 @@ def parseFile(f, callBack):
                      oldLine['doppler'] = oldLine['shift'] # for xml
                      oldLine['ref'] = oldLine['packedref'] # for xml?
                      #print ("Rr at",lineNumber,":")
-   
+
                   if (oldCode == 'S'): # satellite
                      oldLine['sys'] = line['sys']
                      oldLine['ctr'] = line['ctr']  # always 399
@@ -642,7 +643,7 @@ def parseFile(f, callBack):
                      oldLine['pos2'] = line['pos2']
                      oldLine['pos3'] = line['pos3']
                      #print ("Ss at",lineNumber,":")
-   
+
                   if (oldCode == 'V'): # rover
                      oldLine['sys'] = line['sys']  # always WGS84
                      oldLine['ctr'] = line['ctr']  # always 399
@@ -650,14 +651,14 @@ def parseFile(f, callBack):
                      oldLine['pos2'] = line['pos2']   # lat
                      oldLine['pos3'] = line['pos3']   # alt
                      #print ("Vv at",lineNumber,":")
-   
+
                if (newCode in 'rsv'):
                   nextThing = oldLine  # with new fields from line
                   oldCode = None
                else:
                   if (newCode  not in 'RrSsVv'):
                      nextThing = line # all opticals (some Xx)
-   
+
             #
             # save for continuation lines only
             #
@@ -669,7 +670,7 @@ def parseFile(f, callBack):
                oldLine = None
                oldDataLine = None
                oldCode = 'None' # can't be None and still work
-   
+
             if nextThing:  # could yield it up but instead call down -- works in C++
                 if callBack:
                    callBack(nextThing, lineNumber)
@@ -753,7 +754,7 @@ def convertitPreamble(fname):  # set up elementTree
    inObsBlock = False
    # root node has no text or tail and one attribute
    stack = adesutility.ElementStack('ades', None, {'version':'2022'} )
-   
+
 
 
 
@@ -805,7 +806,7 @@ def convertit(item, lineNumber):
        inObsBlock = False
 
   #
-  # how to convert 'Offset' and 'Occultation' values? -- as Optical with 
+  # how to convert 'Offset' and 'Occultation' values? -- as Optical with
   # 'OFF' and 'OCC' as the 'mode' field.  This round-trips.
   #
   if codeType == 'Satellite': # same as rover fields for ICRF_AU and ICRF_KM
@@ -838,7 +839,7 @@ def convertit(item, lineNumber):
      #
      #for item in things:
      #   stack.add(item, d[item])
-   
+
      if code in 'Xx':  # deprecated with disc flag
         code = 'C' # mode set below
         item['deprecated'] = 'X' # what about x?
@@ -879,7 +880,7 @@ def convertit(item, lineNumber):
 
      d = allowedElementDict['optical']
      #print ( [x for x in item if x not in d ] )
-     elements = adesutility.makeElementList( [ (x, str(item[x]).strip()) 
+     elements = adesutility.makeElementList( [ (x, str(item[x]).strip())
                 for x in d if x in item and item[x] and str(item[x]).strip()] )
      stack.addElementList(elements)
 
@@ -894,7 +895,7 @@ def convertit(item, lineNumber):
 
      d = allowedElementDict['radar']
      #print ( 'radar', [(x, item[x]) for x in item if x not in d ] )
-     elements = adesutility.makeElementList( [ (x, str(item[x]).strip()) 
+     elements = adesutility.makeElementList( [ (x, str(item[x]).strip())
                 for x in d if x in item and item[x] and str(item[x]).strip()] )
      stack.addElementList(elements)
      pass
@@ -968,7 +969,7 @@ def convertit(item, lineNumber):
 
 #---------------------------------------------------------------------------
 #
-# The following generators are for splitting lines or not splitting lines. 
+# The following generators are for splitting lines or not splitting lines.
 # Each generator is responsible for setting lineNumber
 #
 
@@ -994,7 +995,7 @@ def doNotSplitRadar(fname):
 def parseRadarLine(l):
    """ splits a line into compenents needed to
        check flag (column 13) and doppler/delay
-       fields. 
+       fields.
    """
    try:
       l1 = l[0:14]
@@ -1006,10 +1007,10 @@ def parseRadarLine(l):
       return (l1, flag, l2, doppler, delay, l3)
    except:
       raise RuntimeError("Invalid line")
-    
+
 
 def splitRadar(fname):
-   """ splitRadar(fname) 
+   """ splitRadar(fname)
 
        opens fname and reads it as an 80-col MPC file
 
@@ -1017,7 +1018,7 @@ def splitRadar(fname):
        be followed by r.  It does no other checking.
 
        If doppler and delay are both specified, it replaces the
-       radar with two entries; otherwise it just passes the 
+       radar with two entries; otherwise it just passes the
        entries through.
 
        It raises RuntimeError on any syntax problem.
@@ -1061,7 +1062,7 @@ def splitRadar(fname):
                   yield l2
 
 
-       
+
 
             lineNumber += 1
             l1 = f.readline()[0:81]
@@ -1074,59 +1075,18 @@ def splitRadar(fname):
 
 
 #Usage: mpc80coltoxml [--nosplit] <inmpcfile> [<outxmlfile>]
-def mpc80coltoxml(args):
-   argc = len(args)
-   outFile = None
-   try:
-      if args[1] == '--nosplit':
-         if argc > 4:
-            raise RuntimeError("bad arg list")
-         func = doNotSplitRadar
-         inFile = args[2]
-         if argc == 4:
-            outFile = args[3]
-      else:
-         if argc > 3:
-            raise RuntimeError("bad arg list")
-         func = splitRadar
-         inFile = args[1]
-         if argc == 3:
-            outFile = args[2]
-   except:
-      print ("Usage: mpc80coltoxml [--nosplit] <inmpcfile> [<outxmlfile>]")
-      print ("    --nosplit will not split doppler/delay radar into two elements")
-      print ("              elements with doppler and delay will not validate")
-      print ("    inmpcfile is the input mpc file")
-      print ("    outxmlfile is the optional output xml file")
-      print ("               without outxmlfile the input will still be checked")
-
-      exit(-1)
-
+def mpc80coltoxml(inmpcfile, outxmlfile, func):
    try:
 
       #
       # for xml output
       #
-      convertitPreamble(outFile)
-      try:
-         pass
-      except:
-         print("Usage: <mpc80coltoxml> [--nosplit] <inmpcfile> <outxmlfile>")
-         exit(-1)
-      try:
-         parseFile(func(inFile), convertit)
-         convertitPostamble(outFile)
-      except RuntimeError as e:
-         print ("Error", e)
-         exit()
-      
+      convertitPreamble(outxmlfile)
+      parseFile(func(inmpcfile), convertit)
+      convertitPostamble(outxmlfile)
 
    except:
-      try:
-         parseFile(func(inFile), None)
-      except:
-         print("Usage: <mpc80coltoxml> [--nosplit] <inmpcfile> <outxmlfile>")
-
+      parseFile(func(inmpcfile), None)
 
    print()
    print()
@@ -1140,7 +1100,16 @@ def mpc80coltoxml(args):
 
 #---------------------------------------------------------------------
 if __name__ == '__main__':
-   mpc80coltoxml(sys.argv)
+   parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+   parser.add_argument("inmpcfile", type=str, help="the input mpc file")
+   parser.add_argument("outxmlfile", nargs="?", default=None, type=str, help="the optional output xml file. without outxmlfile the input will still be checked")
+   parser.add_argument("--nosplit", action="store_true", help="will not split doppler/delay radar into two elements; elements with doppler and delay will not validate")
 
+   args = parser.parse_args()
 
-
+   try:
+      mpc80coltoxml(args.inmpcfile, args.outxmlfile, doNotSplitRadar if args.nosplit else splitRadar)
+   except Exception as e:
+      print("Error", e)
+      parser.print_help()
+      exit(-1)

@@ -1,5 +1,5 @@
 # __future__ imports for Python 3 compliance in Python 2
-# 
+#
 from __future__ import absolute_import, division, print_function
 from __future__ import unicode_literals
 #
@@ -32,7 +32,7 @@ def processDataElement(first, element):
       if childtext:      # add to dict if child has text -- this excludes localUse
                          # because localUse has no text
          subDict[1][childtag] = childtext
- 
+
    if first:
      dataDicts = []  # store subDicts
    dataDicts.append(subDict) # add to the list
@@ -57,7 +57,7 @@ def processObsBlock(element,allowedObsBlockSet,allowedObsDataSet):
                if tag not in allowedObsDataSet:
                   raise RuntimeError("Cannot have tag " + tag + " in obsData");
             elif tag != obsDataType:
-               raise RuntimeError("Cannot mix tag " + tag + " with tag " + 
+               raise RuntimeError("Cannot mix tag " + tag + " with tag " +
                                   obsDataType + "in obsData")
             processDataElement(first, grandchild)
             first = False
@@ -67,7 +67,7 @@ def processObsBlock(element,allowedObsBlockSet,allowedObsDataSet):
 #
 def processAdesElement(element,allowedObsDataSet,allowedAdesSet,allowedObsBlockSet):
    """ processAdesElement (element)
- 
+
        Inputs:
           element:  element of a tree
 
@@ -79,7 +79,7 @@ def processAdesElement(element,allowedObsDataSet,allowedAdesSet,allowedObsBlockS
    dataDicts = []   # printDataDicts won't print anything if empty
    lastDataTagType = None  # logic here is to print the dataDict when
                            # the next block is found.
-   # 
+   #
    # no header with version
    #
    #sline = "# version=2017"
@@ -87,7 +87,7 @@ def processAdesElement(element,allowedObsDataSet,allowedAdesSet,allowedObsBlockS
 
    for child in element:
       tag = child.tag
-      if tag not in allowedAdesSet: 
+      if tag not in allowedAdesSet:
          raise RuntimeError("tag " + tag + " not allowend in ades")
 
       if tag == "obsBlock":
@@ -118,7 +118,7 @@ def hasKeyOrVal(d, key, val):
    """
    if key in d:
      return d[key]
-   else: 
+   else:
      return val
 
 # from https://bitbucket.org/mpcdev/xmlto80/src/master/
@@ -172,7 +172,7 @@ def printOpticalLine(item):
    # NEW APPROACH: USE 1ST CHARACTER
    if len(band) > 1:
       band = band[1]
-   
+
    #This won't work
    #if len(band) > 1: band = '!' # Don't truncate the band, but instead write a nonsense character
 
@@ -198,7 +198,7 @@ def printOpticalLine(item):
    deprecated = hasKeyOrVal(item, 'deprecated', None)
    if deprecated:
       code = deprecated  # right now just X
-   
+
    prog = hasKeyOrVal(item, 'prog', None)
    if prog:  # This changes the meaning of the notes field
       notes = packUtil.unpackProgID(prog)
@@ -249,7 +249,7 @@ def printOpticalLine(item):
       else: # illegal for 80-column format but already checked
          pass
       print (sline, file= encodedout)
-    
+
 def printRadarLine(item):
    """ printRadarLine decodes and prints a radar element
        Input:
@@ -285,7 +285,7 @@ def printRadarLine(item):
    rmsDoppler = adesutility.applyPaddingAndJustification \
                                   (rmsDoppler, 16, 'D', 12)[0]
    rmsDoppler = rmsDoppler[0:11] + rmsDoppler[12:] # remove '.'
-   
+
    delay = hasKeyOrVal(item, 'delay', '               ')
    od = delay
    # delay is in seconds in ADES. So decimal (to be dropped) is 6th character...
@@ -324,7 +324,7 @@ def printRadarLine(item):
            sc + rmsDelay + rmsDoppler + '      ' +\
            item['trx'] + ' ' + item['ref'] + item['rcv']
    print (sline, file= encodedout)
-   
+
 def printDataDicts():
    global dataDicts
    global headerInfo
@@ -347,7 +347,7 @@ def printDataDicts():
 
 def processObsContext(element):
   """ prints obsContext in MPC 80-col format
-      This depends on the tag type and 
+      This depends on the tag type and
       is fragile
   """
   for i in element:
@@ -417,10 +417,10 @@ def processObsContext(element):
        #  sline = "! " + childtag + ' ' + childtext  # in python2, unicode + bytes -> unicode
        #  sline = sline.rstrip() # remove trailing whitespace
        #  print (sline, file=encodedout)
-  
+
 #----------------------------------------------------------------------
 #Main routine
-def xmltompc80col(args):
+def xmltompc80col(xmlfile):
    #
    # read in allowedElementDict, requiredElementDict  and psvFormatDict
    #
@@ -429,14 +429,14 @@ def xmltompc80col(args):
       adesutility.getAdesTables()
 
    # Let's do this!
-   inputTree = adesutility.readXML(args.xml)
+   inputTree = adesutility.readXML(xmlfile)
 
    allowedObsDataSet = setFromElementDictList('obsData',allowedElementDict)
    allowedObsBlockSet = setFromElementDictList('obsBlock',allowedElementDict)
    allowedAdesSet = setFromElementDictList('ades',allowedElementDict)
 
    processAdesElement(inputTree.getroot(),allowedObsDataSet,allowedAdesSet,allowedObsBlockSet)
-       
+
 # --- Start executable code -----------------------------
 if __name__ == '__main__':
    # Input arguments
@@ -457,10 +457,8 @@ if __name__ == '__main__':
       defaultPrecTime = '10'
       defaultPrecRA = '0.01'
       defaultPrecDec = '0.1'
-   
+
    # Open output file
    encodedout = io.open(args.obs80, 'w', encoding='utf-8')
 
-   xmltompc80col(args)
-
-
+   xmltompc80col(args.xml)

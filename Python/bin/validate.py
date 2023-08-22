@@ -6,11 +6,11 @@
 #  ./validate.py submit.xsd  newsubmit.xml
 #
 #
-# This program uses xmlutility but shows how to 
+# This program uses xmlutility but shows how to
 # do the same task making direct lxml calls.
 #
 # __future__ imports for Python 3 compliance in Python 2
-# 
+#
 from __future__ import absolute_import, division, print_function
 from __future__ import unicode_literals
 #
@@ -22,6 +22,7 @@ import traceback
 from xmlutility import readXML
 from xmlutility import XMLtoSchema
 import sys
+import argparse
 
 #
 # Read in the schema
@@ -29,17 +30,17 @@ import sys
 #schemaxml = lxml.etree.parse(sys.argv[1])
 #schema  = lxml.etree.XMLSchema(schemaxml)
 
-def validate(args):
+def validate(schemafile, xmlfile):
     results = {}
 
-    schemaxml = readXML(args[1])
+    schemaxml = readXML(schemafile)
     schema  = XMLtoSchema(schemaxml)
 
     #
     # Read in the xml file
     #
     #candidate = lxml.etree.parse(sys.argv[2])
-    candidate = readXML(args[2])
+    candidate = readXML(xmlfile)
 
     #
     # Check for validity -- prints errors on stdout if any are found
@@ -47,12 +48,12 @@ def validate(args):
     try:
         schema.assertValid(candidate)
         results[schema] = None
-    except:  
+    except:
         results[schema] = traceback.format_exc()
-      
+
     #
     # now print the results, and the reason for failure if the
-    # validation failed.  
+    # validation failed.
     #
     for result in sorted(results):
         r = results[result]
@@ -61,7 +62,13 @@ def validate(args):
             print (r)
         else:
             print (result, "is OK")
-    
+
 # -------------------------------------------------------------------
 if __name__ == '__main__':
-    validate(sys.argv)
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument("schemafile", type=str, help="Schema definition file")
+    parser.add_argument("xmlfile", type=str, help="XML file to check against schema")
+
+    args = parser.parse_args()
+
+    validate(args.schemafile, args.xmlfile)

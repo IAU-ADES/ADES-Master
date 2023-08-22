@@ -8,6 +8,7 @@ from __future__ import unicode_literals
 #
 
 import sys
+import argparse
 import io
 
 from collections import OrderedDict
@@ -16,7 +17,6 @@ from collections import OrderedDict
 # write encoded output for psv.  Default encoding
 # for psv is utf-8
 #
-psvencoding = 'utf-8'
 encodedout = None
 
 #
@@ -311,12 +311,19 @@ allowedObsBlockSet = setFromElementDictList('obsBlock')
 allowedAdesSet = setFromElementDictList('ades')
 
 
-def xmltopsv(args):
+def xmltopsv(xmlfile, psvfile, psvencoding="UTF-8"):
    global encodedout
-   inputTree = adesutility.readXML(args[1])
-   encodedout = io.open(args[2], 'w', encoding=psvencoding)
+   inputTree = adesutility.readXML(xmlfile)
+   encodedout = io.open(psvfile, 'w', encoding=psvencoding)
    processAdesElement(inputTree.getroot())
 
 
 if __name__ == "__main__":
-   xmltopsv(sys.argv)
+   parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+   parser.add_argument("xmlfile", type=str, help="XML file to convert to PSV")
+   parser.add_argument("psvfile", type=str, help="Path to write PSV data to")
+   parser.add_argument("--psvencoding", default="UTF-8", type=str, help="Text encoding for PSV output")
+
+   args = parser.parse_args()
+
+   xmltopsv(args.xmlfile, args.psvfile, psvencoding=args.psvencoding)

@@ -4,7 +4,7 @@
 #
 #
 # __future__ imports for Python 3 compliance in Python 2
-# 
+#
 from __future__ import absolute_import, division, print_function
 from __future__ import unicode_literals
 #
@@ -14,12 +14,13 @@ from __future__ import unicode_literals
 
 import traceback
 import sys
+import argparse
 
 import adesutility
 
 #
 # This script validates an xml file against six different
-# xsd files generated from xslt.  
+# xsd files generated from xslt.
 #
 # Usage:
 #   ./valsubmit <xml to validate>
@@ -29,7 +30,7 @@ import adesutility
 # adesmaster.xml is the master xml file describing the format
 #
 
-def valsubmit(args):
+def valsubmit(xmlfile):
   masterfile = adesutility.adesmaster
 
   #
@@ -48,18 +49,18 @@ def valsubmit(args):
   results = {}
 
   #
-  # read in master file 
+  # read in master file
   #
   xml_tree = adesutility.readXML(masterfile)
 
   #
   # read in file to be validataed from sys.argv[1]
   #
-  candidate = adesutility.readXML(args[1])
+  candidate = adesutility.readXML(xmlfile)
 
   #
   # validate against submit schemaxslt files
-  # 
+  #
   for schemaName in schemaxslts:
     xslt_tree = adesutility.readXML(schemaxslts[schemaName])
     schema = adesutility.XMLtoSchemaViaXSLT(xml_tree, xslt_tree)
@@ -69,12 +70,12 @@ def valsubmit(args):
     try:
       schema.assertValid(candidate)
       results[schemaName] = None
-    except:  
+    except:
       results[schemaName] = traceback.format_exc()
 
   #
   # now print the results, and the reason for failure if the
-  # validation failed.  
+  # validation failed.
   #
   for result in sorted(results):
     r = results[result]
@@ -86,6 +87,9 @@ def valsubmit(args):
 
 # --------------------------------------------------------
 if __name__ == '__main__':
-  valsubmit(sys.argv)
+  parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+  parser.add_argument("xmlfile", type=str, help="XML file to check against schema")
 
-      
+  args = parser.parse_args()
+
+  valsubmit(args.xmlfile)

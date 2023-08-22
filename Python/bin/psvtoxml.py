@@ -1,6 +1,6 @@
 #
 # __future__ imports for Python 3 compliance in Python 2
-# 
+#
 from __future__ import absolute_import, division, print_function
 from __future__ import unicode_literals
 #
@@ -10,6 +10,7 @@ from __future__ import unicode_literals
 import sys
 import re
 import io
+import argparse
 #
 
 #
@@ -93,7 +94,7 @@ DATA_STATE = 'DataState'                    # outside obsBLock
 allAlpha = re.compile("^[A-Za-z_]*$")
 
 def parsePSVLine(line):
-    """ parsePSVLine classifies the PSV lines into 
+    """ parsePSVLine classifies the PSV lines into
           blank line:
             returns None
           TopHeader:
@@ -121,7 +122,7 @@ def parsePSVLine(line):
     fields = [ a.strip() for a in l.split('|') ]
 
                                  # Must be keyword header or data line
-                                 # Classify using the requirement that 
+                                 # Classify using the requirement that
                                  # all xml element names must start with
                                  # letters or an underscore (like C identifiers)
                                  #
@@ -136,11 +137,11 @@ def parsePSVLine(line):
 
     #if fields[:1] == ["permID"]: # If so, must be header not data.  This is a less
                                   # subtle way of distinguishing, but sometimes the
-                                  # permID fields are all blank.  
+                                  # permID fields are all blank.
                                   #
 
     firstChars = ''.join([ x[:1] for x in fields])  # first characgter from all fields
-    if allAlpha.match(firstChars): # If so, must be header not data.  
+    if allAlpha.match(firstChars): # If so, must be header not data.
        #
        # first determine the type tag and append to fields
        #
@@ -148,8 +149,8 @@ def parsePSVLine(line):
        # the tag is identified from elements in header
        #   It is identified by the fields it contains
        #   It must match all the required elements and
-       #   have no extra elements for 'optical', 'offset', 
-       #   'occultation' or 'radar' -- these are the allowed 
+       #   have no extra elements for 'optical', 'offset',
+       #   'occultation' or 'radar' -- these are the allowed
        #   under 'obsBlock'
        #
        #  Need to check if no match occurs (None flags this)
@@ -205,7 +206,7 @@ def errorAction(state, nextState, record, fields):
 
 
 def firstObsBlockAction(state, nextState, record, fields):
-   """ firstObsBlockAction Inserts new obsBlock and obsContext object 
+   """ firstObsBlockAction Inserts new obsBlock and obsContext object
        and adds the first obsContext element to it.
    """
    #
@@ -223,8 +224,8 @@ def firstObsBlockAction(state, nextState, record, fields):
    # set stack to obsContext node; must be top
    #
    stack.addPush('obsContext')
-   # 
-   # make new fields[0] node with fields[1] data 
+   #
+   # make new fields[0] node with fields[1] data
    # append new node to stack top level
    #
    return obsContextAction(state, nextState, record, fields, action=adesutility.ElementStack.addPush)
@@ -259,7 +260,7 @@ def obsContextAction(state, nextState, record, fields, action=adesutility.Elemen
    # create regular new node  -- may or may not have children.
    # PopPush closes old node
    #
-   if (len(fields) < 2):  # may not have text -- don't crash 
+   if (len(fields) < 2):  # may not have text -- don't crash
       action(stack, fields[0], None)
    else:
       action(stack, fields[0], fields[1])
@@ -272,7 +273,7 @@ def subObsContextAction(state, nextState, record, fields):
    global stack
    # make new fields[0] node with fields[1] data to top of stack node
    ###print ("sublevel node added to tree", fields[0], 'is', fields[1])
-   if (len(fields) < 2):  # may not have text -- don't crash 
+   if (len(fields) < 2):  # may not have text -- don't crash
       stack.add(fields[0], None)
    else:
       stack.add(fields[0], fields[1])
@@ -297,8 +298,8 @@ def keywordHeaderAction(state, nextState, record, fields):
    headerType = fields[-1] # found by parser
    if oldHeaderType and (headerType != oldHeaderType):
       raise RuntimeError(
-               "Only one header type allowed per obsBlock: " + 
-               headerType + " vs. " + oldHeaderType 
+               "Only one header type allowed per obsBlock: " +
+               headerType + " vs. " + oldHeaderType
             )
    return nextState
 
@@ -344,13 +345,13 @@ def dataAction(state, nextState, record, fields, action=adesutility.ElementStack
    #
    # open element of headerType using action argument
    #
-   action(stack, headerType) 
+   action(stack, headerType)
 
    #
    # add elements in right order for headerType
    #    first make a dict by using zip to make tuples
    #    zip truncates if fewer fields than headers
-   d = dict(zip(headerVals, fields)) 
+   d = dict(zip(headerVals, fields))
    #
    # now make extend data element in proper order
    #
@@ -384,9 +385,9 @@ def firstDataAction(state, nextState, record, fields):
 
 
 #
-# Main state table, with transtion and action tuples. 
+# Main state table, with transtion and action tuples.
 # Fatal errors transition back to EmptyState since errorAction
-# raises RuntimeError which either terminmates or is 
+# raises RuntimeError which either terminmates or is
 # handled by the caller.
 #
 
@@ -398,7 +399,7 @@ stateTransitions = {
       KEYWORD_RECORD_LINE:     ( FIRST_DATA_STATE,     openDataKeywordHeaderAction ),
       DATA_RECORD_LINE:        ( EMPTY_STATE,          errorAction ),
    },
-   OBSCONTEXT_STATE: { 
+   OBSCONTEXT_STATE: {
       TOP_HEADER_LINE:         ( OBSCONTEXT_STATE,     obsContextAction ),
       SECOND_HEADER_LINE:      ( OBSCONTEXT_STATE,     subObsContextAction ),
       KEYWORD_RECORD_LINE:     ( FIRST_OBSDATA_STATE,  keywordHeaderAction ),
@@ -411,7 +412,7 @@ stateTransitions = {
       DATA_RECORD_LINE:        ( OBSDATA_STATE,        firstObsDataAction ),
    },
    OBSDATA_STATE: {        # obsData inside obsBlock
-      TOP_HEADER_LINE:         ( OBSCONTEXT_STATE,     closeObsBlockOpenObsBlockAction ), 
+      TOP_HEADER_LINE:         ( OBSCONTEXT_STATE,     closeObsBlockOpenObsBlockAction ),
       SECOND_HEADER_LINE:      ( EMPTY_STATE,          errorAction ),
       KEYWORD_RECORD_LINE:     ( FIRST_DATA_STATE,     closeObsBlockKeywordHeaderAction ),
       DATA_RECORD_LINE:        ( OBSDATA_STATE,        dataAction ),
@@ -425,7 +426,7 @@ stateTransitions = {
    DATA_STATE: {        # outside obsBlock
       TOP_HEADER_LINE:         ( OBSCONTEXT_STATE,     closeDataOpenObsBlockAction ),
       SECOND_HEADER_LINE:      ( EMPTY_STATE,          errorAction ),
-      KEYWORD_RECORD_LINE:     ( FIRST_DATA_STATE,     closeDataKeywordHeaderAction ), 
+      KEYWORD_RECORD_LINE:     ( FIRST_DATA_STATE,     closeDataKeywordHeaderAction ),
       DATA_RECORD_LINE:        ( DATA_STATE,           dataAction ),
    },
 }
@@ -446,9 +447,9 @@ def parsePSV(parsedPSVLine):
    global firstLine
 
    parsedLine = parsePSVLine(parsedPSVLine)
-    
+
    if not parsedLine:  # ignore blank lines
-      return;  
+      return;
 
    #
    # first non-blank line must be "#version=2017"
@@ -478,7 +479,7 @@ def parsePSV(parsedPSVLine):
    fields = parsedLine[1]
    #print (fields)
    state = stateTransitions[state][record][1](state, nextState, record, fields)
-   
+
 
 
 #
@@ -498,7 +499,7 @@ def parsePSV(parsedPSVLine):
 #  us = parser.unescape(st)
 #
 #  and us is now restored, except for those unfortunate cases where
-#  the original unicode string contained things like "&#243;".  
+#  the original unicode string contained things like "&#243;".
 #
 # Alternatively, use
 #  import codecs
@@ -515,21 +516,9 @@ def parsePSV(parsedPSVLine):
 # default input and output encoding is 'UTF-8'
 #
 # Main routine
-def psvtoxml(args):
+def psvtoxml(psvfie, xmlfile, psvencoding="UTF-8", xmlencoding="UTF-8"):
 
-   psvencoding = 'UTF-8'
-   try:
-      psvencoding = args[3]
-   except:
-      pass
-
-   xmlencoding = 'UTF-8'
-   try:
-      xmlencoding = args[4]
-   except:
-      pass
-
-   with io.open(args[1], encoding=psvencoding) as f:
+   with io.open(psvfie, encoding=psvencoding) as f:
       lineNumber = 0
       for line in f:
          print(line)
@@ -545,8 +534,16 @@ def psvtoxml(args):
    #                   'LATIN1' 'ISO-LATIN-1' 'ISO-8859-1' 'ASCII' 'cp500' 'cp037' 'UTF-7'
    #                   'windows-1252'
    treeTop = stack.takeTreeAndClear()
-   treeTop.write(args[2], pretty_print=True, xml_declaration=True, encoding=xmlencoding)
+   treeTop.write(xmlfile, pretty_print=True, xml_declaration=True, encoding=xmlencoding)
 
 #----------------------------------------------------
 if __name__ == '__main__':
-   psvtoxml(sys.argv)
+   parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+   parser.add_argument("psvfile", type=str, help="PSV file to convert to XML")
+   parser.add_argument("xmlfile", type=str, help="Path to write XML data to")
+   parser.add_argument("--psvencoding", default="UTF-8", type=str, help="Text encoding for PSV input")
+   parser.add_argument("--xmlencoding", default="UTF-8", type=str, help="Text encoding for XML output")
+
+   args = parser.parse_args()
+
+   psvtoxml(args.psvfile, args.xmlfile, args.psvencoding, args.xmlencoding)
