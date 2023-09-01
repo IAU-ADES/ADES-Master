@@ -18,7 +18,7 @@ def test_read_xml():
     assert(os.path.exists(outfile) and os.stat(outfile).st_size != 0)
 
 #Test the script as a routine
-def test_read_xml():
+def test_read_xml_routine():
     infile = "input/trksub_sub.xml"
     outfile = "output/read_xml_out.txt"
     readxmlpy.readxmlpy(['',infile,outfile])
