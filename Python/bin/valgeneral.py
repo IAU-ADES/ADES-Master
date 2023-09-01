@@ -75,14 +75,23 @@ def valgeneral(args):
   # now print the results, and the reason for failure if the
   # validation failed.  
   #
+  #Also write on a file
+  
+  out = open("valgeneral.file",'w')
+
   for result in sorted(results):
     r = results[result]
     if r:
       print (result, "has failed:")
+      out.write(result+"has failed: "+r)
       print (r)
     else:
       print (result, "is OK")
-      
+      out.write(result+" is OK")
+  out.close()
+
+  
+  
 # ------------------------------------------------------------
 if __name__ == '__main__':
   valgeneral(sys.argv)

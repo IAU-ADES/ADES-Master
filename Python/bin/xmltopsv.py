@@ -314,9 +314,10 @@ allowedAdesSet = setFromElementDictList('ades')
 def xmltopsv(args):
    global encodedout
    inputTree = adesutility.readXML(args[1])
-   encodedout = io.open(args[2], 'w', encoding=psvencoding)
+   encodedout = open(args[2], 'w', encoding=psvencoding)
    processAdesElement(inputTree.getroot())
-
+   encodedout.close()
+   
 
 if __name__ == "__main__":
    xmltopsv(sys.argv)

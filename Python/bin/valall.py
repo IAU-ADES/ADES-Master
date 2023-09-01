@@ -77,13 +77,17 @@ def valall(args):
   # now print the results, and the reason for failure if the
   # validation failed.  
   #
+  out = open("valall.file",'w')
   for result in sorted(results):
     r = results[result]
     if r:
       print (result, "has failed:")
+      out.write(result+" has failed: "+r+"\n")
       print (r)
     else:
-      print (result, "is OK")     
+      print (result, "is OK")
+      out.write(result+" is OK\n")
+  out.close()
       
 # --------------------------------------------------------------
 if __name__ == '__main__':

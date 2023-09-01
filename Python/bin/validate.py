@@ -54,13 +54,17 @@ def validate(args):
     # now print the results, and the reason for failure if the
     # validation failed.  
     #
+    out = open("validate.file",'w')
     for result in sorted(results):
         r = results[result]
         if r:
             print (result, "has failed:")
+            out.write(str(result)+" has failed: \n")
             print (r)
         else:
             print (result, "is OK")
+            out.write(str(result)+" is OK\n")
+    out.close()
     
 # -------------------------------------------------------------------
 if __name__ == '__main__':
