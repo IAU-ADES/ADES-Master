@@ -1,3 +1,9 @@
+01-Sep-2023 - Modified python code in Python/bin
+       # The python script have now the .py suffix in the name
+       # The initial 'python' statement has been removed at the beginning of each script
+       # More tests have been added in the new_tests directory (the tests can be run using 'pytest')
+       # The scripts in Python/bin can now be called as scripts or as routine inside your python code
+
 25-Apr-2022 - Incremented ADES version from v2017 to v2022
 
 03-Feb-2022 - Added a few new fields and other minor revisions
