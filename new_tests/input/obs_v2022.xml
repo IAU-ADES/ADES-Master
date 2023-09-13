@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ades version="2022">
+  <obsBlock>
+    <obsContext>
+      <observatory>
+        <mpcCode>T12</mpcCode>
+        <name>Mauna Kea-UH/Tholen NEO Follow-Up (2.24-m)</name>
+      </observatory>
+      <submitter>
+        <name>D. J. Tholen</name>
+        <institution>University of Hawaii</institution>
+      </submitter>
+      <observers>
+        <name>D. Hung</name>
+      </observers>
+      <measurers>
+        <name>D. J. Tholen</name>
+      </measurers>
+      <telescope>
+        <name>University of Hawaii 2.24-m</name>
+        <design>reflector</design>
+        <aperture>2.24</aperture>
+        <detector>STA1600 10k CCD</detector>
+        <fRatio>10.1</fRatio>
+        <filter>none</filter>
+        <arraySize>2112 x 2112 pixels</arraySize>
+        <pixelScale>0.4118</pixelScale>
+      </telescope>
+      <software>
+        <astrometry>Tholen custom ADES software, 2021 Apr 10 version</astrometry>
+        <fitOrder>1</fitOrder>
+      </software>
+      <fundingSource>NASA 80NSSC21K0807</fundingSource>
+      <comment>
+        <line>Second opposition recovery of 2022 KW.</line>
+        <line>A shutter delay of 0.16 sec was applied to the first and third exposures,</line>
+        <line>while 0.17 sec was applied to the second exposure.</line>
+        <line>Time correction was also applied to the field asteroid.</line>
+      </comment>
+    </obsContext>
+    <obsData>
+      <optical>
+        <provID>2022 KW</provID>
+        <mode>CCD</mode>
+        <stn>T12</stn>
+        <obsTime>2023-06-15T13:44:30.18Z</obsTime>
+        <ra>325.589699</ra>
+        <dec>+0.560433</dec>
+        <rmsRA>0.033</rmsRA>
+        <rmsDec>0.033</rmsDec>
+        <astCat>Gaia2</astCat>
+        <mag>22.458</mag>
+        <rmsMag>0.069</rmsMag>
+        <band>G</band>
+        <photCat>Gaia2</photCat>
+        <photAp>1.2</photAp>
+        <logSNR>1.20</logSNR>
+        <seeing>1.3</seeing>
+        <exp>420.0</exp>
+        <rmsFit>0.049</rmsFit>
+        <nStars>395</nStars>
+        <remarks>S: 0.0018 0.0031 O: 0.0328 0.0328</remarks>
+      </optical>
+      <optical>
+        <provID>2022 KW</provID>
+        <mode>CCD</mode>
+        <stn>T12</stn>
+        <obsTime>2023-06-15T13:51:56.52Z</obsTime>
+        <ra>325.591585</ra>
+        <dec>+0.563396</dec>
+        <rmsRA>0.037</rmsRA>
+        <rmsDec>0.037</rmsDec>
+        <astCat>Gaia2</astCat>
+        <mag>22.286</mag>
+        <rmsMag>0.059</rmsMag>
+        <band>G</band>
+        <photCat>Gaia2</photCat>
+        <photAp>1.1</photAp>
+        <logSNR>1.27</logSNR>
+        <seeing>1.3</seeing>
+        <exp>420.0</exp>
+        <rmsFit>0.049</rmsFit>
+        <nStars>405</nStars>
+        <remarks>S: 0.0020 0.0030 O: 0.0370 0.0370</remarks>
+      </optical>
+      <optical>
+        <provID>2022 KW</provID>
+        <mode>CCD</mode>
+        <stn>T12</stn>
+        <obsTime>2023-06-15T13:59:51.14Z</obsTime>
+        <ra>325.593584</ra>
+        <dec>+0.566568</dec>
+        <rmsRA>0.041</rmsRA>
+        <rmsDec>0.041</rmsDec>
+        <astCat>Gaia2</astCat>
+        <mag>22.502</mag>
+        <rmsMag>0.078</rmsMag>
+        <band>G</band>
+        <photCat>Gaia2</photCat>
+        <photAp>1.3</photAp>
+        <logSNR>1.14</logSNR>
+        <seeing>1.4</seeing>
+        <exp>420.0</exp>
+        <rmsFit>0.045</rmsFit>
+        <nStars>392</nStars>
+        <remarks>S: 0.0019 0.0028 O: 0.0411 0.0411</remarks>
+      </optical>
+      <optical>
+        <provID>2015 LQ20</provID>
+        <mode>CCD</mode>
+        <stn>T12</stn>
+        <obsTime>2023-06-15T13:51:56.54Z</obsTime>
+        <ra>325.5843270</ra>
+        <dec>+0.591102</dec>
+        <rmsRA>0.021</rmsRA>
+        <rmsDec>0.041</rmsDec>
+        <astCat>Gaia2</astCat>
+        <mag>21.369</mag>
+        <rmsMag>0.039</rmsMag>
+        <band>G</band>
+        <photCat>Gaia2</photCat>
+        <photAp>1.1</photAp>
+        <logSNR>1.45</logSNR>
+        <seeing>1.3</seeing>
+        <exp>1260.0</exp>
+        <rmsFit>0.049</rmsFit>
+        <nStars>405</nStars>
+        <notes>K</notes>
+        <remarks>S: 0.0022 0.0033 O: 0.0205 0.0411   From a stack of three 420 sec exposures.  Time corresponds to the middle exposure.</remarks>
+      </optical>
+    </obsData>
+  </obsBlock>
+</ades>

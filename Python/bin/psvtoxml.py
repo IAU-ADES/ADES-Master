@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 #
 # __future__ imports for Python 3 compliance in Python 2
 # 
@@ -446,7 +445,7 @@ def parsePSV(parsedPSVLine):
    global lineNumber
    global firstLine
 
-   parsedLine = parsePSVLine(line)
+   parsedLine = parsePSVLine(parsedPSVLine)
     
    if not parsedLine:  # ignore blank lines
       return;  
@@ -460,7 +459,7 @@ def parsePSV(parsedPSVLine):
    #
    if (firstLine):
       firstLine = False
-      l = line.split('=')
+      l = parsedPSVLine.split('=')
       if len(l) != 2:
         raise RuntimeError("first line of PSV must specify version, e.g., '#version=2017'")
       #
@@ -515,32 +514,39 @@ def parsePSV(parsedPSVLine):
 #
 # default input and output encoding is 'UTF-8'
 #
-psvencoding = 'UTF-8'
-try:
-   psvencoding = sys.argv[3]
-except:
-   pass
+# Main routine
+def psvtoxml(args):
 
-xmlencoding = 'UTF-8'
-try:
-   xmlencoding = sys.argv[4]
-except:
-   pass
+   psvencoding = 'UTF-8'
+   try:
+      psvencoding = args[3]
+   except:
+      pass
 
-with io.open(sys.argv[1], encoding=psvencoding) as f:
-   lineNumber = 0
-   for line in f:
-      try:
-         lineNumber += 1
-         parsePSV(line[:-1])
-      except RuntimeError as e:
-         print (e)
-         exit (-1)
+   xmlencoding = 'UTF-8'
+   try:
+      xmlencoding = args[4]
+   except:
+      pass
+
+   with io.open(args[1], encoding=psvencoding) as f:
+      lineNumber = 0
+      for line in f:
+         print(line)
+         try:
+            lineNumber += 1
+            parsePSV(line[:-1])
+         except RuntimeError as e:
+            print (e)
+            exit (-1)
 
 
-# Tested encodings: 'UTF-16' 'UTF-16LE' 'UTF-16BE' 'UCS-4' 'UTF32' 'UTF-32BE' 'UTF-32LE'
-#                   'LATIN1' 'ISO-LATIN-1' 'ISO-8859-1' 'ASCII' 'cp500' 'cp037' 'UTF-7'
-#                   'windows-1252'
-treeTop = stack.takeTreeAndClear()
-treeTop.write(sys.argv[2], pretty_print=True, xml_declaration=True, encoding=xmlencoding)
+   # Tested encodings: 'UTF-16' 'UTF-16LE' 'UTF-16BE' 'UCS-4' 'UTF32' 'UTF-32BE' 'UTF-32LE'
+   #                   'LATIN1' 'ISO-LATIN-1' 'ISO-8859-1' 'ASCII' 'cp500' 'cp037' 'UTF-7'
+   #                   'windows-1252'
+   treeTop = stack.takeTreeAndClear()
+   treeTop.write(args[2], pretty_print=True, xml_declaration=True, encoding=xmlencoding)
 
+#----------------------------------------------------
+if __name__ == '__main__':
+   psvtoxml(sys.argv)

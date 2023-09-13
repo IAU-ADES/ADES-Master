@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ades version="2017">
+  <obsBlock>
+    <obsContext>
+      <observatory>
+        <mpcCode>W68</mpcCode>
+        <name>ATLAS-Chile</name>
+      </observatory>
+      <submitter>
+        <name>L. Denneau</name>
+        <institution>University of Hawaii</institution>
+      </submitter>
+      <observers>
+        <name>L. Denneau</name>
+        <name>R. Siverd</name>
+        <name>J. Tonry</name>
+        <name>H. Weiland</name>
+      </observers>
+      <measurers>
+        <name>L. Denneau</name>
+        <name>N. Erasmus</name>
+        <name>A. Fitzsimmons</name>
+        <name>A. Lawrence</name>
+        <name>J. Robinson</name>
+        <name>R. Siverd</name>
+        <name>J. Tonry</name>
+        <name>H. Weiland</name>
+      </measurers>
+      <telescope>
+        <aperture>0.5</aperture>
+        <design>Reflector</design>
+        <detector>CCD</detector>
+      </telescope>
+      <fundingSource>NASA 80NSSC21K0265</fundingSource>
+    </obsContext>
+    <obsData>
+      <optical>
+        <trkSub>A10TlFw</trkSub>
+        <mode>CCD</mode>
+        <stn>W68</stn>
+        <obsTime>2023-03-07T09:29:20.88Z</obsTime>
+        <ra>256.566210</ra>
+        <dec>-19.007690</dec>
+        <rmsRA>0.136</rmsRA>
+        <rmsDec>0.136</rmsDec>
+        <astCat>Gaia2</astCat>
+        <mag>14.26</mag>
+        <rmsMag>0.024</rmsMag>
+        <band>Ao</band>
+        <logSNR>1.620</logSNR>
+        <remarks>atlas_W68_highsig/T412024/D11140334</remarks>
+      </optical>
+      <optical>
+        <trkSub>A10TlFw</trkSub>
+        <mode>CCD</mode>
+        <stn>W68</stn>
+        <obsTime>2023-03-07T09:33:28.07Z</obsTime>
+        <ra>256.567400</ra>
+        <dec>-19.007770</dec>
+        <rmsRA>0.135</rmsRA>
+        <rmsDec>0.135</rmsDec>
+        <astCat>Gaia2</astCat>
+        <mag>14.14</mag>
+        <rmsMag>0.021</rmsMag>
+        <band>Ao</band>
+        <logSNR>1.678</logSNR>
+        <remarks>atlas_W68_highsig/T412024/D11141078</remarks>
+      </optical>
+      <optical>
+        <trkSub>A10TlFw</trkSub>
+        <mode>CCD</mode>
+        <stn>W68</stn>
+        <obsTime>2023-03-07T09:45:19.49Z</obsTime>
+        <ra>256.570870</ra>
+        <dec>-19.007840</dec>
+        <rmsRA>0.113</rmsRA>
+        <rmsDec>0.113</rmsDec>
+        <astCat>Gaia2</astCat>
+        <mag>14.12</mag>
+        <rmsMag>0.020</rmsMag>
+        <band>Ao</band>
+        <logSNR>1.699</logSNR>
+        <remarks>atlas_W68_highsig/T412024/D11144237</remarks>
+      </optical>
+    </obsData>
+  </obsBlock>
+</ades>
