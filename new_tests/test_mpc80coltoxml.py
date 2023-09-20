@@ -27,7 +27,7 @@ def test_mpc80coltoxml_mpcfile_routine():
     xmlfile = "output/K20Q04A_test.xml"
     if os.path.exists(xmlfile):
         os.remove(xmlfile)
-    mpc80coltoxml.mpc80coltoxml(['',obsfile,xmlfile])
+    mpc80coltoxml.mpc80coltoxml(obsfile, xmlfile, mpc80coltoxml.splitRadar)
     assert(os.path.exists(xmlfile) and os.stat(xmlfile).st_size != 0)
 
 # ------------------ Testing with the header ------------------    
@@ -45,7 +45,7 @@ def test_mpc80coltoxml_submitted_nosplit_routine():
     xmlfile = "output/85_test_nosplit.xml"
     if os.path.exists(xmlfile):
         os.remove(xmlfile)
-    mpc80coltoxml.mpc80coltoxml(['','--nosplit',obsfile,xmlfile])    
+    mpc80coltoxml.mpc80coltoxml(obsfile,xmlfile, mpc80coltoxml.doNotSplitRadar)
     assert(os.path.exists(xmlfile) and os.stat(xmlfile).st_size != 0)
 
 # ------------------ Testing with the header without --nosplit ------------------    
@@ -66,6 +66,6 @@ def test_mpc80coltoxml_submitted_split_routine():
     xmlfile = "output/85_test_split.xml"
     if os.path.exists(xmlfile):
         os.remove(xmlfile)
-    mpc80coltoxml.mpc80coltoxml(['',obsfile,xmlfile])
+    mpc80coltoxml.mpc80coltoxml(obsfile, xmlfile, mpc80coltoxml.splitRadar)
     assert(os.path.exists(xmlfile))
 

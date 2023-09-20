@@ -37,7 +37,7 @@ def test_valgeneral_routine():
     xmlfile = "input/obs_v2022.xml"
     if os.path.exists("valgeneral.file"):
         os.remove("valgeneral.file")
-    valgeneral.valgeneral(['',xmlfile])
+    valgeneral.valgeneral(xmlfile)
     with open("valgeneral.file",'r') as valfile:
         val = valfile.readlines()[0].replace("\n","")
         if val == 'general is OK':
@@ -62,7 +62,7 @@ def test_valall_routine():
     xmlfile = "input/obs_v2022.xml"
     if os.path.exists("valall.file"):
         os.remove("valall.file")
-    valall.valall(['',xmlfile])
+    valall.valall(xmlfile)
     with open("valall.file",'r') as valfile:
         val = valfile.readlines()[0].replace("\n","")
         if val == 'general is OK':
@@ -91,7 +91,7 @@ def test_validate_v2022_routine():
     xmlfile = "input/obs_v2022.xml"
     if os.path.exists("validate.file"):
         os.remove("validate.file")
-    validate.validate(['',"../xsd/general.xsd",xmlfile])
+    validate.validate("../xsd/general.xsd", xmlfile)
     with open("validate.file",'r') as valfile:
         val = valfile.readlines()[0].replace("\n","")
         if 'is OK' in val:
@@ -117,7 +117,7 @@ def test_validate_v2017_routine():
     xmlfile = "input/obs.xml"
     if os.path.exists("validate.file"):
         os.remove("validate.file")
-    validate.validate(['','../past_versions/v2017/general_v2017.xsd',xmlfile])
+    validate.validate('../past_versions/v2017/general_v2017.xsd', xmlfile)
     with open("validate.file",'r') as valfile:
         val = valfile.readlines()[0].replace("\n","")
         if 'is OK' in val:
@@ -146,7 +146,7 @@ def test_val_submit_routine():
     xmlfile = "input/obs_v2022.xml"
     if os.path.exists("valsubmit.file"):
         os.remove("valsubmit.file")
-    valsubmit.valsubmit(['',xmlfile])
+    valsubmit.valsubmit(xmlfile)
     with open("valsubmit.file",'r') as valfile:
         val = valfile.readlines()[0].replace("\n","")
         if 'is OK' in val:
