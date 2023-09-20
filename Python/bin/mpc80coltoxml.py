@@ -1072,9 +1072,6 @@ def splitRadar(fname):
    lineNumber -= 1 # line number at end should be last line
 
 #---------------------------------------------------------------------------
-
-
-#Usage: mpc80coltoxml [--nosplit] <inmpcfile> [<outxmlfile>]
 def mpc80coltoxml(inmpcfile, outxmlfile, nosplit=False):
    func = doNotSplitRadar if nosplit else splitRadar
    try:
