@@ -316,7 +316,8 @@ def xmltopsv(xmlfile, psvfile, psvencoding="UTF-8"):
    inputTree = adesutility.readXML(xmlfile)
    encodedout = io.open(psvfile, 'w', encoding=psvencoding)
    processAdesElement(inputTree.getroot())
-
+   encodedout.close()
+   
 
 if __name__ == "__main__":
    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
