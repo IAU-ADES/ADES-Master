@@ -138,7 +138,7 @@ commonRegexHelp1 = ( '([ A-Za-z0-9~][A-Za-z0-9 ]{11})'    # id group 1-12
                      #+ '( AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345vzjeL16789])' # notes group 14
                      + '(.)'                 # notes can be anything
                      )
-commonRegexHelp2 = ( '(\d{4})'            # yyyy from obsDate 16-19
+commonRegexHelp2 = ( r'(\d{4})'            # yyyy from obsDate 16-19
                      + '([ a-e])'            # asteroid satellite embedded in date 20
                      + '([0-9 .]{12})'       # rest of obsDate loosely checked 21-32
                      )
