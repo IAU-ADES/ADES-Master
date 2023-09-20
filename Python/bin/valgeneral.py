@@ -14,6 +14,7 @@ from __future__ import unicode_literals
 
 import traceback
 import sys
+import argparse
 
 import adesutility
 
@@ -28,7 +29,7 @@ import adesutility
 #
 # adesmaster.xml is the master xml file describing the format
 #
-def valgeneral(args):
+def valgeneral(xmlfile):
   masterfile = adesutility.adesmaster
   
   #
@@ -54,7 +55,7 @@ def valgeneral(args):
   #
   # read in file to be validataed from sys.argv[1]
   #
-  candidate = adesutility.readXML(args[1])
+  candidate = adesutility.readXML(xmlfile)
   
   #
   # validate against general schemaxslt files
@@ -94,7 +95,8 @@ def valgeneral(args):
   
 # ------------------------------------------------------------
 if __name__ == '__main__':
-  valgeneral(sys.argv)
+  parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+  parser.add_argument("xmlfile", type=str, help="XML file to check against schema")
 
-
-      
+  args = parser.parse_args()
+  valgeneral(args.xmlfile)

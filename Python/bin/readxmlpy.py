@@ -39,6 +39,7 @@ from lxml import etree as XMLTree
 from lxml.etree import Element as XMLElement
 
 import sys
+import argparse
 
 #
 # printElement recursively prints an element and
@@ -83,12 +84,7 @@ def processOptical(opticalList, depth=0):
       print (depth*'  ', tag, '=', text)
    
              
-def readxmlpy(args):
-   try:
-      xmlFile = args[1]
-   except:
-      print ("Usage: python readxml.py <xmlfilename>")
-
+def readxmlpy(xmlFile):
    #
    # read the xml file into python.  This grabs the whole thing
    #
@@ -101,6 +97,9 @@ def readxmlpy(args):
    
 # ------------------------------------------------------
 if __name__ == '__main__':
-   readxmlpy(sys.argv)
+   parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+   parser.add_argument("xmlfilename", type=str, help="XML file to read")
 
+   args = parser.parse_args()
 
+   readxmlpy(args.xmlfilename)

@@ -420,7 +420,7 @@ def processObsContext(element):
   
 #----------------------------------------------------------------------
 #Main routine
-def xmltompc80col(args):
+def xmltompc80col(xmlfile):
    #
    # read in allowedElementDict, requiredElementDict  and psvFormatDict
    #
@@ -429,7 +429,7 @@ def xmltompc80col(args):
       adesutility.getAdesTables()
 
    # Let's do this!
-   inputTree = adesutility.readXML(args.xml)
+   inputTree = adesutility.readXML(xmlfile)
 
    allowedObsDataSet = setFromElementDictList('obsData',allowedElementDict)
    allowedObsBlockSet = setFromElementDictList('obsBlock',allowedElementDict)
@@ -461,6 +461,4 @@ if __name__ == '__main__':
    # Open output file
    encodedout = io.open(args.obs80, 'w', encoding='utf-8')
 
-   xmltompc80col(args)
-
-
+   xmltompc80col(args.xml)

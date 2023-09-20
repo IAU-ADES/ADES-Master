@@ -22,6 +22,7 @@ import traceback
 from xmlutility import readXML
 from xmlutility import XMLtoSchema
 import sys
+import argparse
 
 #
 # Read in the schema
@@ -29,17 +30,17 @@ import sys
 #schemaxml = lxml.etree.parse(sys.argv[1])
 #schema  = lxml.etree.XMLSchema(schemaxml)
 
-def validate(args):
+def validate(schemafile, xmlfile):
     results = {}
 
-    schemaxml = readXML(args[1])
+    schemaxml = readXML(schemafile)
     schema  = XMLtoSchema(schemaxml)
 
     #
     # Read in the xml file
     #
     #candidate = lxml.etree.parse(sys.argv[2])
-    candidate = readXML(args[2])
+    candidate = readXML(xmlfile)
 
     #
     # Check for validity -- prints errors on stdout if any are found
@@ -68,4 +69,10 @@ def validate(args):
     
 # -------------------------------------------------------------------
 if __name__ == '__main__':
-    validate(sys.argv)
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument("schemafile", type=str, help="Schema definition file")
+    parser.add_argument("xmlfile", type=str, help="XML file to check against schema")
+
+    args = parser.parse_args()
+
+    validate(args.schemafile, args.xmlfile)

@@ -25,5 +25,5 @@ def test_psv_to_xml_conversion_routine():
     psv_outfile = "output/obs.psv"
     if os.path.exists(psv_outfile):
         os.remove(psv_outfile)
-    xmltopsv.xmltopsv(['',xml_infile,psv_outfile])     
+    xmltopsv.xmltopsv(xml_infile,psv_outfile)     
     assert(os.path.exists(psv_outfile) and os.stat(psv_outfile).st_size != 0)

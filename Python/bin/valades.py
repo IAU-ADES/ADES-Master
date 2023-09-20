@@ -23,18 +23,26 @@ from __future__ import unicode_literals
 # end of __future__ imports
 #
 import sys
+import argparse
 
 import xmlutility
 
-def valades(args):
-    xml_tree = xmlutility.readXML(args[1])
-    xslt_tree = xmlutility.readXML(args[2])
+def valades(adesmaster, xsltschema, xmlfile):
+    xml_tree = xmlutility.readXML(adesmaster)
+    xslt_tree = xmlutility.readXML(xsltschema)
     schema = xmlutility.XMLtoSchemaViaXSLT(xml_tree, xslt_tree)
 
-    candidate =xmlutility.readXML(args[3])
+    candidate = xmlutility.readXML(xmlfile)
 
     schema.assertValid(candidate)
 
 # ---------------------------------------------------------------
 if __name__ == '__main__':
-    valades(sys.argv)
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument("adesmaster", type=str, help="ADES master xml")
+    parser.add_argument("xsltschema", type=str, help="Schema definition file")
+    parser.add_argument("xmlfile", type=str, help="XML file to check against schema")
+
+    args = parser.parse_args()
+
+    valades(args.adesmaster, args.xsltschema, args.xmlfile)

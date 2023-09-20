@@ -10,6 +10,7 @@ from __future__ import unicode_literals
 import sys
 import re
 import io
+import argparse
 #
 
 #
@@ -515,21 +516,9 @@ def parsePSV(parsedPSVLine):
 # default input and output encoding is 'UTF-8'
 #
 # Main routine
-def psvtoxml(args):
+def psvtoxml(psvfile, xmlfile, psvencoding="UTF-8", xmlencoding="UTF-8"):
 
-   psvencoding = 'UTF-8'
-   try:
-      psvencoding = args[3]
-   except:
-      pass
-
-   xmlencoding = 'UTF-8'
-   try:
-      xmlencoding = args[4]
-   except:
-      pass
-
-   with io.open(args[1], encoding=psvencoding) as f:
+   with io.open(psvfile, encoding=psvencoding) as f:
       lineNumber = 0
       for line in f:
          print(line)
@@ -545,8 +534,16 @@ def psvtoxml(args):
    #                   'LATIN1' 'ISO-LATIN-1' 'ISO-8859-1' 'ASCII' 'cp500' 'cp037' 'UTF-7'
    #                   'windows-1252'
    treeTop = stack.takeTreeAndClear()
-   treeTop.write(args[2], pretty_print=True, xml_declaration=True, encoding=xmlencoding)
+   treeTop.write(xmlfile, pretty_print=True, xml_declaration=True, encoding=xmlencoding)
 
 #----------------------------------------------------
 if __name__ == '__main__':
-   psvtoxml(sys.argv)
+   parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+   parser.add_argument("psvfile", type=str, help="PSV file to convert to XML")
+   parser.add_argument("xmlfile", type=str, help="Path to write XML data to")
+   parser.add_argument("--psvencoding", default="UTF-8", type=str, help="Text encoding for PSV input")
+   parser.add_argument("--xmlencoding", default="UTF-8", type=str, help="Text encoding for XML output")
+
+   args = parser.parse_args()
+
+   psvtoxml(args.psvfile, args.xmlfile, args.psvencoding, args.xmlencoding)

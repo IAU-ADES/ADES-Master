@@ -12,6 +12,7 @@ import sys
 import re
 import io
 import math
+import argparse
 
 import adesutility
 import packUtil
@@ -137,7 +138,7 @@ commonRegexHelp1 = ( '([ A-Za-z0-9~][A-Za-z0-9 ]{11})'    # id group 1-12
                      #+ '( AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345vzjeL16789])' # notes group 14
                      + '(.)'                 # notes can be anything
                      )
-commonRegexHelp2 = ( '(\d{4})'            # yyyy from obsDate 16-19
+commonRegexHelp2 = ( r'(\d{4})'            # yyyy from obsDate 16-19
                      + '([ a-e])'            # asteroid satellite embedded in date 20
                      + '([0-9 .]{12})'       # rest of obsDate loosely checked 21-32 
                      )
@@ -1071,62 +1072,19 @@ def splitRadar(fname):
    lineNumber -= 1 # line number at end should be last line
 
 #---------------------------------------------------------------------------
-
-
-#Usage: mpc80coltoxml [--nosplit] <inmpcfile> [<outxmlfile>]
-def mpc80coltoxml(args):
-   argc = len(args)
-   outFile = None
-   try:
-      if args[1] == '--nosplit':
-         if argc > 4:
-            raise RuntimeError("bad arg list")
-         func = doNotSplitRadar
-         inFile = args[2]
-         if argc == 4:
-            outFile = args[3]
-      else:
-         if argc > 3:
-            raise RuntimeError("bad arg list")
-         func = splitRadar
-         inFile = args[1]
-         if argc == 3:
-            outFile = args[2]
-   except:
-      print ("Usage: mpc80coltoxml [--nosplit] <inmpcfile> [<outxmlfile>]")
-      print ("    --nosplit will not split doppler/delay radar into two elements")
-      print ("              elements with doppler and delay will not validate")
-      print ("    inmpcfile is the input mpc file")
-      print ("    outxmlfile is the optional output xml file")
-      print ("               without outxmlfile the input will still be checked")
-
-      exit(-1)
-
+def mpc80coltoxml(inmpcfile, outxmlfile, nosplit=False):
+   func = doNotSplitRadar if nosplit else splitRadar
    try:
 
       #
       # for xml output
       #
-      convertitPreamble(outFile)
-      try:
-         pass
-      except:
-         print("Usage: <mpc80coltoxml> [--nosplit] <inmpcfile> <outxmlfile>")
-         exit(-1)
-      try:
-         parseFile(func(inFile), convertit)
-         convertitPostamble(outFile)
-      except RuntimeError as e:
-         print ("Error", e)
-         exit()
-      
+      convertitPreamble(outxmlfile)
+      parseFile(func(inmpcfile), convertit)
+      convertitPostamble(outxmlfile)
 
    except:
-      try:
-         parseFile(func(inFile), None)
-      except:
-         print("Usage: <mpc80coltoxml> [--nosplit] <inmpcfile> <outxmlfile>")
-
+      parseFile(func(inmpcfile), None)
 
    print()
    print()
@@ -1140,7 +1098,16 @@ def mpc80coltoxml(args):
 
 #---------------------------------------------------------------------
 if __name__ == '__main__':
-   mpc80coltoxml(sys.argv)
+   parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+   parser.add_argument("inmpcfile", type=str, help="the input mpc file")
+   parser.add_argument("outxmlfile", nargs="?", default=None, type=str, help="the optional output xml file. without outxmlfile the input will still be checked")
+   parser.add_argument("--nosplit", action="store_true", help="will not split doppler/delay radar into two elements; elements with doppler and delay will not validate")
 
+   args = parser.parse_args()
 
-
+   try:
+      mpc80coltoxml(args.inmpcfile, args.outxmlfile, nosplit=args.nosplit)
+   except Exception as e:
+      print("Error", e)
+      parser.print_help()
+      exit(-1)
