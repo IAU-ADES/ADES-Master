@@ -1075,7 +1075,8 @@ def splitRadar(fname):
 
 
 #Usage: mpc80coltoxml [--nosplit] <inmpcfile> [<outxmlfile>]
-def mpc80coltoxml(inmpcfile, outxmlfile, func):
+def mpc80coltoxml(inmpcfile, outxmlfile, nosplit=False):
+   func = doNotSplitRadar if nosplit else splitRadar
    try:
 
       #
@@ -1108,7 +1109,7 @@ if __name__ == '__main__':
    args = parser.parse_args()
 
    try:
-      mpc80coltoxml(args.inmpcfile, args.outxmlfile, doNotSplitRadar if args.nosplit else splitRadar)
+      mpc80coltoxml(args.inmpcfile, args.outxmlfile, nosplit=args.nosplit)
    except Exception as e:
       print("Error", e)
       parser.print_help()
