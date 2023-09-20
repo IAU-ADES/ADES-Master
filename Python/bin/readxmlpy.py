@@ -3,7 +3,7 @@
 #
 # simple python script to demonstrate how to read xml
 # files and walk though the elements and their children
-# using the lxml library.  The only slightly tricky
+# using the lxml library.  The only slightly tricky 
 # thing is to remember to strip() the text to remove
 # leading and trailing whitespace.
 #
@@ -18,11 +18,11 @@
 #
 # This implementaiton uses lxml, which is not part of
 # the default python installation and so must
-# be installed separately.
+# be installed separately. 
 #
 #
 # __future__ imports for Python 3 compliance in Python 2
-#
+# 
 from __future__ import absolute_import, division, print_function
 from __future__ import unicode_literals
 #
@@ -43,24 +43,24 @@ import argparse
 
 #
 # printElement recursively prints an element and
-# its children,
+# its children,   
 #
 #  element:  the element to print
 #  depth:    incremented for each child call
 #
 def printElement(element, depth=0):
    #
-   # print text and attrib for this element if
+   # print text and attrib for this element if 
    # they exist and are not empty
    #
    print ( depth*'  ', element.tag, end='')
    if element.text:
       if not element.text.isspace():  print (':', element.text, end='' )
-   if element.attrib:
+   if element.attrib:  
       print (':', element.attrib, end='' )
    print ()
 
-   #
+   # 
    # now recursively print the children.
    #
    # As and example, separate the 'optical' tags
@@ -72,7 +72,7 @@ def printElement(element, depth=0):
    else:
       for i in element:  # recursively process the rest
          printElement(i, depth+1)
-
+   
 
 #
 # A demonstration used to process only optical tags
@@ -82,8 +82,8 @@ def processOptical(opticalList, depth=0):
    print (depth*'  ', 'OPTICAL ELEMENT LIST FOUND')
    for tag, text in opticalList:
       print (depth*'  ', tag, '=', text)
-
-
+   
+             
 def readxmlpy(xmlFile):
    #
    # read the xml file into python.  This grabs the whole thing
@@ -94,7 +94,7 @@ def readxmlpy(xmlFile):
    # now call the routine to print it recursively
    #
    printElement(xmlTree.getroot(), 0)
-
+   
 # ------------------------------------------------------
 if __name__ == '__main__':
    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)

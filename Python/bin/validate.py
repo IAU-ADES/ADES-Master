@@ -6,11 +6,11 @@
 #  ./validate.py submit.xsd  newsubmit.xml
 #
 #
-# This program uses xmlutility but shows how to
+# This program uses xmlutility but shows how to 
 # do the same task making direct lxml calls.
 #
 # __future__ imports for Python 3 compliance in Python 2
-#
+# 
 from __future__ import absolute_import, division, print_function
 from __future__ import unicode_literals
 #
@@ -48,12 +48,12 @@ def validate(schemafile, xmlfile):
     try:
         schema.assertValid(candidate)
         results[schema] = None
-    except:
+    except:  
         results[schema] = traceback.format_exc()
-
+      
     #
     # now print the results, and the reason for failure if the
-    # validation failed.
+    # validation failed.  
     #
     out = open("validate.file",'w')
     for result in sorted(results):
