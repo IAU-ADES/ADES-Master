@@ -754,7 +754,7 @@ decimal types must be in a range
    <doc> PosDecimalType with no more that 6 characters</doc>
 </simpletype>
 
-<simpletype name="PosDecimalTypeW6">
+<simpletype name="PosDecimalTypeW7">
    <restriction base="PosDecimalType">
       <restrict name="xsd:pattern" value="[0123456789\.]{1,7}"/>
    </restriction>

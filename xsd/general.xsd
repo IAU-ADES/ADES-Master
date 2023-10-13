@@ -163,7 +163,7 @@
       <xsd:pattern value="[0123456789\.]{1,6}"/>
     </xsd:restriction>
   </xsd:simpleType>
-  <xsd:simpleType name="PosDecimalTypeW6">
+  <xsd:simpleType name="PosDecimalTypeW7">
     <xsd:restriction base="PosDecimalType">
       <xsd:pattern value="[0123456789\.]{1,7}"/>
     </xsd:restriction>
@@ -590,6 +590,7 @@
   <xsd:complexType name="OccultationType">
     <xsd:sequence>
       <xsd:group ref="OpticalID"/>
+      <xsd:element ref="mode"/>
       <xsd:element ref="stn"/>
       <xsd:group ref="Location" minOccurs="0"/>
       <xsd:element ref="prog" minOccurs="0"/>
