@@ -1397,6 +1397,7 @@ decimal types must be in a range
    <doc>Optical Occultation Observation with deltaRA, deltaDec, raStar and decStar</doc>
    <sequence>
       <group   ref="OpticalID"   />
+      <element ref="mode"        />
       <element ref="stn"         />
       <group   ref="Location"    use="optional"/>
       <element ref="prog"        use="NoSubmit"/>
