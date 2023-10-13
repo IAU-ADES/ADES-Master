@@ -1693,8 +1693,8 @@ PSVObservationFields doc
    <psv tagtype="optical" name="obsTime"   width="23" justification="L" dpos="0"/>
    <psv tagtype="optical" name="ra"        width="11" justification="D" dpos="4"/>
    <psv tagtype="optical" name="dec"       width="11" justification="D" dpos="4"/>
-   <psv tagtype="optical" name="rmsRA"     width="5"  justification="D" dpos="2"/>
-   <psv tagtype="optical" name="rmsDec"    width="6"  justification="D" dpos="2"/>
+   <psv tagtype="optical" name="rmsRA"     width="7"  justification="D" dpos="2"/>
+   <psv tagtype="optical" name="rmsDec"    width="7"  justification="D" dpos="2"/>
    <psv tagtype="optical" name="rmsCorr"   width="7"  justification="D" dpos="3"/>
    <psv tagtype="optical" name="astCat"    width="3"  justification="R" dpos="0"/>
    <psv tagtype="optical" name="mag"       width="5"  justification="D" dpos="3"/>
@@ -1719,8 +1719,8 @@ PSVObservationFields doc
    <psv tagtype="offset" name="obsCenter" width="8"  justification="L" dpos="0"/>
    <psv tagtype="offset" name="deltaRA"   width="11" justification="D" dpos="4"/>
    <psv tagtype="offset" name="deltaDec"  width="11" justification="D" dpos="4"/>
-   <psv tagtype="offset" name="rmsRA"     width="5"  justification="D" dpos="2"/>
-   <psv tagtype="offset" name="rmsDec"    width="6"  justification="D" dpos="2"/>
+   <psv tagtype="offset" name="rmsRA"     width="7"  justification="D" dpos="2"/>
+   <psv tagtype="offset" name="rmsDec"    width="7"  justification="D" dpos="2"/>
    <psv tagtype="offset" name="dist"      width="5"  justification="D" dpos="2"/>
    <psv tagtype="offset" name="pa"        width="6"  justification="D" dpos="2"/>
    <psv tagtype="offset" name="rmsdist"   width="7"  justification="D" dpos="3"/>
