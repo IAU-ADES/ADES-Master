@@ -1559,8 +1559,8 @@ decimal types must be in a range
    <element name="raStar"     type="RAType"             doc="J2000.0 RA in decimal degrees of the occulted star"/>
    <element name="decStar"    type="DeclinationType"    doc="J2000.0 DEC in decimal degrees of the occulted star"/>
    <element name="obsCenter"  type="ObsCenterType"      doc="Center of offset observation may be planet or other body with PermID or ProvID"/>
-   <element name="deltaRA"    type="DecimalTypeW10"     doc="Measured $\Delta(\mathrm{RA}\cos\mathrm{ DEC})$ in arcseconds.  For offset measurements of a satellite with respect to its primary, or for occultation observations with respect to the star in rectangular coordinates, J2000.0 frame."/>
-   <element name="deltaDec"   type="DecimalTypeW10"     doc="Measured  $\Delta$DEC in  arcseconds.  For offset measurements of a satellite with respect to its primary, or for occultation observations with respect to the star in rectangular coordinates, J2000.0 frame"/>
+   <element name="deltaRA"    type="RAType"             doc="Measured $\Delta(\mathrm{RA}\cos\mathrm{ DEC})$ in arcseconds.  For offset measurements of a satellite with respect to its primary, or for occultation observations with respect to the star in rectangular coordinates, J2000.0 frame."/>
+   <element name="deltaDec"   type="DeclinationType"    doc="Measured  $\Delta$DEC in  arcseconds.  For offset measurements of a satellite with respect to its primary, or for occultation observations with respect to the star in rectangular coordinates, J2000.0 frame"/>
    <element name="dist"       type="PosDecimalTypeW10"  doc="Measured distance in arcseconds.  For offset measurements of a satellite with respect to its primary, or for occultation observations with respect to the star in polar coordinates."/>
    <element name="pa"         type="RAType"             doc="Measured position angle in degrees.  For offset measurements of a satellite with respect to its primary, or for occultation observations with respect to the star in polar coordinates."/>
    <element name="rmsRA"      type="PosDecimalTypeW7"   doc="Random component of the $\mathrm{RA}\cos\mathrm{DEC}$ $1\sigma$ uncertainty in arcseconds as estimated by the observer as part of the image processing and astrometric reduction."/>
@@ -1692,8 +1692,8 @@ PSVObservationFields doc
    <psv tagtype="optical" name="stn"       width="4"  justification="L" dpos="0"/>
    <psv tagtype="optical" name="prog"      width="2"  justification="R" dpos="0"/>
    <psv tagtype="optical" name="obsTime"   width="23" justification="L" dpos="0"/>
-   <psv tagtype="optical" name="ra"        width="11" justification="D" dpos="4"/>
-   <psv tagtype="optical" name="dec"       width="11" justification="D" dpos="4"/>
+   <psv tagtype="optical" name="ra"        width="12" justification="D" dpos="4"/>
+   <psv tagtype="optical" name="dec"       width="12" justification="D" dpos="4"/>
    <psv tagtype="optical" name="rmsRA"     width="7"  justification="D" dpos="2"/>
    <psv tagtype="optical" name="rmsDec"    width="7"  justification="D" dpos="2"/>
    <psv tagtype="optical" name="rmsCorr"   width="7"  justification="D" dpos="3"/>
@@ -1718,8 +1718,8 @@ PSVObservationFields doc
    <psv tagtype="offset" name="prog"      width="2"  justification="R" dpos="0"/>
    <psv tagtype="offset" name="obsTime"   width="23" justification="L" dpos="0"/>
    <psv tagtype="offset" name="obsCenter" width="8"  justification="L" dpos="0"/>
-   <psv tagtype="offset" name="deltaRA"   width="11" justification="D" dpos="4"/>
-   <psv tagtype="offset" name="deltaDec"  width="11" justification="D" dpos="4"/>
+   <psv tagtype="offset" name="deltaRA"   width="12" justification="D" dpos="4"/>
+   <psv tagtype="offset" name="deltaDec"  width="12" justification="D" dpos="4"/>
    <psv tagtype="offset" name="rmsRA"     width="7"  justification="D" dpos="2"/>
    <psv tagtype="offset" name="rmsDec"    width="7"  justification="D" dpos="2"/>
    <psv tagtype="offset" name="dist"      width="5"  justification="D" dpos="2"/>
@@ -1748,10 +1748,10 @@ PSVObservationFields doc
    <psv tagtype="occultation" name="prog"      width="2"  justification="R" dpos="0"/>
    <psv tagtype="occultation" name="obsTime"   width="23" justification="L" dpos="0"/>
    <psv tagtype="occultation" name="obsCenter" width="8"  justification="L" dpos="0"/>
-   <psv tagtype="occultatoin" name="raStar"    width="11" justification="D" dpos="4"/>
-   <psv tagtype="occultation" name="decStar"   width="11" justification="D" dpos="4"/>
-   <psv tagtype="occultation" name="deltaRA"   width="11" justification="D" dpos="4"/>
-   <psv tagtype="occultation" name="deltaDec"  width="11" justification="D" dpos="4"/>
+   <psv tagtype="occultatoin" name="raStar"    width="13" justification="D" dpos="4"/>
+   <psv tagtype="occultation" name="decStar"   width="12" justification="D" dpos="4"/>
+   <psv tagtype="occultation" name="deltaRA"   width="12" justification="D" dpos="4"/>
+   <psv tagtype="occultation" name="deltaDec"  width="13" justification="D" dpos="4"/>
    <psv tagtype="occultation" name="rmsRA"     width="7"  justification="D" dpos="3"/>
    <psv tagtype="occultation" name="rmsDec"    width="7"  justification="D" dpos="3"/>
    <psv tagtype="occultation" name="dist"      width="11" justification="D" dpos="4"/>

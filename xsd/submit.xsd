@@ -680,8 +680,8 @@
   <xsd:element name="raStar" type="RAType"/>
   <xsd:element name="decStar" type="DeclinationType"/>
   <xsd:element name="obsCenter" type="ObsCenterType"/>
-  <xsd:element name="deltaRA" type="DecimalTypeW10"/>
-  <xsd:element name="deltaDec" type="DecimalTypeW10"/>
+  <xsd:element name="deltaRA" type="RAType"/>
+  <xsd:element name="deltaDec" type="DeclinationType"/>
   <xsd:element name="dist" type="PosDecimalTypeW10"/>
   <xsd:element name="pa" type="RAType"/>
   <xsd:element name="rmsRA" type="PosDecimalTypeW7"/>
