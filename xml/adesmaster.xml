@@ -1748,7 +1748,7 @@ PSVObservationFields doc
    <psv tagtype="occultation" name="prog"      width="2"  justification="R" dpos="0"/>
    <psv tagtype="occultation" name="obsTime"   width="23" justification="L" dpos="0"/>
    <psv tagtype="occultation" name="obsCenter" width="8"  justification="L" dpos="0"/>
-   <psv tagtype="occultatoin" name="raStar"    width="13" justification="D" dpos="4"/>
+   <psv tagtype="occultation" name="raStar"    width="13" justification="D" dpos="4"/>
    <psv tagtype="occultation" name="decStar"   width="12" justification="D" dpos="4"/>
    <psv tagtype="occultation" name="deltaRA"   width="12" justification="D" dpos="4"/>
    <psv tagtype="occultation" name="deltaDec"  width="13" justification="D" dpos="4"/>
