@@ -521,7 +521,6 @@ def psvtoxml(psvfile, xmlfile, psvencoding="UTF-8", xmlencoding="UTF-8"):
    with io.open(psvfile, encoding=psvencoding) as f:
       lineNumber = 0
       for line in f:
-         print(line)
          try:
             lineNumber += 1
             parsePSV(line[:-1])
