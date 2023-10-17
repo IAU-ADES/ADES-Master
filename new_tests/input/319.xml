@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ades version="2022">
+  <obsBlock>
+    <obsContext>
+      <observatory>
+        <mpcCode>275</mpcCode>
+      </observatory>
+      <submitter>
+        <name>D. Herald, 3 Lupin Pl., Murrumbateman, NSW, 2582, Australia</name>
+      </submitter>
+      <measurers>
+        <name>D. Herald</name>
+        <name>N. Carlson</name>
+        <name>E. Frappa</name>
+        <name>D. Gault</name>
+        <name>B. Giacchini</name>
+        <name>T. Hayamizu</name>
+        <name>S. Kerr</name>
+        <name>J. Moore</name>
+      </measurers>
+      <observers>
+        <name>S. Alonso</name>
+        <name>J. Bradshaw</name>
+        <name>J. Broughton</name>
+        <name>F. Casarramona</name>
+        <name>A. Castillo</name>
+        <name>V. Dekert</name>
+        <name>J. Delgado</name>
+        <name>P. Escamilla</name>
+        <name>R. Farfan</name>
+        <name>J. Fernandez</name>
+        <name>J. Flores</name>
+        <name>R. Goncalves</name>
+        <name>H. Hamanowa</name>
+        <name>K. Kitazaki</name>
+        <name>J. Madiedo</name>
+        <name>J. Maestre</name>
+        <name>J. Marti</name>
+        <name>S. Moral</name>
+        <name>N. Morales</name>
+        <name>V. Pelenjow</name>
+        <name>C. Perello</name>
+        <name>J. Rizos</name>
+        <name>A. Roman</name>
+        <name>J. Rovira</name>
+        <name>M. Sanchez</name>
+        <name>C. Schnabel</name>
+        <name>A. Selva</name>
+        <name>E. Smith</name>
+        <name>H. Takashima</name>
+        <name>H. Tomioka</name>
+        <name>R. Venable</name>
+      </observers>
+      <telescope>
+        <design>reflector</design>
+        <aperture>0.30</aperture>
+        <fRatio>9.0</fRatio>
+        <detector>CCD</detector>
+      </telescope>
+    </obsContext>
+    <obsData>
+      <occultation>
+        <permID>319</permID>
+        <mode>OCC</mode>
+        <stn>275</stn>
+        <sys>ICRF_KM</sys>
+        <ctr>399</ctr>
+        <pos1>1833.310</pos1>
+        <pos2>-1882.459</pos2>
+        <pos3>-3409.399</pos3>
+        <obsTime>2010-10-22T12:22:12.59Z</obsTime>
+        <raStar>36.443232822</raStar>
+        <decStar>5.964539565</decStar>
+        <deltaRA>0.0000</deltaRA>
+        <deltaDec>0.0000</deltaDec>
+        <rmsRA>0.0129</rmsRA>
+        <rmsDec>0.0157</rmsDec>
+        <rmsCorr>-0.874</rmsCorr>
+        <astCat>Gaia3E</astCat>
+        <shapeOcc>0</shapeOcc>
+        <remarks>StarUncert 0.00011, 0.00009; Fit f4;</remarks>
+      </occultation>
+      <occultation>
+        <permID>319</permID>
+        <mode>OCC</mode>
+        <stn>275</stn>
+        <sys>ICRF_KM</sys>
+        <ctr>399</ctr>
+        <pos1>2157.966</pos1>
+        <pos2>-3582.993</pos2>
+        <pos3>3569.948</pos3>
+        <obsTime>2010-10-27T10:58:34.73Z</obsTime>
+        <raStar>35.625268707</raStar>
+        <decStar>5.332470663</decStar>
+        <deltaRA>0.0000</deltaRA>
+        <deltaDec>0.0000</deltaDec>
+        <rmsRA>0.0143</rmsRA>
+        <rmsDec>0.0169</rmsDec>
+        <rmsCorr>-0.581</rmsCorr>
+        <astCat>Gaia3E</astCat>
+        <shapeOcc>0</shapeOcc>
+        <remarks>StarUncert 0.00014, 0.00011; Fit f4;</remarks>
+      </occultation>
+      <occultation>
+        <permID>319</permID>
+        <mode>OCC</mode>
+        <stn>275</stn>
+        <sys>ICRF_KM</sys>
+        <ctr>399</ctr>
+        <pos1>3336.196</pos1>
+        <pos2>-948.022</pos2>
+        <pos3>2752.627</pos3>
+        <obsTime>2023-09-13T03:43:27.05Z</obsTime>
+        <raStar>85.552205093</raStar>
+        <decStar>14.001140989</decStar>
+        <deltaRA>0.0000</deltaRA>
+        <deltaDec>0.0000</deltaDec>
+        <rmsRA>0.0022</rmsRA>
+        <rmsDec>0.0018</rmsDec>
+        <rmsCorr>-0.095</rmsCorr>
+        <astCat>Gaia3E</astCat>
+        <shapeOcc>0</shapeOcc>
+        <remarks>StarUncert 0.00016, 0.00010; Fit e5;</remarks>
+      </occultation>
+      <occultation>
+        <permID>319</permID>
+        <mode>OCC</mode>
+        <stn>275</stn>
+        <sys>ICRF_KM</sys>
+        <ctr>399</ctr>
+        <pos1>3961.373</pos1>
+        <pos2>-887.256</pos2>
+        <pos3>2602.687</pos3>
+        <obsTime>2023-09-16T10:09:34.70Z</obsTime>
+        <raStar>86.432366700</raStar>
+        <decStar>13.793487153</decStar>
+        <deltaRA>0.0000</deltaRA>
+        <deltaDec>0.0000</deltaDec>
+        <rmsRA>0.0021</rmsRA>
+        <rmsDec>0.0018</rmsDec>
+        <rmsCorr>-0.086</rmsCorr>
+        <astCat>Gaia3E</astCat>
+        <shapeOcc>0</shapeOcc>
+        <remarks>StarUncert 0.00030, 0.00021; Fit e5;</remarks>
+      </occultation>
+    </obsData>
+  </obsBlock>
+</ades>

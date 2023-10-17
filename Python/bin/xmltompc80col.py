@@ -163,8 +163,15 @@ def printOpticalLine(item):
    precRa = float(hasKeyOrVal(item, 'precRA', defaultPrecRA) )
    precDec = float(hasKeyOrVal(item, 'precDec', defaultPrecDec) )
    sexDate = sexVals.isoToSexDate(item['obsTime'], precTime)
-   sexRa = sexVals.decRaToSexRa(item['ra'], precRa)
-   sexDecl = sexVals.degDeclToSexDecl(item['dec'], precDec)
+   if(item['stn'] == '275'):
+      sexRa = sexVals.decRaToSexRa(item['raStar'], precRa)
+      sexDecl = sexVals.degDeclToSexDecl(item['decStar'], precDec)  
+   elif(item['stn'] == '244'): #This has not been tested because at the moment we don't have any data 
+      sexRa = sexVals.decRaToSexRa(item['raStar']+item['deltaRA'], precRa)
+      sexDecl = sexVals.degDeclToSexDecl(item['decStar']+item['deltaDec'], precDec)
+   else:
+      sexRa = sexVals.decRaToSexRa(item['ra'], precRa)
+      sexDecl = sexVals.degDeclToSexDecl(item['dec'], precDec)
    #mag = "{0:5s}".format(hasKeyOrVal(item, 'mag', ''))
    mag = adesutility.applyPaddingAndJustification(hasKeyOrVal(item, 'mag', ''), 5, 'D', 3)[0]
    mag = mag[0:5] # restrict to length of 5
@@ -335,7 +342,7 @@ def printDataDicts():
       #
       for subDict in dataDicts :
         eType = subDict[0]
-        if eType == 'optical':  # process optical -- may be rover or converted offset or occultation
+        if eType == 'optical' or eType == 'occultation':  # process optical -- may be rover or converted offset or occultation
            printOpticalLine(subDict[1])
         elif eType == 'radar':  # process radar
            printRadarLine(subDict[1])

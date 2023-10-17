@@ -1,0 +1,56 @@
+# version=2022
+# observatory
+! mpcCode 275
+# submitter
+! name D. Herald, 3 Lupin Pl., Murrumbateman, NSW, 2582, Australia
+# measurers
+! name D. Herald
+! name N. Carlson
+! name E. Frappa
+! name D. Gault
+! name B. Giacchini
+! name T. Hayamizu
+! name S. Kerr
+! name J. Moore
+# observers
+! name S. Alonso
+! name J. Bradshaw
+! name J. Broughton
+! name F. Casarramona
+! name A. Castillo
+! name V. Dekert
+! name J. Delgado
+! name P. Escamilla
+! name R. Farfan
+! name J. Fernandez
+! name J. Flores
+! name R. Goncalves
+! name H. Hamanowa
+! name K. Kitazaki
+! name J. Madiedo
+! name J. Maestre
+! name J. Marti
+! name S. Moral
+! name N. Morales
+! name V. Pelenjow
+! name C. Perello
+! name J. Rizos
+! name A. Roman
+! name J. Rovira
+! name M. Sanchez
+! name C. Schnabel
+! name A. Selva
+! name E. Smith
+! name H. Takashima
+! name H. Tomioka
+! name R. Venable
+# telescope
+! design reflector
+! aperture 0.30
+! fRatio 9.0
+! detector CCD
+permID    |provID           |mode|stn|obsTime                |raStar       |decStar      |deltaRA |deltaDec|sys    |ctr|pos1     |pos2     |pos3     |rmsRA |rmsDec|rmsCorr|astCat  |shapeOcc|remarks                                            
+       319|                 | OCC|275|2010-10-22T12:22:12.59Z| 36.443232822|  5.964539565|  0.0000|  0.0000|ICRF_KM|399| 1833.310|-1882.459|-3409.399|0.0129|0.0157| -0.874|  Gaia3E|0       |StarUncert 0.00011, 0.00009; Fit f4;
+       319|                 | OCC|275|2010-10-27T10:58:34.73Z| 35.625268707|  5.332470663|  0.0000|  0.0000|ICRF_KM|399| 2157.966|-3582.993| 3569.948|0.0143|0.0169| -0.581|  Gaia3E|0       |StarUncert 0.00014, 0.00011; Fit f4;
+       319|                 | OCC|275|2023-09-13T03:43:27.05Z| 85.552205093| 14.001140989|  0.0000|  0.0000|ICRF_KM|399| 3336.196| -948.022| 2752.627|0.0022|0.0018| -0.095|  Gaia3E|0       |StarUncert 0.00016, 0.00010; Fit e5;
+       319|                 | OCC|275|2023-09-16T10:09:34.70Z| 86.432366700| 13.793487153|  0.0000|  0.0000|ICRF_KM|399| 3961.373| -887.256| 2602.687|0.0021|0.0018| -0.086|  Gaia3E|0       |StarUncert 0.00030, 0.00021; Fit e5;

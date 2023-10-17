@@ -13,5 +13,4 @@ def test_trksub_submission():
     if os.path.exists(outfile):
         os.remove(outfile)
     subprocess.run("python3 ../Python/bin/xmltompc80col.py "+infile+" "+outfile, shell=True)
-    assert(os.path.exists(outfile) and os.stat(outfile).st_size != 0)
-    print("****** Test 1 should pass *******")
+    assert(os.path.exists(outfile) and os.stat(outfile).st_size != 0) 
