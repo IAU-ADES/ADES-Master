@@ -158,7 +158,17 @@ catCodes = { ' ': 'UNK',
              'T': 'URAT2',  # URAT2 missing on ADES web page
              'U': 'Gaia1',
              'V': 'Gaia2',
-             'W': 'UCAC5',  # UCAC5 mission on ADES web page
+             'W': 'Gaia3',
+             'X': 'Gaia3E',  
+             'Y': 'UCAC5',  # UCAC5 mission on ADES web page
+             'Z': 'ATLAS2', 
+             '0': 'IHW', 
+             '1': 'PS1_DR1', 
+             '2': 'PS1_DR2', 
+             '3': 'Gaia_Int', 
+             '4': 'GZ', 
+             '5': 'UBSC', 
+             '6': 'Gaia_2016', 
            }
 
 rCatCodes = { catCodes[i]:i for i in catCodes }
