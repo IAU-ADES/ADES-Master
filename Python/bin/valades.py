@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Python script to create a schema from the
 # adesmaster file and use that to validate an

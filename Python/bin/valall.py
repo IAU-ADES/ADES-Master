@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 #
 # valall checks all six xslt converters
 # Usage: valall <xml data file>
