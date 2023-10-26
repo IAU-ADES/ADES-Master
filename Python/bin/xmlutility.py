@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 #
 # xmlutility.py
 # python module to handle all the XML reads, writes
