@@ -764,8 +764,8 @@
   <xsd:element name="resRA" type="DoubleTypeW7"/>
   <xsd:element name="resDec" type="DoubleTypeW7"/>
   <xsd:element name="selAst" type="SelResType"/>
-  <xsd:element name="sigRA" type="PosDecimalTypeW6"/>
-  <xsd:element name="sigDec" type="PosDecimalTypeW6"/>
+  <xsd:element name="sigRA" type="PosDecimalTypeW7"/>
+  <xsd:element name="sigDec" type="PosDecimalTypeW7"/>
   <xsd:element name="sigCorr" type="CorrDecimalType"/>
   <xsd:element name="sigTime" type="PosDecimalTypeW8"/>
   <xsd:element name="biasRA" type="DecimalTypeW8"/>

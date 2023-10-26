@@ -1609,8 +1609,8 @@ decimal types must be in a range
   <element name="resRA"       type="DoubleTypeW7"       doc="Residuals in $\mathrm{RA}\cos\mathrm{DEC}$ in arcseconds"/>
   <element name="resDec"      type="DoubleTypeW7"       doc="Residuals in DEC in arcseconds"/>
   <element name="selAst"      type="SelResType"         doc="Inclusion/rejection flag for astrometry"/>
-  <element name="sigRA"       type="PosDecimalTypeW6"   doc="Adopted $\mathrm{RA}\cos\mathrm{DEC}$ $1\sigma$ uncertainty in arcseconds."/>
-  <element name="sigDec"      type="PosDecimalTypeW6"   doc="Adopted DEC $1\sigma$ uncertainty in arcseconds."/>
+  <element name="sigRA"       type="PosDecimalTypeW7"   doc="Adopted $\mathrm{RA}\cos\mathrm{DEC}$ $1\sigma$ uncertainty in arcseconds."/>
+  <element name="sigDec"      type="PosDecimalTypeW7"   doc="Adopted DEC $1\sigma$ uncertainty in arcseconds."/>
   <element name="sigCorr"     type="CorrDecimalType"    doc="Adopted correlation between $\mathrm{RA}\cos\mathrm{DEC}$ and $\mathrm{DEC}$."/>
   <element name="sigTime"     type="PosDecimalTypeW8"   doc="Adopted $1\sigma$ time uncertainty in seconds."/>
   <element name="biasRA"      type="DecimalTypeW8"      doc="Adopted $\mathrm{RA}\cos\mathrm{DEC}$ bias in arcseconds."/>
