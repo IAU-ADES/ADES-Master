@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # python module to read in adesmaster.xml and 
 # provide tables of both xml ordering and psv 

@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# 
 # valsubmit checks the submit xml format
 # Usage: valsubmit <xml data file>
 #    ./valsubmit newsubmit.xml

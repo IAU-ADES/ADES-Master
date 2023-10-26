@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# 
 # valgeneral checks the general xml format
 # Usage: valgeneral <xml data file>
 #    ./valgeneral newgeneral.xml

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 #
 # testit.py is a test script for adesutility
 #
