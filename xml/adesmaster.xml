@@ -597,7 +597,7 @@ decimal types must be in a range
     <restrict name="xsd:maxInclusive" value="90.0"/>
     <restrict name="xsd:pattern" value="[+\-]?([1-9]?[0-9])?(\.[0123456789]{0,9})?"/>
   </restriction>
-  <doc> $\mathrm{DEC}$ in degrees in range [-90.0, 90.0] with no more that 8 characters after the decimal</doc>
+  <doc> $\mathrm{DEC}$ in degrees in range [-90.0, 90.0] with no more that 9 characters after the decimal</doc>
 </simpletype>
 
 <simpletype name="DeprecatedType">
@@ -868,7 +868,7 @@ decimal types must be in a range
     <restrict name="xsd:maxExclusive" value="360.0"/>
     <restrict name="xsd:pattern" value="([1-3][0-9]{2}|[1-9]?[0-9])?(\.[0-9]{0,9})?"/>
   </restriction>
-  <doc> Unsigned RA in degrees limited to [0.0, 360.0) with no more that 8 characters after the decimal</doc>
+  <doc> Unsigned RA in degrees limited to [0.0, 360.0) with no more that 9 characters after the decimal</doc>
 </simpletype>
 
 <simpletype name="RefType">
@@ -1559,8 +1559,8 @@ decimal types must be in a range
    <element name="raStar"     type="RAType"             doc="J2000.0 RA in decimal degrees of the occulted star"/>
    <element name="decStar"    type="DeclinationType"    doc="J2000.0 DEC in decimal degrees of the occulted star"/>
    <element name="obsCenter"  type="ObsCenterType"      doc="Center of offset observation may be planet or other body with PermID or ProvID"/>
-   <element name="deltaRA"    type="RAType"             doc="Measured $\Delta(\mathrm{RA}\cos\mathrm{ DEC})$ in arcseconds.  For offset measurements of a satellite with respect to its primary, or for occultation observations with respect to the star in rectangular coordinates, J2000.0 frame."/>
-   <element name="deltaDec"   type="DeclinationType"    doc="Measured  $\Delta$DEC in  arcseconds.  For offset measurements of a satellite with respect to its primary, or for occultation observations with respect to the star in rectangular coordinates, J2000.0 frame"/>
+   <element name="deltaRA"    type="DecimalTypeW10"     doc="Measured $\Delta(\mathrm{RA}\cos\mathrm{ DEC})$ in arcseconds.  For offset measurements of a satellite with respect to its primary, or for occultation observations with respect to the star in rectangular coordinates, J2000.0 frame."/>
+   <element name="deltaDec"   type="DecimalTypeW10"     doc="Measured  $\Delta$DEC in  arcseconds.  For offset measurements of a satellite with respect to its primary, or for occultation observations with respect to the star in rectangular coordinates, J2000.0 frame"/>
    <element name="dist"       type="PosDecimalTypeW10"  doc="Measured distance in arcseconds.  For offset measurements of a satellite with respect to its primary, or for occultation observations with respect to the star in polar coordinates."/>
    <element name="pa"         type="RAType"             doc="Measured position angle in degrees.  For offset measurements of a satellite with respect to its primary, or for occultation observations with respect to the star in polar coordinates."/>
    <element name="rmsRA"      type="PosDecimalTypeW7"   doc="Random component of the $\mathrm{RA}\cos\mathrm{DEC}$ $1\sigma$ uncertainty in arcseconds as estimated by the observer as part of the image processing and astrometric reduction."/>
@@ -1584,7 +1584,7 @@ decimal types must be in a range
    <element name="seeing"     type="PosDecimalTypeW6"   doc="Size of seeing disc in arcseconds, measured at Full Width Half Maximum (FWHM) of target point spread function (PSF). "/>
    <element name="exp"        type="PosDecimalTypeW6"   doc="Exposure time in \si{\second}.  Total exposure time in the case of stacked image detections "/>
    <element name="rmsFit"     type="PosDecimalTypeW6"   doc="RMS of fit of astrometric comparison stars in arcseconds. "/>
-   <element name="nStars"     type="PosIntegerTypeW6"     doc="Number of stars in astrometric fit."/>
+   <element name="nStars"     type="PosIntegerTypeW6"   doc="Number of stars in astrometric fit."/>
    <element name="com"        type="LogicalType"        doc="Flag to indicate that the observation is reduced to the center of mass.  0 implies a measurement to the peak power position, which is usually interpreted as the leading edge of the target, with the reflection point being modeled one object radius prior to the center of mass."/>
    <element name="frq"        type="FrequencyType"      doc="Carrier reference frequence in \si{\mega\hertz}"/>
    <element name="ref"        type="RefType"            doc="Standard reference field used for citations."/>
