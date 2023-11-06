@@ -50,7 +50,7 @@ def validate_xslt(schema_name, schemaxslt, candidate, out):
 
 def validate_xslts(schemaxslts, candidate, out):
     results = {}
-    for schema_name in sorted(schemaxslts):
+    for schema_name in schemaxslts:
         results[schema_name] = validate_xslt(schema_name, schemaxslts[schema_name], candidate, out)
     return results
 

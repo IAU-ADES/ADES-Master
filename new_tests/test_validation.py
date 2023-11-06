@@ -12,6 +12,7 @@ import valgeneral
 import valall
 import validate
 import valsubmit
+import adesutility
 
 
 '''
@@ -48,15 +49,22 @@ def test_valgeneral_routine():
 # valall
 def test_valall():
     xmlfile = "input/obs_v2022.xml"
-    if os.path.exists("validation.file"):
-        os.remove("validation.file")
-    subprocess.run("python3 ../Python/bin/valall.py "+xmlfile+"> validation.file",shell=True)
-    with open("validation.file",'r') as valfile:
-        val = valfile.readlines()[0].replace("\n","")
-        if val == 'general is OK':
-            assert(True)
-        else:
-            assert(False)
+    if os.path.exists("valall.file"):
+        os.remove("valall.file")
+    subprocess.run("python3 ../Python/bin/valall.py "+xmlfile+"> valall.file",shell=True)
+    with open("valall.file",'r') as valfile:
+        lines = [line.strip() for line in valfile.readlines()]
+        assert(all([f"{schema_name} is OK" in lines for schema_name in sorted(adesutility.schemaxslts.keys())]))
+        # for line in valfile.readlines()
+
+        #     if line.strip() in :
+
+        # val = valfile.readlines()[0].replace("\n","")
+
+        # if val == 'general is OK':
+        #     assert(True)
+        # else:
+        #     assert(False)
 
 def test_valall_routine():
     xmlfile = "input/obs_v2022.xml"
@@ -64,11 +72,8 @@ def test_valall_routine():
         os.remove("valall.file")
     valall.valall(xmlfile)
     with open("valall.file",'r') as valfile:
-        val = valfile.readlines()[0].replace("\n","")
-        if val == 'general is OK':
-            assert(True)
-        else:
-            assert(False)
+        lines = [line.strip() for line in valfile.readlines()]
+        assert(all([f"{schema_name} is OK" in lines for schema_name in adesutility.schemaxslts.keys()]))
             
 # ------------------------
 # validate
