@@ -26,6 +26,9 @@ from xmlutility import XMLtoSchema
 import sys
 import argparse
 
+import adesutility
+from valutility import validate_schema, validate_xml_declaration
+
 #
 # Read in the schema
 #
@@ -35,39 +38,18 @@ import argparse
 def validate(schemafile, xmlfile):
     results = {}
 
-    schemaxml = readXML(schemafile)
-    schema  = XMLtoSchema(schemaxml)
-
     #
     # Read in the xml file
     #
     #candidate = lxml.etree.parse(sys.argv[2])
     candidate = readXML(xmlfile)
+    
+    schemaxml = readXML(schemafile)
+    schema  = XMLtoSchema(schemaxml)
 
-    #
-    # Check for validity -- prints errors on stdout if any are found
-    #
-    try:
-        schema.assertValid(candidate)
-        results[schema] = None
-    except:  
-        results[schema] = traceback.format_exc()
-      
-    #
-    # now print the results, and the reason for failure if the
-    # validation failed.  
-    #
-    out = open("validate.file",'w')
-    for result in sorted(results):
-        r = results[result]
-        if r:
-            print (result, "has failed:")
-            out.write(str(result)+" has failed: \n")
-            print (r)
-        else:
-            print (result, "is OK")
-            out.write(str(result)+" is OK\n")
-    out.close()
+    with open("validate.file", "w") as out:
+        validate_xml_declaration(xmlfile, out)
+        validate_schema(schema, schema, candidate, out)
     
 # -------------------------------------------------------------------
 if __name__ == '__main__':

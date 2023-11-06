@@ -19,6 +19,7 @@ import sys
 import argparse
 
 import adesutility
+from valutility import validate_xslts, validate_xml_declaration
 
 #
 # This script validates an xml file against six different
@@ -33,8 +34,6 @@ import adesutility
 #
 
 def valall(xmlfile):
-  masterfile = adesutility.adesmaster
-
   #
   # Six xsd schemas are built, in pairs designed to be favored
   # for machine reading and human reading.  Both items in a pair
@@ -46,51 +45,17 @@ def valall(xmlfile):
   #
   #
   schemaxslts = adesutility.schemaxslts
-
-
-  results = {}
-
   #
-  # read in master file 
-  #
-  xml_tree = adesutility.readXML(masterfile)
-
-  #
-  # read in file to be validataed from sys.argv[1]
+  # read in file to be validataed
   #
   candidate = adesutility.readXML(xmlfile)
-
   #
   # validate against all schemaxslt files
   # 
-  for schemaName in schemaxslts:
-    xslt_tree = adesutility.readXML(schemaxslts[schemaName])
-    schema = adesutility.XMLtoSchemaViaXSLT(xml_tree, xslt_tree)
-    #
-    # check the input xml against the generated schema.
-    #
-    try:
-      schema.assertValid(candidate)
-      results[schemaName] = None
-    except:  
-      results[schemaName] = traceback.format_exc()
-
-  #
-  # now print the results, and the reason for failure if the
-  # validation failed.  
-  #
-  out = open("valall.file",'w')
-  for result in sorted(results):
-    r = results[result]
-    if r:
-      print (result, "has failed:")
-      out.write(result+" has failed: "+r+"\n")
-      print (r)
-    else:
-      print (result, "is OK")
-      out.write(result+" is OK\n")
-  out.close()
-      
+  with open("valall.file", "w") as out:
+    validate_xml_declaration(xmlfile, out)
+    validate_xslts(adesutility.schemaxslts, candidate, out)
+        
 # --------------------------------------------------------------
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
