@@ -49,7 +49,7 @@ def validate(schemafile, xmlfile):
 
     with open("validate.file", "w") as out:
         validate_xml_declaration(xmlfile, out)
-        validate_schema(schema, schema, candidate, out)
+        validate_schema(schemafile, schema, candidate, out)
     
 # -------------------------------------------------------------------
 if __name__ == '__main__':
