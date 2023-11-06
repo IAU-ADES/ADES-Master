@@ -465,11 +465,11 @@ minorplanetPackedIDRegex = re.compile('^(?: {5}|([0-9A-Za-z])(\d{4})|(~[0-9A-Za-
 #
 # Add "I" for interstellar objects
 #
-cometPackedIDRegex = re.compile('^(?: {4}|(\d{4}))([APCDXI])'
-                                  + '(?:' + '([0-9A-Za-z])(\d{2})([A-HJ-Y])([a-zA-Z0-9])(\d)(?:0|([A-Z])|([a-z]))' + '|'
-                                          + '     ([a-z ])([a-z])'  + '|'
-                                          + ' *$'
-                                  + ')$')
+cometPackedIDRegex = re.compile(r'^(?: {4}|(\d{4}))([APCDXI])'
+                                  + r'(?:' + r'([0-9A-Za-z])(\d{2})([A-HJ-Y])([a-zA-Z0-9])(\d)(?:0|([A-Z])|([a-z]))' + r'|'
+                                          + r'     ([a-z ])([a-z])'  + '|'
+                                          + r' *$'
+                                  + r')$')
 
 #
 # Satellite groups:
