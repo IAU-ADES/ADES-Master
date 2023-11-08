@@ -58,11 +58,11 @@ def valueError(s, line, c1, c2, value=None):
 #
 # Sexagesimal Parsing
 #
-_checkNormal = re.compile('^(\d\d) (\d\d) (\d\d\.(\d*)) *$')
-_checkIntegerSeconds = re.compile('^(\d\d) (\d\d) (\d\d) *$')
-_checkMinutesHundredths = re.compile('^(\d\d) (\d\d\.\d\d) *$')
-_checkMinutesTenths = re.compile('^(\d\d) (\d\d\.\d) *$')
-_checkIntegerMinutes = re.compile('^(\d\d) (\d\d) *$')
+_checkNormal = re.compile(r'^(\d\d) (\d\d) (\d\d\.(\d*)) *$')
+_checkIntegerSeconds = re.compile(r'^(\d\d) (\d\d) (\d\d) *$')
+_checkMinutesHundredths = re.compile(r'^(\d\d) (\d\d\.\d\d) *$')
+_checkMinutesTenths = re.compile(r'^(\d\d) (\d\d\.\d) *$')
+_checkIntegerMinutes = re.compile(r'^(\d\d) (\d\d) *$')
 
 _countNormal = 0
 _countIntegerSeconds = 0
@@ -170,7 +170,7 @@ def checkSexagesimal(line):
 
       
 
-_checkDate = re.compile('^((16|17|18|19|[2-9]\d)\d\d) (0[1-9]|10|11|12) ((0[1-9]|[12]\d|30|31)\.(\d+)) *$')
+_checkDate = re.compile(r'^((16|17|18|19|[2-9]\d)\d\d) (0[1-9]|10|11|12) ((0[1-9]|[12]\d|30|31)\.(\d+)) *$')
 #testdate("1800 00 01.333  ")  # bad month
 #testdate("1800 01 00.333  ")  # bad day
 #testdate("1800 01 01    ")

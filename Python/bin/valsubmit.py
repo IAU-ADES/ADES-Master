@@ -19,6 +19,7 @@ import sys
 import argparse
 
 import adesutility
+from valutility import validate_xslt, validate_xml_declaration
 
 #
 # This script validates an xml file against six different
@@ -33,8 +34,6 @@ import adesutility
 #
 
 def valsubmit(xmlfile):
-  masterfile = adesutility.adesmaster
-
   #
   # Six xsd schemas are built, in pairs designed to be favored
   # for machine reading and human reading.  Both items in a pair
@@ -45,52 +44,17 @@ def valsubmit(xmlfile):
   #    generalxsd.xslt      generalhumanxsd.xslt   -- both
   #
   #
-  schemaxslts = { 'submit': adesutility.schemaxslts['submit'] }
-
-
-  results = {}
-
   #
-  # read in master file 
-  #
-  xml_tree = adesutility.readXML(masterfile)
-
-  #
-  # read in file to be validataed from sys.argv[1]
+  # read in file to be validataed
   #
   candidate = adesutility.readXML(xmlfile)
-
   #
   # validate against submit schemaxslt files
   # 
-  for schemaName in schemaxslts:
-    xslt_tree = adesutility.readXML(schemaxslts[schemaName])
-    schema = adesutility.XMLtoSchemaViaXSLT(xml_tree, xslt_tree)
-    #
-    # check the input xml against the generated schema.
-    #
-    try:
-      schema.assertValid(candidate)
-      results[schemaName] = None
-    except:  
-      results[schemaName] = traceback.format_exc()
-
-  #
-  # now print the results, and the reason for failure if the
-  # validation failed.  
-  #
-  out = open("valsubmit.file",'w')
+  with open("valsubmit.file",'w') as out:
+    validate_xml_declaration(xmlfile, out)
+    validate_xslt("submit", adesutility.schemaxslts['submit'], candidate, out)
   
-  for result in sorted(results):
-    r = results[result]
-    if r:
-      print (result, "has failed:")
-      out.write(str(result)+" has failed\n")
-      print (r)
-    else:
-      print (result, "is OK")
-      out.write(str(result)+" is OK")
-
 # --------------------------------------------------------
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)

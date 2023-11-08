@@ -19,6 +19,7 @@ import sys
 import argparse
 
 import adesutility
+from valutility import validate_xslt, validate_xml_declaration
 
 #
 # This script validates an xml file against six different
@@ -44,55 +45,16 @@ def valgeneral(xmlfile):
   #    generalxsd.xslt      generalhumanxsd.xslt   -- both
   #
   #
-  schemaxslts = { 'general': adesutility.schemaxslts['general'] }
-  
-  
-  results = {}
-  
   #
-  # read in master file 
-  #
-  xml_tree = adesutility.readXML(masterfile)
-  
-  #
-  # read in file to be validataed from sys.argv[1]
+  # read in file to be validataed
   #
   candidate = adesutility.readXML(xmlfile)
-  
   #
   # validate against general schemaxslt files
   # 
-  for schemaName in schemaxslts:
-    xslt_tree = adesutility.readXML(schemaxslts[schemaName])
-    schema = adesutility.XMLtoSchemaViaXSLT(xml_tree, xslt_tree)
-    #
-    # check the input xml against the generated schema.
-    #
-    try:
-      schema.assertValid(candidate)
-      results[schemaName] = None
-    except:  
-      results[schemaName] = traceback.format_exc()
-  
-  #
-  # now print the results, and the reason for failure if the
-  # validation failed.  
-  #
-  #Also write on a file
-  
-  out = open("valgeneral.file",'w')
-
-  for result in sorted(results):
-    r = results[result]
-    if r:
-      print (result, "has failed:")
-      out.write(result+"has failed: "+r)
-      print (r)
-    else:
-      print (result, "is OK")
-      out.write(result+" is OK")
-  out.close()
-
+  with open("valgeneral.file", "w") as out:
+    validate_xml_declaration(xmlfile, out)
+    validate_xslt("general", adesutility.schemaxslts['general'], candidate, out)
   
   
 # ------------------------------------------------------------
