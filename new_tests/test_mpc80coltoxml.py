@@ -50,7 +50,6 @@ def test_mpc80coltoxml_submitted_nosplit_routine():
 
 # ------------------ Testing with the header without --nosplit ------------------    
 #Testing file with the header, but without using --nosplit -- this test does not pass
-@pytest.mark.xfail
 def test_mpc80coltoxml_submitted_split():
     obsfile = "input/85_test.obs"
     xmlfile = "output/85_test_split.xml"
@@ -60,7 +59,6 @@ def test_mpc80coltoxml_submitted_split():
     print('******* Test 3 should fail ********')
     assert(os.path.exists(xmlfile))
     
-@pytest.mark.xfail
 def test_mpc80coltoxml_submitted_split_routine():
     obsfile = "input/85_test.obs"
     xmlfile = "output/85_test_split.xml"
