@@ -61,7 +61,7 @@ def validate_xml_declaration(xmlfile, out):
             if line.strip() != "":
                 match = re.search(r"^<\?xml.*\?>", line.strip())
                 valid = (match is not None)
-            break
+                break
     
     if not valid:
         print("candidate file", xmlfile, "has no XML declaration")

@@ -1038,33 +1038,33 @@ def splitRadar(fname):
       l1 = f.readline()[0:81]  # remove trailing newline and/or cr
       try:
          while (l1):  # emulate do .. while structure
-            (al1, aflag, al2, adoppler, adelay, al3) = parseRadarLine(l1)
-            if aflag != 'R':   # just pass through
+            if headerRegex.match(l1):
                yield l1
-            else:              # need second line
-               l2 = f.readline()[0:81]  # remove trailing newline
-               (bl1, bflag, bl2, bdoppler, bdelay, bl3) = parseRadarLine(l2)
-               if bflag != 'r':
-                  raise RuntimeError("flag must be r not "  +  bflag)
-
-               if (adoppler.strip() and adelay.strip()): # If both are present make two entries
-                  nSplit += 1
-                  splitLines.append (lineNumber)
-                  yield al1 + aflag + al2 + adoppler + 14*' ' + al3
-                  lineNumber += 1
-                  yield bl1 + bflag + bl2 + bdoppler + 14*' ' + bl3
-                  lineNumber -= 1
-                  yield al1 + aflag + al2 + 13*' ' + adelay + al3
-                  lineNumber += 1
-                  yield bl1 + bflag + bl2 + 13*' ' + bdelay + bl3
-               else: # normal case just yield l1 and then l2
+            else:
+               (al1, aflag, al2, adoppler, adelay, al3) = parseRadarLine(l1)
+               if aflag != 'R':   # just pass through
                   yield l1
-                  lineNumber += 1
-                  yield l2
+               else:              # need second line
+                  l2 = f.readline()[0:81]  # remove trailing newline
+                  (bl1, bflag, bl2, bdoppler, bdelay, bl3) = parseRadarLine(l2)
+                  if bflag != 'r':
+                     raise RuntimeError("flag must be r not "  +  bflag)
 
-
-       
-
+                  if (adoppler.strip() and adelay.strip()): # If both are present make two entries
+                     nSplit += 1
+                     splitLines.append (lineNumber)
+                     yield al1 + aflag + al2 + adoppler + 14*' ' + al3
+                     lineNumber += 1
+                     yield bl1 + bflag + bl2 + bdoppler + 14*' ' + bl3
+                     lineNumber -= 1
+                     yield al1 + aflag + al2 + 13*' ' + adelay + al3
+                     lineNumber += 1
+                     yield bl1 + bflag + bl2 + 13*' ' + bdelay + bl3
+                  else: # normal case just yield l1 and then l2
+                     yield l1
+                     lineNumber += 1
+                     yield l2
+               
             lineNumber += 1
             l1 = f.readline()[0:81]
       except Exception as e:
