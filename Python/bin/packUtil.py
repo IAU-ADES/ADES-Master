@@ -883,7 +883,15 @@ def packTupleID(triplet):
                   m.group(3) + nn + n2 + m.group(4)
             provIDType = 'A'
          else: # extended
-            n = 25 * int(m.group(5)) + ("ABCDEFGHJKLMNOPQRSTUVWXYZ").find(m.group(4))
+            order_letter = m.group(4)
+            order_letters = ("ABCDEFGHJKLMNOPQRSTUVWXYZ")
+            order = order_letters.find(order_letter)
+            cycle = int(m.group(5))
+            n = 25 * cycle + order
+            if (cycle > 591673) or (cycle == 591673 and order > order_letters.find("L")):
+               raise RuntimeError("Can't pack because number for " 
+                                 + provID + " is too big")
+            
             # print(m.group(2), m.group(3), m.group(4), m.group(5))
             packedProvID = ' _' + packLetters[int(m.group(2))] + m.group(3) + radix62_4(n - 15500)[1:]
             provIDType = 'A'
