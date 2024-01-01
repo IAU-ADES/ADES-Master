@@ -48,8 +48,8 @@ reverseCodeDict = { codeDict[i] : i for i in codeDict }  # no duplicates
 
 validCodes = "A PeCBTMcEOHNnRrSsVvXx"+"0"  # 0 is special for header lines
 validNotes = ' AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345vzjeL16789'
-validProgramCodes = ' AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345016789=#$%"&\+-![]`!|(){}.?@,^;:_/~*<>eLvzjZ'"'"
-programCodesArray = "0123456789!\"#$%&'()*+,-./[\]^_`{|}~:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+validProgramCodes = r' AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345016789=#$%"&\+-![]`!|(){}.?@,^;:_/~*<>eLvzjZ'"'"
+programCodesArray = r"0123456789!\"#$%&'()*+,-./[\]^_`{|}~:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 programCodeSites = \
 set([ "010",
       "012",
@@ -378,17 +378,17 @@ def unPackSigned(value, outLen, nDecimal):
 #cometfragmentPackedProvIDRegex = re.compile('^([CDPX])([0-9A-Za-z])(\d{2})([A-HJ-Y])([a-zA-Z0-9])(\d)([a-z])$')
 #satellitePackedProvIDRegex = re.compile('^S([0-9A-Za-z])(\d{2})([A-HJ-Y])([a-zA-Z0-9])(\d)0$')
 
-minorplanetProvIDRegex = re.compile('^(\d{2})(\d{2}) ([A-HJ-Y])([A-HJ-Z])(\d+)?$')
-minorplanetSurveyProvIDRegex = re.compile('^(\d{4}) (P-L|T-1|T-2|T-3)$')
-cometProvIDRegex = re.compile('^([ACDPX])/(\d{4}) ([A-Z])([A-Z])?(\d*)$')
-cometfragmentProvIDRegex = re.compile('^([CDPX])/(\d{4}) ([A-Z])(\d*)-([A-Z])$')
-satelliteProvIDRegex = re.compile('^S/(\d{4}) ([JSUN]) (\d+)$')
+minorplanetProvIDRegex = re.compile(r'^(\d{2})(\d{2}) ([A-HJ-Y])([A-HJ-Z])(\d+)?$')
+minorplanetSurveyProvIDRegex = re.compile(r'^(\d{4}) (P-L|T-1|T-2|T-3)$')
+cometProvIDRegex = re.compile(r'^([ACDPX])/(\d{4}) ([A-Z])([A-Z])?(\d*)$')
+cometfragmentProvIDRegex = re.compile(r'^([CDPX])/(\d{4}) ([A-Z])(\d*)-([A-Z])$')
+satelliteProvIDRegex = re.compile(r'^S/(\d{4}) ([JSUN]) (\d+)$')
 
-minorplanetPermIDRegex = re.compile('^(\d+)$')
-cometPermIDRegex = re.compile('^(\d+)([PDI])$') # add I for interstellar objects
-cometfragmentPermIDRegex = re.compile('^(\d+)([PDI])-([A-Z]{1,2})$') # like this will happen for interstellar objects
-satellitePermIDRegex = re.compile('^(Jupiter|Saturn|Uranus|Neptune) (\d+)$')
-asteroidsatellitePermIDRegex = re.compile('^\((\d+|\d{4} [A-Z]{2}\d+)\) (\d+)$')
+minorplanetPermIDRegex = re.compile(r'^(\d+)$')
+cometPermIDRegex = re.compile(r'^(\d+)([PDI])$') # add I for interstellar objects
+cometfragmentPermIDRegex = re.compile(r'^(\d+)([PDI])-([A-Z]{1,2})$') # like this will happen for interstellar objects
+satellitePermIDRegex = re.compile(r'^(Jupiter|Saturn|Uranus|Neptune) (\d+)$')
+asteroidsatellitePermIDRegex = re.compile(r'^\((\d+|\d{4} [A-Z]{2}\d+)\) (\d+)$')
 
 #
 # trkSub matches any 7 characters starting with a letter except anything
@@ -401,23 +401,23 @@ asteroidsatellitePermIDRegex = re.compile('^\((\d+|\d{4} [A-Z]{2}\d+)\) (\d+)$')
 #
 # This is a mess because it's hard to exclude things in regex
 #
-trksubRegexHelp = ( '([A-Za-z][A-Za-z0-9]{0,5}' +         # anything six characters
-                    '|[A-HL-OQ-SU-Z][A-Za-z0-9]{0,6}' +   # anything seven not starting with I-K,P or T
-                    '|[I-K][A-Za-z0-9]{5}[a-z1-9]' +      # anything starting with I-K not ending in A-Z or 0
-                    '|[I-K][A-Za-z][A-Za-z0-9]{4}[0A-Z]' + # anything starting with I-K ending in [A-Z] with not digit as second character
-                    '|[I-K][0-9][A-Za-z][A-Za-z0-9]{3}[0A-Z]' + # anything starting with [I-K]<digit> ending in [A-Z] with not digit as third character
-                    '|[I-K][0-9][0-9][Ia-z0-9][A-Za-z0-9]{2}[0A-Z]' + # anything starting with [I-K]<digit> ending in [A-Z] with not [A-Z] as fourth character
-                    '|[I-K][0-9][0-9][A-HJ-Z][A-Za-z0-9][A-Za-z][0A-Z]' + # anything with [I-K]\d\d[A-HJ-Z][A-Za-z0-9]<not digit> [A-Z]
-                    '|P[A-KM-Za-z0-9][A-Za-z0-9]{5}' +   # anything seven starting with P<not L>
-                    '|T[A-Za-z04-9][A-Za-z0-9]{5}' +   # anything seven starting with T<not 1-3>
-                     '|(?:PL|T1|T2|T3)[A-RT-Za-z0-9][A-Za-z0-9]{4}' + # anything starting PL|T1|T2|T3 not followed by S 
-                     '|(?:PL|T1|T2|T3)S[A-Za-z][A-Za-z0-9]{3}' + # anything starting PL|T1|T2|T3 followed by S with not digit in 4
-                     '|(?:PL|T1|T2|T3)S[A-Za-z0-9][A-Za-z][A-Za-z0-9]{2}' + # anything starting PL|T1|T2|T3 followed by S with not digit in 5
-                     '|(?:PL|T1|T2|T3)S[A-Za-z0-9]{2}[A-Za-z][A-Za-z0-9]' + # anything starting PL|T1|T2|T3 followed by S with not digit in 6
-                     '|(?:PL|T1|T2|T3)S[A-Za-z0-9]{3}[A-Za-z]' + # anything starting PL|T1|T2|T3 followed by S with not digit in 7
-                    ')' )
+trksubRegexHelp = ( r'([A-Za-z][A-Za-z0-9]{0,5}' +         # anything six characters
+                    r'|[A-HL-OQ-SU-Z][A-Za-z0-9]{0,6}' +   # anything seven not starting with I-K,P or T
+                    r'|[I-K][A-Za-z0-9]{5}[a-z1-9]' +      # anything starting with I-K not ending in A-Z or 0
+                    r'|[I-K][A-Za-z][A-Za-z0-9]{4}[0A-Z]' + # anything starting with I-K ending in [A-Z] with not digit as second character
+                    r'|[I-K][0-9][A-Za-z][A-Za-z0-9]{3}[0A-Z]' + # anything starting with [I-K]<digit> ending in [A-Z] with not digit as third character
+                    r'|[I-K][0-9][0-9][Ia-z0-9][A-Za-z0-9]{2}[0A-Z]' + # anything starting with [I-K]<digit> ending in [A-Z] with not [A-Z] as fourth character
+                    r'|[I-K][0-9][0-9][A-HJ-Z][A-Za-z0-9][A-Za-z][0A-Z]' + # anything with [I-K]\d\d[A-HJ-Z][A-Za-z0-9]<not digit> [A-Z]
+                    r'|P[A-KM-Za-z0-9][A-Za-z0-9]{5}' +   # anything seven starting with P<not L>
+                    r'|T[A-Za-z04-9][A-Za-z0-9]{5}' +   # anything seven starting with T<not 1-3>
+                     r'|(?:PL|T1|T2|T3)[A-RT-Za-z0-9][A-Za-z0-9]{4}' + # anything starting PL|T1|T2|T3 not followed by S 
+                     r'|(?:PL|T1|T2|T3)S[A-Za-z][A-Za-z0-9]{3}' + # anything starting PL|T1|T2|T3 followed by S with not digit in 4
+                     r'|(?:PL|T1|T2|T3)S[A-Za-z0-9][A-Za-z][A-Za-z0-9]{2}' + # anything starting PL|T1|T2|T3 followed by S with not digit in 5
+                     r'|(?:PL|T1|T2|T3)S[A-Za-z0-9]{2}[A-Za-z][A-Za-z0-9]' + # anything starting PL|T1|T2|T3 followed by S with not digit in 6
+                     r'|(?:PL|T1|T2|T3)S[A-Za-z0-9]{3}[A-Za-z]' + # anything starting PL|T1|T2|T3 followed by S with not digit in 7
+                    r')' )
 #trksubRegex = re.compile('^([A-Za-z][A-Za-z0-9]{0,7})$')
-trksubRegex = re.compile('^' + trksubRegexHelp + '$')
+trksubRegex = re.compile(r'^' + trksubRegexHelp + r'$')
 
 
 #
@@ -438,12 +438,13 @@ trksubRegex = re.compile('^' + trksubRegexHelp + '$')
 #   trkSub:  None if not present
 #      11: six characters starting with a letter
 #
-minorplanetPackedIDRegex = re.compile('^(?: {5}|([0-9A-Za-z])(\d{4})|(~[0-9A-Za-z]{4}))'+ 
-                                      '(?:' + '([I-K])(\d{2})([A-HJ-Y])([a-zA-Z0-9])(\d)(?:([A-HJ-Z])|0)' + '|'
-                                            + '(PL|T1|T2|T3)S(\d{4})' + '|'
-                                            + trksubRegexHelp + ' *|'
-                                            + ' *'
-                                       + ')$')
+minorplanetPackedIDRegex = re.compile(r'^(?: {5}|([0-9A-Za-z])(\d{4})|(~[0-9A-Za-z]{4}))'+ 
+                                      r'(?:' + r'([I-K])(\d{2})([A-HJ-Y])([a-zA-Z0-9])(\d)(?:([A-HJ-Z])|0)' + r'|'
+                                            + r'(PL|T1|T2|T3)S(\d{4})' + r'|'
+                                            + trksubRegexHelp + r' *|'
+                                            + r'(_)([P-Z])([A-HJ-Y])([0-9A-Za-z]{4})' + r'|'
+                                            + r' *'
+                                       + r')$')
 
 #
 # Comet groups:
@@ -484,10 +485,10 @@ cometPackedIDRegex = re.compile(r'^(?: {4}|(\d{4}))([APCDXI])'
 #    6: <letnum>
 #    7: <digit>
 #
-satellitePackedIDRegex = re.compile('^(?: {4}|([JSUN])(\d{3}))S'  
-                                       + '(?:' + '([0-9A-Za-z])(\d{2})([JSUN])([a-zA-Z0-9])(\d)0$' + '|'
-                                               + ' *$'
-                                       + ')$')
+satellitePackedIDRegex = re.compile(r'^(?: {4}|([JSUN])(\d{3}))S'  
+                                       + r'(?:' + r'([0-9A-Za-z])(\d{2})([JSUN])([a-zA-Z0-9])(\d)0$' + r'|'
+                                               + r' *$'
+                                       + r')$')
 
 #
 # A dictionary for unpacking planet names
@@ -549,39 +550,111 @@ def unpackPackedID(packedID):
    #   provID: None if not present
    #   trkSub: None if not present
    #
+
+   # match against minor planet packed ID
    m = minorplanetPackedIDRegex.match(packedID)
+   # ([0-9A-Za-z])(\d{4})|(~[0-9A-Za-z]{4}))
+   permID_leading = m.group(1) # ([0-9A-Za-z])
+   permID_digits = m.group(2) # (\\d{4})
+   permID_base62 = m.group(3) # (~[0-9A-Za-z]{4})
+
+   # minor planet provID
+   # regular provID
+
+   # ([I-K])(\d{2})([A-HJ-Y])([a-zA-Z0-9])(\d)(?:([A-HJ-Z])|0)
+   # The first two digits of the year are packed into a single 
+   # character in column 1 (I = 18, J = 19, K = 20). 
+   provID_leading = m.group(4) # [I-K]
+   # Columns 2-3 contain the last two digits of the year. 
+   provID_year = m.group(5) # (\d{2})
+   # Column 4 contains the half-month letter 
+   provID_half_month_letter = m.group(6) # ([A-HJ-Y])
+   # and column 7 contains the second letter.
+   provID_half_month_order = m.group(9) # ([A-HJ-Z])
+   # The cycle count (the number of times that the second letter has cycled through the alphabet) is coded in columns 5-6, using a letter in column 5 when the cycle count is larger than 99. The uppercase letters are used, followed by the lowercase letters.
+   provID_cycle_count_letter = m.group(7) # ([a-zA-Z0-9])
+   provID_cycle_count_number = m.group(8) # (\d)
+
+   # survey provID
+   # Survey designations of the form 2040 P-L, 3138 T-1, 1010 T-2 and 4101 T-3 are packed differently. Columns 1-3 contain the code indicating the survey and columns 4-7 contain the number within the survey.
+   #    Examples:
+   #    2040 P-L  = PLS2040
+   #    3138 T-1  = T1S3138
+   #    1010 T-2  = T2S1010
+   #    4101 T-3  = T3S4101
+   # (PL|T1|T2|T3)S(\d{4})
+   provID_survey = m.group(10)
+   provID_survey_number = m.group(11)
+
+   # trkSub
+   trkSub = m.group(12)
+
+   # extended provID
+   # When more than 15,500 objects are designated within a half-month, designations will be indicated as follows:
+   # The first character must be an underscore, simultaneously indicating (a) the use of the extended packed provisional format, and (b) that the first 2 digits of the year of discovery are 20.
+      # N.B. This implies that the extended packed provisional designation format will not be applied to objects discovered prior to 2010 (see bullet point below for the encoding of the last two digits of the year).
+   # The second character must be a capital letter (indicating the last 2 digits of the year of discovery, where 'P' = 25, 'Q' = 26, etc).
+      # N.B. This encoding scheme is the same as that used for the first two digits of the year in the Original Packed Provisional Designations format. This implies that this extended packed provisional designation format is not expected to be employed beyond 2035 (as 'Z' = 35).
+   # The third character is the capital letter for the half month.
+   # Four alphanumeric characters [0-9A-Za-z] will be used as a base62 representation of the order of designation after 15,500.
+      # N.B. This implies subtracting 15,501 from the sequence-number before converting to base-62 representation used
+   # The base-62 representation uses the digits 0-9 to represent numbers from 0-9, then upper-case letters A-Z to represent numbers between 10 and 35 inclusive, then lower case letters a-z to represent numbers between 36 and 61 inclusive.
+   # (_)([P-Z])([A-HJ-Y])([0-9A-Za-z]{4})
+   provID_extended = m.group(13)
+   provID_extended_year = m.group(14)
+   provID_extended_half_month = m.group(15)
+   provID_extended_order = m.group(16)
    if m: 
-      if m.group(1) or m.group(3):  # check for permID presence
-         if m.group(1):
-           n = int(m.group(2)) + 10000*unpackLetters[m.group(1)]
-         elif m.group(3):
-           n = 620000 + (((unpackLetters[m.group(3)[1]]*62 +
-                           unpackLetters[m.group(3)[2]])*62 +
-                           unpackLetters[m.group(3)[3]])*62 +
-                           unpackLetters[m.group(3)[4]])
+      if permID_leading or permID_base62:  # check for permID presence
+         if permID_leading:
+            n = int(permID_digits) + 10000*unpackLetters[permID_leading]
+         elif permID_base62:
+            # unpack base62 value 
+            n = 620000 + (((unpackLetters[permID_base62[1]]*62 +
+                           unpackLetters[permID_base62[2]])*62 +
+                           unpackLetters[permID_base62[3]])*62 +
+                           unpackLetters[permID_base62[4]])
          if (n == 0):
             raise RuntimeError("Can't unpack because minor planet number for " 
                                 + packedID + " is zero")
          permID = str(n)
       
-      if m.group(4): # check for normal provID presence
-         y = unpackLetters[m.group(4)] * 100 + int(m.group(5))
-         y = "{0:0d}".format(y)
-         n = unpackLetters[m.group(7)] * 10 + int(m.group(8))
-         if n==0:
+      
+      if provID_leading: # check for normal provID presence
+         year = unpackLetters[provID_leading] * 100 + int(provID_year)
+         year = "{0:0d}".format(year)
+         n = unpackLetters[provID_cycle_count_letter] * 10 + int(provID_cycle_count_number)
+         if n == 0:
             ns = ''
          else:
             ns = str(n)
-         if m.group(9):  # normal asteroid provid
-             provID =  y + ' ' + m.group(6) + m.group(9) + ns
+         if provID_half_month_order:  # normal asteroid provid
+            # e.g. J98SA8Q = 1998 SQ108
+            provID =  year + ' ' + provID_half_month_letter + provID_half_month_order + ns
          else:           # comet ID -- use A/
-             provID =  'A/' + y + ' ' + m.group(6) + ns
+            provID =  'A/' + year + ' ' + provID_half_month_letter + ns
+      elif provID_extended: 
+         year = 20 * 100 + unpackLetters[provID_extended_year]
+         year = "{0:0d}".format(year)
+         # unpack base62 value 
+         n = 15500 + (((unpackLetters[provID_extended_order[0]]*62 +
+                        unpackLetters[provID_extended_order[1]])*62 +
+                        unpackLetters[provID_extended_order[2]])*62 +
+                        unpackLetters[provID_extended_order[3]])
 
-      if m.group(10): # check for survey provID presence
-         provID =  m.group(11) + ' ' + m.group(10)[0] + '-' + m.group(10)[1]
+         order = (n % 25)
+         cycle = str(int((n - order) / 25))
+         order_letter = ("ABCDEFGHJKLMNOPQRSTUVWXYZ")[order]
 
-      if not permID and m.group(12): # check for trkSub -- can't be provID may not have permID
-         trkSub = m.group(12).strip()
+         # e.g. 2026 CZ6190 == _QC0aEM
+         provID = year + ' ' + provID_extended_half_month + order_letter + cycle
+
+      if provID_survey: # check for survey provID presence
+         # e.g. 2040 P-L  = PLS2040
+         provID =  provID_survey_number + ' ' + provID_survey[0] + '-' + provID_survey[1]
+
+      if not permID and trkSub: # check for trkSub -- can't be provID may not have permID
+         trkSub = trkSub.strip()
 
    #
    # Comet groups:
@@ -800,16 +873,20 @@ def packTupleID(triplet):
            n = 0  
          else:
            n = int(n)
-         if n>619: # can't encode if it's too big
-            raise RuntimeError("Can't pack because number for " 
-                                + provID + " is too big")
-         n1 = int(n/10)
-         nn = packLetters[n1]
-         n2 = "{0:0d}".format(n - 10*n1  + 10)[1:]
          
-         packedProvID =  ' ' + packLetters[y] + m.group(2) + \
-                m.group(3) + nn + n2 + m.group(4)
-         provIDType = 'A'
+         if n <= 619: # standard
+            n1 = int(n/10)
+            nn = packLetters[n1]
+            n2 = "{0:0d}".format(n - 10*n1  + 10)[1:]
+            
+            packedProvID =  ' ' + packLetters[y] + m.group(2) + \
+                  m.group(3) + nn + n2 + m.group(4)
+            provIDType = 'A'
+         else: # extended
+            n = 25 * int(m.group(5)) + ("ABCDEFGHJKLMNOPQRSTUVWXYZ").find(m.group(4))
+            # print(m.group(2), m.group(3), m.group(4), m.group(5))
+            packedProvID = ' _' + packLetters[int(m.group(2))] + m.group(3) + radix62_4(n - 15500)[1:]
+            provIDType = 'A'
    
       #
       # minor planets from survey
