@@ -528,6 +528,15 @@ decimal types must be in a range
          upper- and lower-case letters, ASCII numbers and underscores</doc>
 </simpletype>
 
+<simpletype name="MagType">
+   <restriction base="DecimalTypeW8">
+      <restrict name="xsd:minInclusive" value="-5.0"/>
+      <restrict name="xsd:maxInclusive" value="35.0"/>
+   </restriction>
+   <doc> Decimal in range [-5.0, 35.0] with with no more than 7 characters
+   plus optional sign.</doc>
+</simpletype>
+
 <simpletype name="BandType">
    <restriction base="AlphaNumericType">
       <restrict name="xsd:maxLength" value="3"/>
@@ -1533,7 +1542,7 @@ decimal types must be in a range
    <element name="artSat"     type="StringTypeW25"      doc="Name of an artificial satellite"/>
    <element name="trkSub"     type="TrkSubType"         doc="Observer-assigned tracklet identifier, unique within submission batch."/>
    <element name="obsID"      type="ObsIDType"          doc="Globally Unique Observation ID assigned by MPC."/>
-   <element name="obsSubID"   type="ObsIDType"          doc="Observation identifier, optionally included with the submission, that is unique to a given observing program. This element is intended to support extended analyses associated with major observing programs."/>
+   <element name="obsSubID"   type="StringTypeW25"      doc="Observation identifier, optionally included with the submission, that is unique to a given observing program. This element is intended to support extended analyses associated with major observing programs."/>
    <element name="trkID"      type="TrkIDType"          doc="Globally Unique alphnumeric tracklet ID assigned by MPC"/>
    <element name="trkMPC"     type="TrkIDType"          doc="MPC-internal tracklet identifier, used in cases where the value of the trkSub element should be considered deprecated."/>
    <element name="mode"       type="ModeType"           doc="Mode of optical and offset observations."/>
@@ -1573,7 +1582,7 @@ decimal types must be in a range
    <element name="doppler"    type="DecimalTypeW14"     doc="observed radar doppler value in \si{\hertz}"/>
    <element name="rmsDoppler" type="PosDecimalTypeW6"   doc="Measurement $1\sigma$ uncertainty in \si{\hertz} for radar doppler"/>
    <element name="astCat"     type="CatType"            doc="Star catalog used for the astrometric reduction or for the occulted star in the case of occultation observations.)"/>
-   <element name="mag"        type="DecimalTypeW8"      doc="Apparent Magnitude in specified band"/>
+   <element name="mag"        type="MagType"            doc="Apparent Magnitude in specified band"/>
    <element name="rmsMag"     type="PosDecimalTypeW6"   doc="Apparent magnitude $1\sigma$ uncertainty in magnitudes."/>
    <element name="band"       type="BandType"           doc="Filter designation for photometry."/>
    <element name="photCat"    type="CatType"            doc="Star catalog used for photometry measurements."/>
