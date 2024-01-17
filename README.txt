@@ -134,7 +134,11 @@
          You'll have to install the python lxml module for 
          your python separately; the best way to do that is 
          to build from source using a compatible C compiler.  
-         See google for instructions, which change regularly.  
+         See google for instructions, which change regularly.
+
+         Alternatively, install Python package requirements
+         using pip: 
+         $ python -m pip install -r ./Python/requirements.txt 
 
       C: Ensure you have a correctly installed C/C++ compiler 
       and you know its path.  
