@@ -1,0 +1,32 @@
+How to update documentation for the public ADES-Master repo
+
+0) Make desired changes to the adesmaster.xml. (If no changes here then
+steps 2 & 3 can be neglected.)
+
+1) Update MS Word documentation, starting from ./doc directory:
+   a) Copy ADES_Description_<date>.docx to ../attic
+   b) Rename ADES_Description_<date>.docx to show current date
+   c) Edit and save ADES_Description_v<date>].docx, including updates to
+   date on cover page and change log in front matter
+   d) Save PDF version of ADES_Description_<date>.docx to ../ADES_Description.pdf
+   e) Close MS Word
+
+2) Update LaTeX automatic documentation. Run the following commands
+   (replacing <date> in form DDMmmYYYY):
+
+      mv ades_master_<old_date>.pdf ../attic
+      cd docsrc/
+      makedoc
+      cp ades.pdf ../ades_master_<new_date>.pdf
+      cp ades.pdf ../../ades_master.pdf
+      cleanup
+      cd ..
+
+3) Update XSD files. Run the following commands:
+
+      cd ../xsd
+      makexsdfiles
+      cd ..
+
+4) You should now be in the repo root. Final step is to commit and
+push branch.

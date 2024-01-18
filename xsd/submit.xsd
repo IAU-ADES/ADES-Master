@@ -5,6 +5,12 @@
       <xsd:pattern value="[A-Za-z0-9_]*"/>
     </xsd:restriction>
   </xsd:simpleType>
+  <xsd:simpleType name="MagType">
+    <xsd:restriction base="DecimalTypeW8">
+      <xsd:minInclusive value="-5.0"/>
+      <xsd:maxInclusive value="35.0"/>
+    </xsd:restriction>
+  </xsd:simpleType>
   <xsd:simpleType name="BandType">
     <xsd:restriction base="AlphaNumericType">
       <xsd:maxLength value="3"/>
@@ -654,7 +660,7 @@
   <xsd:element name="artSat" type="StringTypeW25"/>
   <xsd:element name="trkSub" type="TrkSubType"/>
   <xsd:element name="obsID" type="ObsIDType"/>
-  <xsd:element name="obsSubID" type="ObsIDType"/>
+  <xsd:element name="obsSubID" type="StringTypeW25"/>
   <xsd:element name="trkID" type="TrkIDType"/>
   <xsd:element name="trkMPC" type="TrkIDType"/>
   <xsd:element name="mode" type="ModeType"/>
@@ -694,7 +700,7 @@
   <xsd:element name="doppler" type="DecimalTypeW14"/>
   <xsd:element name="rmsDoppler" type="PosDecimalTypeW6"/>
   <xsd:element name="astCat" type="CatType"/>
-  <xsd:element name="mag" type="DecimalTypeW8"/>
+  <xsd:element name="mag" type="MagType"/>
   <xsd:element name="rmsMag" type="PosDecimalTypeW6"/>
   <xsd:element name="band" type="BandType"/>
   <xsd:element name="photCat" type="CatType"/>
