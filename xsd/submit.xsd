@@ -605,7 +605,7 @@
     <xsd:all>
       <xsd:element ref="observatory"/>
       <xsd:element ref="submitter"/>
-      <xsd:element ref="observers"/>
+      <xsd:element ref="observers" minOccurs="0"/>
       <xsd:element ref="measurers"/>
       <xsd:element ref="telescope"/>
       <xsd:element ref="software" minOccurs="0"/>
