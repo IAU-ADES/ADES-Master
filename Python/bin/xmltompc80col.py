@@ -238,6 +238,8 @@ def printOpticalLine(item):
          pos1 = adesutility.applyPaddingAndJustification(item['pos1'], 11, 'D', 4)[0]
          pos2 = adesutility.applyPaddingAndJustification(item['pos2'], 11, 'D', 4)[0]
          pos3 = "{0:>5s}".format(item['pos3']) + ' '
+         pos1 = pos1[0:11]
+         pos2 = pos2[0:11]
          sline =  packedID + disc + notes + 'v' + \
                   sexDate + '1 ' + pos1 +  pos2 +  pos3 + \
                   '         ' + astCat + packedref + item['stn']
@@ -245,6 +247,9 @@ def printOpticalLine(item):
          pos1 = packUtil.unPackSigned(item['pos1'], 11, 3)
          pos2 = packUtil.unPackSigned(item['pos2'], 11, 3)
          pos3 = packUtil.unPackSigned(item['pos3'], 11, 3)
+         pos1 = pos1[0:11]
+         pos2 = pos2[0:11]
+         pos3 = pos3[0:11]
          sline =  packedID + disc + notes + 's' + \
                   sexDate + '2 ' + pos1 +  ' ' + pos2 +  ' ' + pos3 + ' ' + \
                   '  '+ packedref + item['stn']
@@ -252,6 +257,9 @@ def printOpticalLine(item):
          pos1 = packUtil.unPackSigned(item['pos1'], 11, 7)
          pos2 = packUtil.unPackSigned(item['pos2'], 11, 7)
          pos3 = packUtil.unPackSigned(item['pos3'], 11, 7)
+         pos1 = pos1[0:11]
+         pos2 = pos2[0:11]
+         pos3 = pos3[0:11]
          sline =  packedID + disc + notes + 's' + \
                   sexDate + '1 ' + pos1 +  ' ' + pos2 +  ' ' + pos3 + ' ' + \
                   '  '+ packedref + item['stn']
