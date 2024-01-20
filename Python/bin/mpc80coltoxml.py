@@ -744,7 +744,7 @@ def convertitPreamble(fname):  # set up elementTree
    global firstObsBlock
    if fname is None:
        return
-   print ("set up elementTree")
+   #print ("set up elementTree")
    outXMLFile = fname
 
    (allowedElementDict, requiredElementDict, psvFormatDict)  = adesutility.getAdesTables()
@@ -764,7 +764,7 @@ def convertitPostamble(fname):
    global outXMLFile
    if outXMLFile is None:
        return
-   print ("write tree on ", outXMLFile)
+   #print ("write tree on ", outXMLFile)
    xmlencoding = 'UTF-8'
    # Tested encodings: 'UTF-16' 'UTF-16LE' 'UTF-16BE' 'UCS-4' 'UTF32' 'UTF-32BE' 'UTF-32LE'
    #                   'LATIN1' 'ISO-LATIN-1' 'ISO-8859-1' 'ASCII' 'cp500' 'cp037' 'UTF-7'
@@ -1087,15 +1087,15 @@ def mpc80coltoxml(inmpcfile, outxmlfile, nosplit=False):
    except:
       parseFile(func(inmpcfile), None)
 
-   print()
-   print()
+   #print()
+   #print()
    if nSplit:
       print (nSplit, "radar lines split out of", lineNumber, "lines")
       print ("split lines:")
       for i in splitLines:
          print (i, '/', i+1)
-   print ("Statistics:")
-   sexVals.printCounts()
+   #print ("Statistics:")
+   #sexVals.printCounts()
 
 #---------------------------------------------------------------------
 if __name__ == '__main__':
