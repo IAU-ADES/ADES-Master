@@ -36,15 +36,40 @@ provID_examples = {
     "T3S1438": "1438 T-3",
 }
 
-@pytest.mark.parametrize("packed,unpacked", provID_examples.items())
-def test_unpack_provID_examples(packed, unpacked):
-    _, provID, _ = packUtil.unpackPackedID(" "*5 + packed)
-    assert(provID == unpacked)
+permID_examples = {
+    "03202": "3202",
+    "50000": "50000",
+    "A0345": "100345",
+    "a0017": "360017",
+    "K3289": "203289",
+    "~0000": "620000",
+    "~000z": "620061",
+    "~AZaz": "3140113",
+    "~zzzz": "15396335"
+}
 
 
-@pytest.mark.parametrize("packed,unpacked", provID_examples.items())
-def test_pack_provID_examples(packed, unpacked):
-    packedID = packUtil.packTupleID((None, unpacked, None))
-    provID = packedID[5:]
-    assert(provID == packed)
+@pytest.mark.parametrize("packed_provID,unpacked_provID", provID_examples.items())
+def test_unpack_provID_examples(packed_provID, unpacked_provID):
+    _, provID, _ = packUtil.unpackPackedID(" "*5 + packed_provID)
+    assert(provID == unpacked_provID)
 
+
+@pytest.mark.parametrize("packed_provID,unpacked_provID", provID_examples.items())
+def test_pack_provID_examples(packed_provID, unpacked_provID):
+    packedID = packUtil.packTupleID((None, unpacked_provID, None))
+    packed_provID = packedID[5:]
+    assert(packed_provID == packed_provID)
+
+
+@pytest.mark.parametrize("packed_permID,unpacked_permID", permID_examples.items())
+def test_unpack_permID_examples(packed_permID, unpacked_permID):
+    permID, _, _ = packUtil.unpackPackedID(packed_permID + " "*7)
+    assert(permID == unpacked_permID)
+
+
+@pytest.mark.parametrize("packed_permID,unpacked_permID", permID_examples.items())
+def test_pack_permID_examples(packed_permID, unpacked_permID):
+    packedID = packUtil.packTupleID((unpacked_permID, None, None))
+    packed_permID = packedID[:5]
+    assert(packed_permID == packed_permID)
