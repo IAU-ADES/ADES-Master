@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """ Convert a JSON file to an XML file
     Does *NOT* check for validity of either the JSON or the XML files
 """
