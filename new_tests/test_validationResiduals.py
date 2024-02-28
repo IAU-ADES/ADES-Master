@@ -15,17 +15,22 @@ Questions related to residuals
 
 '''
 
-#Import global
-import os 
+# Import global
 import subprocess
-import sys
+import os,sys
 
-sys.path.append("../Python/bin")
+# Define useful paths (for import & subprocess)
+master_dir =  os.path.dirname(os.path.dirname(__file__))
+bin_dir = os.path.join(master_dir, "Python/bin")
+test_dir = os.path.join(master_dir, "new_tests")
+x2j_py = os.path.join(bin_dir, "xml2json.py")
+j2x_py = os.path.join(bin_dir, "json2xml.py")
+valsubmit_py = os.path.join(bin_dir, "valsubmit.py")
+valgeneral_py = os.path.join(bin_dir, "valgeneral.py")
+
+# Import local
+sys.path.append( bin_dir )
 import valgeneral
-import valall
-import validate
-import valsubmit
-import adesutility
 
 
 '''
@@ -37,20 +42,50 @@ General validation of observations with RESIDUALS
 def test_valgeneral_residual_A():
     """ Test a file that combines optical & residuals """
     # Input file to use for the test
-    xmlfile = "input/obsResidual.xml"
+    xmlfile = os.path.join(test_dir, "input/obsResidual.xml")
     # Run the validation script
-    result = subprocess.run(f"python3 ../Python/bin/valgeneral.py {xmlfile}",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    result = subprocess.run(f"python3 {valgeneral_py} {xmlfile}",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     # Check the result is as expected
-    print('***'*11, result)
     assert result.stdout.strip() == 'general is OK' ,f'expected `general is OK`, got {result.stdout}'
 
 def test_valgeneral_residual_B():
+    """ Test a file that combines optical & residuals  : As for ...A above, but using import"""
+    # Input file to use for the test
+    xmlfile = os.path.join(test_dir, "input/obsResidual.xml")
+    # Clean ...
+    if os.path.exists("valgeneral.file"):
+        os.remove("valgeneral.file")
+    # Run the validation
+    valgeneral.valgeneral(xmlfile)
+    # Check the result is as expected
+    with open("valgeneral.file",'r') as valfile:
+        assert valfile.readlines()[0].replace("\n","") == 'general is OK'
+    # Clean ...
+    if os.path.exists("valgeneral.file"):
+        os.remove("valgeneral.file")
+
+
+def test_valgeneral_residual_C():
     """ Test a file of stand-alone residuals """
     # Input file to use for the test
-    xmlfile = "input/standaloneResidual.xml"
+    xmlfile = os.path.join(test_dir, "input/standaloneResidual.xml")
     # Run the validation script
-    result = subprocess.run(f"python3 ../Python/bin/valgeneral.py {xmlfile}",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    result = subprocess.run(f"python3 {valgeneral_py} {xmlfile}",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     # Check the result is as expected
-    print('***'*11, result)
     assert result.stdout.strip() == 'general is OK' ,f'expected `general is OK`, got {result.stdout}'
 
+def test_valgeneral_residual_D():
+    """ Test a file of stand-alone residuals : As for ...C above, but using import """
+    # Input file to use for the test
+    xmlfile = os.path.join(test_dir, "input/standaloneResidual.xml")
+    # Clean ...
+    if os.path.exists("valgeneral.file"):
+        os.remove("valgeneral.file")
+    # Run the validation
+    valgeneral.valgeneral(xmlfile)
+    # Check the result is as expected
+    with open("valgeneral.file",'r') as valfile:
+        assert valfile.readlines()[0].replace("\n","") == 'general is OK'
+    # Clean ...
+    if os.path.exists("valgeneral.file"):
+        os.remove("valgeneral.file")
