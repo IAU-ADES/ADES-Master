@@ -10,14 +10,14 @@ import subprocess
 master_dir =  os.path.dirname(os.path.dirname(__file__))
 bin_dir = os.path.join(master_dir, "Python/bin")
 test_dir = os.path.join(master_dir, "new_tests")
-x2j_py = os.path.join(bin_dir, "xml2json.py")
-j2x_py = os.path.join(bin_dir, "json2xml.py")
+x2j_py = os.path.join(bin_dir, "xmltojson.py")
+j2x_py = os.path.join(bin_dir, "jsontoxml.py")
 valsubmit_py = os.path.join(bin_dir, "valsubmit.py")
 valgeneral_py = os.path.join(bin_dir, "valgeneral.py")
 
 # Import local
 sys.path.append( bin_dir )
-import xml2json
+import xmltojson
 
 #Test conversion from psv to xml
 def test_xml2json_A():
@@ -90,5 +90,5 @@ def test_xml2json_D():
     jsonfile = os.path.join(test_dir, "output/319.json")
     if os.path.exists(jsonfile):
         os.remove(jsonfile)
-    xml2json.xml2json(xmlfile, jsonfile)
+    xmltojson.xmltojson(xmlfile, jsonfile)
     assert(os.path.exists(jsonfile) and os.stat(jsonfile).st_size != 0)

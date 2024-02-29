@@ -9,7 +9,7 @@ import json
 import argparse
 from collections import OrderedDict  # Only necessary for python < 3.7
 
-def json2xml(jsonfile , xmlfile , jsonencoding="utf-8"):
+def jsontoxml(jsonfile , xmlfile , jsonencoding="utf-8"):
     """ """
     with open(jsonfile, 'r', encoding=jsonencoding) as jf, open(xmlfile, 'w') as xf:
         xf.write( xmltodict.unparse( json.load(jf, object_pairs_hook=OrderedDict) , pretty=True) )
@@ -24,4 +24,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # call function to read xml into a dict and then write to json
-    json2xml(args.jsonfile, args.xmlfile, jsonencoding=args.jsonencoding)
+    jsontoxml(args.jsonfile, args.xmlfile, jsonencoding=args.jsonencoding)
