@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ades version="2022">
+    <opticalResidual> <!-- name="opticalResidual" type="OpticalResType" -->
+        <provID>2022 KW</provID> <!-- Need to satisfy OpticalID group -->
+        <obsTime>2023-06-15T13:44:30.18Z</obsTime> <!-- Need obsTime -->
+        <!-- Starting OpticalResidual sub-block -->
+                        <orbProd>Someone</orbProd>
+                        <orbID>1</orbID>
+        <!-- Starting OpticalRes sub-sub-block -->
+                                  <resRA>1.2</resRA>
+                                  <resDec>1.2</resDec>
+                                  <selAst>A</selAst>
+                                  <sigRA>1.2</sigRA>
+                                  <sigDec>1.2</sigDec>
+                                  <sigCorr>0.5</sigCorr><!-- optional -->
+                                  <sigTime>0.5</sigTime><!-- optional -->
+                                  <biasRA>1.2</biasRA><!-- optional -->
+                                  <biasDec>1.2</biasDec><!-- optional -->
+                                  <biasTime>1.2</biasTime><!-- optional -->
+        <!-- Starting OpticalResMag sub-sub-block -->
+                                  <photProd>Someone else</photProd><!-- optional -->
+                                  <resMag>1.2</resMag>
+                                  <selPhot>A</selPhot>
+                                  <sigMag>1.2</sigMag>
+                                  <biasMag>1.2</biasMag>
+                                  <photMod>abc123</photMod>
+    </opticalResidual>
+</ades>
