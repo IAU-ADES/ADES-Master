@@ -3,6 +3,9 @@
 """ Convert an XML file to a JSON file
     Does *NOT* check for validity of either the JSON or the XML files
 """
+# __future__ imports for Python 3 compliance in Python 2
+from __future__ import absolute_import, division, print_function
+from __future__ import unicode_literals
 # Standard Imports
 import xmltodict
 import json
