@@ -554,13 +554,15 @@ decimal types must be in a range
 
 <simpletype name="CorrDecimalType">
    <restriction base="xsd:decimal">
-      <restrict name="xsd:minInclusive" value="-1.0"/>
-      <restrict name="xsd:maxInclusive" value="1.0"/>
+      <restrict name="xsd:minExclusive" value="-1.0"/>
+      <restrict name="xsd:maxExclusive" value="1.0"/>
       <restrict name="xsd:pattern" value="[+\-]?(0|1)(\.[0123456789]{0,11})?"/>
    </restriction>
-   <doc> Decimal in range [-1.0, 1.0] with no more that 11 digits
+   <doc> Decimal in range (-1.0, 1.0) with no more that 11 digits
    after the decimal point. Decimal point is optional, but if present
-   the integer portion must be present (i.e., '.1' and '-.1' are invalid.)</doc>
+   the integer portion must be present (i.e., '.1' and '-.1' are invalid).
+   Note that values of $\pm 1$ are disallowed as they imply zero incertainty
+   in one direction.</doc>
 </simpletype>
 
 <simpletype name="DecimalType">
@@ -952,9 +954,10 @@ decimal types must be in a range
       <restrict name="xsd:enumeration"  value="ICRF_AU"/>
       <restrict name="xsd:enumeration"  value="ICRF_KM"/>
    </restriction>
-   <doc> Coordinate system for station coordinates. This is used by the pos[123]  and poscov[123][123] 
+   <doc> Coordinate system for station coordinates. This is used by the pos[123], vel[123], and poscov[123][123] 
          elements to determine the meaning of coordinates. WGS84, ITRF and IAU are for ground-based stations,
-         ICRF\verb|_|AU and ICRF\verb|_|KM are for space-based stations.  </doc>
+         ICRF\verb|_|AU and ICRF\verb|_|KM are for space-based stations. Velocities, if present, are in km/s
+         for ICRF\verb|_|KM , and au/day for ICRF\verb|_|AU.</doc>
 </simpletype>
 
 <simpletype name="TimeHelp">
@@ -1195,6 +1198,9 @@ decimal types must be in a range
     <element ref="pos1"      />
     <element ref="pos2"      />
     <element ref="pos3"      />
+    <element ref="vel1"      use="optional"/>
+    <element ref="vel2"      use="optional"/>
+    <element ref="vel3"      use="optional"/>
     <element ref="posCov11"  use="optional"/>
     <element ref="posCov12"  use="optional"/>
     <element ref="posCov13"  use="optional"/>
@@ -1213,6 +1219,7 @@ decimal types must be in a range
      <element ref="mag"     />
      <element ref="rmsMag"  use="optional"/>
      <element ref="band"    />
+     <element ref="fltr"    use="optional"/>
      <element ref="photCat" use="optional"/>
      <element ref="photAp"  use="optional"/>
      <element ref="nucMag"  use="NoSubmit"/>
@@ -1539,7 +1546,7 @@ decimal types must be in a range
    <doc>These elements are for the observation types in the required order</doc>
    <element name="permID"     type="PermIDType"         doc="IAU permanent designation, i.e., IAU number"/>
    <element name="provID"     type="ProvIDType"         doc="MPC provisional designation (unpacked form) for unnumbered object"/>
-   <element name="artSat"     type="StringTypeW25"      doc="Name of an artificial satellite"/>
+   <element name="artSat"     type="StringTypeW25"      doc="Name of an artificial satellite using international-style designation, e.g., 1998-067A. The general form is YYYY-NNNAAA."/>
    <element name="trkSub"     type="TrkSubType"         doc="Observer-assigned tracklet identifier, unique within submission batch."/>
    <element name="obsID"      type="ObsIDType"          doc="Globally Unique Observation ID assigned by MPC."/>
    <element name="obsSubID"   type="StringTypeW25"      doc="Observation identifier, optionally included with the submission, that is unique to a given observing program. This element is intended to support extended analyses associated with major observing programs."/>
@@ -1554,6 +1561,9 @@ decimal types must be in a range
    <element name="pos1"       type="DecimalTypeW14"     doc="Position of observer per sys, 1st value" />
    <element name="pos2"       type="DecimalTypeW14"     doc="Position of observer per sys, 2nd value"/>
    <element name="pos3"       type="DecimalTypeW14"     doc="Position of observer per sys, 3rd value"/>
+   <element name="vel1"       type="DecimalTypeW14"     doc="Velocity of observer per sys, 1st value" />
+   <element name="vel2"       type="DecimalTypeW14"     doc="Velocity of observer per sys, 2nd value"/>
+   <element name="vel3"       type="DecimalTypeW14"     doc="Velocity of observer per sys, 3rd value"/>
    <element name="posCov11"   type="DoubleTypeW21"      doc="11 covariance per sys"/>
    <element name="posCov12"   type="DoubleTypeW21"      doc="12 covariance per sys"/>
    <element name="posCov13"   type="DoubleTypeW21"      doc="13 covariance per sys"/>
@@ -1584,7 +1594,8 @@ decimal types must be in a range
    <element name="astCat"     type="CatType"            doc="Star catalog used for the astrometric reduction or for the occulted star in the case of occultation observations.)"/>
    <element name="mag"        type="MagType"            doc="Apparent Magnitude in specified band"/>
    <element name="rmsMag"     type="PosDecimalTypeW6"   doc="Apparent magnitude $1\sigma$ uncertainty in magnitudes."/>
-   <element name="band"       type="BandType"           doc="Filter designation for photometry."/>
+   <element name="band"       type="BandType"           doc="Passband designation for photometry. This is normally the passband of the reference star catalog."/>
+   <element name="fltr"       type="BandType"           doc="Filter used for observation. This is primarily used to distinguish simultaneous multi-filter astrometry."/>
    <element name="photCat"    type="CatType"            doc="Star catalog used for photometry measurements."/>
    <element name="photAp"     type="PosDecimalTypeW6"   doc="Photometric aperture radius in arcseconds."/>
    <element name="nucMag"     type="LogicalType"        doc="Nuclear magnitude flag for comets.  0 for total magnitude (i.e., for most archival comet observations and all asteroid observations), 1 for nuclear magnitude. Primarily used for archival data as photAp should be used to communicate this information in the new standard"/>

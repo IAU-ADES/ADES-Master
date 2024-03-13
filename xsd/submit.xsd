@@ -24,8 +24,8 @@
   </xsd:simpleType>
   <xsd:simpleType name="CorrDecimalType">
     <xsd:restriction base="xsd:decimal">
-      <xsd:minInclusive value="-1.0"/>
-      <xsd:maxInclusive value="1.0"/>
+      <xsd:minExclusive value="-1.0"/>
+      <xsd:maxExclusive value="1.0"/>
       <xsd:pattern value="[+\-]?(0|1)(\.[0123456789]{0,11})?"/>
     </xsd:restriction>
   </xsd:simpleType>
@@ -434,6 +434,9 @@
       <xsd:element ref="pos1"/>
       <xsd:element ref="pos2"/>
       <xsd:element ref="pos3"/>
+      <xsd:element ref="vel1" minOccurs="0"/>
+      <xsd:element ref="vel2" minOccurs="0"/>
+      <xsd:element ref="vel3" minOccurs="0"/>
       <xsd:element ref="posCov11" minOccurs="0"/>
       <xsd:element ref="posCov12" minOccurs="0"/>
       <xsd:element ref="posCov13" minOccurs="0"/>
@@ -447,6 +450,7 @@
       <xsd:element ref="mag"/>
       <xsd:element ref="rmsMag" minOccurs="0"/>
       <xsd:element ref="band"/>
+      <xsd:element ref="fltr" minOccurs="0"/>
       <xsd:element ref="photCat" minOccurs="0"/>
       <xsd:element ref="photAp" minOccurs="0"/>
     </xsd:sequence>
@@ -672,6 +676,9 @@
   <xsd:element name="pos1" type="DecimalTypeW14"/>
   <xsd:element name="pos2" type="DecimalTypeW14"/>
   <xsd:element name="pos3" type="DecimalTypeW14"/>
+  <xsd:element name="vel1" type="DecimalTypeW14"/>
+  <xsd:element name="vel2" type="DecimalTypeW14"/>
+  <xsd:element name="vel3" type="DecimalTypeW14"/>
   <xsd:element name="posCov11" type="DoubleTypeW21"/>
   <xsd:element name="posCov12" type="DoubleTypeW21"/>
   <xsd:element name="posCov13" type="DoubleTypeW21"/>
@@ -703,6 +710,7 @@
   <xsd:element name="mag" type="MagType"/>
   <xsd:element name="rmsMag" type="PosDecimalTypeW6"/>
   <xsd:element name="band" type="BandType"/>
+  <xsd:element name="fltr" type="BandType"/>
   <xsd:element name="photCat" type="CatType"/>
   <xsd:element name="photAp" type="PosDecimalTypeW6"/>
   <xsd:element name="nucMag" type="LogicalType"/>
