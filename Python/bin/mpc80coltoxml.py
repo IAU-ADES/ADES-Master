@@ -738,17 +738,17 @@ def printit(item, lineNumber):
 # convert to XML -- note preamble and postamble since we aren't using yield
 #
 outXMLFile = None
-def convertitPreamble(file, output_encoding='utf-8'):  # set up elementTree
+def convertitPreamble(fname, output_encoding='utf-8'):  # set up elementTree
    global outXMLFile
    global stack
    global allowedElementDict
    global firstElement
    global inObsBlock
    global firstObsBlock
-   if file is None:
+   if fname is None:
        return
    #print ("set up elementTree")
-   outXMLFile = file
+   outXMLFile = fname
 
    (allowedElementDict, requiredElementDict, psvFormatDict)  = adesutility.getAdesTables()
    MPC80OpticalElements = ['permID', 'provID', 'trkSub', 'mode', 'stn',
@@ -763,7 +763,7 @@ def convertitPreamble(file, output_encoding='utf-8'):  # set up elementTree
 
 
 
-def convertitPostamble(file, output_encoding='utf-8'):
+def convertitPostamble(fname, output_encoding='utf-8'):
    global outXMLFile
    if outXMLFile is None:
        return
@@ -772,7 +772,7 @@ def convertitPostamble(file, output_encoding='utf-8'):
    #                   'LATIN1' 'ISO-LATIN-1' 'ISO-8859-1' 'ASCII' 'cp500' 'cp037' 'UTF-7'
    #                   'windows-1252' 'UTF-8'
    treeTop = stack.takeTreeAndClear()
-   treeTop.write(outXMLFile, pretty_print=True, xml_declaration=True, encoding=output_encoding)
+   treeTop.write(fname, pretty_print=True, xml_declaration=True, encoding=output_encoding)
 
 
 def convertit(item, lineNumber):
@@ -980,15 +980,14 @@ def convertit(item, lineNumber):
 # generator to just read lines one by one
 #
 
-def doNotSplitRadar(file, input_encoding='utf-8'):
+def doNotSplitRadar(fname, input_encoding='utf-8'):
    global nSplit
    global splitLines
    global lineNumber
    nSplit = 0
    splitLines = []
    lineNumber = 0
-   # with open(fname) as f:
-   with open(file, "r", encoding=input_encoding) as f:
+   with open(fname, "r", encoding=input_encoding) as f:
       for l in f:
          lineNumber += 1
          yield l[0:81]
