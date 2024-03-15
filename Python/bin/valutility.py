@@ -9,6 +9,8 @@ import argparse
 import re
 
 import adesutility
+import convertutility
+import io
 
 
 def validate_schema(schema_name, schema, candidate, out):

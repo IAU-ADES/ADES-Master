@@ -14,6 +14,8 @@ import io
 
 from collections import OrderedDict
 
+import convertutility
+
 #
 # write encoded output for psv.  Default encoding
 # for psv is utf-8
@@ -311,21 +313,14 @@ allowedObsDataSet = setFromElementDictList('obsData')
 allowedObsBlockSet = setFromElementDictList('obsBlock')
 allowedAdesSet = setFromElementDictList('ades')
 
-
 def xmltopsv(xmlfile, psvfile, psvencoding="UTF-8"):
    global encodedout
    inputTree = adesutility.readXML(xmlfile)
-   encodedout = io.open(psvfile, 'w', encoding=psvencoding)
-   processAdesElement(inputTree.getroot())
-   encodedout.close()
+   with open(psvfile, 'w', encoding=psvencoding) as encodedout:
+      processAdesElement(inputTree.getroot())
    
-
 if __name__ == "__main__":
-   parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-   parser.add_argument("xmlfile", type=str, help="XML file to convert to PSV")
-   parser.add_argument("psvfile", type=str, help="Path to write PSV data to")
-   parser.add_argument("--psvencoding", default="UTF-8", type=str, help="Text encoding for PSV output")
-
+   parser = convertutility.conversion_parser(description="Convert ADES XML to PSV")
    args = parser.parse_args()
-
-   xmltopsv(args.xmlfile, args.psvfile, psvencoding=args.psvencoding)
+   call = lambda i, o : xmltopsv(i, o, psvencoding=args.output_encoding)
+   convertutility.call_with_files(call, args)

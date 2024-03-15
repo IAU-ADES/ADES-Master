@@ -11,20 +11,21 @@ import xmltodict
 import json
 import argparse
 from collections import OrderedDict  # Only necessary for python < 3.7
+import convertutility
+import sys
 
-def jsontoxml(jsonfile , xmlfile , jsonencoding="utf-8"):
+def jsontoxml(jsonfile , xmlfile , jsonencoding="utf-8", xmlencoding="utf-8"):
     """ """
-    with open(jsonfile, 'r', encoding=jsonencoding) as jf, open(xmlfile, 'w') as xf:
-        xf.write( xmltodict.unparse( json.load(jf, object_pairs_hook=OrderedDict) , pretty=True) )
+    with open(jsonfile, 'r', encoding=jsonencoding) as jf, open(xmlfile, 'w', encoding=xmlencoding) as xf:
+        xf.write( xmltodict.unparse( json.load(jf, object_pairs_hook=OrderedDict) , pretty=True, encoding=xmlencoding) )
 
 if __name__ == '__main__':
-
     # read command line arguments
-    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("jsonfile", type=str, help="JSON file to convert to XML")
-    parser.add_argument("xmlfile", type=str, help="Path to write XML data to")
-    parser.add_argument("--jsonencoding", default="utf-8", type=str, help="Text encoding for JSON input")
+    parser = convertutility.conversion_parser(
+      description='Convert ADES JSON to XML', 
+    )
     args = parser.parse_args()
 
     # call function to read xml into a dict and then write to json
-    jsontoxml(args.jsonfile, args.xmlfile, jsonencoding=args.jsonencoding)
+    call = lambda i, o : jsontoxml(i, o, jsonencoding=args.input_encoding, xmlencoding=args.output_encoding)
+    convertutility.call_with_files(call, args)
