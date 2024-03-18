@@ -60,11 +60,14 @@ def valgeneral(xmlfile):
   
 # ------------------------------------------------------------
 if __name__ == '__main__':
+  # construct argument parser for a validation tool (input only)
   parser = convertutility.input_parser(
     description='Validate XML against general schema', 
     input_help="XML file to check against schema"
   )
   args = parser.parse_args()
+  # create callable
   call = lambda i, o : valgeneral(i)
+  # call function with filename arguments
   convertutility.call_with_files(call, args)
 

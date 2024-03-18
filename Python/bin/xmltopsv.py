@@ -320,7 +320,10 @@ def xmltopsv(xmlfile, psvfile, psvencoding="UTF-8"):
       processAdesElement(inputTree.getroot())
    
 if __name__ == "__main__":
+   # construct argument parser for a conversion tool
    parser = convertutility.conversion_parser(description="Convert ADES XML to PSV")
    args = parser.parse_args()
+   # create callable
    call = lambda i, o : xmltopsv(i, o, psvencoding=args.output_encoding)
+   # call function with filename arguments
    convertutility.call_with_files(call, args)

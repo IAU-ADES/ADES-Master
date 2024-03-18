@@ -23,10 +23,12 @@ def xmltojson(xmlfile, jsonfile, xmlencoding="utf-8", jsonencoding="utf-8"):
 
 if __name__ == '__main__':
     # read command line arguments
+    # construct argument parser for a conversion tool
     parser = convertutility.conversion_parser(
         description='Convert ADES XML to JSON', 
     )
     args = parser.parse_args()
     # call function to read xml into a dict and then write to json
     call = lambda i, o : xmltojson(i, o, xmlencoding=args.input_encoding, jsonencoding=args.output_encoding)
+    # call function with filename arguments
     convertutility.call_with_files(call, args)

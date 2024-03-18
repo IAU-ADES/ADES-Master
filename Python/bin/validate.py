@@ -54,6 +54,7 @@ def validate(schemafile, xmlfile):
     
 # -------------------------------------------------------------------
 if __name__ == '__main__':
+    # construct argument parser for a validation tool (input only)
     parser = argparse.ArgumentParser(
         description='Validate XML', 
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -62,6 +63,7 @@ if __name__ == '__main__':
     parser = convertutility.input_parser(parser, input_help="XML file to check against schema")
 
     args = parser.parse_args()
-
+    # create callable
     call = lambda i, o : validate(args.schemafile, i)
+    # call function with filename arguments
     convertutility.call_with_files(call, args)

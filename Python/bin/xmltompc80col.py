@@ -459,6 +459,7 @@ def xmltompc80col(xmlfile, mpcencdoing='utf-8'):
 # --- Start executable code -----------------------------
 if __name__ == '__main__':
    # Input arguments
+   # construct argument parser for a conversion tool
    parser = convertutility.conversion_parser(
       description='Convert ADES XML to MPC obs80 format.', 
       input_help="XML file name", 
@@ -478,10 +479,12 @@ if __name__ == '__main__':
       defaultPrecTime = '10'
       defaultPrecRA = '0.01'
       defaultPrecDec = '0.1'
-   
+
+   # create callable
    def call(i, o):
       global encodedout
       with open(o, "w", encoding=args.output_encoding) as encodedout:
          xmltompc80col(i)
    
+   # call function with filename arguments
    convertutility.call_with_files(call, args)

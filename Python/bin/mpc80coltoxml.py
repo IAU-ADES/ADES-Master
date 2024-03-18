@@ -20,7 +20,6 @@ import adesutility
 import packUtil
 import sexVals
 import convertutility
-import tempfile
 
 #codeDict = {  # converts code to mode for optical type
 #
@@ -1104,6 +1103,7 @@ def mpc80coltoxml(inmpcfile, outxmlfile, nosplit=False, input_encoding='utf-8', 
 
 #---------------------------------------------------------------------
 if __name__ == '__main__':
+   # construct argument parser for a conversion tool
    parser = convertutility.conversion_parser(
       description='Convert MPC obs80 to ADES XML.', 
    )
@@ -1113,13 +1113,17 @@ if __name__ == '__main__':
    args = parser.parse_args()
 
    try:
+      # check if only doing validation
       if args.val_only:
          if args.input is not sys.stdin and args.output is not sys.stdout:
             raise Exception("Error: cannot request output file for --val-only")
          else:
+            # send output to /dev/null on Unix or null on Window
             args.output = os.devnull
-
+      
+      # create callable
       call = lambda i, o : mpc80coltoxml(i, o, nosplit=args.nosplit, input_encoding=args.input_encoding, output_encoding=args.output_encoding)
+      # call function with filename arguments
       convertutility.call_with_files(call, args)
    except Exception as e:
       print("Error", e)

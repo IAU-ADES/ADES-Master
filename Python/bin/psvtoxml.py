@@ -539,9 +539,12 @@ def psvtoxml(psvfile, xmlfile, psvencoding="UTF-8", xmlencoding="UTF-8"):
 
 #----------------------------------------------------
 if __name__ == '__main__':
+  # construct argument parser for a conversion tool
    parser = convertutility.conversion_parser(
       description='Convert ADES PSV to XML.', 
    )
    args = parser.parse_args()
+   # create callable
    call = lambda i, o : psvtoxml(i, o, psvencoding=args.input_encoding, xmlencoding=args.output_encoding)
+   # call function with filename arguments
    convertutility.call_with_files(call, args)
