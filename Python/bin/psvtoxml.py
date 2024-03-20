@@ -24,6 +24,7 @@ import argparse
 import sys
 
 import adesutility
+import convertutility
 
 
 #
@@ -519,7 +520,7 @@ def parsePSV(parsedPSVLine):
 # Main routine
 def psvtoxml(psvfile, xmlfile, psvencoding="UTF-8", xmlencoding="UTF-8"):
 
-   with io.open(psvfile, encoding=psvencoding) as f:
+   with open(psvfile, encoding=psvencoding) as f:
       lineNumber = 0
       for line in f:
          try:
@@ -538,12 +539,12 @@ def psvtoxml(psvfile, xmlfile, psvencoding="UTF-8", xmlencoding="UTF-8"):
 
 #----------------------------------------------------
 if __name__ == '__main__':
-   parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-   parser.add_argument("psvfile", type=str, help="PSV file to convert to XML")
-   parser.add_argument("xmlfile", type=str, help="Path to write XML data to")
-   parser.add_argument("--psvencoding", default="UTF-8", type=str, help="Text encoding for PSV input")
-   parser.add_argument("--xmlencoding", default="UTF-8", type=str, help="Text encoding for XML output")
-
+  # construct argument parser for a conversion tool
+   parser = convertutility.conversion_parser(
+      description='Convert ADES PSV to XML.', 
+   )
    args = parser.parse_args()
-
-   psvtoxml(args.psvfile, args.xmlfile, args.psvencoding, args.xmlencoding)
+   # create callable
+   call = lambda i, o : psvtoxml(i, o, psvencoding=args.input_encoding, xmlencoding=args.output_encoding)
+   # call function with filename arguments
+   convertutility.call_with_files(call, args)

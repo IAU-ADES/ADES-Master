@@ -10,6 +10,7 @@ from __future__ import unicode_literals
 #
 #
 import sys
+import os
 import re
 import io
 import math
@@ -18,6 +19,7 @@ import argparse
 import adesutility
 import packUtil
 import sexVals
+import convertutility
 
 #codeDict = {  # converts code to mode for optical type
 #
@@ -598,14 +600,14 @@ def parseFile(f, callBack):
                print ("oldDataLLine", oldDataLine)
                print ("dataLine    ", dataLine)
                badCombo = True
-          
+         
             if (newCode in 'rsv' and newCode.upper() != oldCode):
                print ()
                print (newCode + '/' + newCode.upper() +  " mismatch at" ,lineNumber,"old was " + oldCode  + ":")
                print ("oldDataLLine", oldDataLine)
                print ("dataLine    ", dataLine)
                badCombo = True
-          
+         
    
             #
             # now yield valid lines and combinations
@@ -614,8 +616,8 @@ def parseFile(f, callBack):
             if not badCombo:
                if (oldCode in 'RSV'):
                   if ( (line['totalid'] != oldLine['totalid']) or \
-                       (line['date'] != oldLine['date']) or \
-                       (line['stn'] != oldLine['stn']) ):
+                     (line['date'] != oldLine['date']) or \
+                     (line['stn'] != oldLine['stn']) ):
                      print ("Contintuation line mismatch at",i)
                      print ("oldLine", oldLine)
                      print ("line", line)
@@ -673,8 +675,8 @@ def parseFile(f, callBack):
                oldCode = 'None' # can't be None and still work
    
             if nextThing:  # could yield it up but instead call down -- works in C++
-                if callBack:
-                   callBack(nextThing, lineNumber)
+               if callBack:
+                  callBack(nextThing, lineNumber)
 
          except RuntimeError as e:
             print ("Error in line ", lineNumber)
@@ -735,7 +737,7 @@ def printit(item, lineNumber):
 # convert to XML -- note preamble and postamble since we aren't using yield
 #
 outXMLFile = None
-def convertitPreamble(fname):  # set up elementTree
+def convertitPreamble(fname, output_encoding='utf-8'):  # set up elementTree
    global outXMLFile
    global stack
    global allowedElementDict
@@ -760,17 +762,16 @@ def convertitPreamble(fname):  # set up elementTree
 
 
 
-def convertitPostamble(fname):
+def convertitPostamble(fname, output_encoding='utf-8'):
    global outXMLFile
    if outXMLFile is None:
        return
    #print ("write tree on ", outXMLFile)
-   xmlencoding = 'UTF-8'
    # Tested encodings: 'UTF-16' 'UTF-16LE' 'UTF-16BE' 'UCS-4' 'UTF32' 'UTF-32BE' 'UTF-32LE'
    #                   'LATIN1' 'ISO-LATIN-1' 'ISO-8859-1' 'ASCII' 'cp500' 'cp037' 'UTF-7'
    #                   'windows-1252' 'UTF-8'
    treeTop = stack.takeTreeAndClear()
-   treeTop.write(fname, pretty_print=True, xml_declaration=True, encoding=xmlencoding)
+   treeTop.write(fname, pretty_print=True, xml_declaration=True, encoding=output_encoding)
 
 
 def convertit(item, lineNumber):
@@ -977,17 +978,18 @@ def convertit(item, lineNumber):
 #
 # generator to just read lines one by one
 #
-def doNotSplitRadar(fname):
+
+def doNotSplitRadar(fname, input_encoding='utf-8'):
    global nSplit
    global splitLines
    global lineNumber
    nSplit = 0
    splitLines = []
    lineNumber = 0
-   with open(fname) as f:
+   with open(fname, "r", encoding=input_encoding) as f:
       for l in f:
-          lineNumber += 1
-          yield l[0:81]
+         lineNumber += 1
+         yield l[0:81]
 
 #---------------------------------------------------------------------------
 #
@@ -1010,7 +1012,7 @@ def parseRadarLine(l):
       raise RuntimeError("Invalid line")
     
 
-def splitRadar(fname):
+def splitRadar(fname, input_encoding='utf-8'):
    """ splitRadar(fname) 
 
        opens fname and reads it as an 80-col MPC file
@@ -1033,7 +1035,8 @@ def splitRadar(fname):
    global lineNumber
    nSplit = 0
    splitLines = []
-   with open(fname) as f:
+
+   with open(fname, "r", encoding=input_encoding) as f:
       lineNumber = 1
       l1 = f.readline()[0:81]  # remove trailing newline and/or cr
       try:
@@ -1068,24 +1071,25 @@ def splitRadar(fname):
             lineNumber += 1
             l1 = f.readline()[0:81]
       except Exception as e:
-        raise RuntimeError(repr(e) + " in line " + str(lineNumber))
+         raise RuntimeError(repr(e) + " in line " + str(lineNumber))
 
    lineNumber -= 1 # line number at end should be last line
 
 #---------------------------------------------------------------------------
-def mpc80coltoxml(inmpcfile, outxmlfile, nosplit=False):
+def mpc80coltoxml(inmpcfile, outxmlfile, nosplit=False, input_encoding='utf-8', output_encoding='utf-8'):
    func = doNotSplitRadar if nosplit else splitRadar
    try:
 
       #
       # for xml output
       #
-      convertitPreamble(outxmlfile)
-      parseFile(func(inmpcfile), convertit)
-      convertitPostamble(outxmlfile)
+      convertitPreamble(outxmlfile, output_encoding=output_encoding)
+      parseFile(func(inmpcfile, input_encoding=input_encoding), convertit)
+      convertitPostamble(outxmlfile, output_encoding=output_encoding)
 
-   except:
-      parseFile(func(inmpcfile), None)
+   except Exception as e:
+      print(e)
+      parseFile(func(inmpcfile, input_encoding=input_encoding), None)
 
    #print()
    #print()
@@ -1099,15 +1103,28 @@ def mpc80coltoxml(inmpcfile, outxmlfile, nosplit=False):
 
 #---------------------------------------------------------------------
 if __name__ == '__main__':
-   parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-   parser.add_argument("inmpcfile", type=str, help="the input mpc file")
-   parser.add_argument("outxmlfile", nargs="?", default=None, type=str, help="the optional output xml file. without outxmlfile the input will still be checked")
+   # construct argument parser for a conversion tool
+   parser = convertutility.conversion_parser(
+      description='Convert MPC obs80 to ADES XML.', 
+   )
    parser.add_argument("--nosplit", action="store_true", help="will not split doppler/delay radar into two elements; elements with doppler and delay will not validate")
+   parser.add_argument("--val-only", action="store_true", help="check validity of input obs80, but do not output XML file")
 
    args = parser.parse_args()
 
    try:
-      mpc80coltoxml(args.inmpcfile, args.outxmlfile, nosplit=args.nosplit)
+      # check if only doing validation
+      if args.val_only:
+         if args.input is not sys.stdin and args.output is not sys.stdout:
+            raise Exception("Error: cannot request output file for --val-only")
+         else:
+            # send output to /dev/null on Unix or null on Window
+            args.output = os.devnull
+      
+      # create callable
+      call = lambda i, o : mpc80coltoxml(i, o, nosplit=args.nosplit, input_encoding=args.input_encoding, output_encoding=args.output_encoding)
+      # call function with filename arguments
+      convertutility.call_with_files(call, args)
    except Exception as e:
       print("Error", e)
       parser.print_help()

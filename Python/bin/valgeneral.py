@@ -20,6 +20,7 @@ import argparse
 
 import adesutility
 from valutility import validate_xslt, validate_xml_declaration
+import convertutility
 
 #
 # This script validates an xml file against six different
@@ -59,8 +60,14 @@ def valgeneral(xmlfile):
   
 # ------------------------------------------------------------
 if __name__ == '__main__':
-  parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-  parser.add_argument("xmlfile", type=str, help="XML file to check against schema")
-
+  # construct argument parser for a validation tool (input only)
+  parser = convertutility.input_parser(
+    description='Validate XML against general schema', 
+    input_help="XML file to check against schema"
+  )
   args = parser.parse_args()
-  valgeneral(args.xmlfile)
+  # create callable
+  call = lambda i, o : valgeneral(i)
+  # call function with filename arguments
+  convertutility.call_with_files(call, args)
+

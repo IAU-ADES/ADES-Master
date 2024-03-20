@@ -28,6 +28,7 @@ import argparse
 
 import adesutility
 from valutility import validate_schema, validate_xml_declaration
+import convertutility
 
 #
 # Read in the schema
@@ -53,10 +54,16 @@ def validate(schemafile, xmlfile):
     
 # -------------------------------------------------------------------
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    # construct argument parser for a validation tool (input only)
+    parser = argparse.ArgumentParser(
+        description='Validate XML', 
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
     parser.add_argument("schemafile", type=str, help="Schema definition file")
-    parser.add_argument("xmlfile", type=str, help="XML file to check against schema")
+    parser = convertutility.input_parser(parser, input_help="XML file to check against schema")
 
     args = parser.parse_args()
-
-    validate(args.schemafile, args.xmlfile)
+    # create callable
+    call = lambda i, o : validate(args.schemafile, i)
+    # call function with filename arguments
+    convertutility.call_with_files(call, args)

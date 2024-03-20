@@ -16,6 +16,8 @@ import argparse
 import adesutility
 import packUtil
 import sexVals
+import convertutility
+
 
 def setFromElementDictList(element,allowedElementDict):
    """ makes a set from the allowedElementDict list for elemnt """
@@ -437,11 +439,11 @@ def processObsContext(element):
   
 #----------------------------------------------------------------------
 #Main routine
-def xmltompc80col(xmlfile):
+def xmltompc80col(xmlfile, mpcencdoing='utf-8'):
+   global encodedout
    #
    # read in allowedElementDict, requiredElementDict  and psvFormatDict
    #
-
    (allowedElementDict, requiredElementDict, psvFormatDict) = \
       adesutility.getAdesTables()
 
@@ -457,9 +459,12 @@ def xmltompc80col(xmlfile):
 # --- Start executable code -----------------------------
 if __name__ == '__main__':
    # Input arguments
-   parser = argparse.ArgumentParser(description='Convert ADES XML to MPC obs80 format.')
-   parser.add_argument("xml", help = "XML file name")
-   parser.add_argument("obs80", help = "obs80 file name")
+   # construct argument parser for a conversion tool
+   parser = convertutility.conversion_parser(
+      description='Convert ADES XML to MPC obs80 format.', 
+      input_help="XML file name", 
+      output_help="obs80 file name",
+   )
    parser.add_argument("--lowPrec", action='store_true', \
                        help= "Export Time, RA, and DEC in lower precision.")
    parser.add_argument("--noHeader", action='store_true', \
@@ -474,8 +479,12 @@ if __name__ == '__main__':
       defaultPrecTime = '10'
       defaultPrecRA = '0.01'
       defaultPrecDec = '0.1'
-   
-   # Open output file
-   encodedout = io.open(args.obs80, 'w', encoding='utf-8')
 
-   xmltompc80col(args.xml)
+   # create callable
+   def call(i, o):
+      global encodedout
+      with open(o, "w", encoding=args.output_encoding) as encodedout:
+         xmltompc80col(i)
+   
+   # call function with filename arguments
+   convertutility.call_with_files(call, args)

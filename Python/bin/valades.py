@@ -38,11 +38,15 @@ def valades(adesmaster, xsltschema, xmlfile):
 
 # ---------------------------------------------------------------
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser = argparse.ArgumentParser(
+        description='Validate XML against ADES master and a chosen schema.', 
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
     parser.add_argument("adesmaster", type=str, help="ADES master xml")
     parser.add_argument("xsltschema", type=str, help="Schema definition file")
-    parser.add_argument("xmlfile", type=str, help="XML file to check against schema")
-
+    parser = convertutility.input_parser(parser, input_help="XML file to check against schema")
+    
     args = parser.parse_args()
-
-    valades(args.adesmaster, args.xsltschema, args.xmlfile)
+    
+    call = lambda i, o : valades(args.adesmaster, args.xsltschema, i)
+    convertutility.call_with_files(call, args)
