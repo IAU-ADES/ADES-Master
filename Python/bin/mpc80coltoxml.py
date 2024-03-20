@@ -862,10 +862,10 @@ def convertit(item, lineNumber):
      else:
         item['astCat'] = packUtil.catCodes[astCodeVal]
      if item['mag']:
-        if not item['band'].strip():
-          item['band'] = 'V'  # V is default if blank
+        if item['band'].strip() == '':
+          item['band'] = 'UNK'  # UNK is default if blank
      if item['band']:  # dump band if no mag
-        if not item['mag'].strip():
+        if item['mag'].strip() == '':
           item['band'] = None
      #
      # If notes is not alphabetic it is a 'prog' entry
