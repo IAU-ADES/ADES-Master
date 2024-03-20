@@ -48,8 +48,13 @@ reverseCodeDict = { codeDict[i] : i for i in codeDict }  # no duplicates
 
 validCodes = "A PeCBTMcEOHNnRrSsVvXx"+"0"  # 0 is special for header lines
 validNotes = ' AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345vzjeL16789'
-validProgramCodes = r' AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345016789=#$%"&\+-![]`!|(){}.?@,^;:_/~*<>eLvzjZ'"'"
-programCodesArray = r"0123456789!\"#$%&'()*+,-./[\]^_`{|}~:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+# Prior value: 
+# validProgramCodes = r' AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345016789=#$%"&\+-![]`!|(){}.?@,^;:_/~*<>eLvzjZ'"'"
+# New value as of 19 Mar 2024. Downloaded from https://www.minorplanetcenter.net/iau/lists/ProgramCodes.txt
+validProgramCodes = r" 0123456789!\"#$%&'()*+,-./[\]^_`{|}~:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz£"
+programCodesArray = r"0123456789!\"#$%&'()*+,-./[\]^_`{|}~:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz£"
+
+
 programCodeSites = \
 set([ "010",
       "012",

@@ -497,8 +497,15 @@
     <xsd:sequence>
       <xsd:element ref="orbProd"/>
       <xsd:element ref="orbID"/>
-      <xsd:group ref="OpticalRes" minOccurs="0"/>
-      <xsd:group ref="OpticalResMag" minOccurs="0"/>
+      <xsd:choice>
+        <xsd:sequence>
+          <xsd:group ref="OpticalRes"/>
+          <xsd:group ref="OpticalResMag" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:sequence>
+          <xsd:group ref="OpticalResMag"/>
+        </xsd:sequence>
+      </xsd:choice>
     </xsd:sequence>
   </xsd:group>
   <xsd:group name="RadarResiduals">

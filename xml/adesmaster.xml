@@ -1289,8 +1289,15 @@ decimal types must be in a range
    <sequence>
       <element ref="orbProd" />
       <element ref="orbID" />
-      <group ref="OpticalRes" use="optional"/>
-      <group ref="OpticalResMag" use="optional"/>
+      <choice>
+	<sequence>
+	  <group ref="OpticalRes"/>
+	  <group ref="OpticalResMag" use="optional"/>
+	</sequence>
+	<sequence>
+	  <group ref="OpticalResMag"/>
+	</sequence>
+      </choice>
    </sequence>
    <doc>
       The OpticalResiduals group is optional for adding residuals
