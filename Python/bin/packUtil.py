@@ -471,7 +471,7 @@ asteroidsatellitePermIDRegex = re.compile(r'^\((\d+|\d{4} [A-Z]{2}\d+)\) (\d+)$'
 # This is a mess because it's hard to exclude things in regex
 #
 trksubRegexHelp = ( r'([A-Za-z][A-Za-z0-9]{0,5}' +         # anything six characters
-                    r'|[A-HL-OQ-SU-Z][A-Za-z0-9]{0,6}' +   # anything seven not starting with I-K,P or T
+                    r'|([A-HL-OQ-SU-Z]|[a-z])[A-Za-z0-9]{0,6}' +   # anything seven not starting with I-K,P or T
                     r'|[I-K][A-Za-z0-9]{5}[a-z1-9]' +      # anything starting with I-K not ending in A-Z or 0
                     r'|[I-K][A-Za-z][A-Za-z0-9]{4}[0A-Z]' + # anything starting with I-K ending in [A-Z] with not digit as second character
                     r'|[I-K][0-9][A-Za-z][A-Za-z0-9]{3}[0A-Z]' + # anything starting with [I-K]<digit> ending in [A-Z] with not digit as third character
@@ -1055,6 +1055,7 @@ def packTupleID(triplet):
       #
       # check trksub regex
       #
+      
       m = trksubRegex.match(trkSub)
       if m:
          tmp = m.group(1)
