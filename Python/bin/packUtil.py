@@ -50,7 +50,7 @@ validCodes = "A PeCBTMcEOHNnRrSsVvXx"+"0"  # 0 is special for header lines
 validNotes = ' AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345vzjeL16789'
 # Triple quotes to handle the double quotation mark in the string and not munge the index of characters.
 # New value as of 19 Mar 2024. Downloaded from https://www.minorplanetcenter.net/iau/lists/ProgramCodes.txt
-programCodesArray = """0123456789!"#$%&'()*+,-./[\]^_`{|}~:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz£"""
+programCodesArray = R"""0123456789!"#$%&'()*+,-./[\]^_`{|}~:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz£"""
 validProgramCodes = ' ' + programCodesArray
 
 programCodeSites = \
