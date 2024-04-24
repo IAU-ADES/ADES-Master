@@ -231,33 +231,33 @@ def unpackRef(packedref):
 
 
 def packProgID(c): # for program code id -- must be alpha
-   # should be radix-52 with 0-1 first
+   # should be radix-62 with 0-1 first
    try:
       codeIndex = programCodesArray.index(c)
    except:
-      raise RuntimeError("Illegal program code " + c)
-   
-   if codeIndex > 51:
+      raise RuntimeError("Illegal program code '" + c + "'")
+
+   if codeIndex > 61:
       first = '1'
    else:
       first = '0' 
 
-   second = packLetters[codeIndex%52]
+   second = packLetters[codeIndex%62]
 
    return  first + second 
 
-def unpackProgID(s): # for program code id -- must be alpha
-   # should be radix-52 with 0-1 first
-   if len(s) != 2 or s[0] not in "01":
-      raise RuntimeError ("Illegal packed prog ID " + s + " in xml")
-  
+def unpackProgID(s): # for program code id -- must be alphanumeric
+   # should be radix-62 with 0-1 first
+
    try:
       codeIndex = unpackLetters[s[1]]
-      if s[0] == 1:
-        codeIndex += 52
-      packed = programCodesArray[codeIndex]
+      codeIndex += 62 * unpackLetters[s[0]]
+      if codeIndex <= 93:
+          packed = programCodesArray[codeIndex]
+      else:
+          packed = ' '
    except:
-      raise RuntimeError ("Illegal packed prog ID " + s + " in xml")
+      raise RuntimeError ("Illegal packed prog ID '" + s + "' in xml")
 
    return packed
 

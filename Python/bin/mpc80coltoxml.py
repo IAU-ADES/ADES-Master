@@ -871,6 +871,16 @@ def convertit(item, lineNumber):
      # If notes is not alphabetic it is a 'prog' entry
      # There are six exceptions for STEREO and SOHO not in this code
      #
+     # So early version treated col 14 as a note if stn was not in the
+     # list of stations using program codes, Latest version treats col
+     # 14 as note if it is an alphabetical character. Both approaches
+     # appear incorrect. What is needed is to treat col 14 as 'prog'
+     # if 'stn' has col 14 as a defined value in the program code list
+     # at https://www.minorplanetcenter.net/iau/lists/ProgramCodes.txt
+     # How to proceed, given that ProgramCodes.txt is a living document.
+     #
+     # And there are the SOHO/STEREO exceptions mentioned above...
+     #
      #if (item['stn'] in packUtil.programCodeSites):
      if (item['notes'] not in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz'):
          item['prog'] = packUtil.packProgID(item['notes'])  # convert to hex or something else
