@@ -167,6 +167,13 @@ set([ "010",
       "Z58",
       "Z84" ])
 
+# For STEREO and SOHO there is a letter in col 14 to
+# indicate which instrument is used. This is to be treated as a
+# program code by adding these obscodes to programCodeSites.
+# Commenting the next line would cause these to be treated as notes.
+# See https://minorplanetcenter.net/iau/info/ObsNote.html
+programCodeSites.add("249", "C49", "C50 ")
+
 catCodes = { ' ': 'UNK',
              'a': 'USNOA1',
              'b': 'USNOSA1',
