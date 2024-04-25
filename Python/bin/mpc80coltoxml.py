@@ -878,6 +878,11 @@ def convertit(item, lineNumber):
      # after a certain date it did. Before the switch col 14 will
      # always be a note and after the switch it will always be a
      # program code.
+     # * N.B. that there are special cases where the distinction
+     # betwenn note and program code is blurry. These are for STEREO
+     # and SOHO as discussed here:
+     # https://minorplanetcenter.net/iau/info/ObsNote.html The current
+     # implementation will leave these cases as notes.
      if (item['notes'] != ' ' and item['stn'] in packUtil.programCodeSites):
          # We have a non-blank col 14 for an obscode that uses program
          # codes. Therefore treat col 14 as 'prog' and clear 'notes'.

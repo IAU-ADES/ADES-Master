@@ -172,7 +172,8 @@ set([ "010",
 # program code by adding these obscodes to programCodeSites.
 # Commenting the next line would cause these to be treated as notes.
 # See https://minorplanetcenter.net/iau/info/ObsNote.html
-programCodeSites.add("249", "C49", "C50 ")
+#progSOHOSTEREO = set(["249", "C49", "C50"])
+#programCodeSites.update(progSOHOSTEREO)
 
 catCodes = { ' ': 'UNK',
              'a': 'USNOA1',
