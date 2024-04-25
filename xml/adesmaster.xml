@@ -750,12 +750,26 @@ decimal types must be in a range
    <doc> Positive integer in range (0, 1,000,000). Thus no more than 6 characters. </doc>
 </simpletype>
 
-<simpletype name="SPICEIDType">
+<simpletype name="CtrType">
+   <union memberTypes="SPICESpacecraftType SPICEBodyType"/>
+   <submitunion memberTypes="SPICESpacecraftType SPICEBodyType"/>
+   <doc>Integer having absolute value strictly less than $10^9$, neglecting values 0--9.</doc>
+</simpletype>
+
+<simpletype name="SPICESpacecraftType">
    <restriction base="xsd:integer">
-      <restrict name="xsd:maxExclusive" value="+1000000000"/>
+      <restrict name="xsd:maxExclusive" value="0"/>
       <restrict name="xsd:minExclusive" value="-1000000000"/>
    </restriction>
-   <doc> Integer having absolute value strictly less than 1,000,000,000.</doc>
+   <doc> Negative integer having absolute value strictly greater than $-10^9$.</doc>
+</simpletype>
+
+<simpletype name="SPICEBodyType">
+   <restriction base="xsd:integer">
+      <restrict name="xsd:maxExclusive" value="1000000000"/>
+      <restrict name="xsd:minExclusive" value="9"/>
+   </restriction>
+   <doc> Positive integer greater than 9 and less than $10^9$.</doc>
 </simpletype>
 
 <simpletype name="PosDecimalTypeW6">
@@ -1564,7 +1578,7 @@ decimal types must be in a range
    <element name="trx"        type="StationType"        doc="Station code of transmiting antenna."/>
    <element name="rcv"        type="StationType"        doc="Station code of receiving antenna."/>
    <element name="sys"        type="SysType"            doc="Coordinate system for station coordinates and covariance."/>
-   <element name="ctr"        type="SPICEIDType"        doc="Origin of the reference system.  Use public SPICE codes, e.g., 399 is the geocenter, 10 is the Sun center.  Note;  sys=WGS84 implies ctr=399"/>
+   <element name="ctr"        type="CtrType"            doc="Origin of the reference system.  Use public SPICE codes, e.g., 399 is the geocenter, 10 is the Sun center. Barycenter values (0-9) disallowed. Note: sys=WGS84 implies ctr=399"/>
    <element name="pos1"       type="DecimalTypeW14"     doc="Position of observer per sys, 1st value" />
    <element name="pos2"       type="DecimalTypeW14"     doc="Position of observer per sys, 2nd value"/>
    <element name="pos3"       type="DecimalTypeW14"     doc="Position of observer per sys, 3rd value"/>
