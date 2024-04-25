@@ -867,24 +867,27 @@ def convertit(item, lineNumber):
      if item['band']:  # dump band if no mag
         if item['mag'].strip() == '':
           item['band'] = None
-     #
-     # If notes is not alphabetic it is a 'prog' entry
-     # There are six exceptions for STEREO and SOHO not in this code
-     #
-     # So early version treated col 14 as a note if stn was not in the
-     # list of stations using program codes, Latest version treats col
-     # 14 as note if it is an alphabetical character. Both approaches
-     # appear incorrect. What is needed is to treat col 14 as 'prog'
-     # if 'stn' has col 14 as a defined value in the program code list
-     # at https://www.minorplanetcenter.net/iau/lists/ProgramCodes.txt
-     # How to proceed, given that ProgramCodes.txt is a living document.
-     #
-     # And there are the SOHO/STEREO exceptions mentioned above...
-     #
-     #if (item['stn'] in packUtil.programCodeSites):
-     if (item['notes'] not in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz'):
-         item['prog'] = packUtil.packProgID(item['notes'])  # convert to hex or something else
-         item['notes'] = ' ' # need to put notes somewhere else
+
+     # For the moment treat col 14 as a program code if this obscode uses them,
+     # otherwise leave it as a note. This may be the wrong translation in a few
+     # cases:
+     # * If the observation was not published by the MPC then the
+     # observer may have put a note in column 14, which the MPC will
+     # eventually overwrite with the program code.
+     # * If the observatory used to not have program codes and then
+     # after a certain date it did. Before the switch col 14 will
+     # always be a note and after the switch it will always be a
+     # program code.
+     # * N.B. that there are special cases where the distinction
+     # betwenn note and program code is blurry. These are for STEREO
+     # and SOHO as discussed here:
+     # https://minorplanetcenter.net/iau/info/ObsNote.html The current
+     # implementation will leave these cases as notes.
+     if (item['notes'] != ' ' and item['stn'] in packUtil.programCodeSites):
+         # We have a non-blank col 14 for an obscode that uses program
+         # codes. Therefore treat col 14 as 'prog' and clear 'notes'.
+         item['prog'] = packUtil.packProgID(item['notes'])  # convert to ADES 2-char base 62
+         item['notes'] = ' '
 
      #item['ref'] = item['packedref'][1:]  # astCat now has first character
      item['ref'] = packUtil.unpackRef(item['packedref'][1:])  # astCat now has first character
@@ -911,10 +914,6 @@ def convertit(item, lineNumber):
                 for x in d if x in item and item[x] and str(item[x]).strip()] )
      stack.addElementList(elements)
      pass
-
-
-
-
 
   if codeType == 'Header':  # headers introduce obsBlocks
      if not inObsBlock:  # open obsBlock

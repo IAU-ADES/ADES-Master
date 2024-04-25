@@ -230,10 +230,9 @@ def unpackRef(packedref):
    return packedref
 
 
-def packProgID(c): # for program code id -- must be alpha
-   # should be radix-62 with 0-1 first
+def packProgID(c): # Convert 1-char obs80 program code to the 2-char ADES equivalent
    try:
-      codeIndex = programCodesArray.index(c)
+      codeIndex = programCodesArray.index(c) # Should always be an integer in the range 0-93
    except:
       raise RuntimeError("Illegal program code '" + c + "'")
 
@@ -246,9 +245,8 @@ def packProgID(c): # for program code id -- must be alpha
 
    return  first + second 
 
-def unpackProgID(s): # for program code id -- must be alphanumeric
-   # should be radix-62 with 0-1 first
-
+def unpackProgID(s): # Convert 2-char ADES program code to the 1-char obs80 equivalent
+   # input is 2-char base 62, with character order: [0..9A..Za..z]
    try:
       codeIndex = unpackLetters[s[1]]
       codeIndex += 62 * unpackLetters[s[0]]
