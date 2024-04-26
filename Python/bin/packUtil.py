@@ -49,8 +49,11 @@ reverseCodeDict = { codeDict[i] : i for i in codeDict }  # no duplicates
 # See Note 2 at https://www.minorplanetcenter.net/iau/info/OpticalObs.html
 # Do 'DZWwQqTt' need to be added?
 validCodes = "A PeCBTMcEOHNnRrSsVvXx"+"0"  # 0 is special for header lines
+
 # What is the source for this? Does not agree with https://minorplanetcenter.net/iau/info/ObsNote.html
+# What are 'Yy' and 'vzjeL16789' doing here?
 validNotes = ' AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQXZ2345vzjeL16789'
+
 # Triple quotes to handle the double quotation mark in the string and not munge the index of characters.
 # New value as of 19 Mar 2024. Downloaded from https://www.minorplanetcenter.net/iau/lists/ProgramCodes.txt
 # But deleted British Pound symbol '£' in anticipation of MPC removing it from their ProgramCodes.txt soon.
