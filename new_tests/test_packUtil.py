@@ -19,12 +19,6 @@ provID_examples = {
     "_QC0000": "2026 CA620",
     "_QC0aEM": "2026 CZ6190",
     "_QCzzzz": "2026 CL591673",
-    "J95A010": "1995 A1",
-    "J94P01b": "1994 P1-B",
-    "J94P010": "1994 P1",
-    "K48X130": "2048 X13",
-    "K33L89c": "2033 L89-C",
-    "K88AA30": "2088 A103",
     "K14A00A": "2014 AA",
     "K14B01A": "2014 BA1",
     "K14Aa0A": "2014 AA360",
@@ -33,9 +27,18 @@ provID_examples = {
     "PLS4007": "4007 P-L",
     "T1S4568": "4568 T-1",
     "T2S1238": "1238 T-2",
-    "T3S1438": "1438 T-3",
+    "T3S1438": "1438 T-3"
 }
 
+comet_provID_examples = {
+    "CJ95A010": "C/1995 A1",
+    "XJ94P01b": "X/1994 P1-B",
+    "DJ94P010": "D/1994 P1",
+    "AK48X130": "A/2048 X13",
+    "CK33L89c": "C/2033 L89-C",
+    "PK88AA30": "P/2088 A103"
+}
+    
 permID_examples = {
     "03202": "3202",
     "50000": "50000",
@@ -61,6 +64,17 @@ def test_pack_provID_examples(packed_provID, unpacked_provID):
     packed_provID = packedID[5:]
     assert(packed_provID == packed_provID)
 
+@pytest.mark.parametrize("packed_provID,unpacked_provID", comet_provID_examples.items())
+def test_unpack_comet_provID_examples(packed_provID, unpacked_provID):
+    _, provID, _ = packUtil.unpackPackedID(" "*4 + packed_provID)
+    assert(provID == unpacked_provID)
+
+
+@pytest.mark.parametrize("packed_provID,unpacked_provID", comet_provID_examples.items())
+def test_pack_comet_provID_examples(packed_provID, unpacked_provID):
+    packedID = packUtil.packTupleID((None, unpacked_provID, None))
+    packed_provID = packedID[4:]
+    assert(packed_provID == packed_provID)
 
 @pytest.mark.parametrize("packed_permID,unpacked_permID", permID_examples.items())
 def test_unpack_permID_examples(packed_permID, unpacked_permID):
