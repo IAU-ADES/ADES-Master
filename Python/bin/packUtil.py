@@ -232,7 +232,7 @@ catCodes = { ' ': 'UNK',
              'V': 'Gaia2',
              'W': 'Gaia3',
              'X': 'Gaia3E',  
-             'Y': 'UCAC5',  # UCAC5 mission on ADES web page
+             'Y': 'UCAC5',
              'Z': 'ATLAS2', 
              '0': 'IHW', 
              '1': 'PS1_DR1', 

@@ -1,5 +1,8 @@
 import pytest
 import packUtil
+import sys
+
+sys.path.append("../Python/bin")
 
 provID_examples = {
     "J95X00A": "1995 XA",
