@@ -6,7 +6,7 @@ steps 2 & 3 can be neglected.)
 1) Update MS Word documentation, starting from ./doc directory:
    a) Copy ADES_Description_<date>.docx to ../attic
    b) Rename ADES_Description_<date>.docx to show current date
-   c) Edit and save ADES_Description_v<date>].docx, including updates to
+   c) Edit and save ADES_Description_<date>].docx, including updates to
    date on cover page and change log in front matter
    d) Save PDF version of ADES_Description_<date>.docx to ../ADES_Description.pdf
    e) Close MS Word

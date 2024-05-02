@@ -750,12 +750,19 @@ decimal types must be in a range
    <doc> Positive integer in range (0, 1,000,000). Thus no more than 6 characters. </doc>
 </simpletype>
 
+<simpletype name="CtrType">
+   <restriction base="SPICEIDType">
+      <restrict name="xsd:enumeration"  value="399" />
+   </restriction>
+   <doc>An enumerated list of SPICE IDs, with currently only geocentric ('399') allowed. Other values may be added for cases where the geocenter is not appropriate.</doc>
+</simpletype>
+
 <simpletype name="SPICEIDType">
    <restriction base="xsd:integer">
       <restrict name="xsd:maxExclusive" value="+1000000000"/>
       <restrict name="xsd:minExclusive" value="-1000000000"/>
    </restriction>
-   <doc> Integer having absolute value strictly less than 1,000,000,000.</doc>
+   <doc> Integer having absolute value strictly less than $10^9$.</doc>
 </simpletype>
 
 <simpletype name="PosDecimalTypeW6">
@@ -1564,7 +1571,7 @@ decimal types must be in a range
    <element name="trx"        type="StationType"        doc="Station code of transmiting antenna."/>
    <element name="rcv"        type="StationType"        doc="Station code of receiving antenna."/>
    <element name="sys"        type="SysType"            doc="Coordinate system for station coordinates and covariance."/>
-   <element name="ctr"        type="SPICEIDType"        doc="Origin of the reference system.  Use public SPICE codes, e.g., 399 is the geocenter, 10 is the Sun center.  Note;  sys=WGS84 implies ctr=399"/>
+   <element name="ctr"        type="CtrType"            doc="Origin of the reference system. Use an enumerated subset of public SPICE codes, e.g., 399 is the geocenter."/>
    <element name="pos1"       type="DecimalTypeW14"     doc="Position of observer per sys, 1st value" />
    <element name="pos2"       type="DecimalTypeW14"     doc="Position of observer per sys, 2nd value"/>
    <element name="pos3"       type="DecimalTypeW14"     doc="Position of observer per sys, 3rd value"/>

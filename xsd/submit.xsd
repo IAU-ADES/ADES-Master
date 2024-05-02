@@ -158,6 +158,11 @@
       <xsd:maxExclusive value="1000000"/>
     </xsd:restriction>
   </xsd:simpleType>
+  <xsd:simpleType name="CtrType">
+    <xsd:restriction base="SPICEIDType">
+      <xsd:enumeration value="399"/>
+    </xsd:restriction>
+  </xsd:simpleType>
   <xsd:simpleType name="SPICEIDType">
     <xsd:restriction base="xsd:integer">
       <xsd:maxExclusive value="+1000000000"/>
@@ -679,7 +684,7 @@
   <xsd:element name="trx" type="StationType"/>
   <xsd:element name="rcv" type="StationType"/>
   <xsd:element name="sys" type="SysType"/>
-  <xsd:element name="ctr" type="SPICEIDType"/>
+  <xsd:element name="ctr" type="CtrType"/>
   <xsd:element name="pos1" type="DecimalTypeW14"/>
   <xsd:element name="pos2" type="DecimalTypeW14"/>
   <xsd:element name="pos3" type="DecimalTypeW14"/>
