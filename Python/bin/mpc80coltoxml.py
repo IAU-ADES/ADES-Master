@@ -21,92 +21,6 @@ import packUtil
 import sexVals
 import convertutility
 
-#codeDict = {  # converts code to mode for optical type
-#
-#  'P': 'PHO',
-#  'e': 'ENC',
-#  'C': 'CCD',
-#  'T': 'MER',
-#  'M': 'MIC',
-#  'c': 'ccd',
-#  'E': 'OCC',
-#  'O': 'OFF',
-#  'H': 'PMT', # hipparcos
-#  'N': 'NOR',
-#  'n': 'VID',
-#
-#   'A': 'PHO', # sets subFrm to 'B1950.0' not in dict
-#   'X': 'CCD', # not in dict
-#   'x': 'CCD', # not in dict
-#
-# # 'V': 'CCD', # by type
-# # 'S': 'CCD', # by type
-#}
-#reverseCodeDict = { codeDict[i] : i for i in codeDict }  # no duplicates
-
-#validCodes = "A PeCTMcEOHNnRrSsVvXx"+"0"  # 0 is special for header lines
-#validNotes = ' AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345vzjeL16789'
-#validProgramCodes = ' AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345016789=#$%"&\+-![]`!|(){}.?@,^;:_/~*<>eLvzjZ'"'"
-#programCodeSites = \
-#set([ "010",
-#      "012",
-#      "084",
-#      "089",
-#      "094",
-#      "095",
-#      "121",
-#      "260",
-#      "261",
-#      "262",
-#      "266",
-#      "267",
-#      "268",
-#      "269",
-#      "290",
-#      "309",
-#      "413",
-#      "561",
-#      "568",
-#      "658",
-#      "673",
-#      "675",
-#      "688",
-#      "689",
-#      "695",
-#      "696",
-#      "705",
-#      "807",
-#      "809",
-#      "950",
-#      "A84",
-#      "B35",
-#      "D90",
-#      "E03",
-#      "E10",
-#      "E26",
-#      "F65",
-#      "G40",
-#      "G73",
-#      "G83",
-#      "H06",
-#      "I03",
-#      "I05",
-#      "I11",
-#      "I89",
-#      "J13",
-#      "N50",
-#      "Q62",
-#      "U69",
-#      "V07",
-#      "W84",
-#      "W88",
-#      "Z18",
-#      "Z19",
-#      "Z20",
-#      "249",
-#      "C49",
-#      "C50 ", ])
-
 #
 # ignore blanks lines everywhere
 #
@@ -520,30 +434,33 @@ def decode80ColumnDataLine(line):
 
    #if ( ret['notes'] == 'X' ): 
    #    print (lineNumber, ":", line)
+   # Validate col 15
    if ( ret['code'] not in packUtil.validCodes):
       error80 ("invalid column 14 " + ret['code']+ " in line " +  repr(lineNumber), line)
-   #if (ret['stn'] in packUtil.programCodeSites):
-   #    if ( ret['notes'] not in packUtil.validProgramCodes):
-   #         error80 ("invalid program code "+ ret['notes']+ " in line "+ repr(lineNumber), line)
-   #else:
-   #     if ( ret['notes'] not in packUtil.validNotes):
-   #         error80 ("invalid note "+ ret['notes'] +" in line "+ repr(lineNumber), line)
-   notesExceptions = {
-     '249': { '2': 'A',   # SOHO 2->A, 3->B
-              '3': 'B',
-            },
-     'C49': { '4': 'G',   # STEREO A 4->G 5->H
-              '5': 'H',
-            },
-     'C50': { '4': 'O',   # STEREO A 4->O 5->P
-              '5': 'P',
-            },
-   }
-   stn = ret['stn']
-   if stn in notesExceptions:
-      note = ret['notes']
-      if note in notesExceptions[stn]:
-         ret['notes'] = notesException[stn][note]
+   # Validate col 14
+   if (ret['stn'] in packUtil.programCodeSites):
+       if ( ret['notes'] not in packUtil.validProgramCodes):
+            error80 ("invalid program code "+ ret['notes']+ " in line "+ repr(lineNumber), line)
+   else:
+        if ( ret['notes'] not in packUtil.validNotes):
+            error80 ("invalid note "+ ret['notes'] +" in line "+ repr(lineNumber), line)
+   # This SOHO/STEREO business is now handled a) differently and b) in packUtil.py
+   #notesExceptions = {
+   #  '249': { '2': 'A',   # SOHO 2->A, 3->B
+   #           '3': 'B',
+   #         },
+   #  'C49': { '4': 'G',   # STEREO A 4->G 5->H
+   #           '5': 'H',
+   #         },
+   #  'C50': { '4': 'O',   # STEREO A 4->O 5->P
+   #           '5': 'P',
+   #         },
+   #}
+   #stn = ret['stn']
+   #if stn in notesExceptions:
+   #   note = ret['notes']
+   #   if note in notesExceptions[stn]:
+   #      ret['notes'] = notesExceptions[stn][note]
 
    if ( ret['notes'] not in packUtil.validProgramCodes): # allow any station
        error80 ("invalid program code "+ ret['notes']+ " in line "+ repr(lineNumber), line)
@@ -558,7 +475,7 @@ def decode80ColumnDataLine(line):
    ret['permID'] = permID
    ret['provID'] = provID
    ret['trkSub'] = trkSub
-   #print(permid, provid, trkSub)
+   # print("IDs:", ret['totalid'], permID, provID, trkSub) #DEBUG
    
    try:
      packtest =  packUtil.packTupleID( (permID, provID, trkSub) )
@@ -867,14 +784,27 @@ def convertit(item, lineNumber):
      if item['band']:  # dump band if no mag
         if item['mag'].strip() == '':
           item['band'] = None
-     #
-     # If notes is not alphabetic it is a 'prog' entry
-     # There are six exceptions for STEREO and SOHO not in this code
-     #
-     #if (item['stn'] in packUtil.programCodeSites):
-     if (item['notes'] not in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz'):
-         item['prog'] = packUtil.packProgID(item['notes'])  # convert to hex or something else
-         item['notes'] = ' ' # need to put notes somewhere else
+
+     # For the moment treat col 14 as a program code if this obscode uses them,
+     # otherwise leave it as a note. This may be the wrong translation in a few
+     # cases:
+     # * If the observation was not published by the MPC then the
+     # observer may have put a note in column 14, which the MPC will
+     # eventually overwrite with the program code.
+     # * If the observatory used to not have program codes and then
+     # after a certain date it did. Before the switch col 14 will
+     # always be a note and after the switch it will always be a
+     # program code.
+     # * N.B. that there are special cases where the distinction
+     # betwenn note and program code is blurry. These are for STEREO
+     # and SOHO as discussed here:
+     # https://minorplanetcenter.net/iau/info/ObsNote.html The current
+     # implementation will leave these cases as notes.
+     if (item['notes'] != ' ' and item['stn'] in packUtil.programCodeSites):
+         # We have a non-blank col 14 for an obscode that uses program
+         # codes. Therefore treat col 14 as 'prog' and clear 'notes'.
+         item['prog'] = packUtil.packProgID(item['notes'])  # convert to ADES 2-char base 62
+         item['notes'] = ' '
 
      #item['ref'] = item['packedref'][1:]  # astCat now has first character
      item['ref'] = packUtil.unpackRef(item['packedref'][1:])  # astCat now has first character
@@ -901,10 +831,6 @@ def convertit(item, lineNumber):
                 for x in d if x in item and item[x] and str(item[x]).strip()] )
      stack.addElementList(elements)
      pass
-
-
-
-
 
   if codeType == 'Header':  # headers introduce obsBlocks
      if not inObsBlock:  # open obsBlock

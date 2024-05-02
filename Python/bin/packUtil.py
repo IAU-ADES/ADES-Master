@@ -46,22 +46,35 @@ codeDict = {  # converts code to mode for optical type
 }
 reverseCodeDict = { codeDict[i] : i for i in codeDict }  # no duplicates
 
+# See Note 2 at https://www.minorplanetcenter.net/iau/info/OpticalObs.html
+# Do 'DZWwQqTt' need to be added?
 validCodes = "A PeCBTMcEOHNnRrSsVvXx"+"0"  # 0 is special for header lines
-validNotes = ' AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQX2345vzjeL16789'
+
+# What is the source for this? Does not agree with https://minorplanetcenter.net/iau/info/ObsNote.html
+# What are 'Yy' and 'vzjeL16789' doing here?
+validNotes = ' AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQXZ2345vzjeL16789'
+
 # Triple quotes to handle the double quotation mark in the string and not munge the index of characters.
 # New value as of 19 Mar 2024. Downloaded from https://www.minorplanetcenter.net/iau/lists/ProgramCodes.txt
 # But deleted British Pound symbol '£' in anticipation of MPC removing it from their ProgramCodes.txt soon.
 programCodesArray = R"""0123456789!"#$%&'()*+,-./[\]^_`{|}~:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"""
 validProgramCodes = ' ' + programCodesArray
 
+# Updated 25-Apr-2024 based on https://www.minorplanetcenter.net/iau/lists/ProgramCodes.txt
 programCodeSites = \
 set([ "010",
       "012",
+      "033",
+      "071",
       "084",
       "089",
       "094",
       "095",
+      "119",
       "121",
+      "181",
+      "186",
+      "246",
       "260",
       "261",
       "262",
@@ -69,6 +82,7 @@ set([ "010",
       "267",
       "268",
       "269",
+      "274",
       "290",
       "309",
       "413",
@@ -81,38 +95,91 @@ set([ "010",
       "689",
       "695",
       "696",
+      "703",
       "705",
       "807",
       "809",
+      "851",
       "950",
       "A84",
       "B35",
+      "C40",
+      "C65",
+      "D20",
       "D90",
       "E03",
       "E10",
       "E26",
       "F65",
+      "G37",
       "G40",
       "G73",
       "G83",
+      "G96",
       "H06",
       "I03",
       "I05",
       "I11",
+      "I18",
+      "I22",
       "I89",
+      "J04",
       "J13",
+      "J75",
+      "K91",
+      "K92",
+      "K93",
+      "K99",
+      "L28",
+      "L80",
+      "L81",
+      "M49",
       "N50",
+      "Q54",
       "Q62",
+      "Q63",
+      "Q64",
+      "T09",
+      "T11",
+      "T12",
+      "T14",
+      "T15",
+      "U65",
       "U69",
+      "U94",
       "V07",
+      "V26",
+      "V37",
+      "V39",
+      "W11",
+      "W38",
+      "W57",
+      "W76",
       "W84",
+      "W85",
+      "W86",
+      "W87",
       "W88",
+      "W98",
+      "X06",
+      "X07",
       "Z18",
       "Z19",
       "Z20",
-      "249",
-      "C49",
-      "C50 ", ])
+      "Z23",
+      "Z24",
+      "Z28",
+      "Z31",
+      "Z58",
+      "Z84" ])
+
+# For STEREO and SOHO there is a letter in col 14 to
+# indicate which instrument is used. This is to be treated as a
+# program code by adding these obscodes to programCodeSites.
+# Commenting the next line would cause these to be treated as notes.
+# See https://minorplanetcenter.net/iau/info/ObsNote.html
+progSOHOSTEREO = set(["249", "C49", "C50"])
+programCodeSites.update(progSOHOSTEREO)
 
 catCodes = { ' ': 'UNK',
              'a': 'USNOA1',
@@ -165,7 +232,7 @@ catCodes = { ' ': 'UNK',
              'V': 'Gaia2',
              'W': 'Gaia3',
              'X': 'Gaia3E',  
-             'Y': 'UCAC5',  # UCAC5 mission on ADES web page
+             'Y': 'UCAC5',
              'Z': 'ATLAS2', 
              '0': 'IHW', 
              '1': 'PS1_DR1', 
@@ -230,34 +297,32 @@ def unpackRef(packedref):
    return packedref
 
 
-def packProgID(c): # for program code id -- must be alpha
-   # should be radix-52 with 0-1 first
+def packProgID(c): # Convert 1-char obs80 program code to the 2-char ADES equivalent
    try:
-      codeIndex = programCodesArray.index(c)
+      codeIndex = programCodesArray.index(c) # Should always be an integer in the range 0-93
    except:
-      raise RuntimeError("Illegal program code " + c)
-   
-   if codeIndex > 51:
+      raise RuntimeError("Illegal program code '" + c + "'")
+
+   if codeIndex > 61:
       first = '1'
    else:
       first = '0' 
 
-   second = packLetters[codeIndex%52]
+   second = packLetters[codeIndex%62]
 
    return  first + second 
 
-def unpackProgID(s): # for program code id -- must be alpha
-   # should be radix-52 with 0-1 first
-   if len(s) != 2 or s[0] not in "01":
-      raise RuntimeError ("Illegal packed prog ID " + s + " in xml")
-  
+def unpackProgID(s): # Convert 2-char ADES program code to the 1-char obs80 equivalent
+   # input is 2-char base 62, with character order: [0..9A..Za..z]
    try:
       codeIndex = unpackLetters[s[1]]
-      if s[0] == 1:
-        codeIndex += 52
-      packed = programCodesArray[codeIndex]
+      codeIndex += 62 * unpackLetters[s[0]]
+      if codeIndex <= 93:
+          packed = programCodesArray[codeIndex]
+      else:
+          packed = ' '
    except:
-      raise RuntimeError ("Illegal packed prog ID " + s + " in xml")
+      raise RuntimeError ("Illegal packed prog ID '" + s + "' in xml")
 
    return packed
 
@@ -557,58 +622,60 @@ def unpackPackedID(packedID):
 
    # match against minor planet packed ID
    m = minorplanetPackedIDRegex.match(packedID)
-   # ([0-9A-Za-z])(\d{4})|(~[0-9A-Za-z]{4}))
-   permID_leading = m.group(1) # ([0-9A-Za-z])
-   permID_digits = m.group(2) # (\\d{4})
-   permID_base62 = m.group(3) # (~[0-9A-Za-z]{4})
+   if m:
+   
+      # ([0-9A-Za-z])(\d{4})|(~[0-9A-Za-z]{4}))
+      permID_leading = m.group(1) # ([0-9A-Za-z])
+      permID_digits = m.group(2) # (\\d{4})
+      permID_base62 = m.group(3) # (~[0-9A-Za-z]{4})
+   
+      # minor planet provID
+      # regular provID
+   
+      # ([I-K])(\d{2})([A-HJ-Y])([a-zA-Z0-9])(\d)(?:([A-HJ-Z])|0)
+      # The first two digits of the year are packed into a single 
+      # character in column 1 (I = 18, J = 19, K = 20). 
+      provID_leading = m.group(4) # [I-K]
+      # Columns 2-3 contain the last two digits of the year. 
+      provID_year = m.group(5) # (\d{2})
+      # Column 4 contains the half-month letter 
+      provID_half_month_letter = m.group(6) # ([A-HJ-Y])
+      # and column 7 contains the second letter.
+      provID_half_month_order = m.group(9) # ([A-HJ-Z])
+      # The cycle count (the number of times that the second letter has cycled through the alphabet) is coded in columns 5-6, using a letter in column 5 when the cycle count is larger than 99. The uppercase letters are used, followed by the lowercase letters.
+      provID_cycle_count_letter = m.group(7) # ([a-zA-Z0-9])
+      provID_cycle_count_number = m.group(8) # (\d)
+   
+      # survey provID
+      # Survey designations of the form 2040 P-L, 3138 T-1, 1010 T-2 and 4101 T-3 are packed differently. Columns 1-3 contain the code indicating the survey and columns 4-7 contain the number within the survey.
+      #    Examples:
+      #    2040 P-L  = PLS2040
+      #    3138 T-1  = T1S3138
+      #    1010 T-2  = T2S1010
+      #    4101 T-3  = T3S4101
+      # (PL|T1|T2|T3)S(\d{4})
+      provID_survey = m.group(10)
+      provID_survey_number = m.group(11)
+   
+      # trkSub
+      trkSub = m.group(12)
+   
+      # extended provID
+      # When more than 15,500 objects are designated within a half-month, designations will be indicated as follows:
+      # The first character must be an underscore, simultaneously indicating (a) the use of the extended packed provisional format, and (b) that the first 2 digits of the year of discovery are 20.
+         # N.B. This implies that the extended packed provisional designation format will not be applied to objects discovered prior to 2010 (see bullet point below for the encoding of the last two digits of the year).
+      # The second character must be a capital letter (indicating the last 2 digits of the year of discovery, where 'P' = 25, 'Q' = 26, etc).
+         # N.B. This encoding scheme is the same as that used for the first two digits of the year in the Original Packed Provisional Designations format. This implies that this extended packed provisional designation format is not expected to be employed beyond 2035 (as 'Z' = 35).
+      # The third character is the capital letter for the half month.
+      # Four alphanumeric characters [0-9A-Za-z] will be used as a base62 representation of the order of designation after 15,500.
+         # N.B. This implies subtracting 15,501 from the sequence-number before converting to base-62 representation used
+      # The base-62 representation uses the digits 0-9 to represent numbers from 0-9, then upper-case letters A-Z to represent numbers between 10 and 35 inclusive, then lower case letters a-z to represent numbers between 36 and 61 inclusive.
+      # (_)([P-Z])([A-HJ-Y])([0-9A-Za-z]{4})
+      provID_extended = m.group(13)
+      provID_extended_year = m.group(14)
+      provID_extended_half_month = m.group(15)
+      provID_extended_order = m.group(16)
 
-   # minor planet provID
-   # regular provID
-
-   # ([I-K])(\d{2})([A-HJ-Y])([a-zA-Z0-9])(\d)(?:([A-HJ-Z])|0)
-   # The first two digits of the year are packed into a single 
-   # character in column 1 (I = 18, J = 19, K = 20). 
-   provID_leading = m.group(4) # [I-K]
-   # Columns 2-3 contain the last two digits of the year. 
-   provID_year = m.group(5) # (\d{2})
-   # Column 4 contains the half-month letter 
-   provID_half_month_letter = m.group(6) # ([A-HJ-Y])
-   # and column 7 contains the second letter.
-   provID_half_month_order = m.group(9) # ([A-HJ-Z])
-   # The cycle count (the number of times that the second letter has cycled through the alphabet) is coded in columns 5-6, using a letter in column 5 when the cycle count is larger than 99. The uppercase letters are used, followed by the lowercase letters.
-   provID_cycle_count_letter = m.group(7) # ([a-zA-Z0-9])
-   provID_cycle_count_number = m.group(8) # (\d)
-
-   # survey provID
-   # Survey designations of the form 2040 P-L, 3138 T-1, 1010 T-2 and 4101 T-3 are packed differently. Columns 1-3 contain the code indicating the survey and columns 4-7 contain the number within the survey.
-   #    Examples:
-   #    2040 P-L  = PLS2040
-   #    3138 T-1  = T1S3138
-   #    1010 T-2  = T2S1010
-   #    4101 T-3  = T3S4101
-   # (PL|T1|T2|T3)S(\d{4})
-   provID_survey = m.group(10)
-   provID_survey_number = m.group(11)
-
-   # trkSub
-   trkSub = m.group(12)
-
-   # extended provID
-   # When more than 15,500 objects are designated within a half-month, designations will be indicated as follows:
-   # The first character must be an underscore, simultaneously indicating (a) the use of the extended packed provisional format, and (b) that the first 2 digits of the year of discovery are 20.
-      # N.B. This implies that the extended packed provisional designation format will not be applied to objects discovered prior to 2010 (see bullet point below for the encoding of the last two digits of the year).
-   # The second character must be a capital letter (indicating the last 2 digits of the year of discovery, where 'P' = 25, 'Q' = 26, etc).
-      # N.B. This encoding scheme is the same as that used for the first two digits of the year in the Original Packed Provisional Designations format. This implies that this extended packed provisional designation format is not expected to be employed beyond 2035 (as 'Z' = 35).
-   # The third character is the capital letter for the half month.
-   # Four alphanumeric characters [0-9A-Za-z] will be used as a base62 representation of the order of designation after 15,500.
-      # N.B. This implies subtracting 15,501 from the sequence-number before converting to base-62 representation used
-   # The base-62 representation uses the digits 0-9 to represent numbers from 0-9, then upper-case letters A-Z to represent numbers between 10 and 35 inclusive, then lower case letters a-z to represent numbers between 36 and 61 inclusive.
-   # (_)([P-Z])([A-HJ-Y])([0-9A-Za-z]{4})
-   provID_extended = m.group(13)
-   provID_extended_year = m.group(14)
-   provID_extended_half_month = m.group(15)
-   provID_extended_order = m.group(16)
-   if m: 
       if permID_leading or permID_base62:  # check for permID presence
          if permID_leading:
             n = int(permID_digits) + 10000*unpackLetters[permID_leading]
