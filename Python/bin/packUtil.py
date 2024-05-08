@@ -1062,7 +1062,6 @@ def packTupleID(triplet):
       #
       
       m = trksubRegex.match(trkSub)
-      print(m)
       if m:
          tmp = m.group(1)
          #print ("m.groups is ", m.groups())
