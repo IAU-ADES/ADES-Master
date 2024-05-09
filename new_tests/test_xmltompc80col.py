@@ -36,3 +36,33 @@ def test_trksub_submission_newregex():
         check=False,
     )
     assert os.path.exists(outfile) and os.stat(outfile).st_size != 0
+
+
+def test_trksub_8char():
+    """Converting the file even if the trksub is 8-char long"""
+    infile = "input/trksub_8char.xml"
+    outfile = "output/trksub_8char.obs"
+    # Remove outfile if there
+    if os.path.exists(outfile):
+        os.remove(outfile)
+    subprocess.run(
+        "python3 ../Python/bin/xmltompc80col.py " + infile + " " + outfile,
+        shell=True,
+        check=False,
+    )
+    assert os.path.exists(outfile) and os.stat(outfile).st_size != 0
+    
+
+def test_provid_notrksub():
+    """Converting the file even if trksub=provid """
+    infile = "input/provid_no_trksub.xml"
+    outfile = "output/provid_no_trksub.obs"
+    # Remove outfile if there
+    if os.path.exists(outfile):
+        os.remove(outfile)
+    subprocess.run(
+        "python3 ../Python/bin/xmltompc80col.py " + infile + " " + outfile,
+        shell=True,
+        check=False,
+    )
+    assert os.path.exists(outfile) and os.stat(outfile).st_size != 0

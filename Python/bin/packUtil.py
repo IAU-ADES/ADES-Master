@@ -1061,8 +1061,10 @@ def packTupleID(triplet):
          tmp = m.group(1)
          #print ("m.groups is ", m.groups())
          if len(tmp) > 7:
-            raise RuntimeError("Can't pack " + trkSub + " because it it is too long")
-         packedTrkSub = m.group(1)
+            print('Warning: trkSub ' + trkSub + ' is too long for obs80, removing the first character')
+            packedTrkSub = tmp[1:]
+         else:
+            packedTrkSub = m.group(1)
 
       if not packedTrkSub:  # none falls through
           if packedProvID:  # sometimes trkSub is packedProvID minus a space

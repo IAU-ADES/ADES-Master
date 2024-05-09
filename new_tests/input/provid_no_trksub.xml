@@ -1,0 +1,116 @@
+<ades version="2017">
+  <obsBlock>
+    <obsContext>
+      <observatory>
+        <mpcCode>V00</mpcCode>
+        <name>Bok NEO Survey</name>
+      </observatory>
+      <submitter>
+        <name>E. J. Christensen</name>
+      </submitter>
+      <observers>
+        <name>R. A. Mastaler</name>
+      </observers>
+      <measurers>
+        <name>M. J. Brucker</name>
+        <name>C. E. Woodward</name>
+        <name>D. Fay</name>
+        <name>J. B. Fazekas</name>
+        <name>D. C. Fuls</name>
+        <name>A. R. Gibbs</name>
+        <name>H. Groeller</name>
+        <name>J. K. Hogan</name>
+        <name>R. A. Kowalski</name>
+        <name>S. M. Larson</name>
+        <name>C. Lejoly</name>
+        <name>G. J. Leonard</name>
+        <name>R. A. Mastaler</name>
+        <name>R. S. McMillan</name>
+        <name>D. Rankin</name>
+        <name>R. L. Seaman</name>
+        <name>A. Serrano</name>
+        <name>F. C. Shelly</name>
+        <name>K. W. Wierzchos</name>
+      </measurers>
+      <telescope>
+        <design>reflector</design>
+        <aperture>2.25</aperture>
+        <detector>4x4K mosaic CCD</detector>
+      </telescope>
+    </obsContext>
+    <obsData>
+      <optical>
+        <trkSub>K23X07X</trkSub>
+        <mode>CCD</mode>
+        <stn>V00</stn>
+        <obsTime>2024-01-18T07:05:16.287Z</obsTime>
+        <ra>106.650255</ra>
+        <dec>33.756980</dec>
+        <rmsCorr>-0.0431</rmsCorr>
+        <astCat>Gaia2</astCat>
+        <mag>19.01</mag>
+        <rmsMag>0.262</rmsMag>
+        <band>G</band>
+        <photCat>Gaia2</photCat>
+        <logSNR>1.698</logSNR>
+        <rmsFit>0.102</rmsFit>
+        <nStars>11634</nStars>
+        
+      </optical>
+      <optical>
+        <trkSub>K23X07X</trkSub>
+        <mode>CCD</mode>
+        <stn>V00</stn>
+        <obsTime>2024-01-18T07:18:30.922Z</obsTime>
+        <ra>106.687635</ra>
+        <dec>33.768420</dec>
+        <rmsCorr>-0.0570</rmsCorr>
+        <astCat>Gaia2</astCat>
+        <mag>19.00</mag>
+        <rmsMag>0.257</rmsMag>
+        <band>G</band>
+        <photCat>Gaia2</photCat>
+        <logSNR>1.676</logSNR>
+        <rmsFit>0.093</rmsFit>
+        <nStars>11660</nStars>
+        
+      </optical>
+      <optical>
+        <trkSub>K23X07X</trkSub>
+        <mode>CCD</mode>
+        <stn>V00</stn>
+        <obsTime>2024-01-18T07:27:18.921Z</obsTime>
+        <ra>106.712385</ra>
+        <dec>33.775960</dec>
+        <rmsCorr>-0.0718</rmsCorr>
+        <astCat>Gaia2</astCat>
+        <mag>19.17</mag>
+        <rmsMag>0.255</rmsMag>
+        <band>G</band>
+        <photCat>Gaia2</photCat>
+        <logSNR>1.788</logSNR>
+        <rmsFit>0.088</rmsFit>
+        <nStars>11609</nStars>
+        
+      </optical>
+      <optical>
+        <trkSub>K23X07X</trkSub>
+        <mode>CCD</mode>
+        <stn>V00</stn>
+        <obsTime>2024-01-18T07:36:08.173Z</obsTime>
+        <ra>106.737360</ra>
+        <dec>33.783530</dec>
+        <rmsCorr>-0.0751</rmsCorr>
+        <astCat>Gaia2</astCat>
+        <mag>18.99</mag>
+        <rmsMag>0.254</rmsMag>
+        <band>G</band>
+        <photCat>Gaia2</photCat>
+        <logSNR>1.840</logSNR>
+        <rmsFit>0.097</rmsFit>
+        <nStars>11663</nStars>
+        
+      </optical>
+    </obsData>
+  </obsBlock>
+</ades>
