@@ -487,9 +487,7 @@ asteroidsatellitePermIDRegex = re.compile(r'^\((\d+|\d{4} [A-Z]{2}\d+)\) (\d+)$'
 #                    r')' )
 #trksubRegexHelp = r'[-A-Za-z0-9_]{0,7}' # anything seven characters
 #trksubRegex = re.compile('^([A-Za-z][A-Za-z0-9]{0,7})$')
-trksubRegexHelp = ( r'([-A-Za-z0-9_]{0,7}' + # anything 8 chars
-                   r'[A-Za-z0-9]{0,6}'+ # anything 7 chars
-                   r'[A-Za-z0-9]{0,5})')  # anything 6 chars
+trksubRegexHelp =  r'([-A-Za-z0-9_]*)' # anything 
                    
 trksubRegex = re.compile(r'^' + trksubRegexHelp + r'$')
 
