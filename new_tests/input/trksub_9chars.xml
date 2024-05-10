@@ -43,7 +43,7 @@
     </obsContext>
     <obsData>
       <optical>
-        <trkSub>f00360dc</trkSub>
+        <trkSub>gf00360dc</trkSub>
         <obsSubID>c4d.410843.40.276</obsSubID>
         <mode>CCD</mode>
         <stn>W84</stn>
@@ -58,7 +58,7 @@
         <band>r</band>
       </optical>
       <optical>
-        <trkSub>f00360dc</trkSub>
+        <trkSub>gf00360dc</trkSub>
         <obsSubID>c4d.410893.40.236</obsSubID>
         <mode>CCD</mode>
         <stn>W84</stn>
@@ -73,7 +73,7 @@
         <band>g</band>
       </optical>
       <optical>
-        <trkSub>f00360dc</trkSub>
+        <trkSub>gf00360dc</trkSub>
         <obsSubID>c4d.410949.40.330</obsSubID>
         <mode>CCD</mode>
         <stn>W84</stn>
@@ -88,7 +88,7 @@
         <band>g</band>
       </optical>
       <optical>
-        <trkSub>f00360dc</trkSub>
+        <trkSub>gf00360dc</trkSub>
         <obsSubID>c4d.410999.40.375</obsSubID>
         <mode>CCD</mode>
         <stn>W84</stn>
@@ -103,7 +103,7 @@
         <band>g</band>
       </optical>
       <optical>
-        <trkSub>f00360dc</trkSub>
+        <trkSub>gf00360dc</trkSub>
         <obsSubID>c4d.411283.40.1062</obsSubID>
         <mode>CCD</mode>
         <stn>W84</stn>
@@ -118,7 +118,7 @@
         <band>g</band>
       </optical>
       <optical>
-        <trkSub>f00360dc</trkSub>
+        <trkSub>gf00360dc</trkSub>
         <obsSubID>c4d.411383.40.1174</obsSubID>
         <mode>CCD</mode>
         <stn>W84</stn>
@@ -133,7 +133,7 @@
         <band>g</band>
       </optical>
       <optical>
-        <trkSub>f00360dc</trkSub>
+        <trkSub>gf00360dc</trkSub>
         <obsSubID>c4d.411786.32.23</obsSubID>
         <mode>CCD</mode>
         <stn>W84</stn>

@@ -486,7 +486,7 @@ asteroidsatellitePermIDRegex = re.compile(r'^\((\d+|\d{4} [A-Z]{2}\d+)\) (\d+)$'
 #                     r'|(?:PL|T1|T2|T3)S[A-Za-z0-9]{3}[A-Za-z]' + # anything starting PL|T1|T2|T3 followed by S with not digit in 7
 #                    r')' )
 #trksubRegex = re.compile('^([A-Za-z][A-Za-z0-9]{0,7})$')
-trksubRegexHelp =  r'([-A-Za-z0-9]{0,7})' #Use the same regex that is used in the ADES web page
+trksubRegexHelp =  r'([-A-Za-z0-9]{0,8})' #Use the same regex that is used in the ADES web page
 trksubRegex = re.compile(r'^' + trksubRegexHelp + r'$')
 
 
