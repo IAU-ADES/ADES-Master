@@ -68,8 +68,6 @@ def test_provid_notrksub():
     )
     assert os.path.exists(outfile) and os.stat(outfile).st_size != 0
     
-    
-@pytest.mark.xfail
 def test_trksub_9char():
     """ The code should stop with an error for any trksubs longer than 8 chars"""
     infile = "input/trksub_9chars.xml"
@@ -77,9 +75,9 @@ def test_trksub_9char():
     # Remove outfile if there
     if os.path.exists(outfile):
         os.remove(outfile)
-    subprocess.run(
+    result = subprocess.run(
         "python3 ../Python/bin/xmltompc80col.py " + infile + " " + outfile,
         shell=True,
         check=False,
     )
-    assert os.path.exists(outfile) and os.stat(outfile).st_size != 0
+    assert result.returncode != 0 # Designed to fail...
