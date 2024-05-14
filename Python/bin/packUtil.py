@@ -470,22 +470,23 @@ asteroidsatellitePermIDRegex = re.compile(r'^\((\d+|\d{4} [A-Z]{2}\d+)\) (\d+)$'
 #
 # This is a mess because it's hard to exclude things in regex
 #
-trksubRegexHelp = ( r'([A-Za-z][A-Za-z0-9]{0,5}' +         # anything six characters
-                    r'|[A-HL-OQ-SU-Z][A-Za-z0-9]{0,6}' +   # anything seven not starting with I-K,P or T
-                    r'|[I-K][A-Za-z0-9]{5}[a-z1-9]' +      # anything starting with I-K not ending in A-Z or 0
-                    r'|[I-K][A-Za-z][A-Za-z0-9]{4}[0A-Z]' + # anything starting with I-K ending in [A-Z] with not digit as second character
-                    r'|[I-K][0-9][A-Za-z][A-Za-z0-9]{3}[0A-Z]' + # anything starting with [I-K]<digit> ending in [A-Z] with not digit as third character
-                    r'|[I-K][0-9][0-9][Ia-z0-9][A-Za-z0-9]{2}[0A-Z]' + # anything starting with [I-K]<digit> ending in [A-Z] with not [A-Z] as fourth character
-                    r'|[I-K][0-9][0-9][A-HJ-Z][A-Za-z0-9][A-Za-z][0A-Z]' + # anything with [I-K]\d\d[A-HJ-Z][A-Za-z0-9]<not digit> [A-Z]
-                    r'|P[A-KM-Za-z0-9][A-Za-z0-9]{5}' +   # anything seven starting with P<not L>
-                    r'|T[A-Za-z04-9][A-Za-z0-9]{5}' +   # anything seven starting with T<not 1-3>
-                     r'|(?:PL|T1|T2|T3)[A-RT-Za-z0-9][A-Za-z0-9]{4}' + # anything starting PL|T1|T2|T3 not followed by S 
-                     r'|(?:PL|T1|T2|T3)S[A-Za-z][A-Za-z0-9]{3}' + # anything starting PL|T1|T2|T3 followed by S with not digit in 4
-                     r'|(?:PL|T1|T2|T3)S[A-Za-z0-9][A-Za-z][A-Za-z0-9]{2}' + # anything starting PL|T1|T2|T3 followed by S with not digit in 5
-                     r'|(?:PL|T1|T2|T3)S[A-Za-z0-9]{2}[A-Za-z][A-Za-z0-9]' + # anything starting PL|T1|T2|T3 followed by S with not digit in 6
-                     r'|(?:PL|T1|T2|T3)S[A-Za-z0-9]{3}[A-Za-z]' + # anything starting PL|T1|T2|T3 followed by S with not digit in 7
-                    r')' )
+#trksubRegexHelp = ( r'([A-Za-z][A-Za-z0-9]{0,5}' +         # anything six characters
+#                    r'|[A-HL-OQ-SU-Z][A-Za-z0-9]{0,6}' +   # anything seven not starting with I-K,P or T
+#                    r'|[I-K][A-Za-z0-9]{5}[a-z1-9]' +      # anything starting with I-K not ending in A-Z or 0
+#                    r'|[I-K][A-Za-z][A-Za-z0-9]{4}[0A-Z]' + # anything starting with I-K ending in [A-Z] with not digit as second character
+#                    r'|[I-K][0-9][A-Za-z][A-Za-z0-9]{3}[0A-Z]' + # anything starting with [I-K]<digit> ending in [A-Z] with not digit as third character
+#                    r'|[I-K][0-9][0-9][Ia-z0-9][A-Za-z0-9]{2}[0A-Z]' + # anything starting with [I-K]<digit> ending in [A-Z] with not [A-Z] as fourth character
+#                    r'|[I-K][0-9][0-9][A-HJ-Z][A-Za-z0-9][A-Za-z][0A-Z]' + # anything with [I-K]\d\d[A-HJ-Z][A-Za-z0-9]<not digit> [A-Z]
+#                    r'|P[A-KM-Za-z0-9][A-Za-z0-9]{5}' +   # anything seven starting with P<not L>
+#                    r'|T[A-Za-z04-9][A-Za-z0-9]{5}' +   # anything seven starting with T<not 1-3>
+#                     r'|(?:PL|T1|T2|T3)[A-RT-Za-z0-9][A-Za-z0-9]{4}' + # anything starting PL|T1|T2|T3 not followed by S 
+#                     r'|(?:PL|T1|T2|T3)S[A-Za-z][A-Za-z0-9]{3}' + # anything starting PL|T1|T2|T3 followed by S with not digit in 4
+#                     r'|(?:PL|T1|T2|T3)S[A-Za-z0-9][A-Za-z][A-Za-z0-9]{2}' + # anything starting PL|T1|T2|T3 followed by S with not digit in 5
+#                     r'|(?:PL|T1|T2|T3)S[A-Za-z0-9]{2}[A-Za-z][A-Za-z0-9]' + # anything starting PL|T1|T2|T3 followed by S with not digit in 6
+#                     r'|(?:PL|T1|T2|T3)S[A-Za-z0-9]{3}[A-Za-z]' + # anything starting PL|T1|T2|T3 followed by S with not digit in 7
+#                    r')' )
 #trksubRegex = re.compile('^([A-Za-z][A-Za-z0-9]{0,7})$')
+trksubRegexHelp =  r'([-A-Za-z0-9]{0,8})' #Use the same regex that is used in the ADES web page
 trksubRegex = re.compile(r'^' + trksubRegexHelp + r'$')
 
 
@@ -1060,8 +1061,10 @@ def packTupleID(triplet):
          tmp = m.group(1)
          #print ("m.groups is ", m.groups())
          if len(tmp) > 7:
-            raise RuntimeError("Can't pack " + trkSub + " because it it is too long")
-         packedTrkSub = m.group(1)
+            print('Warning: trkSub ' + trkSub + ' is too long for obs80, removing the first character', file=sys.stderr)
+            packedTrkSub = tmp[1:]
+         else:
+            packedTrkSub = m.group(1)
 
       if not packedTrkSub:  # none falls through
           if packedProvID:  # sometimes trkSub is packedProvID minus a space
@@ -1451,4 +1454,3 @@ def testCases(stream=sys.stdout):
    testConverter("    SK10JB10", True, testPackedRoundTrip, stream)
 
 #testCases(sys.stdout)
-

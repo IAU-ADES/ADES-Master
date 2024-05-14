@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ades version="2022">
+  <obsBlock>
+    <obsContext>
+      <observatory>
+        <mpcCode>W84</mpcCode>
+        <name>Cerro Tololo - Blanco + DECam</name>
+      </observatory>
+      <submitter>
+        <name>J. Moeyens</name>
+        <institution>B612 Asteroid Institute</institution>
+      </submitter>
+      <observers>
+        <name>D. E. Survey</name>
+      </observers>
+      <measurers>
+        <name>J. Moeyens</name>
+        <name>M. Juric</name>
+        <name>S. Nelson</name>
+        <name>A. Koumjian</name>
+        <name>K. Kiker</name>
+        <name>N. Tellis</name>
+        <name>D. Veronese-Milin</name>
+        <name>A. Posner</name>
+        <name>E. Lu</name>
+        <name>C. Fiaschetti</name>
+        <name>D. Remy</name>
+      </measurers>
+      <telescope>
+        <name>Blanco 4m</name>
+        <design>Reflector</design>
+        <aperture>4.0</aperture>
+        <detector>CCD</detector>
+      </telescope>
+      <software>
+        <objectDetection>Asteroid Discovery Analysis and Mapping + Tracklet-less Heliocentric Orbit Recovery (ADAM::THOR)</objectDetection>
+      </software>
+      <fundingSource>WilliamBowes, McGregorGirand, Tito's Vodka, PRawls, SKraus, Yishan/KWong, SGalitsky, Google</fundingSource>
+      <comment>
+        <line>Discovery candidates found by members of the Asteroid Institute, a program of B612 Foundation,</line>
+        <line>using the institute's ADAM::THOR discovery service running on Google Cloud.</line>
+      </comment>
+    </obsContext>
+    <obsData>
+      <optical>
+        <trkSub>gf00360dc</trkSub>
+        <obsSubID>c4d.410843.40.276</obsSubID>
+        <mode>CCD</mode>
+        <stn>W84</stn>
+        <obsTime>2015-02-17T01:02:53.575Z</obsTime>
+        <ra>136.84242570</ra>
+        <dec>-0.58304612</dec>
+        <rmsRA>0.1316</rmsRA>
+        <rmsDec>0.1314</rmsDec>
+        <astCat>Gaia2</astCat>
+        <mag>23.28</mag>
+        <rmsMag>0.19</rmsMag>
+        <band>r</band>
+      </optical>
+      <optical>
+        <trkSub>gf00360dc</trkSub>
+        <obsSubID>c4d.410893.40.236</obsSubID>
+        <mode>CCD</mode>
+        <stn>W84</stn>
+        <obsTime>2015-02-17T02:40:52.818Z</obsTime>
+        <ra>136.82932923</ra>
+        <dec>-0.57694198</dec>
+        <rmsRA>0.2330</rmsRA>
+        <rmsDec>0.2337</rmsDec>
+        <astCat>Gaia2</astCat>
+        <mag>23.10</mag>
+        <rmsMag>0.18</rmsMag>
+        <band>g</band>
+      </optical>
+      <optical>
+        <trkSub>gf00360dc</trkSub>
+        <obsSubID>c4d.410949.40.330</obsSubID>
+        <mode>CCD</mode>
+        <stn>W84</stn>
+        <obsTime>2015-02-17T04:43:26.622Z</obsTime>
+        <ra>136.81285533</ra>
+        <dec>-0.56943249</dec>
+        <rmsRA>0.1597</rmsRA>
+        <rmsDec>0.1613</rmsDec>
+        <astCat>Gaia2</astCat>
+        <mag>23.27</mag>
+        <rmsMag>0.14</rmsMag>
+        <band>g</band>
+      </optical>
+      <optical>
+        <trkSub>gf00360dc</trkSub>
+        <obsSubID>c4d.410999.40.375</obsSubID>
+        <mode>CCD</mode>
+        <stn>W84</stn>
+        <obsTime>2015-02-17T06:22:16.704Z</obsTime>
+        <ra>136.79957333</ra>
+        <dec>-0.56325920</dec>
+        <rmsRA>0.0942</rmsRA>
+        <rmsDec>0.0975</rmsDec>
+        <astCat>Gaia2</astCat>
+        <mag>23.20</mag>
+        <rmsMag>0.15</rmsMag>
+        <band>g</band>
+      </optical>
+      <optical>
+        <trkSub>gf00360dc</trkSub>
+        <obsSubID>c4d.411283.40.1062</obsSubID>
+        <mode>CCD</mode>
+        <stn>W84</stn>
+        <obsTime>2015-02-18T02:35:55.869Z</obsTime>
+        <ra>136.64418176</ra>
+        <dec>-0.48734882</dec>
+        <rmsRA>0.0984</rmsRA>
+        <rmsDec>0.1006</rmsDec>
+        <astCat>Gaia2</astCat>
+        <mag>23.40</mag>
+        <rmsMag>0.15</rmsMag>
+        <band>g</band>
+      </optical>
+      <optical>
+        <trkSub>gf00360dc</trkSub>
+        <obsSubID>c4d.411383.40.1174</obsSubID>
+        <mode>CCD</mode>
+        <stn>W84</stn>
+        <obsTime>2015-02-18T05:51:31.466Z</obsTime>
+        <ra>136.61819972</ra>
+        <dec>-0.47495945</dec>
+        <rmsRA>0.1204</rmsRA>
+        <rmsDec>0.1225</rmsDec>
+        <astCat>Gaia2</astCat>
+        <mag>23.37</mag>
+        <rmsMag>0.15</rmsMag>
+        <band>g</band>
+      </optical>
+      <optical>
+        <trkSub>gf00360dc</trkSub>
+        <obsSubID>c4d.411786.32.23</obsSubID>
+        <mode>CCD</mode>
+        <stn>W84</stn>
+        <obsTime>2015-02-19T05:49:04.463Z</obsTime>
+        <ra>136.43564423</ra>
+        <dec>-0.38339213</dec>
+        <rmsRA>0.1347</rmsRA>
+        <rmsDec>0.1346</rmsDec>
+        <astCat>Gaia2</astCat>
+        <mag>23.23</mag>
+        <rmsMag>0.16</rmsMag>
+        <band>g</band>
+      </optical>
+    </obsData>
+  </obsBlock>
+</ades>
