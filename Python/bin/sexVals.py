@@ -220,11 +220,13 @@ def twoDigit(t):
    ss = "{0:.0f}".format(t+100.0)[1:]
    return ss
 
-def sexDateToISO(sexDate, intsec=False, mpc_rounding=True):
-   """ translates date into iso date
+def sexDateToISO(sexDate, intsec=False, microsec=False, mpc_rounding=True):
+   """ Translates sexagesimal date into ISO formatted date, with rounding behavior controlled through argument inputs. 
+   If all rounding behavior arguments are False, will round ISO format date using the precision of the provided sexagesimal date.
        Inputs:
            sexDate:  sexDate string
            intsec (bool, optional): round to integer seconds (Defaults to False)
+           microsec (bool, optional): round to microseconds (Defaults to False)
            mpc_rounding (bool, optional): always report isoDate with millisecond precision (Defaults to True)
        Return Value:
            A tuple
@@ -278,9 +280,28 @@ def sexDateToISO(sexDate, intsec=False, mpc_rounding=True):
       elif intsec:
          # do not report microseconds
          digits = 0
-      else:
-         # pass through at microsecond precision
+      elif microsec:
+         # report microseconds
          digits = 6
+      else:
+         # smart rounding for ISO format seconds according to the sexTime day precision
+         # prec_day prec_sec microsecond digits
+         # 1e-06    9e-08     8
+         # 1e-05    9e-07     7
+         # 0.0001   9e-06     6
+         # 0.001    9e-05     5
+         # 0.01     9e-04     4
+         # 0.1      9e-03     3
+         # 1        9e-02     2
+         # 10       9e-01     1
+         # 100      9e+00     0
+         # 1000     9e+01    -1
+         # 10000    9e+02    -2
+         # 100000   9e+03    -3
+         # 1000000  9e+04    -4
+         # ISO format accepts at most 6 digits (microsecond)
+         # and at minimum 0 digits (whole seconds)
+         digits = int(min(max(0, 2 - math.log10(prec)), 6))
 
       fractional_seconds = round((seconds - int(seconds)) * 10**digits)
 
