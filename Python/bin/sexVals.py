@@ -15,6 +15,7 @@ import sys
 import re
 import io
 import math
+from datetime import datetime, timedelta
 
 #import adesutility
 
@@ -170,7 +171,7 @@ def checkSexagesimal(line):
 
       
 
-_checkDate = re.compile(r'^((16|17|18|19|[2-9]\d)\d\d) (0[1-9]|10|11|12) ((0[1-9]|[12]\d|30|31)\.(\d+)) *$')
+_checkDate = re.compile(r'^(?P<year>(?P<century>16|17|18|19|[2-9]\d)\d\d) (?P<month>0[1-9]|10|11|12) (?P<days>(?P<day>0[1-9]|[12]\d|30|31)\.(?P<fractional_day>\d+)) *$')
 #testdate("1800 00 01.333  ")  # bad month
 #testdate("1800 01 00.333  ")  # bad day
 #testdate("1800 01 01    ")
@@ -219,10 +220,14 @@ def twoDigit(t):
    ss = "{0:.0f}".format(t+100.0)[1:]
    return ss
 
-def sexDateToISO(sexDate, intsec=False):
-   """ translates date into iso date
+def sexDateToISO(sexDate, intsec=False, microsec=False, mpc_rounding=True):
+   """ Translates sexagesimal date into ISO formatted date, with rounding behavior controlled through argument inputs. 
+   If all rounding behavior arguments are False, will round ISO format date using the precision of the provided sexagesimal date.
        Inputs:
            sexDate:  sexDate string
+           intsec (bool, optional): round to integer seconds (Defaults to False)
+           microsec (bool, optional): round to microseconds (Defaults to False)
+           mpc_rounding (bool, optional): always report isoDate with millisecond precision (Defaults to True)
        Return Value:
            A tuple
             (isoDate, prec, oldfracdd)
@@ -244,93 +249,71 @@ def sexDateToISO(sexDate, intsec=False):
    global _countDate1000000
    global _countDateBig
    global _countDateSmall
+
    m = _checkDate.match(sexDate)
    if m:
-     #print (m.groups())
-     #print (m.group(1), m.group(3), m.group(4), "prec = ", prec)
-     yyyy = int(m.group(1)) # Year
-     dd = float(m.group(4)) # Decimal date, e.g., 15.12345
-     prec = int( 10.0**(6 - len(m.group(6)))) # >1 for legal mpc
- 
-     # Count the number of differenent precision values
-     if prec == 1: _countDate1 += 1       # This means 1e-6 day precision
-     if prec == 10: _countDate10 += 1
-     if prec == 100: _countDate100 += 1
-     if prec == 1000: _countDate1000 += 1
-     if prec == 10000: _countDate10000 += 1
-     if prec == 100000: _countDate100000 += 1
-     if prec == 1000000: _countDate1000000 += 1 # This means integer day precission
-     if prec >  1000000: _countDateBig += 1 # Should not be possible
-     if prec < 1: _countDateSmall += 1 # Should not be possible
- 
-     # Start to disect the decimal day  
-     oldfracdd = m.group(4)[2:] # Drop the integer part
-     fracdd = float(oldfracdd) * 86400.0 # GH trick to add a millisec?: + 0.001 # 0.001 avoids round-off to <secs>.999999
-     hh_int = int(fracdd/3600.0);
-     fracdd = fracdd - hh_int*3600.0  # Remaining seconds after stripping off hours
-     mm_int = int(fracdd/60.0)
-     fracdd = fracdd - mm_int*60.0  # Remaining seconds after stripping off hours and minutes
- 
-     # Deal with formatting seconds
-     if intsec or prec >= 100:
+      d = m.groupdict()
+      year = int(d['year'])
+      month = int(d['month'])
+      day = int(d['day'])
+      oldfracdd = "." + d['fractional_day']
+      seconds = float(oldfracdd) * 86400
+      # precision in millions of a day
+      prec = 10.0**(6 - len(d['fractional_day'])) # >1 for legal mpc
+      if prec >= 1:
+         prec = int(prec)
 
-        # Round to integer sec
-        ss_int =  int(round(fracdd))
-        if ss_int == 60: # Check for illegitimate 60s
-           #print("A Fixing: ", ss_int, mm_int, hh_int)
-           ss_int = 0
-           mm_int += 1
-           if mm_int == 60:
-              mm_int = 0
-              hh_int += 1
-              if hh_int == 24:
-                 errorSexVal('With integer seconds, fractional portion of date rounds to "24:00:00". ' + \
-                                 ' This should not happen. ', sexDate)
-                 
-        # Get the string            
-        ss = "{:02d}".format(ss_int)
-       
-     elif (prec == 1):
+      # Count the number of different precision values
+      if prec == 1: _countDate1 += 1       # This means 1e-6 day precision
+      if prec == 10: _countDate10 += 1
+      if prec == 100: _countDate100 += 1
+      if prec == 1000: _countDate1000 += 1
+      if prec == 10000: _countDate10000 += 1
+      if prec == 100000: _countDate100000 += 1
+      if prec == 1000000: _countDate1000000 += 1 # This means integer day precission
+      if prec >  1000000: _countDateBig += 1 # Should not be possible
+      if prec < 1: _countDateSmall += 1 # Should not be possible
 
-        # Round to two decimal places
-        ss = "{:05.2f}".format(fracdd)
-        if ss == "60.00":
-           #print("B Fixing: " + ss, mm_int, hh_int)
-           ss = "00.00"
-           mm_int += 1
-           if mm_int == 60:
-              mm_int = 0
-              hh_int += 1
-              if hh_int == 24:
-                 errorSexVal('With two decimal places, fractional portion of date rounds to "24:00:00.00". ' + \
-                                 ' This should not happen. ', sexDate)
-                   
-     elif (prec == 10):
+      if mpc_rounding:
+         # convert to millisecond precision if precision is 1e-6 day or less (i.e. all MPC records)
+         digits = 3
+      elif intsec:
+         # do not report microseconds
+         digits = 0
+      elif microsec:
+         # report microseconds
+         digits = 6
+      else:
+         # smart rounding for ISO format seconds according to the sexTime day precision
+         # prec_day prec_sec microsecond digits
+         # 1e-06    9e-08     8
+         # 1e-05    9e-07     7
+         # 0.0001   9e-06     6
+         # 0.001    9e-05     5
+         # 0.01     9e-04     4
+         # 0.1      9e-03     3
+         # 1        9e-02     2
+         # 10       9e-01     1
+         # 100      9e+00     0
+         # 1000     9e+01    -1
+         # 10000    9e+02    -2
+         # 100000   9e+03    -3
+         # 1000000  9e+04    -4
+         # ISO format accepts at most 6 digits (microsecond)
+         # and at minimum 0 digits (whole seconds)
+         digits = int(min(max(0, 2 - math.log10(prec)), 6))
 
-        # Round to one decimal place
-        ss = "{:04.1f}".format(fracdd)
-        if ss == "60.0": 
-           #print("C Fixing: " + ss, mm_int, hh_int)
-           ss = "00.0"
-           mm_int += 1
-           if mm_int == 60:
-              mm_int = 0
-              hh_int += 1
-              if hh_int == 24:
-                 errorSexVal('With one decimal place, fractional portion of date rounds to "24:00:00.0". ' + \
-                                 ' This should not happen. ', sexDate)
+      fractional_seconds = round((seconds - int(seconds)) * 10**digits)
 
-     # Write the string
-     mm = "{:02d}".format(mm_int)
-     hh = "{:02d}".format(hh_int)
-     isodate = m.group(1) + '-' + m.group(3)  + '-' + m.group(4)[0:2] + 'T' + hh + ':' + mm + ':' + ss + 'Z'
-
-     if (ss[0:2] == "60") or (ss[0] == "-"):  # should raise error
-        print ("Bad Date: " + ss + " for ss in date:",  sexDate)
-
-     return (isodate, prec, oldfracdd)
+      isofmt = "%Y-%m-%dT%H:%M:%S"
+      dt = datetime(year, month, day) + timedelta(seconds=seconds)
+      isoDate = dt.strftime(isofmt)
+      if mpc_rounding or digits != 0:
+         isoDate += "." + str(fractional_seconds).rjust(digits, "0") # add on microseconds
+      isoDate += "Z"
+      return isoDate, prec, oldfracdd
    else:
-     errorSexVal('date  must be "YYYY MM DD.d..." not ', sexDate)
+      errorSexVal('date  must be "YYYY MM DD.d..." not ', sexDate)
 
 def isoToSexDate(isodate, prec):
    """ Translates isodate to sexDate format
@@ -341,32 +324,27 @@ def isoToSexDate(isodate, prec):
           sexdate
        Errors:  Only if prec is wierd
    """
-   #print (isodate, prec)
-   # -- do this later with regex which checks for Z, T and colons
-   yyyy = isodate[0:4]
-   month = isodate[5:7]
-   day = isodate[8:10]
-   hh = isodate[11:13]
-   mm = isodate[14:16]
-   ss = isodate[17:-1]
-   xx = int(hh)*3600.0 + int(mm)*60.0 + float(ss)
-   #print (yyyy, month, day, hh, mm, ss, xx, prec)
-   if (prec <= 1): # < never copmes from legal input mpc
-      yy = "{0:.6f}".format(xx/86400.0)[1:]
-   if (prec == 10):
-      yy = "{0:.5f}".format(xx/86400.0)[1:]
-   if (prec == 100):
-      yy = "{0:.4f}".format(xx/86400.0)[1:]
-   if (prec == 1000):
-      yy = "{0:.3f}".format(xx/86400.0)[1:]
-   if (prec == 10000):
-      yy = "{0:.2f}".format(xx/86400.0)[1:]
-   if (prec >= 100000): # > never comes from legal input mpc
-      yy = "{0:.1f}".format(xx/86400.0)[1:]
-   #print (yy)
-   sexdate = yyyy + ' ' + month + ' ' + day + yy
-   #print (sexdate)
-   return "{0:17s}".format(sexdate)  # get length right
+
+   isoformat = "%Y-%m-%dT%H:%M:%S.%fZ"
+   dt = datetime.strptime(isodate, isoformat)
+   epoch = datetime(dt.year, dt.month, dt.day, tzinfo=dt.tzinfo)
+   delta = (dt - epoch)
+   # get fractional days
+   fracdd = delta.seconds / 86400 + delta.microseconds / (86400) / 1e6
+   # compute fractional days considering precision
+   number_of_digits = 6 - int(math.log10(prec))
+   if number_of_digits <= 0: # this corresponds to integer days or less precision
+      # never comes from legal input mpc
+      number_of_digits = 1
+   fmt = "{" + f":.{number_of_digits}f" + "}"
+   fracdd = fmt.format(fracdd) # round to the desired number of digits
+   fracdd = fracdd.split(".")[1] # get digits after decimal place
+   fracdd = fracdd.ljust(6, " ") # pad with whitespace
+   fracdd = "." + fracdd
+
+   sexDateFmt = "%Y %m %d"
+   sexdate = dt.strftime(sexDateFmt) + fracdd
+   return sexdate
 
 
 def checkDate(rdict, radar=False):
@@ -375,14 +353,17 @@ def checkDate(rdict, radar=False):
        rdict['precTime'] if it is"""
    date = rdict['date']
    (dateiso, prec, fracdd) = sexDateToISO(date, radar)
-   rdict['obsTime'] = dateiso
-   rdict['precTime'] = prec
+   if prec < 1:
+      errorSexVal(f"time precision too high for ADES: precTime={prec}", date)
    #
    # test by turning it back -- valid prec is 1 through 100000
    #
    sexdate = isoToSexDate(dateiso, prec)
    if sexdate != date:  # no round-trip
        errorSexVal( " Date invalid reverse: " + date, sexdate)
+
+   rdict['obsTime'] = dateiso
+   rdict['precTime'] = prec
 
 
 secToDegrees = 360.0/86400.0
