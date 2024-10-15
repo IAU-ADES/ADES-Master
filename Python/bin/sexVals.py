@@ -324,9 +324,15 @@ def isoToSexDate(isodate, prec):
           sexdate
        Errors:  Only if prec is wierd
    """
-    
-   # Convert input time to datetime object
-   dt = datetime.fromisoformat(isodate)
+   # This next line will only work reliably for python 3.11+ 
+   # dt = datetime.fromisoformat(isodate)
+   # And so we'll do it more carefully:
+   try:
+      # Try parsing with fractional seconds
+      dt =  datetime.strptime(isodate, "%Y-%m-%dT%H:%M:%S.%fZ")
+   except ValueError:
+      # Fallback to parsing without fractional seconds
+      dt = datetime.strptime(isodate, "%Y-%m-%dT%H:%M:%SZ")
    epoch = datetime(dt.year, dt.month, dt.day, tzinfo=dt.tzinfo)
    delta = (dt - epoch)
    # get fractional days
