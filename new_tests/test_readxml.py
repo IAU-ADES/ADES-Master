@@ -8,14 +8,13 @@ import subprocess
 import sys
 from contextlib import redirect_stdout
 
-sys.path.append("../Python/bin")
-import readxmlpy
+from ades import readxmlpy
 
 #Test the script from command line
 def test_read_xml():
     infile = "input/trksub_sub.xml"
     outfile = "output/read_xml_out.txt"
-    subprocess.run("python3 ../Python/bin/readxmlpy.py "+infile+"> "+outfile,shell=True)
+    subprocess.run("readxmlpy.py "+infile+"> "+outfile,shell=True)
     assert(os.path.exists(outfile) and os.stat(outfile).st_size != 0)
 
 #Test the script as a routine

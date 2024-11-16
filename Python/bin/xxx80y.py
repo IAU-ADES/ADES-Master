@@ -12,7 +12,7 @@ import sys
 import re
 import io
 
-import adesutility
+from ades import adesutility
 
 #
 # sys.argv[1]: input mpc 80-column file

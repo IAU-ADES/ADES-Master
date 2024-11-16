@@ -1,4 +1,4 @@
-from packUtil import programCodesArray
+from ades.packUtil import programCodesArray
 
 def test_programCodesArray():
     program_code_mappings = "\n".join([f"{i} {i}" for i in range(10)])
