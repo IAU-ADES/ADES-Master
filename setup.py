@@ -5,7 +5,7 @@ from setuptools.command.build import build
 from pathlib import Path
 
 def manage_symlinks(action):
-    root = Path("Python") / "bin" / "data"
+    root = Path("Python") / "ades" / "data"
     if not root.exists():
         root.mkdir()
 
