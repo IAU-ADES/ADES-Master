@@ -7,12 +7,11 @@ import os
 import subprocess
 import sys
 
-sys.path.append("../Python/bin")
-import valgeneral
-import valall
-import validate
-import valsubmit
-import adesutility
+from ades import valgeneral
+from ades import valall
+from ades import validate
+from ades import valsubmit
+from ades import adesutility
 
 
 '''
@@ -26,7 +25,7 @@ def test_valgeneral():
     xmlfile = "input/obs_v2022.xml"
     if os.path.exists("validation.file"):
         os.remove("validation.file")
-    subprocess.run("python3 ../Python/bin/valgeneral.py "+xmlfile+"> validation.file",shell=True)
+    subprocess.run("valgeneral.py "+xmlfile+"> validation.file",shell=True)
     with open("validation.file",'r') as valfile:
         val = valfile.readlines()[0].replace("\n","")
         if val == 'general is OK':
@@ -51,7 +50,7 @@ def test_valall():
     xmlfile = "input/obs_v2022.xml"
     if os.path.exists("valall.file"):
         os.remove("valall.file")
-    subprocess.run("python3 ../Python/bin/valall.py "+xmlfile+"> valall.file",shell=True)
+    subprocess.run("valall.py "+xmlfile+"> valall.file",shell=True)
     with open("valall.file",'r') as valfile:
         lines = [line.strip() for line in valfile.readlines()]
         assert(all([f"{schema_name} is OK" in lines for schema_name in sorted(adesutility.schemaxslts.keys())]))
@@ -83,7 +82,7 @@ def test_validate_v2022():
     xmlfile = "input/obs_v2022.xml"
     if os.path.exists("validation.file"):
         os.remove("validation.file")
-    subprocess.run("python3 ../Python/bin/validate.py ../xsd/general.xsd "+xmlfile+"> validation.file",shell=True)
+    subprocess.run("validate.py ../xsd/general.xsd "+xmlfile+"> validation.file",shell=True)
     with open("validation.file",'r') as valfile:
         val = valfile.readlines()[0].replace("\n","")
         if 'is OK' in val:
@@ -109,7 +108,7 @@ def test_validate_v2017():
     xmlfile = "input/obs.xml"
     if os.path.exists("validation.file"):
         os.remove("validation.file")
-    subprocess.run("python3 ../Python/bin/validate.py ../past_versions/v2017/general_v2017.xsd "+xmlfile+"> validation.file",shell=True)
+    subprocess.run("validate.py ../past_versions/v2017/general_v2017.xsd "+xmlfile+"> validation.file",shell=True)
     with open("validation.file",'r') as valfile:
         val = valfile.readlines()[0].replace("\n","")
         if 'is OK' in val:
@@ -139,7 +138,7 @@ def test_val_submit():
     xmlfile = "input/obs_v2022.xml"
     if os.path.exists("validation.file"):
         os.remove("validation.file")
-    subprocess.run("python3 ../Python/bin/valsubmit.py "+xmlfile+"> validation.file",shell=True)
+    subprocess.run("valsubmit.py "+xmlfile+"> validation.file",shell=True)
     with open("validation.file",'r') as valfile:
         val = valfile.readlines()[0].replace("\n","")
         if 'is OK' in val:

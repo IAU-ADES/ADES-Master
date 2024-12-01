@@ -19,10 +19,10 @@ from __future__ import unicode_literals
 
 
 
-import adesutility
-from adesutility import applyPaddingAndJustification
+from ades import adesutility
+from ades.adesutility import applyPaddingAndJustification
 
-from xmlutility import regularizeWhiteSpace
+from ades.xmlutility import regularizeWhiteSpace
 
 #
 # read in allowedElementDict, requiredELementDict and psvFormatDict

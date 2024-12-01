@@ -12,7 +12,7 @@ from __future__ import unicode_literals
 import sys
 import re
 
-import adesutility
+from ades import adesutility
 
 #
 # codes and translations

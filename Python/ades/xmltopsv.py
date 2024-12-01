@@ -14,7 +14,7 @@ import io
 
 from collections import OrderedDict
 
-import convertutility
+from ades import convertutility
 
 #
 # write encoded output for psv.  Default encoding
@@ -29,8 +29,8 @@ encodedout = None
 #
 import sys
 
-import adesutility
-from adesutility import applyPaddingAndJustification
+from ades import adesutility
+from ades.adesutility import applyPaddingAndJustification
 
 def setFromElementDictList(element):
    """ makes a set from the allowedElementDict list for elemnt """
@@ -319,7 +319,7 @@ def xmltopsv(xmlfile, psvfile, psvencoding="UTF-8"):
    with open(psvfile, 'w', encoding=psvencoding) as encodedout:
       processAdesElement(inputTree.getroot())
    
-if __name__ == "__main__":
+def main():
    # construct argument parser for a conversion tool
    parser = convertutility.conversion_parser(description="Convert ADES XML to PSV")
    args = parser.parse_args()
@@ -327,3 +327,6 @@ if __name__ == "__main__":
    call = lambda i, o : xmltopsv(i, o, psvencoding=args.output_encoding)
    # call function with filename arguments
    convertutility.call_with_files(call, args)
+
+if __name__ == "__main__":
+   main()

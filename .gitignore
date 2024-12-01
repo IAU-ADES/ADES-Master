@@ -24,3 +24,9 @@ C/src/writexml
 C/src/xmltopsv
 Python/bin/__pycache__
 .vscode
+.DS_Store
+env/
+build/
+*.egg-info
+_version.py
+dist/

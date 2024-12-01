@@ -21,14 +21,14 @@ from __future__ import unicode_literals
 
 #import lxml.etree
 import traceback
-from xmlutility import readXML
-from xmlutility import XMLtoSchema
+from ades.xmlutility import readXML
+from ades.xmlutility import XMLtoSchema
 import sys
 import argparse
 
-import adesutility
-from valutility import validate_schema, validate_xml_declaration
-import convertutility
+from ades import adesutility
+from ades.valutility import validate_schema, validate_xml_declaration
+from ades import convertutility
 
 #
 # Read in the schema
@@ -52,8 +52,7 @@ def validate(schemafile, xmlfile):
         validate_xml_declaration(xmlfile, out)
         validate_schema(schemafile, schema, candidate, out)
     
-# -------------------------------------------------------------------
-if __name__ == '__main__':
+def main():
     # construct argument parser for a validation tool (input only)
     parser = argparse.ArgumentParser(
         description='Validate XML', 
@@ -67,3 +66,8 @@ if __name__ == '__main__':
     call = lambda i, o : validate(args.schemafile, i)
     # call function with filename arguments
     convertutility.call_with_files(call, args)
+
+
+# -------------------------------------------------------------------
+if __name__ == '__main__':
+    main()

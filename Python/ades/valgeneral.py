@@ -18,9 +18,9 @@ import traceback
 import sys
 import argparse
 
-import adesutility
-from valutility import validate_xslt, validate_xml_declaration
-import convertutility
+from ades import adesutility
+from ades.valutility import validate_xslt, validate_xml_declaration
+from ades import convertutility
 
 #
 # This script validates an xml file against six different
@@ -57,9 +57,7 @@ def valgeneral(xmlfile):
     validate_xml_declaration(xmlfile, out)
     validate_xslt("general", adesutility.schemaxslts['general'], candidate, out)
   
-  
-# ------------------------------------------------------------
-if __name__ == '__main__':
+def main():
   # construct argument parser for a validation tool (input only)
   parser = convertutility.input_parser(
     description='Validate XML against general schema', 
@@ -71,3 +69,8 @@ if __name__ == '__main__':
   # call function with filename arguments
   convertutility.call_with_files(call, args)
 
+
+  
+# ------------------------------------------------------------
+if __name__ == '__main__':
+  main()

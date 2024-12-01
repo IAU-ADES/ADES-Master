@@ -19,7 +19,7 @@ import sys
 # example: ./writexml <xml file> UTF-8
 #
 
-import adesutility
+from ades import adesutility
 
 
 def usage(name):

@@ -25,7 +25,7 @@ from __future__ import unicode_literals
 import sys
 import argparse
 
-import xmlutility
+from ades import xmlutility
 
 def valades(adesmaster, xsltschema, xmlfile):
     xml_tree = xmlutility.readXML(adesmaster)
@@ -36,8 +36,7 @@ def valades(adesmaster, xsltschema, xmlfile):
 
     schema.assertValid(candidate)
 
-# ---------------------------------------------------------------
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(
         description='Validate XML against ADES master and a chosen schema.', 
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
@@ -50,3 +49,7 @@ if __name__ == '__main__':
     
     call = lambda i, o : valades(args.adesmaster, args.xsltschema, i)
     convertutility.call_with_files(call, args)
+
+# ---------------------------------------------------------------
+if __name__ == '__main__':
+    main()

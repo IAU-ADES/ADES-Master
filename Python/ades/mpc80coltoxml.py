@@ -16,10 +16,10 @@ import io
 import math
 import argparse
 
-import adesutility
-import packUtil
-import sexVals
-import convertutility
+from ades import adesutility
+from ades import packUtil
+from ades import sexVals
+from ades import convertutility
 
 #
 # ignore blanks lines everywhere
@@ -1027,8 +1027,7 @@ def mpc80coltoxml(inmpcfile, outxmlfile, nosplit=False, input_encoding='utf-8', 
    #print ("Statistics:")
    #sexVals.printCounts()
 
-#---------------------------------------------------------------------
-if __name__ == '__main__':
+def main():
    # construct argument parser for a conversion tool
    parser = convertutility.conversion_parser(
       description='Convert MPC obs80 to ADES XML.', 
@@ -1055,3 +1054,8 @@ if __name__ == '__main__':
       print("Error", e)
       parser.print_help()
       exit(-1)
+
+
+#---------------------------------------------------------------------
+if __name__ == '__main__':
+   main()

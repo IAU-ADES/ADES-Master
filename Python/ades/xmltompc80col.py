@@ -13,10 +13,10 @@ import io
 from collections import OrderedDict
 import sys
 import argparse
-import adesutility
-import packUtil
-import sexVals
-import convertutility
+from ades import adesutility
+from ades import packUtil
+from ades import sexVals
+from ades import convertutility
 
 
 def setFromElementDictList(element,allowedElementDict):
@@ -50,7 +50,7 @@ def processObsBlock(element,allowedObsBlockSet,allowedObsDataSet):
       if tag not in allowedObsBlockSet:
         raise RuntimeError("Cannot have tag " + tag + " in obsBlock");
 
-      elif tag == "obsContext" and not args.noHeader:
+      elif tag == "obsContext" and not noHeader:
         processObsContext(child)
 
       elif tag == "obsData": # an empty obsData is not allowed in PSV
@@ -455,9 +455,14 @@ def xmltompc80col(xmlfile, mpcencdoing='utf-8'):
    allowedAdesSet = setFromElementDictList('ades',allowedElementDict)
 
    processAdesElement(inputTree.getroot(),allowedObsDataSet,allowedAdesSet,allowedObsBlockSet)
-       
-# --- Start executable code -----------------------------
-if __name__ == '__main__':
+
+noHeader = False
+# Set obs80 precision constants
+defaultPrecTime = '1'
+defaultPrecRA = '0.001'
+defaultPrecDec = '0.01'
+
+def main():
    # Input arguments
    # construct argument parser for a conversion tool
    parser = convertutility.conversion_parser(
@@ -470,14 +475,16 @@ if __name__ == '__main__':
    parser.add_argument("--noHeader", action='store_true', \
                        help = "Do not export ADES obsContext information to obs80 header.")
    args = parser.parse_args()
+   
+   global noHeader
+   noHeader = args.noHeader
 
-   # Set obs80 precision constants
-   defaultPrecTime = '1'
-   defaultPrecRA = '0.001'
-   defaultPrecDec = '0.01'
    if args.lowPrec:
+      global defaultPrecTime
       defaultPrecTime = '10'
+      global defaultPrecRA
       defaultPrecRA = '0.01'
+      global defaultPrecDec
       defaultPrecDec = '0.1'
 
    # create callable
@@ -488,3 +495,7 @@ if __name__ == '__main__':
    
    # call function with filename arguments
    convertutility.call_with_files(call, args)
+
+# --- Start executable code -----------------------------
+if __name__ == '__main__':
+   main()

@@ -23,8 +23,8 @@ import argparse
 #
 import sys
 
-import adesutility
-import convertutility
+from ades import adesutility
+from ades import convertutility
 
 
 #
@@ -537,9 +537,8 @@ def psvtoxml(psvfile, xmlfile, psvencoding="UTF-8", xmlencoding="UTF-8"):
    treeTop = stack.takeTreeAndClear()
    treeTop.write(xmlfile, pretty_print=True, xml_declaration=True, encoding=xmlencoding)
 
-#----------------------------------------------------
-if __name__ == '__main__':
-  # construct argument parser for a conversion tool
+def main():
+   # construct argument parser for a conversion tool
    parser = convertutility.conversion_parser(
       description='Convert ADES PSV to XML.', 
    )
@@ -548,3 +547,8 @@ if __name__ == '__main__':
    call = lambda i, o : psvtoxml(i, o, psvencoding=args.input_encoding, xmlencoding=args.output_encoding)
    # call function with filename arguments
    convertutility.call_with_files(call, args)
+
+
+#----------------------------------------------------
+if __name__ == '__main__':
+   main()

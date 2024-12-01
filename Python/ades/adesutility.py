@@ -39,24 +39,24 @@ from __future__ import unicode_literals
 #-------------------------------------------------------------------
 # XML utilities
 #-------------------------------------------------------------------
-from xmlutility import readXML
-from xmlutility import XMLtoXSLT
-from xmlutility import transformViaXSLT
-from xmlutility import transformFileViaXSLT
-from xmlutility import XMLtoSchema
-from xmlutility import XMLtoSchemaViaXSLT
+from ades.xmlutility import readXML
+from ades.xmlutility import XMLtoXSLT
+from ades.xmlutility import transformViaXSLT
+from ades.xmlutility import transformFileViaXSLT
+from ades.xmlutility import XMLtoSchema
+from ades.xmlutility import XMLtoSchemaViaXSLT
 #-------------------------------------------------------------------
 # Element utilities
 #-------------------------------------------------------------------
-from xmlutility import getElementTagTextTail
-from xmlutility import getElementTagText
-from xmlutility import newElement
-from xmlutility import makeTree
-from xmlutility import makeElementList
+from ades.xmlutility import getElementTagTextTail
+from ades.xmlutility import getElementTagText
+from ades.xmlutility import newElement
+from ades.xmlutility import makeTree
+from ades.xmlutility import makeElementList
 #-------------------------------------------------------------------
 # ElementStack utility class
 #-------------------------------------------------------------------
-from xmlutility import ElementStack
+from ades.xmlutility import ElementStack
 #-------------------------------------------------------------------
 
 
@@ -65,7 +65,7 @@ from collections import OrderedDict  # to do list duplicate removal
 import io # io.open works in python 2 and 3 the same way
 import os
 import inspect
-import adesutility # circular imports are allowed -- used for inspect
+from ades import adesutility # circular imports are allowed -- used for inspect
 
 #-------------------------------------------------------------------
 # Variables for external consumption
@@ -83,10 +83,10 @@ import adesutility # circular imports are allowed -- used for inspect
 #
 #-------------------------------------------------------------------
 
-mypath = os.path.abspath(os.path.dirname(inspect.getfile(adesutility))) # where am I?
+mypath = os.path.dirname(os.path.abspath(__file__)) # where am I?
 
-xmlpath = os.path.join(mypath, '../../xml')
-xsltpath = os.path.join(mypath, '../../xslt')
+xmlpath = os.path.join(mypath, 'data', 'xml')
+xsltpath = os.path.join(mypath, 'data', 'xslt')
 adesmaster = os.path.join(xmlpath, "adesmaster.xml")
 
 # transforms master a form 

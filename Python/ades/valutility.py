@@ -8,8 +8,8 @@ import sys
 import argparse
 import re
 
-import adesutility
-import convertutility
+from ades import adesutility
+from ades import convertutility
 import io
 
 

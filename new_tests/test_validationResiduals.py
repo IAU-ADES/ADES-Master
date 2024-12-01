@@ -21,16 +21,13 @@ import os,sys
 
 # Define useful paths (for import & subprocess)
 master_dir =  os.path.dirname(os.path.dirname(__file__))
-bin_dir = os.path.join(master_dir, "Python/bin")
 test_dir = os.path.join(master_dir, "new_tests")
-x2j_py = os.path.join(bin_dir, "xml2json.py")
-j2x_py = os.path.join(bin_dir, "json2xml.py")
-valsubmit_py = os.path.join(bin_dir, "valsubmit.py")
-valgeneral_py = os.path.join(bin_dir, "valgeneral.py")
+x2j_py = "xml2json.py"
+j2x_py = "json2xml.py"
+valsubmit_py = "valsubmit.py"
+valgeneral_py = "valgeneral.py"
 
-# Import local
-sys.path.append( bin_dir )
-import valgeneral
+from ades import valgeneral
 
 
 '''
@@ -44,7 +41,7 @@ def test_valgeneral_residual_A():
     # Input file to use for the test
     xmlfile = os.path.join(test_dir, "input/obsResidual.xml")
     # Run the validation script
-    result = subprocess.run(f"python3 {valgeneral_py} {xmlfile}",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    result = subprocess.run(f"{valgeneral_py} {xmlfile}",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     # Check the result is as expected
     assert result.stdout.strip() == 'general is OK' ,f'expected `general is OK`, got {result.stdout}'
 
@@ -70,7 +67,7 @@ def test_valgeneral_residual_C():
     # Input file to use for the test
     xmlfile = os.path.join(test_dir, "input/standaloneResidual.xml")
     # Run the validation script
-    result = subprocess.run(f"python3 {valgeneral_py} {xmlfile}",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    result = subprocess.run(f"{valgeneral_py} {xmlfile}",shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     # Check the result is as expected
     assert result.stdout.strip() == 'general is OK' ,f'expected `general is OK`, got {result.stdout}'
 

@@ -7,8 +7,7 @@ import os
 import subprocess
 import sys
 
-sys.path.append("../Python/bin/")
-import psvtoxml
+from ades import psvtoxml
 
 
 #Testing the script from command line
@@ -17,7 +16,7 @@ def test_psv_to_xml_conversion():
     xml_outfile = "output/2023MQ5.xml"
     if os.path.exists(xml_outfile):
         os.remove(xml_outfile)
-    subprocess.run("python3 ../Python/bin/psvtoxml.py "+psv_infile+" "+xml_outfile,shell=True)       
+    subprocess.run("psvtoxml.py "+psv_infile+" "+xml_outfile,shell=True)       
     assert(os.path.exists(xml_outfile) and os.stat(xml_outfile).st_size != 0)
     
 #Testing the script as a function
