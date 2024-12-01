@@ -6,8 +6,12 @@ env:
 .PHONY: install
 install:
 	python3 -m pip install --upgrade pip
-	python3 -m pip install pytest
-	python3 -m pip install .
+	python3 -m pip install ".[test]"
+
+.PHONY: dist
+dist:
+	python3 -m pip install build
+	python3 -m build
 
 .PHONY: clean
 clean:
