@@ -28,6 +28,5 @@ Python/bin/__pycache__
 env/
 build/
 *.egg-info
-Python/ades/data
 _version.py
 dist/
