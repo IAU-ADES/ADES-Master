@@ -7,13 +7,7 @@ env:
 install:
 	python3 -m pip install --upgrade pip
 	python3 -m pip install pytest
-	test -d ./Python/bin/data || mkdir -p ./Python/bin/data
-	pushd ./Python/bin/data; \
-	test -L xml || ln -s ../../../xml xml; \
-	test -L xsd || ln -s ../../../xsd xsd; \
-	test -L xslt || ln -s ../../../xslt xslt;
 	python3 -m pip install .
-
 
 .PHONY: clean
 clean:

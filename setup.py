@@ -34,5 +34,6 @@ class Build(build):
 setup(
     cmdclass={
         'build': Build,
-    }
+    },
+    use_scm_version=True,
 )

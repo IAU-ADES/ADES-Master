@@ -1,6 +1,6 @@
 [project]
 name = "ADES"
-version = "0.0.1"
+dynamic = ['version']
 dependencies = [
     "lxml",
     "xmltodict",
@@ -23,7 +23,7 @@ readme = "README.txt"
 "xmltopsv.py" = "ades.xmltopsv:main"
 
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=64", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.package-dir]
@@ -31,3 +31,6 @@ ades = "Python/bin"
 
 [tool.setuptools.package-data]
 ades = ["data/xml/*.xml", "data/xsd/*.xsd", "data/xslt/*/*.xslt"]
+
+[tool.setuptools_scm]
+write_to = "Python/bin/_version.py"

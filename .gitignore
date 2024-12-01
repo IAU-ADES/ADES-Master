@@ -29,3 +29,5 @@ env/
 build/
 *.egg-info
 Python/bin/data
+_version.py
+dist/
