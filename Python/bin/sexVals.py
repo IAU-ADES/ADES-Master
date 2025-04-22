@@ -64,14 +64,6 @@ _checkIntegerSeconds = re.compile(r'^\s*(\d{1,2})\s+(\d{1,2})\s+(\d{1,2})\s*$')
 _checkMinutesHundredths = re.compile(r'^\s*(\d{1,2})\s+(\d{1,2}\.\d{2})\s*$')
 _checkMinutesTenths = re.compile(r'^\s*(\d{1,2})\s+(\d{1,2}\.\d)\s*$')
 _checkIntegerMinutes = re.compile(r'^\s*(\d{1,2})\s+(\d{1,2})\s*$')
-##
-## Sexagesimal Parsing
-##
-#_checkNormal = re.compile(r'^(\d\d) (\d\d) (\d\d\.(\d*)) *$')
-#_checkIntegerSeconds = re.compile(r'^(\d\d) (\d\d) (\d\d) *$')
-#_checkMinutesHundredths = re.compile(r'^(\d\d) (\d\d\.\d\d) *$')
-#_checkMinutesTenths = re.compile(r'^(\d\d) (\d\d\.\d) *$')
-#_checkIntegerMinutes = re.compile(r'^(\d\d) (\d\d) *$')
 
 _countNormal = 0
 _countIntegerSeconds = 0
