@@ -38,6 +38,9 @@ def processDataElement(first, element):
          subDict[1][childtag] = childtext
  
    if first:
+     sline = "NET "+subDict[1]['astCat']
+     print(sline, file= encodedout)
+     
      dataDicts = []  # store subDicts
    dataDicts.append(subDict) # add to the list
 
@@ -63,7 +66,9 @@ def processObsBlock(element,allowedObsBlockSet,allowedObsDataSet):
             elif tag != obsDataType:
                raise RuntimeError("Cannot mix tag " + tag + " with tag " + 
                                   obsDataType + "in obsData")
+            
             processDataElement(first, grandchild)
+            
             first = False
 
 #
