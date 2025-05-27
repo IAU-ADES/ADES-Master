@@ -1496,19 +1496,33 @@ decimal types must be in a range
 <complextype name="ObsDataType">
   <doc>A list of all optical or all radar observations</doc>
   <choice>
-     <element ref="optical" use="unbounded"/>
-     <element ref="offset" use="unbounded"/>
-     <element ref="occultation" use="unbounded"/>
-     <element ref="radar" use="unbounded"/>
-  </choice>
+    <element ref="optical" maxOccurs="50000"/>
+    <element ref="offset" maxOccurs="50000"/>
+    <element ref="occultation" maxOccurs="50000"/>
+    <element ref="radar" maxOccurs="50000"/>
+ </choice>
 </complextype>
 
+<complextype name="ObsDataLargeType">
+  <doc>A long list of only optical observations</doc>
+  <sequence>
+    <element ref="optical" maxOccurs="500000"/>
+  </sequence>
+</complextype>
 
 <complextype name="ObsBlockType">
   <doc>A list of all optical or all radar observations, with context</doc>
   <sequence>
     <element ref="obsContext" />
-    <element ref="obsData" />
+    <element name="obsData" type="ObsDataType"/>
+  </sequence>
+</complextype>
+
+<complextype name="ObsBlockLargeType">
+  <doc>A long list of only optical observations, with context</doc>
+  <sequence>
+    <element ref="obsContext"/>
+    <element name="obsData" type="ObsDataLargeType"/>
   </sequence>
 </complextype>
 
@@ -1533,18 +1547,31 @@ decimal types must be in a range
 </complextype>
 
 <complextype name="ADESType">
-  <doc>This is what is allowed in ades documents -- any
-       of these in any order</doc>
-    <attribute name="version" type="VersionType" use="requiredAttribute" doc="must be 2022"/>
+  <doc>This is what is allowed in ades documents --
+  For general and submit, either a single obsBlockLarge or multiple obsBlocks.
+  Or (not ``and''), for general only, any collection of observation and residual elements,
+  in which case no obsBlock or obsBlockLarge are allowed.</doc>
+  <attribute name="version" type="VersionType" use="requiredAttribute" doc="must be 2022"/>
+
+  <choice>
+    <!-- General-use observation elements (excluded from submit.xsd) -->
     <choice use="unbounded">
-       <element ref="optical" use="NoSubmit"/>
-       <element ref="offset" use="NoSubmit"/>
-       <element ref="occultation" use="NoSubmit"/>
-       <element ref="radar" use="NoSubmit"/>
-       <element ref="opticalResidual" use="NoSubmit"/>
-       <element ref="radarResidual" use="NoSubmit"/>
-       <element ref="obsBlock"/>
+      <element ref="optical" use="NoSubmit"/>
+      <element ref="offset" use="NoSubmit"/>
+      <element ref="occultation" use="NoSubmit"/>
+      <element ref="radar" use="NoSubmit"/>
+      <element ref="opticalResidual" use="NoSubmit"/>
+      <element ref="radarResidual" use="NoSubmit"/>
     </choice>
+
+    <!-- Structured submission format -->
+    <sequence>
+      <choice>
+        <element ref="obsBlock" minOccurs="1" maxOccurs="10"/>
+        <element ref="obsBlockLarge" minOccurs="1" maxOccurs="1"/>
+      </choice>
+    </sequence>
+  </choice>
 </complextype>
 
 
@@ -1695,9 +1722,11 @@ decimal types must be in a range
    <!-- for obsContext and  obsBlock -->
 <XSDElementTypes purpose="observation-context, obsBlock">
    <doc>These are the top-level types></doc>
-   <element name="obsContext"  type="ObsContextType"  doc="observation context information"/>
-   <element name="obsData"     type="ObsDataType"     doc="list of optical or radar observations"/>
-   <element name="obsBlock"    type="ObsBlockType"    doc="obsBlock contains an obsContext and obsData"/>
+   <element name="obsContext"    type="ObsContextType"    doc="observation context information"/>
+   <element name="obsData"       type="ObsDataType"       doc="list of optical or radar observations"/>
+   <element name="obsData"       type="ObsDataLargeType"  doc="long list of only optical observations"/>
+   <element name="obsBlock"      type="ObsBlockType"      doc="obsBlock contains an obsContext and an obsData of type ObsDataType"/>
+   <element name="obsBlockLarge" type="ObsBlockLargeType" doc="obsBlockLarge contains an obsContext and an obsData of type ObsDataLargeType"/>
 </XSDElementTypes>
 
    <!-- for independent residuals-->

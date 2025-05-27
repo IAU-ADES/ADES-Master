@@ -81,9 +81,20 @@ with the first letter capitalized.
 <xsl:template match="any">
   \multicolumn{1}{c}{}&amp; <xsl:value-of select='local-name()'/> &amp; &amp;  \\ </xsl:template>
 
-<xsl:template match="element[@ref]|group[@ref]">
-  \multicolumn{1}{c}{}&amp; <xsl:value-of select='local-name()'/> &amp; <xsl:value-of select='@ref'/>  &amp; <xsl:call-template name='processUse'/> \\ </xsl:template>
+<!-- <xsl:template match="element[@ref]|group[@ref]">
+  \multicolumn{1}{c}{}&amp; <xsl:value-of select='local-name()'/> &amp; <xsl:value-of select='@ref'/>  &amp; <xsl:call-template name='processUse'/> \\ </xsl:template> -->
 
+<xsl:template match="element[@ref]|group[@ref]">
+  \multicolumn{1}{c}{}&amp; <xsl:value-of select='local-name()'/> &amp; <xsl:value-of select='@ref'/> &amp; 
+  <xsl:call-template name='processUse'/>
+  <xsl:if test='@minOccurs'>
+    <xsl:text> min=</xsl:text><xsl:value-of select='@minOccurs'/>
+  </xsl:if>
+  <xsl:if test='@maxOccurs'>
+    <xsl:text> max=</xsl:text><xsl:value-of select='@maxOccurs'/>
+  </xsl:if> \\
+</xsl:template>
+  
 <xsl:template match="element[@name]|group[@name]">
   \multicolumn{1}{c}{}&amp; type <xsl:value-of select='@type'/>  &amp; <xsl:value-of select='@name'/>   &amp; <xsl:call-template name='processUse'/> \\ </xsl:template>
 
