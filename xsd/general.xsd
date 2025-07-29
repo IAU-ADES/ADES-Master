@@ -672,10 +672,10 @@
   </xsd:complexType>
   <xsd:complexType name="ObsDataType">
     <xsd:choice>
-      <xsd:element ref="optical" maxOccurs="50000"/>
-      <xsd:element ref="offset" maxOccurs="50000"/>
-      <xsd:element ref="occultation" maxOccurs="50000"/>
-      <xsd:element ref="radar" maxOccurs="50000"/>
+      <xsd:element ref="optical" maxOccurs="999999"/>
+      <xsd:element ref="offset" maxOccurs="999999"/>
+      <xsd:element ref="occultation" maxOccurs="999999"/>
+      <xsd:element ref="radar" maxOccurs="999999"/>
     </xsd:choice>
   </xsd:complexType>
   <xsd:complexType name="ObsDataLargeType">
@@ -843,7 +843,6 @@
   <xsd:element name="radar" type="RadarType"/>
   <xsd:element name="obsContext" type="ObsContextType"/>
   <xsd:element name="obsData" type="ObsDataType"/>
-  <xsd:element name="obsData" type="ObsDataLargeType"/>
   <xsd:element name="obsBlock" type="ObsBlockType"/>
   <xsd:element name="obsBlockLarge" type="ObsBlockLargeType"/>
   <xsd:element name="opticalResidual" type="OpticalResType"/>

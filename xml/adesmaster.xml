@@ -1493,13 +1493,14 @@ decimal types must be in a range
 </complextype>
 
 <!-- type for observations and ObservationChunk -->
+<!-- NOTE: This 999999 limit will be reduced to 50000 in the near future, after transition to obsBlockLarge -->
 <complextype name="ObsDataType">
-  <doc>A list of all optical or all radar observations</doc>
+  <doc>A list of a single type of observation (optical, offset, occultation or radar)</doc>
   <choice>
-    <element ref="optical" maxOccurs="50000"/>
-    <element ref="offset" maxOccurs="50000"/>
-    <element ref="occultation" maxOccurs="50000"/>
-    <element ref="radar" maxOccurs="50000"/>
+    <element ref="optical"     maxOccurs="999999"/>
+    <element ref="offset"      maxOccurs="999999"/>
+    <element ref="occultation" maxOccurs="999999"/>
+    <element ref="radar"       maxOccurs="999999"/>
  </choice>
 </complextype>
 
@@ -1724,7 +1725,6 @@ decimal types must be in a range
    <doc>These are the top-level types></doc>
    <element name="obsContext"    type="ObsContextType"    doc="observation context information"/>
    <element name="obsData"       type="ObsDataType"       doc="list of optical or radar observations"/>
-   <element name="obsData"       type="ObsDataLargeType"  doc="long list of only optical observations"/>
    <element name="obsBlock"      type="ObsBlockType"      doc="obsBlock contains an obsContext and an obsData of type ObsDataType"/>
    <element name="obsBlockLarge" type="ObsBlockLargeType" doc="obsBlockLarge contains an obsContext and an obsData of type ObsDataLargeType"/>
 </XSDElementTypes>
