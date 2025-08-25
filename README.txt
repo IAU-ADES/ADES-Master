@@ -2,8 +2,8 @@
        # All python code has been moved from Python/bin to Python/ades to support code packaging
        # Existing scripts that utilize ADES-Master by modifying the computing environment 
        # via PATH and PYTHONPATH environment variables should be updated to:
-       #   add ADES-Master/Python/ades to the PATH
-       #   add both ADES-Master/Python and ADES-Master/Python/ades to the PYTHONPATH
+       #   add Python/ades to the PATH
+       #   add both Python and Python/ades to the PYTHONPATH
        # to enable using the ADES conversion tools as command line scripts 
        # and as importable python libarires
 
