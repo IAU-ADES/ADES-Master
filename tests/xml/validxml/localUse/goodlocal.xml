@@ -64,7 +64,6 @@
         <photCat>UCAC4</photCat>
         <logSNR>3.32</logSNR>
         <remarks>/data0/seaman_ar/G96_20131004_1A_N20016_01_0002.sext A &gt; B</remarks>
-        <localUse/>
       </optical>
       <optical>
         <trkSub>XJF32B7</trkSub>
@@ -81,9 +80,6 @@
         <photCat>UCAC4</photCat>
         <logSNR>3.31</logSNR>
         <remarks>/data0/seaman_ar/G96_20131004_1A_N20016_01_0003.sext A &lt; B</remarks>
-        <localUse>
-           <one>one</one>
-        </localUse>
       </optical>
       <optical>
         <trkSub>XJF32B7</trkSub>
@@ -100,10 +96,6 @@
         <photCat>UCAC4</photCat>
         <logSNR>3.29</logSNR>
         <remarks>/data0/seaman_ar/G96_20131004_1A_N20016_01_0004.sext</remarks>
-        <localUse>
-           <one>one</one>
-           <two>two</two>
-        </localUse>
       </optical>
       <optical>
         <trkSub>XJF32B6</trkSub>
@@ -120,11 +112,6 @@
         <photCat>UCAC4</photCat>
         <logSNR>3.03</logSNR>
         <remarks>/data0/seaman_ar/G96_20131004_1A_N20016_01_0001.sext</remarks>
-        <localUse>
-           <one>one</one>
-           <two>two</two>
-           <one>another one</one>
-        </localUse>
       </optical>
       <optical>
         <trkSub>XJF32B6</trkSub>
