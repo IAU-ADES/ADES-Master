@@ -1,5 +1,5 @@
 set py3 = 'python3'
-set xmltopsv = "$py3 $pybindir/xmltopsv"
-set psvtoxml = "$py3 $pybindir/psvtoxml"
-set valades = "$py3 $pybindir/valades"
+set xmltopsv = "$py3 $pybindir/xmltopsv.py"
+set psvtoxml = "$py3 $pybindir/psvtoxml.py"
+set valades = "$py3 $pybindir/valades.py"
 set getencoding = "$py3 $pybindir/getencoding"
