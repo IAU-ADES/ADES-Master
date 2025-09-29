@@ -24,3 +24,7 @@ C/src/writexml
 C/src/xmltopsv
 Python/bin/__pycache__
 .vscode
+.github/copilot-instructions.md
+C/src/readxmlc
+C/src/writexmlc
+*.file
