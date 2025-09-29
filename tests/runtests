@@ -107,7 +107,7 @@ $xmltopsv $testdir/xml/validxml/codings/goodutf8.xml testarea/a.out
 foreach encoding ( 'UTF-16' 'UTF-16LE' 'UTF-16BE' 'UCS-4' 'UTF32' 'UTF-32BE' 'UTF-32LE' 'LATIN1' 'ISO-LATIN-1' 'ISO-8859-1' 'ISO-8859-5' 'ASCII' 'CP500' 'CP037' 'UTF-7' 'WINDOWS-1252' 'UTF-8')
 echo "------------------------------------------------"
 echo $encoding
-$psvtoxml testarea/a.out testarea/y.out 'UTF-8' $encoding
+$psvtoxml --input-encoding UTF-8 --output-encoding $encoding testarea/a.out testarea/y.out
 $getencoding testarea/y.out
 #diff testarea/y.out encodedxml/$encoding.xml  # uncomment this eventually -- there is a problem with WINDOWS-1252 encoding
 #cp testarea/y.out encodedxml/$encoding.xml
