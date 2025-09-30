@@ -75,7 +75,8 @@ The service will start on `http://localhost:8000`
 1. Open `http://localhost:8000` in your browser
 2. Click "Choose File" and select an ADES XML or PSV file
 3. Click "Validate" to check the file against all schemas
-4. View the results showing pass/fail status for each schema
+4. Watch the progress bar during upload and validation processing
+5. View the results showing pass/fail status for each schema and observation count
 
 ### REST API
 

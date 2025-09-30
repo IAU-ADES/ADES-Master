@@ -129,6 +129,8 @@ async def root():
             .progress-bar { width: 100%; height: 20px; background-color: #f0f0f0; border-radius: 10px; overflow: hidden; }
             .progress-fill { height: 100%; background-color: #007bff; width: 0%; transition: width 0.3s ease; }
             .progress-text { text-align: center; margin-top: 5px; font-size: 14px; color: #666; }
+            .spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid #f3f3f3; border-top: 2px solid #007bff; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 8px; }
+            @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         </style>
     </head>
     <body>
@@ -175,7 +177,7 @@ async def root():
                 // Show progress bar
                 progressContainer.style.display = 'block';
                 progressFill.style.width = '0%';
-                progressText.textContent = 'Uploading...';
+                progressText.innerHTML = '<span class="spinner"></span>Uploading...';
 
                 // Hide previous results
                 resultDiv.style.display = 'none';
@@ -187,8 +189,19 @@ async def root():
                         if (e.lengthComputable) {
                             const percentComplete = (e.loaded / e.total) * 100;
                             progressFill.style.width = percentComplete + '%';
-                            progressText.textContent = `Uploading... ${Math.round(percentComplete)}%`;
+                            progressText.innerHTML = `<span class="spinner"></span>Uploading... ${Math.round(percentComplete)}%`;
                         }
+                    });
+
+                    xhr.upload.addEventListener('load', () => {
+                        // Upload complete, now server is processing
+                        progressFill.style.width = '100%';
+                        progressText.innerHTML = '<span class="spinner"></span>Validating...';
+                    });
+
+                    xhr.addEventListener('loadstart', () => {
+                        // Server has started processing the request
+                        progressText.innerHTML = '<span class="spinner"></span>Validating...';
                     });
 
                     xhr.addEventListener('load', () => {
