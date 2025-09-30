@@ -12,13 +12,9 @@ This service provides both a REST API and web interface for validating ADES file
 
 PSV files are automatically converted to XML format before validation.
 
-## Prerequisites
-
-- Python 3.8+
-- Conda environment (recommended)
-- The ADES-Master project dependencies
-
 ## Installation
+
+### Option 1: Local Installation
 
 1. Follow the installation instructions for the main ADES-Master project to set up the required dependencies and environment.
 
@@ -27,14 +23,45 @@ PSV files are automatically converted to XML format before validation.
    pip install fastapi uvicorn python-multipart
    ```
 
+### Option 2: Docker Installation
+
+1. Ensure Docker and Docker Compose are installed on your system.
+
+2. Build and run the service using Docker Compose:
+   ```bash
+   cd web
+   docker-compose up --build
+   ```
+
+   Or build and run manually:
+   ```bash
+   # Use the build script (recommended - checks Docker installation and provides usage instructions)
+   # Run from the repository root
+   ./web/build.sh
+
+   # Or build manually from the repository root
+   docker build -f web/Dockerfile -t ades-validation .
+
+   # Run the container
+   docker run -p 8000:8000 ades-validation
+   ```
+
+The service will be available at `http://localhost:8000`
+
 ## Running the Service
+
+### Docker (Recommended for Production)
+```bash
+cd web
+docker-compose up --build
+```
 
 ### Development Mode
 ```bash
 python web/app.py
 ```
 
-### Production Mode
+### Production Mode (Local)
 ```bash
 uvicorn web.app:app --host 0.0.0.0 --port 8000
 ```
@@ -107,6 +134,7 @@ The service reuses the existing ADES validation infrastructure from the ADES-Mas
 
 ## Troubleshooting
 
+- **"docker command not found"**: Ensure Docker Desktop is installed and running. The `web/build.sh` script will check for this automatically.
 - **"uvicorn command not found"**: Ensure you're in the correct conda environment
 - **Import errors**: Check that ADES-Master dependencies are installed
 - **Schema validation fails**: Verify your XML conforms to ADES version 2022 standards</content>

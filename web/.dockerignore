@@ -1,0 +1,38 @@
+# Git
+.git
+.gitignore
+
+# Documentation and archives
+*.pdf
+*.docx
+README.txt
+doc/
+attic/
+past_versions/
+
+# Test files
+tests/
+new_tests/
+
+# Build artifacts
+C/
+Fortran/
+*.log
+*.status
+
+# Development files
+.vscode/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+environment.yml
+
+# Validation files (these are test outputs)
+*.file
