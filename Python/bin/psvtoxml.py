@@ -454,7 +454,7 @@ def parsePSV(parsedPSVLine):
       return;  
 
    #
-   # first non-blank line must be "#version=2017"
+   # first non-blank line must be "#version=2017" or "#version=2022"
    #
    # stuff the attribute into the first node here as well
    # so we can have all this in one place if we want to
@@ -464,12 +464,12 @@ def parsePSV(parsedPSVLine):
       firstLine = False
       l = parsedPSVLine.split('=')
       if len(l) != 2:
-        raise RuntimeError("first line of PSV must specify version, e.g., '#version=2017'")
+        raise RuntimeError("first line of PSV must specify version, e.g., '#version=2017' or '#version=2022'")
       #
       # strip all white space
       #
       if (''.join(l[0].split()) != '#version') :
-        raise RuntimeError("first line of PSV must specify version, e.g., '#version=2017'")
+        raise RuntimeError("first line of PSV must specify version, e.g., '#version=2017' or '#version=2022'")
       version_id = ''.join(l[1].split())
       # root node has no text or tail and one attribute
       stack = adesutility.ElementStack('ades', None, {'version':version_id} )
@@ -519,6 +519,14 @@ def parsePSV(parsedPSVLine):
 #
 # Main routine
 def psvtoxml(psvfile, xmlfile, psvencoding="UTF-8", xmlencoding="UTF-8"):
+   # Reset global state for each conversion
+   global state, firstLine, stack, lineNumber, headerType, headerVals
+   state = EMPTY_STATE
+   firstLine = True
+   stack = None
+   lineNumber = 0
+   headerType = None
+   headerVals = []
 
    with open(psvfile, encoding=psvencoding) as f:
       lineNumber = 0
@@ -528,7 +536,7 @@ def psvtoxml(psvfile, xmlfile, psvencoding="UTF-8", xmlencoding="UTF-8"):
             parsePSV(line[:-1])
          except RuntimeError as e:
             print (e)
-            exit (-1)
+            raise e  # Re-raise instead of exit(-1)
 
 
    # Tested encodings: 'UTF-16' 'UTF-16LE' 'UTF-16BE' 'UCS-4' 'UTF32' 'UTF-32BE' 'UTF-32LE'
