@@ -11,44 +11,74 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'Python', 'bin'))
 
 import adesutility
 from valutility import validate_xslts, validate_xml_declaration
+from psvtoxml import psvtoxml
 
 app = FastAPI(title="ADES Validation API", description="Validate ADES XML files against general schema")
 
 # Mount static files
 app.mount("/static", StaticFiles(directory=os.path.join(os.path.dirname(__file__), "static")), name="static")
 
-def validate_all_schemas(xmlfile_path: str) -> dict:
+def validate_all_schemas(file_path: str) -> dict:
     """
-    Validate XML file against all available schemas and return the validation results.
+    Validate ADES file (XML or PSV) against all available schemas and return the validation results.
+    For PSV files, converts to XML first.
     """
-    # Read the candidate XML
-    candidate = adesutility.readXML(xmlfile_path)
+    # Determine file type and prepare XML file
+    file_ext = os.path.splitext(file_path)[1].lower()
+    
+    if file_ext == '.psv':
+        # Convert PSV to XML
+        xml_temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.xml')
+        xml_temp_file.close()
+        try:
+            psvtoxml(file_path, xml_temp_file.name)
+            xml_file_path = xml_temp_file.name
+        except Exception as e:
+            os.unlink(xml_temp_file.name)
+            raise Exception(f"PSV to XML conversion failed: {str(e)}")
+    elif file_ext == '.xml':
+        xml_file_path = file_path
+    else:
+        raise Exception("Unsupported file type. Must be .xml or .psv")
 
-    # Capture output in a string buffer
-    output_buffer = io.StringIO()
+    try:
+        # Read the candidate XML
+        candidate = adesutility.readXML(xml_file_path)
 
-    # Validate XML declaration
-    validate_xml_declaration(xmlfile_path, output_buffer)
+        # Capture output in a string buffer
+        output_buffer = io.StringIO()
 
-    # Validate against all schemas
-    results = validate_xslts(adesutility.schemaxslts, candidate, output_buffer)
+        # Validate XML declaration
+        validate_xml_declaration(xml_file_path, output_buffer)
 
-    # Get the output
-    output = output_buffer.getvalue()
-    output_buffer.close()
+        # Validate against all schemas
+        results = validate_xslts(adesutility.schemaxslts, candidate, output_buffer)
 
-    return {"results": results, "output": output}
+        # Get the output
+        output = output_buffer.getvalue()
+        output_buffer.close()
+
+        return {"results": results, "output": output}
+    finally:
+        # Clean up temporary XML file if we created one
+        if file_ext == '.psv':
+            os.unlink(xml_file_path)
 
 @app.post("/validate")
 async def validate_file(file: UploadFile):
     """
-    Validate an uploaded ADES XML file against all available schemas.
+    Validate an uploaded ADES file (XML or PSV) against all available schemas.
+    PSV files are automatically converted to XML for validation.
     """
-    if not file.filename or not file.filename.lower().endswith('.xml'):
-        raise HTTPException(status_code=400, detail="File must be an XML file")
+    if not file.filename:
+        raise HTTPException(status_code=400, detail="No file provided")
+    
+    file_ext = os.path.splitext(file.filename)[1].lower()
+    if file_ext not in ['.xml', '.psv']:
+        raise HTTPException(status_code=400, detail="File must be an XML (.xml) or PSV (.psv) file")
 
     # Save uploaded file to temporary location
-    with tempfile.NamedTemporaryFile(delete=False, suffix='.xml') as temp_file:
+    with tempfile.NamedTemporaryFile(delete=False, suffix=file_ext) as temp_file:
         temp_file.write(await file.read())
         temp_file_path = temp_file.name
 
@@ -61,6 +91,7 @@ async def validate_file(file: UploadFile):
 
         return {
             "filename": file.filename,
+            "file_type": file_ext[1:].upper(),  # XML or PSV
             "valid": is_valid,
             "results": validation_data["results"],
             "output": validation_data["output"]
@@ -95,11 +126,11 @@ async def root():
         </style>
     </head>
     <body>
-        <h1>ADES XML Validation</h1>
-        <p>Upload an ADES XML file to validate it against all available schemas (submit, general, etc.).</p>
+        <h1>ADES Validation</h1>
+        <p>Upload an ADES XML or PSV file to validate it against all available schemas (submit, general, etc.). PSV files are automatically converted to XML for validation.</p>
 
         <form class="upload-form" id="uploadForm">
-            <input type="file" id="fileInput" accept=".xml" required>
+            <input type="file" id="fileInput" accept=".xml,.psv" required>
             <button type="submit">Validate</button>
         </form>
 
@@ -131,7 +162,7 @@ async def root():
                     resultDiv.style.display = 'block';
                     resultDiv.className = 'result ' + (data.valid ? 'valid' : 'invalid');
                     
-                    let html = `<h3>Validation Result for ${data.filename}</h3>`;
+                    let html = `<h3>Validation Result for ${data.filename} (${data.file_type})</h3>`;
                     for (const [schema, error] of Object.entries(data.results)) {
                         const status = error ? 'Failed' : 'OK';
                         const statusClass = error ? 'schema-failed' : 'schema-ok';

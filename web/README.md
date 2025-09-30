@@ -1,14 +1,16 @@
 # ADES Validation Web Service
 
-A FastAPI-based web service for validating ADES (Astrodynamics Data Exchange Standard) XML files against multiple schema variants.
+A FastAPI-based web service for validating ADES (Astrodynamics Data Exchange Standard) files in XML and PSV formats against multiple schema variants.
 
 ## Overview
 
-This service provides both a REST API and web interface for validating ADES XML files. It validates files against all available ADES schemas:
+This service provides both a REST API and web interface for validating ADES files in XML and PSV (Pipe Separated Value) formats. It validates files against all available ADES schemas:
 - `submit` - Submission schema
 - `submithuman` - Human-readable submission schema
 - `general` - General schema
 - `generalhuman` - Human-readable general schema
+
+PSV files are automatically converted to XML format before validation.
 
 ## Prerequisites
 
@@ -44,7 +46,7 @@ The service will start on `http://localhost:8000`
 ### Web Interface
 
 1. Open `http://localhost:8000` in your browser
-2. Click "Choose File" and select an ADES XML file
+2. Click "Choose File" and select an ADES XML or PSV file
 3. Click "Validate" to check the file against all schemas
 4. View the results showing pass/fail status for each schema
 
@@ -55,13 +57,14 @@ The service will start on `http://localhost:8000`
 POST /validate
 Content-Type: multipart/form-data
 
-file: <xml_file>
+file: <xml_file> or <psv_file>
 ```
 
 **Response:**
 ```json
 {
   "filename": "example.xml",
+  "file_type": "XML",
   "valid": false,
   "results": {
     "general": "lxml.etree.DocumentInvalid: Element 'ades', attribute 'version': [facet 'enumeration'] The value '2017' is not an element of the set {'2022'}.",
@@ -83,8 +86,9 @@ Visit `http://localhost:8000/docs` for interactive API documentation powered by 
 
 ## File Requirements
 
-- Files must have `.xml` extension
-- Must be valid XML with proper ADES structure
+- Files must have `.xml` or `.psv` extension
+- Must contain valid ADES data in the respective format
+- PSV files are converted to XML before validation
 - Current schemas expect ADES version '2022'
 
 ## Error Handling
@@ -98,6 +102,7 @@ Visit `http://localhost:8000/docs` for interactive API documentation powered by 
 The service reuses the existing ADES validation infrastructure from the ADES-Master project, specifically:
 - `adesutility.py` for schema management
 - `valutility.py` for validation logic
+- `psvtoxml.py` for PSV to XML conversion
 - XSLT transforms for schema generation
 
 ## Troubleshooting
