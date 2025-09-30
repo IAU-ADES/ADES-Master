@@ -1,0 +1,15 @@
+name: ades-master
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python>=3.8
+  - lxml
+  - pyyaml
+  - pytest
+  - pip
+  - pip:
+    - xmltodict
+    - fastapi>=0.104.0
+    - uvicorn[standard]>=0.24.0
+    - python-multipart>=0.0.6
