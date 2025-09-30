@@ -3,7 +3,6 @@
 from __future__ import absolute_import, division, print_function
 from __future__ import unicode_literals
 
-import traceback
 import sys
 import argparse
 import re
@@ -20,8 +19,8 @@ def validate_schema(schema_name, schema, candidate, out):
     try:
         schema.assertValid(candidate)
         result = None
-    except:  
-        result = traceback.format_exc()
+    except Exception as e:  
+        result = str(e)
 
     #
     # now print the results, and the reason for failure if the
@@ -29,7 +28,8 @@ def validate_schema(schema_name, schema, candidate, out):
     #
     if result:
         print (schema_name, "has failed:")
-        out.write(str(schema_name)+" has failed: \n")
+        out.write(str(schema_name)+" has failed: ")
+        out.write(str(result) + "\n")
         print (result)
     else:
         print (schema_name, "is OK")
