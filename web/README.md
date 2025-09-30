@@ -4,7 +4,7 @@ A FastAPI-based web service for validating ADES (Astrodynamics Data Exchange Sta
 
 ## Overview
 
-This service provides both a REST API and web interface for validating ADES files in XML and PSV (Pipe Separated Value) formats. It validates files against all available ADES schemas:
+This service provides both a REST API and web interface for validating ADES files in XML and PSV (Pipe Separated Value) formats. It validates files against all available ADES schemas and provides additional metadata including the count of optical elements in the file.
 - `submit` - Submission schema
 - `submithuman` - Human-readable submission schema
 - `general` - General schema
@@ -93,6 +93,7 @@ file: <xml_file> or <psv_file>
   "filename": "example.xml",
   "file_type": "XML",
   "valid": false,
+  "optical_count": 42,
   "results": {
     "general": "lxml.etree.DocumentInvalid: Element 'ades', attribute 'version': [facet 'enumeration'] The value '2017' is not an element of the set {'2022'}.",
     "submit": null,
@@ -104,6 +105,7 @@ file: <xml_file> or <psv_file>
 ```
 
 - `valid`: `true` if all schemas pass, `false` otherwise
+- `optical_count`: Number of `<optical>` elements found in the ADES file
 - `results`: Object with schema names as keys; `null` for passed schemas, error string for failed ones
 - `output`: Full validation output text
 

@@ -45,6 +45,9 @@ def validate_all_schemas(file_path: str) -> dict:
         # Read the candidate XML
         candidate = adesutility.readXML(xml_file_path)
 
+        # Count optical elements
+        optical_count = len(candidate.findall('.//optical'))
+
         # Capture output in a string buffer
         output_buffer = io.StringIO()
 
@@ -58,7 +61,7 @@ def validate_all_schemas(file_path: str) -> dict:
         output = output_buffer.getvalue()
         output_buffer.close()
 
-        return {"results": results, "output": output}
+        return {"results": results, "output": output, "optical_count": optical_count}
     finally:
         # Clean up temporary XML file if we created one
         if file_ext == '.psv':
@@ -94,7 +97,8 @@ async def validate_file(file: UploadFile):
             "file_type": file_ext[1:].upper(),  # XML or PSV
             "valid": is_valid,
             "results": validation_data["results"],
-            "output": validation_data["output"]
+            "output": validation_data["output"],
+            "optical_count": validation_data["optical_count"]
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Validation error: {str(e)}")
@@ -165,6 +169,7 @@ async def root():
                     resultDiv.className = 'result';
                     
                     let html = `<h3>Validation Result for ${data.filename} (${data.file_type})</h3>`;
+                    html += `<p><strong>Observations:</strong> ${data.optical_count.toLocaleString()}</p>`;
                     for (const [schema, error] of Object.entries(data.results)) {
                         const status = error ? 'Failed' : 'OK';
                         const statusClass = error ? 'schema-failed' : 'schema-ok';
