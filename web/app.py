@@ -115,14 +115,12 @@ async def root():
         <style>
             body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
             .upload-form { margin: 20px 0; }
-            .result { margin: 20px 0; padding: 10px; border: 1px solid #ccc; white-space: pre-wrap; }
-            .schema-result { margin: 5px 0; }
-            .schema-ok { color: green; font-weight: bold; }
-            .schema-failed { color: red; font-weight: bold; }
+            .result { margin: 20px 0; padding: 10px; border: 1px solid #ccc; }
+            .schema-result { margin: 5px 0; padding: 5px; border-radius: 3px; }
+            .schema-ok { background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+            .schema-failed { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
             .full-output { margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee; }
             pre { word-wrap: break-word; overflow-wrap: break-word; }
-            .valid { background-color: #d4edda; border-color: #c3e6cb; }
-            .invalid { background-color: #f8d7da; border-color: #f5c6cb; }
         </style>
     </head>
     <body>
@@ -135,6 +133,10 @@ async def root():
         </form>
 
         <div id="result" class="result" style="display: none;"></div>
+        
+        <div style="text-align: right; margin-top: 20px; font-size: 14px; color: #666;">
+            <a href="/docs" target="_blank" style="color: #007bff; text-decoration: none;">API Documentation</a>
+        </div>
 
         <script>
             document.getElementById('uploadForm').addEventListener('submit', async (e) => {
@@ -160,13 +162,13 @@ async def root():
                     const data = await response.json();
 
                     resultDiv.style.display = 'block';
-                    resultDiv.className = 'result ' + (data.valid ? 'valid' : 'invalid');
+                    resultDiv.className = 'result';
                     
                     let html = `<h3>Validation Result for ${data.filename} (${data.file_type})</h3>`;
                     for (const [schema, error] of Object.entries(data.results)) {
                         const status = error ? 'Failed' : 'OK';
                         const statusClass = error ? 'schema-failed' : 'schema-ok';
-                        html += `<div class="schema-result"><strong>${schema}:</strong> <span class="${statusClass}">${status}</span>`;
+                        html += `<div class="schema-result ${statusClass}"><strong>${schema}:</strong> ${status}`;
                         if (error) {
                             html += `<br><small>${error}</small>`;
                         }
@@ -177,7 +179,7 @@ async def root():
                     resultDiv.innerHTML = html;
                 } catch (error) {
                     resultDiv.style.display = 'block';
-                    resultDiv.className = 'result invalid';
+                    resultDiv.className = 'result';
                     resultDiv.innerHTML = `<h3>Error</h3><p>${error.message}</p>`;
                 }
             });
