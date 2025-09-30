@@ -125,6 +125,10 @@ async def root():
             .schema-failed { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
             .full-output { margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee; }
             pre { word-wrap: break-word; overflow-wrap: break-word; }
+            .progress-container { margin: 10px 0; display: none; }
+            .progress-bar { width: 100%; height: 20px; background-color: #f0f0f0; border-radius: 10px; overflow: hidden; }
+            .progress-fill { height: 100%; background-color: #007bff; width: 0%; transition: width 0.3s ease; }
+            .progress-text { text-align: center; margin-top: 5px; font-size: 14px; color: #666; }
         </style>
     </head>
     <body>
@@ -135,6 +139,13 @@ async def root():
             <input type="file" id="fileInput" accept=".xml,.psv" required>
             <button type="submit">Validate</button>
         </form>
+
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">Uploading...</div>
+        </div>
 
         <div id="result" class="result" style="display: none;"></div>
         
@@ -148,41 +159,78 @@ async def root():
 
                 const fileInput = document.getElementById('fileInput');
                 const resultDiv = document.getElementById('result');
+                const progressContainer = document.getElementById('progressContainer');
+                const progressFill = document.getElementById('progressFill');
+                const progressText = document.getElementById('progressText');
 
                 if (!fileInput.files[0]) {
                     alert('Please select a file');
                     return;
                 }
 
+                const file = fileInput.files[0];
                 const formData = new FormData();
-                formData.append('file', fileInput.files[0]);
+                formData.append('file', file);
+
+                // Show progress bar
+                progressContainer.style.display = 'block';
+                progressFill.style.width = '0%';
+                progressText.textContent = 'Uploading...';
+
+                // Hide previous results
+                resultDiv.style.display = 'none';
 
                 try {
-                    const response = await fetch('/validate', {
-                        method: 'POST',
-                        body: formData
+                    const xhr = new XMLHttpRequest();
+
+                    xhr.upload.addEventListener('progress', (e) => {
+                        if (e.lengthComputable) {
+                            const percentComplete = (e.loaded / e.total) * 100;
+                            progressFill.style.width = percentComplete + '%';
+                            progressText.textContent = `Uploading... ${Math.round(percentComplete)}%`;
+                        }
                     });
 
-                    const data = await response.json();
+                    xhr.addEventListener('load', () => {
+                        if (xhr.status === 200) {
+                            const data = JSON.parse(xhr.responseText);
 
-                    resultDiv.style.display = 'block';
-                    resultDiv.className = 'result';
-                    
-                    let html = `<h3>Validation Result for ${data.filename} (${data.file_type})</h3>`;
-                    html += `<p><strong>Observations:</strong> ${data.optical_count.toLocaleString()}</p>`;
-                    for (const [schema, error] of Object.entries(data.results)) {
-                        const status = error ? 'Failed' : 'OK';
-                        const statusClass = error ? 'schema-failed' : 'schema-ok';
-                        html += `<div class="schema-result ${statusClass}"><strong>${schema}:</strong> ${status}`;
-                        if (error) {
-                            html += `<br><small>${error}</small>`;
+                            progressContainer.style.display = 'none';
+
+                            resultDiv.style.display = 'block';
+                            resultDiv.className = 'result';
+                            
+                            let html = `<h3>Validation Result for ${data.filename} (${data.file_type})</h3>`;
+                            html += `<p><strong>Observations:</strong> ${data.optical_count.toLocaleString()}</p>`;
+                            for (const [schema, error] of Object.entries(data.results)) {
+                                const status = error ? 'Failed' : 'OK';
+                                const statusClass = error ? 'schema-failed' : 'schema-ok';
+                                html += `<div class="schema-result ${statusClass}"><strong>${schema}:</strong> ${status}`;
+                                if (error) {
+                                    html += `<br><small>${error}</small>`;
+                                }
+                                html += '</div>';
+                            }
+                            // html += `<div class="full-output"><p>${data.output}</p></div>`;
+                            
+                            resultDiv.innerHTML = html;
+                        } else {
+                            throw new Error(xhr.responseText || 'Upload failed');
                         }
-                        html += '</div>';
-                    }
-                    // html += `<div class="full-output"><p>${data.output}</p></div>`;
-                    
-                    resultDiv.innerHTML = html;
+                    });
+
+                    xhr.addEventListener('error', () => {
+                        progressContainer.style.display = 'none';
+                        resultDiv.style.display = 'block';
+                        resultDiv.className = 'result';
+                        resultDiv.innerHTML = `<h3>Error</h3><p>Network error occurred during upload</p>`;
+                    });
+
+                    xhr.open('POST', '/validate');
+                    xhr.send(formData);
+
                 } catch (error) {
+                    progressContainer.style.display = 'none';
                     resultDiv.style.display = 'block';
                     resultDiv.className = 'result';
                     resultDiv.innerHTML = `<h3>Error</h3><p>${error.message}</p>`;
