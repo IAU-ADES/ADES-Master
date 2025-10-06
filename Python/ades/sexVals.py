@@ -57,13 +57,13 @@ def valueError(s, line, c1, c2, value=None):
                    ' must be blank not "' + s + '"', line)
 
 #
-# Sexagesimal Parsing
+# Sexagesimal Parsing (relaxed to allow leading spaces or single-digit fields)
 #
-_checkNormal = re.compile(r'^(\d\d) (\d\d) (\d\d\.(\d*)) *$')
-_checkIntegerSeconds = re.compile(r'^(\d\d) (\d\d) (\d\d) *$')
-_checkMinutesHundredths = re.compile(r'^(\d\d) (\d\d\.\d\d) *$')
-_checkMinutesTenths = re.compile(r'^(\d\d) (\d\d\.\d) *$')
-_checkIntegerMinutes = re.compile(r'^(\d\d) (\d\d) *$')
+_checkNormal = re.compile(r'^\s*(\d{1,2})\s+(\d{1,2})\s+(\d{1,2}\.(\d*))\s*$')
+_checkIntegerSeconds = re.compile(r'^\s*(\d{1,2})\s+(\d{1,2})\s+(\d{1,2})\s*$')
+_checkMinutesHundredths = re.compile(r'^\s*(\d{1,2})\s+(\d{1,2}\.\d{2})\s*$')
+_checkMinutesTenths = re.compile(r'^\s*(\d{1,2})\s+(\d{1,2}\.\d)\s*$')
+_checkIntegerMinutes = re.compile(r'^\s*(\d{1,2})\s+(\d{1,2})\s*$')
 
 _countNormal = 0
 _countIntegerSeconds = 0
@@ -258,7 +258,7 @@ def sexDateToISO(sexDate, intsec=False, microsec=False, mpc_rounding=True):
       day = int(d['day'])
       oldfracdd = "." + d['fractional_day']
       seconds = float(oldfracdd) * 86400
-      # precision in millions of a day
+      # Approximate (reciprocal) precision in millionths of a day, e.g., prec=100 means 1e-4 day
       prec = 10.0**(6 - len(d['fractional_day'])) # >1 for legal mpc
       if prec >= 1:
          prec = int(prec)
@@ -270,19 +270,21 @@ def sexDateToISO(sexDate, intsec=False, microsec=False, mpc_rounding=True):
       if prec == 1000: _countDate1000 += 1
       if prec == 10000: _countDate10000 += 1
       if prec == 100000: _countDate100000 += 1
-      if prec == 1000000: _countDate1000000 += 1 # This means integer day precission
+      if prec == 1000000: _countDate1000000 += 1 # This means integer day precision
       if prec >  1000000: _countDateBig += 1 # Should not be possible
       if prec < 1: _countDateSmall += 1 # Should not be possible
 
-      if mpc_rounding:
-         # convert to millisecond precision if precision is 1e-6 day or less (i.e. all MPC records)
-         digits = 3
-      elif intsec:
-         # do not report microseconds
+      # If more than one of intsec, microsec, and  mpc_rounding are True then there is a conflict.
+      # Prioritize intsec (radar), microsec (testing), mpc_rounding (default) 
+      if intsec:
+         # Round to integer seconds (probably for radar)
          digits = 0
       elif microsec:
-         # report microseconds
+         # Report microseconds (probably for testing)
          digits = 6
+      elif mpc_rounding:
+         #  MPC records will have precision 1e-6 day (= 86.4 ms) or less. Always convert MPC records to millisec precision.
+         digits = 3
       else:
          # smart rounding for ISO format seconds according to the sexTime day precision
          # prec_day prec_sec microsecond digits
@@ -303,17 +305,23 @@ def sexDateToISO(sexDate, intsec=False, microsec=False, mpc_rounding=True):
          # and at minimum 0 digits (whole seconds)
          digits = int(min(max(0, 2 - math.log10(prec)), 6))
 
-      fractional_seconds = round((seconds - int(seconds)) * 10**digits)
+      if digits == 0:
+        seconds = round(seconds)
 
-      isofmt = "%Y-%m-%dT%H:%M:%S"
       dt = datetime(year, month, day) + timedelta(seconds=seconds)
-      isoDate = dt.strftime(isofmt)
-      if mpc_rounding or digits != 0:
-         isoDate += "." + str(fractional_seconds).rjust(digits, "0") # add on microseconds
+      isoDate = dt.strftime("%Y-%m-%dT%H:%M:%S")
+
+      if digits != 0:
+        fractional_seconds = round((seconds - int(seconds)) * 10**digits)
+        isoDate += "." + str(fractional_seconds).rjust(digits, "0")
+
       isoDate += "Z"
+
       return isoDate, prec, oldfracdd
+
    else:
-      errorSexVal('date  must be "YYYY MM DD.d..." not ', sexDate)
+
+      errorSexVal('date must be "YYYY MM DD.d..." not ', sexDate)
 
 def isoToSexDate(isodate, prec):
    """ Translates isodate to sexDate format
