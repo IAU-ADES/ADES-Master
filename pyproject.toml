@@ -34,3 +34,5 @@ ades = ["data/xml/*.xml", "data/xsd/*.xsd", "data/xslt/*/*.xslt"]
 
 [tool.setuptools_scm]
 write_to = "Python/ades/_version.py"
+version_scheme = "guess-next-dev"
+local_scheme = "no-local-version"
