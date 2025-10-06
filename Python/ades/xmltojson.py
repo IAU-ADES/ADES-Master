@@ -11,7 +11,7 @@ import xmltodict
 import json
 import argparse
 from collections import OrderedDict  # Only necessary for python < 3.7
-import convertutility
+from ades import convertutility
 import sys
 
 
@@ -20,8 +20,7 @@ def xmltojson(xmlfile, jsonfile, xmlencoding="utf-8", jsonencoding="utf-8"):
     with open(xmlfile, 'rb') as xf, open(jsonfile, 'w', encoding=jsonencoding) as jf:
         json.dump(xmltodict.parse(xf.read().decode(xmlencoding), dict_constructor=OrderedDict), jf, indent=4, ensure_ascii=False)
 
-
-if __name__ == '__main__':
+def main():
     # read command line arguments
     # construct argument parser for a conversion tool
     parser = convertutility.conversion_parser(
@@ -32,3 +31,7 @@ if __name__ == '__main__':
     call = lambda i, o : xmltojson(i, o, xmlencoding=args.input_encoding, jsonencoding=args.output_encoding)
     # call function with filename arguments
     convertutility.call_with_files(call, args)
+
+
+if __name__ == '__main__':
+    main()

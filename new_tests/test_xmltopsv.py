@@ -7,8 +7,7 @@ import os
 import subprocess
 import sys
 
-sys.path.append("../Python/bin")
-import xmltopsv
+from ades import xmltopsv
 
 #Testing main
 def test_psv_to_xml_conversion():
@@ -16,7 +15,7 @@ def test_psv_to_xml_conversion():
     psv_outfile = "output/obs.psv"
     if os.path.exists(psv_outfile):
         os.remove(psv_outfile)
-    subprocess.run("python3 ../Python/bin/xmltopsv.py "+xml_infile+" "+psv_outfile,shell=True)       
+    subprocess.run("xmltopsv.py "+xml_infile+" "+psv_outfile,shell=True)       
     assert(os.path.exists(psv_outfile) and os.stat(psv_outfile).st_size != 0)
 
 #Testing routine call

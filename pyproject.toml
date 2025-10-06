@@ -1,0 +1,38 @@
+[project]
+name = "iau-ades"
+dynamic = ['version']
+dependencies = [
+    "lxml",
+    "xmltodict",
+    "pyyaml"
+]
+readme = "README.txt"
+
+[project.scripts]
+"jsontoxml.py" = "ades.jsontoxml:main"
+"mpc80coltoxml.py" = "ades.mpc80coltoxml:main"
+"psvtoxml.py" = "ades.psvtoxml:main"
+"readxmlpy.py" = "ades.readxmlpy:main"
+"valades.py" = "ades.valades:main"
+"valall.py" = "ades.valall:main"
+"valgeneral.py" = "ades.valgeneral:main"
+"validate.py" = "ades.validate:main"
+"valsubmit.py" = "ades.valsubmit:main"
+"xmltojson.py" = "ades.xmltojson:main"
+"xmltompc80col.py" = "ades.xmltompc80col:main"
+"xmltopsv.py" = "ades.xmltopsv:main"
+
+[build-system]
+requires = ["setuptools>=64", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.package-dir]
+ades = "Python/ades"
+
+[tool.setuptools.package-data]
+ades = ["data/xml/*.xml", "data/xsd/*.xsd", "data/xslt/*/*.xslt"]
+
+[tool.setuptools_scm]
+write_to = "Python/ades/_version.py"
+version_scheme = "guess-next-dev"
+local_scheme = "no-local-version"
