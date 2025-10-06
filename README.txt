@@ -1,4 +1,4 @@
-25-Aug-2025 - Moved python code from Python/bin to Python/ades
+06-Oct-2025 - Moved python code from Python/bin to Python/ades; release iau-ades package
        # All python code has been moved from Python/bin to Python/ades to support code packaging
        # Existing scripts that utilize ADES-Master by modifying the computing environment 
        # via PATH and PYTHONPATH environment variables should be updated to:
@@ -6,6 +6,10 @@
        #   add both Python and Python/ades to the PYTHONPATH
        # to enable using the ADES conversion tools as command line scripts 
        # and as importable python libarires
+       # 
+       # The python code can be installed via the iau-ades package distributed via the 
+       # Python Package Index (PyPI). Install with:
+       #   $ python -m pip install iau-ades
 
 01-Sep-2023 - Modified python code in Python/bin
        # The python script have now the .py suffix in the name
