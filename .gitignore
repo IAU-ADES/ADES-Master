@@ -29,4 +29,5 @@ build/
 _version.py
 dist/
 Python/ades/data/*
-*.file # test files
+tests/output
+tests/*.file # test files
