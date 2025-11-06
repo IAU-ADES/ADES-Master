@@ -1,0 +1,156 @@
+{
+    "ades": {
+        "@version": "2022",
+        "obsBlock": {
+            "obsContext": {
+                "observatory": {
+                    "mpcCode": "275"
+                },
+                "submitter": {
+                    "name": "D. Herald, 3 Lupin Pl., Murrumbateman, NSW, 2582, Australia"
+                },
+                "measurers": {
+                    "name": [
+                        "D. Herald",
+                        "N. Carlson",
+                        "E. Frappa",
+                        "D. Gault",
+                        "B. Giacchini",
+                        "T. Hayamizu",
+                        "S. Kerr",
+                        "J. Moore"
+                    ]
+                },
+                "observers": {
+                    "name": [
+                        "S. Alonso",
+                        "J. Bradshaw",
+                        "J. Broughton",
+                        "F. Casarramona",
+                        "A. Castillo",
+                        "V. Dekert",
+                        "J. Delgado",
+                        "P. Escamilla",
+                        "R. Farfan",
+                        "J. Fernandez",
+                        "J. Flores",
+                        "R. Goncalves",
+                        "H. Hamanowa",
+                        "K. Kitazaki",
+                        "J. Madiedo",
+                        "J. Maestre",
+                        "J. Marti",
+                        "S. Moral",
+                        "N. Morales",
+                        "V. Pelenjow",
+                        "C. Perello",
+                        "J. Rizos",
+                        "A. Roman",
+                        "J. Rovira",
+                        "M. Sanchez",
+                        "C. Schnabel",
+                        "A. Selva",
+                        "E. Smith",
+                        "H. Takashima",
+                        "H. Tomioka",
+                        "R. Venable"
+                    ]
+                },
+                "telescope": {
+                    "design": "reflector",
+                    "aperture": "0.30",
+                    "fRatio": "9.0",
+                    "detector": "CCD"
+                }
+            },
+            "obsData": {
+                "occultation": [
+                    {
+                        "permID": "319",
+                        "mode": "OCC",
+                        "stn": "275",
+                        "sys": "ICRF_KM",
+                        "ctr": "399",
+                        "pos1": "1833.310",
+                        "pos2": "-1882.459",
+                        "pos3": "-3409.399",
+                        "obsTime": "2010-10-22T12:22:12.59Z",
+                        "raStar": "36.443232822",
+                        "decStar": "5.964539565",
+                        "deltaRA": "0.0000",
+                        "deltaDec": "0.0000",
+                        "rmsRA": "0.0129",
+                        "rmsDec": "0.0157",
+                        "rmsCorr": "-0.874",
+                        "astCat": "Gaia3E",
+                        "shapeOcc": "0",
+                        "remarks": "StarUncert 0.00011, 0.00009; Fit f4;"
+                    },
+                    {
+                        "permID": "319",
+                        "mode": "OCC",
+                        "stn": "275",
+                        "sys": "ICRF_KM",
+                        "ctr": "399",
+                        "pos1": "2157.966",
+                        "pos2": "-3582.993",
+                        "pos3": "3569.948",
+                        "obsTime": "2010-10-27T10:58:34.73Z",
+                        "raStar": "35.625268707",
+                        "decStar": "5.332470663",
+                        "deltaRA": "0.0000",
+                        "deltaDec": "0.0000",
+                        "rmsRA": "0.0143",
+                        "rmsDec": "0.0169",
+                        "rmsCorr": "-0.581",
+                        "astCat": "Gaia3E",
+                        "shapeOcc": "0",
+                        "remarks": "StarUncert 0.00014, 0.00011; Fit f4;"
+                    },
+                    {
+                        "permID": "319",
+                        "mode": "OCC",
+                        "stn": "275",
+                        "sys": "ICRF_KM",
+                        "ctr": "399",
+                        "pos1": "3336.196",
+                        "pos2": "-948.022",
+                        "pos3": "2752.627",
+                        "obsTime": "2023-09-13T03:43:27.05Z",
+                        "raStar": "85.552205093",
+                        "decStar": "14.001140989",
+                        "deltaRA": "0.0000",
+                        "deltaDec": "0.0000",
+                        "rmsRA": "0.0022",
+                        "rmsDec": "0.0018",
+                        "rmsCorr": "-0.095",
+                        "astCat": "Gaia3E",
+                        "shapeOcc": "0",
+                        "remarks": "StarUncert 0.00016, 0.00010; Fit e5;"
+                    },
+                    {
+                        "permID": "319",
+                        "mode": "OCC",
+                        "stn": "275",
+                        "sys": "ICRF_KM",
+                        "ctr": "399",
+                        "pos1": "3961.373",
+                        "pos2": "-887.256",
+                        "pos3": "2602.687",
+                        "obsTime": "2023-09-16T10:09:34.70Z",
+                        "raStar": "86.432366700",
+                        "decStar": "13.793487153",
+                        "deltaRA": "0.0000",
+                        "deltaDec": "0.0000",
+                        "rmsRA": "0.0021",
+                        "rmsDec": "0.0018",
+                        "rmsCorr": "-0.086",
+                        "astCat": "Gaia3E",
+                        "shapeOcc": "0",
+                        "remarks": "StarUncert 0.00030, 0.00021; Fit e5;"
+                    }
+                ]
+            }
+        }
+    }
+}

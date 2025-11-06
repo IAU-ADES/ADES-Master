@@ -1,0 +1,77 @@
+ ades: {'version': '2017'}
+   obsBlock
+     obsContext
+       observatory
+         mpcCode: W68
+         name: ATLAS-Chile
+       submitter
+         name: L. Denneau
+         institution: University of Hawaii
+       observers
+         name: L. Denneau
+         name: R. Siverd
+         name: J. Tonry
+         name: H. Weiland
+       measurers
+         name: L. Denneau
+         name: N. Erasmus
+         name: A. Fitzsimmons
+         name: A. Lawrence
+         name: J. Robinson
+         name: R. Siverd
+         name: J. Tonry
+         name: H. Weiland
+       telescope
+         aperture: 0.5
+         design: Reflector
+         detector: CCD
+       fundingSource: NASA 80NSSC21K0265
+     obsData
+       optical
+         OPTICAL ELEMENT LIST FOUND
+         trkSub = A10TlFw
+         mode = CCD
+         stn = W68
+         obsTime = 2023-03-07T09:29:20.88Z
+         ra = 256.566210
+         dec = -19.007690
+         rmsRA = 0.136
+         rmsDec = 0.136
+         astCat = Gaia2
+         mag = 14.26
+         rmsMag = 0.024
+         band = Ao
+         logSNR = 1.620
+         remarks = atlas_W68_highsig/T412024/D11140334
+       optical
+         OPTICAL ELEMENT LIST FOUND
+         trkSub = A10TlFw
+         mode = CCD
+         stn = W68
+         obsTime = 2023-03-07T09:33:28.07Z
+         ra = 256.567400
+         dec = -19.007770
+         rmsRA = 0.135
+         rmsDec = 0.135
+         astCat = Gaia2
+         mag = 14.14
+         rmsMag = 0.021
+         band = Ao
+         logSNR = 1.678
+         remarks = atlas_W68_highsig/T412024/D11141078
+       optical
+         OPTICAL ELEMENT LIST FOUND
+         trkSub = A10TlFw
+         mode = CCD
+         stn = W68
+         obsTime = 2023-03-07T09:45:19.49Z
+         ra = 256.570870
+         dec = -19.007840
+         rmsRA = 0.113
+         rmsDec = 0.113
+         astCat = Gaia2
+         mag = 14.12
+         rmsMag = 0.020
+         band = Ao
+         logSNR = 1.699
+         remarks = atlas_W68_highsig/T412024/D11144237

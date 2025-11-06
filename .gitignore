@@ -1,10 +1,9 @@
 *.pyc
 __pycache__
-new_tests/.pytest_cache
-new_tests/output/*
-!new_tests/output/.gitkeep
-new_tests/*.file
-tests/testarea/
+attic/old_tests/.pytest_cache
+attic/old_tests/output/*
+!attic/old_tests/output/.gitkeep
+attic/old_tests/testarea/
 C/bin/
 C/config.log
 C/config.status
@@ -30,3 +29,4 @@ build/
 _version.py
 dist/
 Python/ades/data/*
+*.file # test files

@@ -22,6 +22,11 @@ readme = "README.txt"
 "xmltompc80col.py" = "ades.xmltompc80col:main"
 "xmltopsv.py" = "ades.xmltopsv:main"
 
+[project.optional-dependencies]
+test = [
+    "pytest"
+]
+
 [build-system]
 requires = ["setuptools>=64", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
