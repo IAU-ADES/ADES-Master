@@ -3,7 +3,7 @@ import subprocess
 import os
 
 master_dir =  os.path.dirname(os.path.dirname(__file__))
-test_dir = os.path.join(master_dir, "new_tests")
+test_dir = os.path.join(master_dir, "tests")
 input_dir = os.path.join(test_dir, "input")
 output_dir = os.path.join(test_dir, "output")
 

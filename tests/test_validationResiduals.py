@@ -21,7 +21,7 @@ import os,sys
 
 # Define useful paths (for import & subprocess)
 master_dir =  os.path.dirname(os.path.dirname(__file__))
-test_dir = os.path.join(master_dir, "new_tests")
+test_dir = os.path.join(master_dir, "tests")
 x2j_py = "xml2json.py"
 j2x_py = "json2xml.py"
 valsubmit_py = "valsubmit.py"
