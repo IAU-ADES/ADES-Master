@@ -22,11 +22,9 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        python -m pip install pytest lxml xmltodict
-        # python -m pip install .
+        python -m pip install pytest
+        python -m pip install .
     - name: Test with pytest
       run: |
-        export PYTHONPATH=$PWD/Python/bin
-        export PATH=$PWD/Python/bin:$PATH
         cd new_tests
         pytest
