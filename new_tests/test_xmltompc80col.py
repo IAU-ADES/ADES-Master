@@ -17,7 +17,7 @@ def test_trksub_submission():
     if os.path.exists(outfile):
         os.remove(outfile)
     subprocess.run(
-        "python3 ../Python/bin/xmltompc80col.py " + infile + " " + outfile,
+        "xmltompc80col.py " + infile + " " + outfile,
         shell=True,
         check=False,
     )
@@ -32,7 +32,7 @@ def test_trksub_submission_newregex():
     if os.path.exists(outfile):
         os.remove(outfile)
     subprocess.run(
-        "python3 ../Python/bin/xmltompc80col.py " + infile + " " + outfile,
+        "xmltompc80col.py " + infile + " " + outfile,
         shell=True,
         check=False,
     )
@@ -47,7 +47,7 @@ def test_trksub_8char():
     if os.path.exists(outfile):
         os.remove(outfile)
     subprocess.run(
-        "python3 ../Python/bin/xmltompc80col.py " + infile + " " + outfile,
+        "xmltompc80col.py " + infile + " " + outfile,
         shell=True,
         check=False,
     )
@@ -62,7 +62,7 @@ def test_provid_notrksub():
     if os.path.exists(outfile):
         os.remove(outfile)
     subprocess.run(
-        "python3 ../Python/bin/xmltompc80col.py " + infile + " " + outfile,
+        "xmltompc80col.py " + infile + " " + outfile,
         shell=True,
         check=False,
     )
@@ -77,7 +77,7 @@ def test_trksub_9char():
     if os.path.exists(outfile):
         os.remove(outfile)
     result = subprocess.run(
-        "python3 ../Python/bin/xmltompc80col.py " + infile + " " + outfile,
+        "xmltompc80col.py " + infile + " " + outfile,
         shell=True,
         check=True,
     )

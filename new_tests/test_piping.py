@@ -3,7 +3,6 @@ import subprocess
 import os
 
 master_dir =  os.path.dirname(os.path.dirname(__file__))
-bin_dir = os.path.join(master_dir, "Python/bin")
 test_dir = os.path.join(master_dir, "new_tests")
 input_dir = os.path.join(test_dir, "input")
 output_dir = os.path.join(test_dir, "output")
@@ -22,7 +21,7 @@ def test_pipe_executables(executable, in_filename, out_filename):
     in_path = os.path.join(input_dir, in_filename)
     out_path = os.path.join(output_dir, out_filename)
     with open(in_path, "rb") as in_file, open(out_path, "w") as out_file:
-        p = subprocess.run(os.path.join(bin_dir, executable), input=in_file.read(), stdout=out_file)
+        p = subprocess.run(executable, input=in_file.read(), stdout=out_file)
     
     assert(os.path.exists(out_path) and os.stat(out_path).st_size != 0)
 
@@ -38,7 +37,7 @@ validation = [
 def test_pipe_validation(executable, in_filename, args):
     in_path = os.path.join(input_dir, in_filename)
     with open(in_path, "rb") as in_file:
-        p = subprocess.Popen([os.path.join(bin_dir, executable)] + args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p = subprocess.Popen([executable] + args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = p.communicate(input=in_file.read())
 
     assert(b'is OK' in out and err == b'')

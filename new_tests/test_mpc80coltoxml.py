@@ -9,8 +9,7 @@ import os
 import subprocess
 import sys
 
-sys.path.append('../Python/bin')
-import mpc80coltoxml
+from ades import mpc80coltoxml
 
 # ------------------ Testing without the header ------------------
 #Testing file without the header - this test should pass
@@ -19,7 +18,7 @@ def test_mpc80coltoxml_mpcfile():
     xmlfile = "output/K20Q04A_test.xml"
     if os.path.exists(xmlfile):
         os.remove(xmlfile)
-    subprocess.run("python3 ../Python/bin/mpc80coltoxml.py "+obsfile+" "+xmlfile,shell=True)
+    subprocess.run("mpc80coltoxml.py "+obsfile+" "+xmlfile,shell=True)
     assert(os.path.exists(xmlfile) and os.stat(xmlfile).st_size != 0)
 
 def test_mpc80coltoxml_mpcfile_routine():
@@ -37,7 +36,7 @@ def test_mpc80coltoxml_submitted_nosplit():
     xmlfile = "output/85_test_nosplit.xml"
     if os.path.exists(xmlfile):
         os.remove(xmlfile)
-    subprocess.run("python3 ../Python/bin/mpc80coltoxml.py --nosplit "+obsfile+" "+xmlfile,shell=True)
+    subprocess.run("mpc80coltoxml.py --nosplit "+obsfile+" "+xmlfile,shell=True)
     assert(os.path.exists(xmlfile) and os.stat(xmlfile).st_size != 0)
     
 def test_mpc80coltoxml_submitted_nosplit_routine():
@@ -55,7 +54,7 @@ def test_mpc80coltoxml_submitted_split():
     xmlfile = "output/85_test_split.xml"
     if os.path.exists(xmlfile):
         os.remove(xmlfile)
-    subprocess.run("python3 ../Python/bin/mpc80coltoxml.py "+obsfile+" "+xmlfile,shell=True)
+    subprocess.run("mpc80coltoxml.py "+obsfile+" "+xmlfile,shell=True)
     print('******* Test 3 should fail ********')
     assert(os.path.exists(xmlfile))
     

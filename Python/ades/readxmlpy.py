@@ -96,11 +96,14 @@ def readxmlpy(xmlFile):
    #
    printElement(xmlTree.getroot(), 0)
    
-# ------------------------------------------------------
-if __name__ == '__main__':
+def main():
    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
    parser.add_argument("xmlfilename", type=str, help="XML file to read")
 
    args = parser.parse_args()
 
    readxmlpy(args.xmlfilename)
+
+# ------------------------------------------------------
+if __name__ == '__main__':
+   main()

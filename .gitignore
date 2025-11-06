@@ -1,5 +1,5 @@
 *.pyc
-new_tests/__pycache__
+__pycache__
 new_tests/.pytest_cache
 new_tests/output/*
 !new_tests/output/.gitkeep
@@ -22,5 +22,11 @@ C/src/valgeneral
 C/src/valsubmit
 C/src/writexml
 C/src/xmltopsv
-Python/bin/__pycache__
 .vscode
+.DS_Store
+env/
+build/
+*.egg-info
+_version.py
+dist/
+Python/ades/data/*
