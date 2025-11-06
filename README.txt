@@ -5,7 +5,7 @@
        #   add Python/ades to the PATH
        #   add both Python and Python/ades to the PYTHONPATH
        # to enable using the ADES conversion tools as command line scripts 
-       # and as importable python libarires
+       # and as importable python libraries
        # 
        # The python code can be installed via the iau-ades package distributed via the 
        # Python Package Index (PyPI). Install with:

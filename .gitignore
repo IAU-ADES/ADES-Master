@@ -1,10 +1,10 @@
 *.pyc
+tests/output/*
+!tests/output/.gitkeep
 __pycache__
-new_tests/.pytest_cache
-new_tests/output/*
-!new_tests/output/.gitkeep
-new_tests/*.file
-tests/testarea/
+tests/.pytest_cache
+attic/old_tests/testarea/
+*.file
 C/bin/
 C/config.log
 C/config.status
