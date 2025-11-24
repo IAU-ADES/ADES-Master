@@ -8,11 +8,6 @@ from __future__ import unicode_literals
 # end of __future__ imports
 #
 
-import sys
-import io
-from collections import OrderedDict
-import sys
-import argparse
 from ades import adesutility
 from ades import packUtil
 from ades import sexVals
