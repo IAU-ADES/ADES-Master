@@ -120,25 +120,23 @@ def hasKeyOrVal(d, key, val):
    else: 
      return val
 
-# from https://bitbucket.org/mpcdev/xmlto80/src/master/
-bandconv = {'Vj': 'V',
-            'Rc': 'R',
-            'Ic': 'I',
-            'Bj': 'B',
-            'Uj': 'U',
-            'Sg': 'g',
-            'Sr': 'r',
-            'Si': 'i',
-            'Sz': 'z',
-            'Pg': 'g',
-            'Pr': 'r',
-            'Pi': 'i',
-            'Pz': 'z',
-            'Pw': 'w',
-            'Ao': 'o',
-            'Ac': 'c',
-            'Gb': 'G',
-            'Gr': 'G'}
+# This set of band-conversion maps captures the subset of bands that need special
+# handling when creating an obs80 string. By default, single-character ADES bands
+# are passed through unmodified, and multi-character ADES bands are mapped to
+# the second character (e.g., `Sg` => `g`). Currently, all of the exceptions in
+# this table are two-character bands where we use the first character instead of
+# the second, but this table can be used to define any mapping that needs to take
+# precedence over the default logic.
+bandconv = {
+   'Vj': 'V',
+   'VR': 'V',
+   'Rc': 'R',
+   'Ic': 'I',
+   'Bj': 'B',
+   'Uj': 'U',
+   'Gb': 'G',
+   'Gr': 'G',
+}
 
 def printOpticalLine(item):
    """ printOpticalLine decodes and prints an optical element
@@ -174,21 +172,17 @@ def printOpticalLine(item):
    #mag = "{0:5s}".format(hasKeyOrVal(item, 'mag', ''))
    mag = adesutility.applyPaddingAndJustification(hasKeyOrVal(item, 'mag', ''), 5, 'D', 3)[0]
    mag = mag[0:5] # restrict to length of 5
-   band = hasKeyOrVal(item, 'band', ' ')
-   # NEW APPROACH: USE 1ST CHARACTER
-   if len(band) > 1:
-      band = band[1]
-   
-   #This won't work
-   #if len(band) > 1: band = '!' # Don't truncate the band, but instead write a nonsense character
 
-   # OLD APPROACH: USE 2ND CHARACTER IF IN BANDCONV HASH ABOVE...
-   #   if len(band) > 1:
-   #      #band = band[1] # take the second character for 2-character band.  This does not invert
-   #      if band in bandconv:
-   #          band = bandconv[band]
-   #      else:
-   #          band = ' '
+   # Map ADES to obs80 band specifiers. If the ADES band is listed in the
+   # `bandconv` table, use that value. Otherwise, the default logic is: use
+   # single-character ADES bands as-is; for multi-character bands, use the
+   # second character.
+   band = hasKeyOrVal(item, 'band', ' ')
+   new_band = bandconv.get(band)
+   if new_band:
+      band = new_band
+   elif len(band) > 1:
+      band = band[1]
 
    #
    # map astCat to single-character packing

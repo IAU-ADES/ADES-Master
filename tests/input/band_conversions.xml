@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ades version="2017">
+  <obsBlock>
+    <obsContext>
+      <observatory>
+        <mpcCode>XXX</mpcCode>
+        <name>testcase</name>
+      </observatory>
+      <submitter>
+        <name>A. Stronomer</name>
+        <institution>University of Science</institution>
+      </submitter>
+      <observers>
+        <name>A. Stronomer</name>
+      </observers>
+      <measurers>
+        <name>A. Stronomer</name>
+      </measurers>
+      <telescope>
+        <aperture>0.5</aperture>
+        <design>Reflector</design>
+        <detector>CCD</detector>
+      </telescope>
+    </obsContext>
+    <obsData>
+      <optical>
+        <trkSub>A10TlFw</trkSub>
+        <mode>CCD</mode>
+        <stn>XXX</stn>
+        <obsTime>2023-03-07T09:29:20.88Z</obsTime>
+        <ra>256.566210</ra>
+        <dec>-19.007690</dec>
+        <rmsRA>0.136</rmsRA>
+        <rmsDec>0.136</rmsDec>
+        <astCat>Gaia2</astCat>
+        <mag>14.26</mag>
+        <rmsMag>0.024</rmsMag>
+        <band>VR</band>
+        <logSNR>1.620</logSNR>
+      </optical>
+      <optical>
+        <trkSub>A10TlFw</trkSub>
+        <mode>CCD</mode>
+        <stn>XXX</stn>
+        <obsTime>2023-03-07T09:33:28.07Z</obsTime>
+        <ra>256.567400</ra>
+        <dec>-19.007770</dec>
+        <rmsRA>0.135</rmsRA>
+        <rmsDec>0.135</rmsDec>
+        <astCat>Gaia2</astCat>
+        <mag>14.14</mag>
+        <rmsMag>0.021</rmsMag>
+        <band>Sg</band>
+        <logSNR>1.678</logSNR>
+      </optical>
+    </obsData>
+  </obsBlock>
+</ades>
