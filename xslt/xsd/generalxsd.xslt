@@ -105,16 +105,23 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 </xsl:template>
 
 <!-- for submission validation, omit distribOnly fields -->
-
-<!-- <xsl:template match="element[@ref]|group[@ref]"> -->
 <xsl:template match="*[self::element or self::group][@ref]">
   <xsl:element name="xsd:{local-name()}">
-     <xsl:attribute name="ref"><xsl:value-of select="@ref"/></xsl:attribute>
-     <xsl:call-template name="processUse"/>
-  </xsl:element> 
+    <xsl:attribute name="ref"><xsl:value-of select="@ref"/></xsl:attribute>
+
+    <!-- Preserve cardinality -->
+    <xsl:if test="@minOccurs">
+      <xsl:attribute name="minOccurs"><xsl:value-of select="@minOccurs"/></xsl:attribute>
+    </xsl:if>
+    <xsl:if test="@maxOccurs">
+      <xsl:attribute name="maxOccurs"><xsl:value-of select="@maxOccurs"/></xsl:attribute>
+    </xsl:if>
+
+    <!-- Retain any @use behavior -->
+    <xsl:call-template name="processUse"/>
+  </xsl:element>
 </xsl:template>
 
-<!-- <xsl:template match="element[@name]|group[@name]"> --> <!-- must have type too -->
 <xsl:template match="*[self::attribute or self::element or self::group][@name][@type][not(@use='NoSubmitDistribRequired')][not(@use='NoSubmit')]"> <!-- must have both name and type -->
   <xsl:element name="xsd:{local-name()}">
      <xsl:attribute name="name"><xsl:value-of select="@name"/></xsl:attribute>
