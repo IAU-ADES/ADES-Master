@@ -17,7 +17,7 @@ from ades import adesutility
 #
 # sys.argv[1]: input mpc 80-column file
 # sys.argv[2]: output xml file  (in utf-8)
-# example: ./psvtoxml.py <psv file> <xml file>
+# example: ./xxx80y.py <mpc 80-col file> <xml file>
 #
 
 
