@@ -2,6 +2,7 @@
 name = "iau-ades"
 dynamic = ['version']
 dependencies = [
+    "json5",
     "lxml",
     "xmltodict",
     "pyyaml"
