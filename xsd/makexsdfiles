@@ -4,7 +4,7 @@
 # apply xlst to adesmaster file to make xsd files in four formats
 #
 
-../Python/bin/applyxslt ../xml/adesmaster.xml ../xslt/xsd/generalxsd.xslt > general.xsd
+../Python/ades/applyxslt ../xml/adesmaster.xml ../xslt/xsd/generalxsd.xslt > general.xsd
 #../Python/bin/applyxslt ../xml/adesmaster.xml ../xslt/xsd/generalhumanxsd.xslt > generalhuman.xsd
-../Python/bin/applyxslt ../xml/adesmaster.xml ../xslt/xsd/submitxsd.xslt > submit.xsd
+../Python/ades/applyxslt ../xml/adesmaster.xml ../xslt/xsd/submitxsd.xslt > submit.xsd
 #../Python/bin/applyxslt ../xml/adesmaster.xml ../xslt/xsd/submithumanxsd.xslt > submithuman.xsd

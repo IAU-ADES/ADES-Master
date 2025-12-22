@@ -270,6 +270,11 @@
       <xsd:maxLength value="25"/>
     </xsd:restriction>
   </xsd:simpleType>
+  <xsd:simpleType name="StringTypeW35">
+    <xsd:restriction base="StringType">
+      <xsd:maxLength value="35"/>
+    </xsd:restriction>
+  </xsd:simpleType>
   <xsd:simpleType name="StringTypeW100">
     <xsd:restriction base="StringType">
       <xsd:maxLength value="100"/>
@@ -715,7 +720,7 @@
   <xsd:element name="artSat" type="StringTypeW25"/>
   <xsd:element name="trkSub" type="TrkSubType"/>
   <xsd:element name="obsID" type="ObsIDType"/>
-  <xsd:element name="obsSubID" type="StringTypeW25"/>
+  <xsd:element name="obsSubID" type="StringTypeW35"/>
   <xsd:element name="trkID" type="TrkIDType"/>
   <xsd:element name="trkMPC" type="TrkIDType"/>
   <xsd:element name="mode" type="ModeType"/>
