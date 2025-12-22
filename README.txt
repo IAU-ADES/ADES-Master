@@ -1,3 +1,6 @@
+22-Dec-2025 - Changed the length of the obssubID field from 25 to 35 chars 
+       # Some clean-up
+
 06-Oct-2025 - Moved python code from Python/bin to Python/ades; release iau-ades package
        # All python code has been moved from Python/bin to Python/ades to support code packaging
        # Existing scripts that utilize ADES-Master by modifying the computing environment 
