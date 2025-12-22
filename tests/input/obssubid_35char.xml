@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ades version="2022">
+  <obsBlock>
+    <obsContext>
+      <observatory>
+        <mpcCode>X05</mpcCode>
+        <name>Vera C. Rubin Observatory</name>
+      </observatory>
+      <submitter>
+        <name>V. Rubin PreopsLSSTCam</name>
+        <institution>Vera C. Rubin Observatory</institution>
+      </submitter>
+      <measurers>
+        <name>P. H. Bernardinelli</name>
+        <name>A. Heinze</name>
+        <name>M. Juric</name>
+        <name>J. Kurlander</name>
+        <name>J. Moeyens</name>
+      </measurers>
+      <telescope>
+        <design>Modified Paul-Baker</design>
+        <aperture>8.4</aperture>
+        <detector>CCD</detector>
+        <fRatio>1.234</fRatio>
+        <pixelScale>0.2</pixelScale>
+      </telescope>
+      <software>
+        <astrometry>astrometry LSST Science Pipelines</astrometry>
+        <photometry>LSST Science Pipelines</photometry>
+        <objectDetection>heliolincx</objectDetection>
+      </software>
+      <fundingSource>National Science Foundation; Department of Energy</fundingSource>
+      <comment>
+        <line>line ADES generated and submitted using B612 Asteroid Institute ADAM mpcq</line>
+      </comment>
+    </obsContext>
+    <obsData>
+      <optical>
+        <trkSub>cb00090</trkSub>
+        <obsSubID>LSST-AP-DS-NNNNNNNNNNNNNNNNNNNN</obsSubID>
+        <mode>CCD</mode>
+        <stn>X05</stn>
+        <obsTime>2025-04-22T02:38:05.222Z</obsTime>
+        <ra>187.572904</ra>
+        <dec>+6.924455</dec>
+        <rmsRA>0.027</rmsRA>
+        <rmsDec>0.034</rmsDec>
+        <astCat>Gaia3</astCat>
+        <mag>21.209</mag>
+        <rmsMag>0.029</rmsMag>
+        <band>Li</band>
+        <photCat>Gaia3</photCat>
+      </optical>
+      <optical>
+        <trkSub>cb00090</trkSub>
+        <obsSubID>LSST-DP1-DS-NNNNNNNNNNNNNNNNNNNN</obsSubID>
+        <mode>CCD</mode>
+        <stn>X05</stn>
+        <obsTime>2025-04-22T02:41:45.334Z</obsTime>
+        <ra>187.572460</ra>
+        <dec>+6.924549</dec>
+        <rmsRA>0.027</rmsRA>
+        <rmsDec>0.034</rmsDec>
+        <astCat>Gaia3</astCat>
+        <mag>21.213</mag>
+        <rmsMag>0.029</rmsMag>
+        <band>Li</band>
+        <photCat>Gaia3</photCat>
+      </optical>
+    </obsData>
+  </obsBlock>
+</ades>
