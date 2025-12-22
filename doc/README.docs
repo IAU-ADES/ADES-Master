@@ -6,7 +6,7 @@ steps 2 & 3 can be neglected.)
 1) Update MS Word documentation, starting from ./doc directory:
    a) Copy ADES_Description_<date>.docx to ../attic
    b) Rename ADES_Description_<date>.docx to show current date
-   c) Edit and save ADES_Description_<date>].docx, including updates to
+   c) Edit and save ADES_Description_<date>.docx, including updates to
    date on cover page and change log in front matter
    d) Save PDF version of ADES_Description_<date>.docx to ../ADES_Description.pdf
    e) Close MS Word
@@ -28,5 +28,13 @@ steps 2 & 3 can be neglected.)
       makexsdfiles
       cd ..
 
-4) You should now be in the repo root. Final step is to commit and
+4) Update adesmaster.xml in Python/ades/data/xml
+      cd xml/
+      cp adesmaster.xml ../Python/ades/data/xml/
+      cd ..
+
+5) Be sure you have added the tests to prove that changes you made 
+   to adesmaster.xml still works
+
+6) You should now be in the repo root. Final step is to commit and
 push branch.
