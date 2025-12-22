@@ -216,7 +216,7 @@
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="ProvIDType">
-    <xsd:union memberTypes="BaseProvIDType"/>
+    <xsd:union memberTypes="BaseProvIDType OldProvIDType"/>
   </xsd:simpleType>
   <xsd:simpleType name="RaDecPrecType">
     <xsd:restriction base="xsd:decimal">

@@ -844,7 +844,7 @@ decimal types must be in a range
 
 <simpletype name="ProvIDType">
    <union memberTypes="BaseProvIDType OldProvIDType"/>
-   <submitunion memberTypes="BaseProvIDType"/>
+   <submitunion memberTypes="BaseProvIDType OldProvIDType"/>
    <doc> A provID (provisional ID) is may be a minor planet provid, 
       which is a 4-digit year followed by a space followd by two letters
       followed optinally by digits; or a comet it, which is C/ or P/ or D/ 
@@ -855,8 +855,7 @@ decimal types must be in a range
       which is S/ followed by a 4-digit year followed a space followed
       either (by a minor planet PermID in parentheses or the bare letter 
       M, J, S, N, U) followed by a space followed by digits.   For
-      data before 1926, the OldProvIDType may occur -- this is not allowed
-      in new submissions
+      data before 1926, the OldProvIDType may occur.
       </doc>
 
 </simpletype>
