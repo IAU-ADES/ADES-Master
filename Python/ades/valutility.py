@@ -4,14 +4,9 @@ from __future__ import absolute_import, division, print_function
 from __future__ import unicode_literals
 
 import traceback
-import sys
-import argparse
 import re
 
 from ades import adesutility
-from ades import convertutility
-import io
-
 
 def validate_schema(schema_name, schema, candidate, out):
     #
