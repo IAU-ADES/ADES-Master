@@ -24,7 +24,6 @@ def test_valgeneral(xmlfile):
 
     if os.path.exists("validation.file"):
         os.remove("validation.file")
-    print(xmlfile)
     subprocess.run(
         "valgeneral.py " + xmlfile + "> validation.file", shell=True, check=True
     )
