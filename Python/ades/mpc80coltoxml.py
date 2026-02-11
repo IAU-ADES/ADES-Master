@@ -654,6 +654,10 @@ def printit(item, lineNumber):
 # convert to XML -- note preamble and postamble since we aren't using yield
 #
 outXMLFile = None
+_submission_mode = False
+# Elements valid in the general schema but not in the submission schema (submit.xsd)
+_non_submission_elements = {'subFmt', 'precTime', 'precRA', 'precDec', 'subFrm', 'deprecated'}
+
 def convertitPreamble(fname, output_encoding='utf-8'):  # set up elementTree
    global outXMLFile
    global stack
@@ -812,8 +816,9 @@ def convertit(item, lineNumber):
 
      d = allowedElementDict['optical']
      #print ( [x for x in item if x not in d ] )
-     elements = adesutility.makeElementList( [ (x, str(item[x]).strip()) 
-                for x in d if x in item and item[x] and str(item[x]).strip()] )
+     skip = _non_submission_elements if _submission_mode else set()
+     elements = adesutility.makeElementList( [ (x, str(item[x]).strip())
+                for x in d if x in item and item[x] and str(item[x]).strip() and x not in skip] )
      stack.addElementList(elements)
 
      #prettyPrintDict("Found code " + code + ' at line ' + repr(lineNumber), item);
@@ -827,8 +832,9 @@ def convertit(item, lineNumber):
 
      d = allowedElementDict['radar']
      #print ( 'radar', [(x, item[x]) for x in item if x not in d ] )
-     elements = adesutility.makeElementList( [ (x, str(item[x]).strip()) 
-                for x in d if x in item and item[x] and str(item[x]).strip()] )
+     skip = _non_submission_elements if _submission_mode else set()
+     elements = adesutility.makeElementList( [ (x, str(item[x]).strip())
+                for x in d if x in item and item[x] and str(item[x]).strip() and x not in skip] )
      stack.addElementList(elements)
      pass
 
@@ -1002,7 +1008,9 @@ def splitRadar(fname, input_encoding='utf-8'):
    lineNumber -= 1 # line number at end should be last line
 
 #---------------------------------------------------------------------------
-def mpc80coltoxml(inmpcfile, outxmlfile, nosplit=False, input_encoding='utf-8', output_encoding='utf-8'):
+def mpc80coltoxml(inmpcfile, outxmlfile, nosplit=False, input_encoding='utf-8', output_encoding='utf-8', submission=False):
+   global _submission_mode
+   _submission_mode = submission
    func = doNotSplitRadar if nosplit else splitRadar
    try:
 
@@ -1033,6 +1041,7 @@ def main():
       description='Convert MPC obs80 to ADES XML.', 
    )
    parser.add_argument("--nosplit", action="store_true", help="will not split doppler/delay radar into two elements; elements with doppler and delay will not validate")
+   parser.add_argument("--submission", action="store_true", help="omit elements not valid in the submission schema (subFmt, precTime, precRA, precDec, etc.)")
    parser.add_argument("--val-only", action="store_true", help="check validity of input obs80, but do not output XML file")
 
    args = parser.parse_args()
@@ -1047,7 +1056,7 @@ def main():
             args.output = os.devnull
       
       # create callable
-      call = lambda i, o : mpc80coltoxml(i, o, nosplit=args.nosplit, input_encoding=args.input_encoding, output_encoding=args.output_encoding)
+      call = lambda i, o : mpc80coltoxml(i, o, nosplit=args.nosplit, input_encoding=args.input_encoding, output_encoding=args.output_encoding, submission=args.submission)
       # call function with filename arguments
       convertutility.call_with_files(call, args)
    except Exception as e:
