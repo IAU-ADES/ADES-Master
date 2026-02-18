@@ -1,3 +1,6 @@
+18-Feb-2026 - Added `submission` option to `mpc80coltoxml`
+       # Allow users to turn an 80col file into an XML file that is valid for submission.
+
 22-Dec-2025 - Changed the length of the obssubID field from 25 to 35 chars 
        # Allow submission of old-style provIDs (e.g. A988 CA)
        # Some clean-up
