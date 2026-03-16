@@ -163,7 +163,7 @@ def printOpticalLine(item):
     provID = hasKeyOrVal(item, "provID", None)
     trkSub = hasKeyOrVal(item, "trkSub", None)
     artSat = hasKeyOrVal(item, "artSat", None)
-    if artSat != None:
+    if artSat is not None:
         packedID = artSat.rjust(
             12, str(" ")
         )  # If artSat is present then ignore other designation info
