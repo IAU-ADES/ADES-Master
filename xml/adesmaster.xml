@@ -892,7 +892,7 @@ decimal types must be in a range
   <restriction base="StringType">
     <restrict name="xsd:maxLength" value="28"/>
   </restriction>
-  <doc>MPC-assigned reference, up to eighteen characters</doc>
+  <doc>MPC-assigned reference, up to 28 characters</doc>
 </simpletype>
 
 <simpletype name="RemarkType">
