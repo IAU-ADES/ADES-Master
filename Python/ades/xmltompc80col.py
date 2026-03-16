@@ -16,7 +16,7 @@ from ades import convertutility
 
 
 def setFromElementDictList(element, allowedElementDict):
-    """makes a set from the allowedElementDict list for elemnt"""
+    """makes a set from the allowedElementDict list for element"""
     return set([t for t in allowedElementDict[element]])
 
 
@@ -95,7 +95,7 @@ def processAdesElement(element, allowedObsDataSet, allowedAdesSet, allowedObsBlo
     for child in element:
         tag = child.tag
         if tag not in allowedAdesSet:
-            raise RuntimeError("tag " + tag + " not allowend in ades")
+            raise RuntimeError("tag " + tag + " not allowed in ades")
 
         if tag == "obsBlock":
             printDataDicts()
@@ -163,7 +163,7 @@ def printOpticalLine(item):
     provID = hasKeyOrVal(item, "provID", None)
     trkSub = hasKeyOrVal(item, "trkSub", None)
     artSat = hasKeyOrVal(item, "artSat", None)
-    if artSat != None:
+    if artSat is not None:
         packedID = artSat.rjust(
             12, str(" ")
         )  # If artSat is present then ignore other designation info
