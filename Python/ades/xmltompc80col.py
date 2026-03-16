@@ -95,7 +95,7 @@ def processAdesElement(element, allowedObsDataSet, allowedAdesSet, allowedObsBlo
     for child in element:
         tag = child.tag
         if tag not in allowedAdesSet:
-            raise RuntimeError("tag " + tag + " not allowend in ades")
+            raise RuntimeError("tag " + tag + " not allowed in ades")
 
         if tag == "obsBlock":
             printDataDicts()
