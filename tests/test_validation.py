@@ -26,6 +26,7 @@ from ades import adesutility
         "input/old_style_provid.xml",
         "input/obs_design.xml",
         "input/obs_ITF_trksub.xml",
+        "input/obs_ref_28chars.xml",
     ],
 )
 def test_valgeneral(xmlfile):
@@ -52,6 +53,7 @@ def test_valgeneral(xmlfile):
         "input/old_style_provid.xml",
         "input/obs_design.xml",
         "input/obs_ITF_trksub.xml",
+        "input/obs_ref_28chars.xml",
     ],
 )
 def test_valgeneral_routine(xmlfile):
