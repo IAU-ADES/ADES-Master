@@ -16,7 +16,7 @@ from ades import convertutility
 
 
 def setFromElementDictList(element, allowedElementDict):
-    """makes a set from the allowedElementDict list for elemnt"""
+    """makes a set from the allowedElementDict list for element"""
     return set([t for t in allowedElementDict[element]])
 
 
