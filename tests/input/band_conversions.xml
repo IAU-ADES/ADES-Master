@@ -42,6 +42,21 @@
         <trkSub>A10TlFw</trkSub>
         <mode>CCD</mode>
         <stn>XXX</stn>
+        <obsTime>2023-03-07T09:30:20.88Z</obsTime>
+        <ra>257.566210</ra>
+        <dec>-19.007690</dec>
+        <rmsRA>0.136</rmsRA>
+        <rmsDec>0.136</rmsDec>
+        <astCat>Gaia2</astCat>
+        <mag>14.26</mag>
+        <rmsMag>0.024</rmsMag>
+        <band>Rj</band>
+        <logSNR>1.620</logSNR>
+      </optical>
+      <optical>
+        <trkSub>A10TlFw</trkSub>
+        <mode>CCD</mode>
+        <stn>XXX</stn>
         <obsTime>2023-03-07T09:33:28.07Z</obsTime>
         <ra>256.567400</ra>
         <dec>-19.007770</dec>

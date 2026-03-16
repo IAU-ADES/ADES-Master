@@ -890,9 +890,9 @@ decimal types must be in a range
 
 <simpletype name="RefType">
   <restriction base="StringType">
-    <restrict name="xsd:maxLength" value="16"/>
+    <restrict name="xsd:maxLength" value="28"/>
   </restriction>
-  <doc>MPC-assigned reference, up to sixteen characters</doc>
+  <doc>MPC-assigned reference, up to eighteen characters</doc>
 </simpletype>
 
 <simpletype name="RemarkType">
@@ -1033,7 +1033,7 @@ decimal types must be in a range
 
 <simpletype name="OldTrkSubType">
    <restriction base="StringType">
-     <restrict name="xsd:pattern" value="[- ?+@.()/\\A-Za-z0-9_]*"/>
+     <restrict name="xsd:pattern" value="[- ?+@./()/\\A-Za-z0-9_]*"/>
      <restrict name="xsd:maxLength" value="8"/>
    </restriction>
    <doc>A trkSub is up to eight funky characters</doc>
@@ -1083,7 +1083,7 @@ decimal types must be in a range
 <complextype name="TelescopeType">
      <all>
        <element name="name" type="StringTypeW100" use="optional" doc="telescope name"/>
-       <element name="design" type="StringTypeW25" doc="telescope design"/>
+       <element name="design" type="StringTypeW35" doc="telescope design"/>
        <element name="aperture" type="PosDecimalTypeW6" doc="telescope aperture"/>
        <element name="detector" type="StringTypeW25" doc="telescope detector"/>
        <element name="fRatio" type="PosDecimalTypeW6" use="optional" doc="telescope f number"/>

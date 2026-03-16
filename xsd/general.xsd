@@ -238,7 +238,7 @@
   </xsd:simpleType>
   <xsd:simpleType name="RefType">
     <xsd:restriction base="StringType">
-      <xsd:maxLength value="16"/>
+      <xsd:maxLength value="28"/>
     </xsd:restriction>
   </xsd:simpleType>
   <xsd:simpleType name="RemarkType">
@@ -330,7 +330,7 @@
   </xsd:simpleType>
   <xsd:simpleType name="OldTrkSubType">
     <xsd:restriction base="StringType">
-      <xsd:pattern value="[- ?+@.()/\\A-Za-z0-9_]*"/>
+      <xsd:pattern value="[- ?+@./()/\\A-Za-z0-9_]*"/>
       <xsd:maxLength value="8"/>
     </xsd:restriction>
   </xsd:simpleType>
@@ -362,7 +362,7 @@
   <xsd:complexType name="TelescopeType">
     <xsd:all>
       <xsd:element name="name" type="StringTypeW100" minOccurs="0"/>
-      <xsd:element name="design" type="StringTypeW25"/>
+      <xsd:element name="design" type="StringTypeW35"/>
       <xsd:element name="aperture" type="PosDecimalTypeW6"/>
       <xsd:element name="detector" type="StringTypeW25"/>
       <xsd:element name="fRatio" type="PosDecimalTypeW6" minOccurs="0"/>

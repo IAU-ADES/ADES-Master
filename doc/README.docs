@@ -16,10 +16,10 @@ steps 2 & 3 can be neglected.)
 
       mv ades_master_<old_date>.pdf ../attic
       cd docsrc/
-      makedoc
+      ./makedoc
       cp ades.pdf ../ades_master_<new_date>.pdf
       cp ades.pdf ../../ades_master.pdf
-      cleanup
+      ./cleanup
       cd ..
 
 3) Update XSD files. Run the following commands:
