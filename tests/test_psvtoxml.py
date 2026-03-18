@@ -28,12 +28,12 @@ def test_psv_to_xml_conversion_routine():
     psvtoxml.psvtoxml(psv_infile, xml_outfile)
     assert(os.path.exists(xml_outfile) and os.stat(xml_outfile).st_size != 0)
 
-# Testing that a PSV file with unrecognized header fields (xObs, yObs, zObs,
-# obsCoord) raises a RuntimeError with a diagnostic message listing the
+# Testing that a PSV file with unrecognized header fields (e.g. xObs, yObs, zObs,
+# obsCoord) fails with a diagnostic message listing the
 # unrecognized fields.
 def test_psv_bad_headers_fail():
-    psv_infile = "input/fail.psv"
-    xml_outfile = "output/fail.xml"
+    psv_infile = "input/fail_headers.psv"
+    xml_outfile = "output/fail_headers.xml"
     if os.path.exists(xml_outfile):
         os.remove(xml_outfile)
     result = subprocess.run(
@@ -46,8 +46,8 @@ def test_psv_bad_headers_fail():
 # Testing that a PSV file with valid positional header fields (pos1, pos2,
 # pos3, ctr, sys) converts successfully to XML.
 def test_psv_valid_headers_pass():
-    psv_infile = "input/pass.psv"
-    xml_outfile = "output/pass.xml"
+    psv_infile = "input/pass_headers.psv"
+    xml_outfile = "output/pass_headers.xml"
     if os.path.exists(xml_outfile):
         os.remove(xml_outfile)
     result = subprocess.run(
