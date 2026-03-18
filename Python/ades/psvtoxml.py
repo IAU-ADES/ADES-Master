@@ -169,7 +169,42 @@ def parsePSVLine(line):
               s.issuperset(requiredElementDict[possible])):
                 tag = possible
        if (not tag):
-          raise RuntimeError("No matching header type")
+          #
+          # Provide actionable diagnostics:
+          #  - If there are unrecognized element names in the header, list them.
+          #  - Otherwise, show which required fields are missing for each possible
+          #    obsBlock record type.
+          #
+          possible_tags = [p for p in allowedElementDict['ades']
+                           if p in allowedElementDict and p in requiredElementDict]
+
+          allowed_union = set()
+          for ptag in possible_tags:
+             allowed_union |= set(allowedElementDict[ptag])
+
+          unknown = sorted([f for f in s if f and (f not in allowed_union)])
+          if unknown:
+             raise RuntimeError("No matching header type; unrecognized header field(s): "
+                                + ", ".join(unknown))
+
+          # All fields are known ADES elements, but the set doesn't match any type.
+          missing_by_type = []
+          for ptag in possible_tags:
+             missing = sorted(list(set(requiredElementDict[ptag]) - s))
+             extra = sorted(list(s - set(allowedElementDict[ptag])))
+             if missing or extra:
+                parts = []
+                if missing:
+                   parts.append("missing required: " + ", ".join(missing))
+                if extra:
+                   parts.append("extra: " + ", ".join(extra))
+                missing_by_type.append(ptag + " (" + "; ".join(parts) + ")")
+
+          msg = ("No matching header type; header fields are valid ADES elements, "
+                 "but do not satisfy any obsBlock record type")
+          if missing_by_type:
+             msg += "; candidates: " + " | ".join(missing_by_type)
+          raise RuntimeError(msg)
 
        fields.append(tag) # the last one is the tag
 
