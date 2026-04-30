@@ -240,7 +240,15 @@ catCodes = { ' ': 'UNK',
              '3': 'Gaia_Int', 
              '4': 'GZ', 
              '5': 'UBSC', 
-             '6': 'Gaia_2016', 
+             '6': 'Gaia_2016',
+             '7': 'ZZCAT',
+             '8': 'APASS',
+             '9': 'UBSC',
+             '!': 'AKARI',
+             '@': 'AG',
+             '#': 'WISE',
+             '$': 'LSST2502',
+             '^': 'IRASPSC'
            }
 
 rCatCodes = { catCodes[i]:i for i in catCodes }
