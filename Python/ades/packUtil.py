@@ -60,7 +60,7 @@ validNotes = ' AaBbcDdEFfGgGgHhIiJKkMmNOoPpRrSsTtUuVWwYyCQXZ2345vzjeL16789'
 programCodesArray = R"""0123456789!"#$%&'()*+,-./[\]^_`{|}~:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"""
 validProgramCodes = ' ' + programCodesArray
 
-# Updated 25-Apr-2024 based on https://www.minorplanetcenter.net/iau/lists/ProgramCodes.txt
+# Updated 30-Apr-2026 based on MPC's obscodes table
 programCodeSites = \
 set([ "010",
       "012",
