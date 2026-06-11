@@ -441,7 +441,7 @@ def _generic_decimal_to_sexagesimal(tot_seconds, prefix, prec, is_ra):
 
    # We need to round the rightmost fractional item *before* breaking down into
    # H/M/S to avoid `60.0` situations. But the "native" unit of this item
-   # depends on whether we're in "minutes mode" or not. Eithe way, we also need
+   # depends on whether we're in "minutes mode" or not. Either way, we also need
    # to check if rounding has brought us to the edge of the domain, and wrap or
    # clamp depending on whether we're RA or dec.
 
