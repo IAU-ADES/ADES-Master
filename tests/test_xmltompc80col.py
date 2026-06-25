@@ -11,29 +11,40 @@ import pytest
 
 
 def _test_doesnt_crash(inpath):
-    with NamedTemporaryFile(mode="w+t", suffix=".obs") as f_output_temp:
-        subprocess.run(
-            ["xmltompc80col.py", inpath, f_output_temp.name],
-            shell=False,
-            check=True,
-        )
+    # To be Windows-friendly, we have to close the file before launching the
+    # subprocess. In that case we might as well leave the file on disk if
+    # anything goes wrong.
+    with NamedTemporaryFile(suffix=".obs", delete=False) as f_output_temp:
+        pass
 
-        assert os.path.exists(f_output_temp.name)
-        assert os.stat(f_output_temp.name).st_size != 0
+    subprocess.run(
+        ["xmltompc80col.py", inpath, f_output_temp.name],
+        shell=False,
+        check=True,
+    )
+
+    assert os.path.exists(f_output_temp.name)
+    assert os.stat(f_output_temp.name).st_size != 0
+    os.remove(f_output_temp.name)
 
 
 def _test_output_is_expected(inpath, exppath):
     with open(exppath) as f_expected:
         expected = f_expected.read()
 
-    with NamedTemporaryFile(mode="w+t", suffix=".obs") as f_output_temp:
-        subprocess.run(
-            ["xmltompc80col.py", inpath, f_output_temp.name],
-            shell=False,
-            check=True,
-        )
-        f_output_temp.seek(0)
+    with NamedTemporaryFile(suffix=".obs") as f_output_temp:
+        pass
+
+    subprocess.run(
+        ["xmltompc80col.py", inpath, f_output_temp.name],
+        shell=False,
+        check=True,
+    )
+
+    with open(f_output_temp.name) as f_output_temp:
         observed = f_output_temp.read()
+
+    os.remove(f_output_temp.name)
 
     assert observed == expected
 
