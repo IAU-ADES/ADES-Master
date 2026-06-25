@@ -409,7 +409,7 @@ def _generic_decimal_to_sexagesimal(tot_seconds, prefix, prec, is_ra):
    Inputs: 
       tot_seconds: float, the value in its "seconds" unit; should already be bounds-checked
       prefix: string, a prefix to apply to the result
-      prec: float, precison value (see below)
+      prec: float, precision value (see below)
       is_ra: bool, True if we are handling an RA; otherwise, it is a declination
 
    Returns: 
@@ -485,8 +485,7 @@ def decRaToSexRa(decRa, prec):
 
    Inputs: 
       decRa: decimal degrees RA; type is anything that can be converted to a float
-      prec: float, precison value (see below)
-
+      prec: float, precision value (see below)
    Return Value: 
       sexRa: string, sexagesimal RA value in hms
 
@@ -557,8 +556,7 @@ def degDeclToSexDecl(sexDecl, prec):
 
    Inputs: 
       decDecl: **string** representation of a declination in decimal degrees
-      prec: float, precison value (see below)
-
+      prec: float, precision value (see below)
    Return Value: 
       sexDecl: string, sexagesimal declination value in dms
 

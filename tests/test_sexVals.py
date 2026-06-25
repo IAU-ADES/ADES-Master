@@ -62,6 +62,5 @@ DEC_DECIMAL_TO_SEXG_CASES = [
 ]
 
 @pytest.mark.parametrize("dec_decimal,prec,expected_sexg", DEC_DECIMAL_TO_SEXG_CASES)
-def test_decRaToSexRa(dec_decimal, prec, expected_sexg):
-    observed_sexg = sexVals.degDeclToSexDecl(dec_decimal, prec)
+def test_degDeclToSexDecl(dec_decimal, prec, expected_sexg):
     assert observed_sexg == expected_sexg
