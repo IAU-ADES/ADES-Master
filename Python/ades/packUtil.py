@@ -395,7 +395,9 @@ catCodes = { ' ': 'UNK',
              '@': 'AG',
              '#': 'WISE',
              '$': 'LSST2502',
-             '^': 'IRASPSC'
+             '^': 'IRASPSC',
+             '&': 'SDSS9',
+             '*': 'SDSS16',
            }
 
 rCatCodes = { catCodes[i]:i for i in catCodes }
