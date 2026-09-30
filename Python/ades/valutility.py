@@ -8,15 +8,31 @@ import re
 
 from ades import adesutility
 
-def validate_schema(schema_name, schema, candidate, out):
+def format_schema_errors(schema):
+    """Format every entry in a schema's error log as `  line N: message` lines.
+
+    lxml fills error_log during validate(); assertValid() stops at the first
+    invalid element and raises, so only one error is ever available there.
+    """
+    return "".join(
+        "  line {}: {}\n".format(entry.line, entry.message)
+        for entry in schema.error_log
+    )
+
+def validate_schema(schema_name, schema, candidate, out, all_errors=False):
     #
     # Check for validity -- prints errors on stdout if any are found
     #
-    try:
-        schema.assertValid(candidate)
+    if all_errors:
         result = None
-    except:  
-        result = traceback.format_exc()
+        if not schema.validate(candidate):
+            result = format_schema_errors(schema)
+    else:
+        try:
+            schema.assertValid(candidate)
+            result = None
+        except:
+            result = traceback.format_exc()
 
     #
     # now print the results, and the reason for failure if the
@@ -32,7 +48,7 @@ def validate_schema(schema_name, schema, candidate, out):
 
     return result
 
-def validate_xslt(schema_name, schemaxslt, candidate, out):
+def validate_xslt(schema_name, schemaxslt, candidate, out, all_errors=False):
     masterfile = adesutility.adesmaster
 
     #
@@ -43,12 +59,12 @@ def validate_xslt(schema_name, schemaxslt, candidate, out):
     xslt_tree = adesutility.readXML(schemaxslt)
     schema = adesutility.XMLtoSchemaViaXSLT(xml_tree, xslt_tree)
 
-    return validate_schema(schema_name, schema, candidate, out)
+    return validate_schema(schema_name, schema, candidate, out, all_errors)
 
-def validate_xslts(schemaxslts, candidate, out):
+def validate_xslts(schemaxslts, candidate, out, all_errors=False):
     results = {}
     for schema_name in schemaxslts:
-        results[schema_name] = validate_xslt(schema_name, schemaxslts[schema_name], candidate, out)
+        results[schema_name] = validate_xslt(schema_name, schemaxslts[schema_name], candidate, out, all_errors)
     return results
 
 def validate_xml_declaration(xmlfile, out):

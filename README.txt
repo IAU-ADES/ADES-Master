@@ -1,3 +1,8 @@
+30-Sep-2026 - Added `--report-all-errors` option to the validation tools
+       # List every schema error with its line number instead of stopping at the first one
+       # Applies to `valgeneral`, `valall`, `valsubmit`, `validate` and `valades`
+       # The default output and the `<schema_name>.file` summary lines are unchanged
+
 18-Feb-2026 - Added `submission` option to `mpc80coltoxml`
        # Allow users to turn an 80col file into an XML file that is valid for submission.
 

@@ -36,7 +36,7 @@ from ades import convertutility
 #schemaxml = lxml.etree.parse(sys.argv[1])
 #schema  = lxml.etree.XMLSchema(schemaxml)
 
-def validate(schemafile, xmlfile):
+def validate(schemafile, xmlfile, all_errors=False):
     results = {}
 
     #
@@ -50,7 +50,7 @@ def validate(schemafile, xmlfile):
 
     with open("validate.file", "w") as out:
         validate_xml_declaration(xmlfile, out)
-        validate_schema(schemafile, schema, candidate, out)
+        validate_schema(schemafile, schema, candidate, out, all_errors)
     
 def main():
     # construct argument parser for a validation tool (input only)
@@ -63,7 +63,7 @@ def main():
 
     args = parser.parse_args()
     # create callable
-    call = lambda i, o : validate(args.schemafile, i)
+    call = lambda i, o : validate(args.schemafile, i, args.report_all_errors)
     # call function with filename arguments
     convertutility.call_with_files(call, args)
 

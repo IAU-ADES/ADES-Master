@@ -26,15 +26,21 @@ import sys
 import argparse
 
 from ades import xmlutility
+from ades.valutility import format_schema_errors
+from ades import convertutility
 
-def valades(adesmaster, xsltschema, xmlfile):
+def valades(adesmaster, xsltschema, xmlfile, all_errors=False):
     xml_tree = xmlutility.readXML(adesmaster)
     xslt_tree = xmlutility.readXML(xsltschema)
     schema = xmlutility.XMLtoSchemaViaXSLT(xml_tree, xslt_tree)
 
     candidate = xmlutility.readXML(xmlfile)
 
-    schema.assertValid(candidate)
+    if all_errors:
+        if not schema.validate(candidate):
+            print(format_schema_errors(schema))
+    else:
+        schema.assertValid(candidate)
 
 def main():
     parser = argparse.ArgumentParser(
@@ -47,7 +53,7 @@ def main():
     
     args = parser.parse_args()
     
-    call = lambda i, o : valades(args.adesmaster, args.xsltschema, i)
+    call = lambda i, o : valades(args.adesmaster, args.xsltschema, i, args.report_all_errors)
     convertutility.call_with_files(call, args)
 
 # ---------------------------------------------------------------

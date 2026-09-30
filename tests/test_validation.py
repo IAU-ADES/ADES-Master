@@ -5,6 +5,7 @@ that could in principle have additional fields
 
 # Import global
 import os
+import re
 import pytest
 import subprocess
 
@@ -67,6 +68,73 @@ def test_valgeneral_routine(xmlfile):
             assert True
         else:
             assert False
+
+
+# ------------------------
+# --report-all-errors
+
+
+def file_with_multiple_errors(tmp_path):
+    """A copy of obs_v2022.xml carrying more than one invalid value"""
+    with open("input/obs_v2022.xml", "r", encoding="utf-8") as source:
+        broken = source.read()
+    broken = broken.replace("<ra>325.589699</ra>", "<ra>999.589699</ra>")
+    broken = broken.replace("<nStars>395</nStars>", "<nStars>abc</nStars>")
+    xmlfile = tmp_path / "obs_multiple_errors.xml"
+    xmlfile.write_text(broken, encoding="utf-8")
+    return str(xmlfile)
+
+
+@pytest.mark.parametrize(
+    "command",
+    [
+        pytest.param("valgeneral.py", id="valgeneral"),
+        pytest.param("valall.py", id="valall"),
+        pytest.param("valsubmit.py", id="valsubmit"),
+        pytest.param("validate.py ../xsd/general.xsd", id="validate"),
+        pytest.param(
+            "valades.py "
+            + adesutility.adesmaster
+            + " "
+            + adesutility.schemaxslts["general"],
+            id="valades",
+        ),
+    ],
+)
+def test_report_all_errors(command, tmp_path):
+    """The opt-in flag lists every schema error, the default still stops at the first"""
+    xmlfile = file_with_multiple_errors(tmp_path)
+
+    default = subprocess.run(
+        f"{command} {xmlfile}", shell=True, capture_output=True, text=True
+    )
+    assert not [line for line in default.stdout.splitlines() if line.startswith("  line ")]
+
+    all_errors = subprocess.run(
+        f"{command} --report-all-errors {xmlfile}",
+        shell=True,
+        capture_output=True,
+        text=True,
+    )
+    reported = [
+        line for line in all_errors.stdout.splitlines() if line.startswith("  line ")
+    ]
+    assert len(reported) >= 3
+    assert all(re.match(r"^  line \d+: \S", line) for line in reported)
+    assert any("999.589699" in line for line in reported)
+    assert any("'abc'" in line for line in reported)
+
+
+def test_report_all_errors_output_file(tmp_path):
+    """The .file summary line is unchanged when all errors are reported"""
+    xmlfile = file_with_multiple_errors(tmp_path)
+    if os.path.exists("valgeneral.file"):
+        os.remove("valgeneral.file")
+    subprocess.run(
+        f"valgeneral.py --report-all-errors {xmlfile}", shell=True, check=True
+    )
+    with open("valgeneral.file", "r", encoding="utf-8") as valfile:
+        assert valfile.readlines()[0].replace("\n", "") == "general has failed: "
 
 
 # ------------------------

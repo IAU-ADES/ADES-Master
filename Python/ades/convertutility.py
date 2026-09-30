@@ -112,6 +112,11 @@ def input_parser(parser=None, input_help=None, **kwargs):
     
     parser.add_argument("input", nargs='?', type=str, default=sys.stdin, help=input_help)
     parser.add_argument("--input-encoding", default="utf-8", help="The text encoding of the input.")
+    parser.add_argument(
+        "--report-all-errors",
+        action="store_true",
+        help="Report every schema error with its line number instead of only the first one.",
+    )
     return parser
 
 def output_parser(parser=None, output_help=None, **kwargs):
