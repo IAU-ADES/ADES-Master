@@ -132,15 +132,24 @@ def test_report_all_errors(args, tmp_path):
 
 
 def test_report_all_errors_output_file(tmp_path):
-    """The .file summary line is unchanged when all errors are reported"""
+    """The .file keeps its summary line first and lists the errors below it"""
     xmlfile = file_with_multiple_errors(tmp_path)
     if os.path.exists("valgeneral.file"):
         os.remove("valgeneral.file")
-    subprocess.run(
-        f"valgeneral.py --report-all-errors {xmlfile}", shell=True, check=True
+    result = subprocess.run(
+        f"valgeneral.py --report-all-errors {xmlfile}",
+        shell=True,
+        check=True,
+        capture_output=True,
+        text=True,
     )
     with open("valgeneral.file", "r", encoding="utf-8") as valfile:
-        assert valfile.readlines()[0].replace("\n", "") == "general has failed: "
+        lines = valfile.readlines()
+    assert lines[0].replace("\n", "") == "general has failed: "
+    printed = [
+        line for line in result.stdout.splitlines() if line.startswith("  line ")
+    ]
+    assert [line.rstrip("\n") for line in lines[1:]] == printed
 
 
 # ------------------------
