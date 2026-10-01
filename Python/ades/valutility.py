@@ -41,6 +41,8 @@ def validate_schema(schema_name, schema, candidate, out, all_errors=False):
     if result:
         print (schema_name, "has failed:")
         out.write(str(schema_name)+" has failed: \n")
+        if all_errors:
+            out.write(result)
         print (result)
     else:
         print (schema_name, "is OK")
