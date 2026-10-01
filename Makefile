@@ -29,4 +29,4 @@ clean:
 
 .PHONY: test
 test: 
-	pushd new_tests && pytest
+	cd tests && pytest
