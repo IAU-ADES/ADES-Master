@@ -24,9 +24,10 @@ def validate_schema(schema_name, schema, candidate, out, all_errors=False):
     # Check for validity -- prints errors on stdout if any are found
     #
     if all_errors:
-        result = None
         if not schema.validate(candidate):
-            result = format_schema_errors(schema)
+            result = format_schema_errors(schema) or "  (no error detail available)\n"
+        else:
+            result = None
     else:
         try:
             schema.assertValid(candidate)
