@@ -38,7 +38,8 @@ def valades(adesmaster, xsltschema, xmlfile, all_errors=False):
 
     if all_errors:
         if not schema.validate(candidate):
-            print(format_schema_errors(schema))
+            print(format_schema_errors(schema) or "  (no error detail available)\n")
+            raise SystemExit(1)
     else:
         schema.assertValid(candidate)
 

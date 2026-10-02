@@ -131,6 +131,36 @@ def test_report_all_errors(args, tmp_path):
     assert any("'abc'" in line for line in reported)
 
 
+def test_valades_exit_status(tmp_path):
+    """valades is the one validator signalling failure through its exit code:
+    --report-all-errors must keep that signal instead of exiting 0"""
+    xmlfile = file_with_multiple_errors(tmp_path)
+    command = [
+        "valades.py",
+        "--report-all-errors",
+        adesutility.adesmaster,
+        adesutility.schemaxslts["general"],
+        xmlfile,
+    ]
+    failed = subprocess.run(
+        " ".join(shlex.quote(a) for a in command),
+        shell=True,
+        capture_output=True,
+        text=True,
+    )
+    assert failed.returncode != 0
+    assert any("999.589699" in line for line in failed.stdout.splitlines())
+
+    valid = "input/obs_v2022.xml"
+    passed = subprocess.run(
+        " ".join(shlex.quote(a) for a in command[:-1] + [valid]),
+        shell=True,
+        capture_output=True,
+        text=True,
+    )
+    assert passed.returncode == 0
+
+
 def test_report_all_errors_output_file(tmp_path):
     """The .file keeps its summary line first and lists the errors below it"""
     xmlfile = file_with_multiple_errors(tmp_path)
