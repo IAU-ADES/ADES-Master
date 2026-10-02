@@ -3,6 +3,9 @@
        # Applies to `valgeneral`, `valall`, `valsubmit`, `validate` and `valades`
        # The default output and the first line of `<schema_name>.file` are unchanged
        # With the option, `<schema_name>.file` carries the error list below that first line
+       # On Python < 3.12, the flag must not appear between two positional arguments
+       # (`validate.py --report-all-errors SCHEMA FILE` works; `validate.py SCHEMA
+       # --report-all-errors FILE` does not)
 
 18-Feb-2026 - Added `submission` option to `mpc80coltoxml`
        # Allow users to turn an 80col file into an XML file that is valid for submission.
