@@ -59,7 +59,7 @@ def valgeneral(xmlfile, all_errors=False):
   
 def main():
   # construct argument parser for a validation tool (input only)
-  parser = convertutility.input_parser(
+  parser = convertutility.validation_parser(
     description='Validate XML against general schema', 
     input_help="XML file to check against schema"
   )

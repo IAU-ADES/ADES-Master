@@ -50,7 +50,7 @@ def main():
     )
     parser.add_argument("adesmaster", type=str, help="ADES master xml")
     parser.add_argument("xsltschema", type=str, help="Schema definition file")
-    parser = convertutility.input_parser(parser, input_help="XML file to check against schema")
+    parser = convertutility.validation_parser(parser, input_help="XML file to check against schema")
     
     args = parser.parse_args()
     
