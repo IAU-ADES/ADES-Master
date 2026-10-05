@@ -101,6 +101,8 @@ def validation_parser(parser=None, input_help=None, **kwargs):
 
     if parser is None:
         parser = input_parser(input_help=input_help, **kwargs)
+    else:
+        parser = input_parser(parser=parser, input_help=input_help, **kwargs)
 
     parser.add_argument(
         "--report-all-errors",
