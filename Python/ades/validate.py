@@ -59,7 +59,7 @@ def main():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument("schemafile", type=str, help="Schema definition file")
-    parser = convertutility.input_parser(parser, input_help="XML file to check against schema")
+    parser = convertutility.validation_parser(parser, input_help="XML file to check against schema")
 
     args = parser.parse_args()
     # create callable

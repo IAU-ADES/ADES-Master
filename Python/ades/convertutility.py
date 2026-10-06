@@ -95,6 +95,23 @@ def conversion_parser(parser=None, input_help=None, output_help=None, **kwargs):
     parser = output_parser(parser, output_help=output_help, **kwargs)
     return parser
 
+def validation_parser(parser=None, input_help=None, **kwargs):
+    if input_help is None:
+        input_help = "The input file to validate"
+
+    if parser is None:
+        parser = input_parser(input_help=input_help, **kwargs)
+    else:
+        parser = input_parser(parser=parser, input_help=input_help, **kwargs)
+
+    parser.add_argument(
+        "--report-all-errors",
+        action="store_true",
+        help="Report every schema error with its line number instead of only the first one.",
+    )
+
+    return parser
+
 def input_parser(parser=None, input_help=None, **kwargs):
     """Construct or modify an argparse ArgumentParser object to add an input/input encoding argument
 
@@ -112,11 +129,6 @@ def input_parser(parser=None, input_help=None, **kwargs):
     
     parser.add_argument("input", nargs='?', type=str, default=sys.stdin, help=input_help)
     parser.add_argument("--input-encoding", default="utf-8", help="The text encoding of the input.")
-    parser.add_argument(
-        "--report-all-errors",
-        action="store_true",
-        help="Report every schema error with its line number instead of only the first one.",
-    )
     return parser
 
 def output_parser(parser=None, output_help=None, **kwargs):
