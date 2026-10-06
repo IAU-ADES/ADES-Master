@@ -34,7 +34,7 @@ from ades import convertutility
 # adesmaster.xml is the master xml file describing the format
 #
 
-def valall(xmlfile):
+def valall(xmlfile, all_errors=False):
   #
   # Six xsd schemas are built, in pairs designed to be favored
   # for machine reading and human reading.  Both items in a pair
@@ -55,17 +55,17 @@ def valall(xmlfile):
   # 
   with open("valall.file", "w") as out:
     validate_xml_declaration(xmlfile, out)
-    validate_xslts(adesutility.schemaxslts, candidate, out)
+    validate_xslts(adesutility.schemaxslts, candidate, out, all_errors)
 
 def main():
   # construct argument parser for a validation tool (input only)
-  parser = convertutility.input_parser(
+  parser = convertutility.validation_parser(
     description='Validate XML against all schemas', 
     input_help="XML file to check against schema"
   )
   args = parser.parse_args()
   # create callable
-  call = lambda i, o : valall(i)
+  call = lambda i, o : valall(i, args.report_all_errors)
   # call function with filename arguments
   convertutility.call_with_files(call, args)
 

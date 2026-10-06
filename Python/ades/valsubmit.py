@@ -35,7 +35,7 @@ from ades import convertutility
 # adesmaster.xml is the master xml file describing the format
 #
 
-def valsubmit(xmlfile):
+def valsubmit(xmlfile, all_errors=False):
   #
   # Six xsd schemas are built, in pairs designed to be favored
   # for machine reading and human reading.  Both items in a pair
@@ -56,11 +56,11 @@ def valsubmit(xmlfile):
   # 
   with open("valsubmit.file",'w') as out:
     validate_xml_declaration(xmlfile, out)
-    validate_xslt("submit", adesutility.schemaxslts['submit'], candidate, out)
+    validate_xslt("submit", adesutility.schemaxslts['submit'], candidate, out, all_errors)
   
 def main():
   # construct argument parser for a validation tool (input only)
-  parser = convertutility.input_parser(
+  parser = convertutility.validation_parser(
     description='Validate XML against submit schema', 
     input_help="XML file to check against schema",
   )
@@ -68,7 +68,7 @@ def main():
   args = parser.parse_args()
 
   # create callable
-  call = lambda i, o : valsubmit(i)
+  call = lambda i, o : valsubmit(i, args.report_all_errors)
   # call function with filename arguments
   convertutility.call_with_files(call, args)
 

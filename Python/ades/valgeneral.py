@@ -33,7 +33,7 @@ from ades import convertutility
 #
 # adesmaster.xml is the master xml file describing the format
 #
-def valgeneral(xmlfile):
+def valgeneral(xmlfile, all_errors=False):
   masterfile = adesutility.adesmaster
   
   #
@@ -55,17 +55,17 @@ def valgeneral(xmlfile):
   # 
   with open("valgeneral.file", "w") as out:
     validate_xml_declaration(xmlfile, out)
-    validate_xslt("general", adesutility.schemaxslts['general'], candidate, out)
+    validate_xslt("general", adesutility.schemaxslts['general'], candidate, out, all_errors)
   
 def main():
   # construct argument parser for a validation tool (input only)
-  parser = convertutility.input_parser(
+  parser = convertutility.validation_parser(
     description='Validate XML against general schema', 
     input_help="XML file to check against schema"
   )
   args = parser.parse_args()
   # create callable
-  call = lambda i, o : valgeneral(i)
+  call = lambda i, o : valgeneral(i, args.report_all_errors)
   # call function with filename arguments
   convertutility.call_with_files(call, args)
 

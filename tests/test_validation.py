@@ -5,6 +5,8 @@ that could in principle have additional fields
 
 # Import global
 import os
+import re
+import shlex
 import pytest
 import subprocess
 
@@ -67,6 +69,117 @@ def test_valgeneral_routine(xmlfile):
             assert True
         else:
             assert False
+
+
+# ------------------------
+# --report-all-errors
+
+
+def file_with_multiple_errors(tmp_path):
+    """A copy of obs_v2022.xml carrying more than one invalid value"""
+    with open("input/obs_v2022.xml", "r", encoding="utf-8") as source:
+        broken = source.read()
+    broken = broken.replace("<ra>325.589699</ra>", "<ra>999.589699</ra>")
+    broken = broken.replace("<nStars>395</nStars>", "<nStars>abc</nStars>")
+    xmlfile = tmp_path / "obs_multiple_errors.xml"
+    xmlfile.write_text(broken, encoding="utf-8")
+    return str(xmlfile)
+
+
+@pytest.mark.parametrize(
+    "args",
+    [
+        pytest.param(["valgeneral.py"], id="valgeneral"),
+        pytest.param(["valall.py"], id="valall"),
+        pytest.param(["valsubmit.py"], id="valsubmit"),
+        pytest.param(["validate.py", "../xsd/general.xsd"], id="validate"),
+        pytest.param(
+            ["valades.py", adesutility.adesmaster, adesutility.schemaxslts["general"]],
+            id="valades",
+        ),
+    ],
+)
+def test_report_all_errors(args, tmp_path):
+    """The opt-in flag lists every schema error, the default still stops at the first"""
+    xmlfile = file_with_multiple_errors(tmp_path)
+
+    # The flag goes before the positional arguments: the optional `input`
+    # positional breaks argparse on Python <= 3.11 when an option is
+    # interspersed between positionals.
+    default = subprocess.run(
+        " ".join(shlex.quote(a) for a in args + [xmlfile]),
+        shell=True,
+        capture_output=True,
+        text=True,
+    )
+    assert not [line for line in default.stdout.splitlines() if line.startswith("  line ")]
+
+    all_errors = subprocess.run(
+        " ".join(
+            shlex.quote(a) for a in args[:1] + ["--report-all-errors"] + args[1:] + [xmlfile]
+        ),
+        shell=True,
+        capture_output=True,
+        text=True,
+    )
+    reported = [
+        line for line in all_errors.stdout.splitlines() if line.startswith("  line ")
+    ]
+    assert len(reported) >= 2
+    assert all(re.match(r"^  line \d+: \S", line) for line in reported)
+    assert any("999.589699" in line for line in reported)
+    assert any("'abc'" in line for line in reported)
+
+
+def test_valades_exit_status(tmp_path):
+    """valades is the one validator signalling failure through its exit code:
+    --report-all-errors must keep that signal instead of exiting 0"""
+    xmlfile = file_with_multiple_errors(tmp_path)
+    command = [
+        "valades.py",
+        "--report-all-errors",
+        adesutility.adesmaster,
+        adesutility.schemaxslts["general"],
+        xmlfile,
+    ]
+    failed = subprocess.run(
+        " ".join(shlex.quote(a) for a in command),
+        shell=True,
+        capture_output=True,
+        text=True,
+    )
+    assert failed.returncode != 0
+    assert any("999.589699" in line for line in failed.stdout.splitlines())
+
+    valid = "input/obs_v2022.xml"
+    passed = subprocess.run(
+        " ".join(shlex.quote(a) for a in command[:-1] + [valid]),
+        shell=True,
+        capture_output=True,
+        text=True,
+    )
+    assert passed.returncode == 0
+
+
+def test_report_all_errors_output_file(tmp_path):
+    """The .file keeps its summary line first and lists the errors below it"""
+    xmlfile = file_with_multiple_errors(tmp_path)
+    if os.path.exists("valgeneral.file"):
+        os.remove("valgeneral.file")
+    result = subprocess.run(
+        f"valgeneral.py --report-all-errors {xmlfile}",
+        shell=True,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    with open("valgeneral.file", "r", encoding="utf-8") as valfile:
+        lines = valfile.readlines()
+    assert lines[0].replace("\n", "") == "general has failed: "
+    printed = [
+        line for line in result.stdout.splitlines() if line.startswith("  line ")
+    ]
+    assert [line.rstrip("\n") for line in lines[1:]] == printed
 
 
 # ------------------------
